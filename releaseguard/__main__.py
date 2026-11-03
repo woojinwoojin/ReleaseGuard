@@ -54,11 +54,12 @@ def main(argv: list[str] | None = None) -> int:
     e.add_argument("--rules", type=Path, default=DEFAULT_RULES)
     e.add_argument("--out", type=Path, default=Path("out/eval"))
     e.add_argument("--agent", action="store_true", help="수기 정답이 있는 커밋에 에이전트도 실행 (API 비용 발생)")
+    e.add_argument("--repeat", type=int, default=1, help="에이전트를 커밋마다 몇 번 돌릴지 (일관성 측정)")
     args = parser.parse_args(argv)
 
     if args.command == "eval":
-        ev = evaluate.evaluate(args.cases, load_rules(args.rules), openai_runner() if args.agent else None)
-        suffix = "_agent" if args.agent else ""
+        ev = evaluate.evaluate(args.cases, load_rules(args.rules), openai_runner() if args.agent else None, args.repeat)
+        suffix = f"_agent_x{args.repeat}" if args.agent else ""
         write(args.out / f"{date.today():%Y%m%d}_eval{suffix}", ev, evaluate.to_markdown(ev))
         return 0
 

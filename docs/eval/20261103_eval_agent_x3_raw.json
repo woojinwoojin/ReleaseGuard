@@ -1,0 +1,3904 @@
+{
+  "repo": "C:\\Project_Folder\\predict-success",
+  "rules_version": 1,
+  "repeat": 3,
+  "metrics": {
+    "commits": 34,
+    "decisions": {
+      "REVIEW REQUIRED": 19,
+      "SAFE": 15
+    },
+    "rule_fire_rate": {
+      "R01": 0.088,
+      "R02": 0.5,
+      "R03": 0.412,
+      "R04": 0.029,
+      "R05": 0.324,
+      "R07": 0.059
+    },
+    "test_retrieval": {
+      "commits": 19,
+      "precision": 0.705,
+      "recall": 0.969
+    },
+    "decision": {
+      "labeled": 15,
+      "judgments": 45,
+      "accuracy": 0.867,
+      "over_warning": 6,
+      "under_warning": 0,
+      "confusion": {
+        "REVIEW REQUIRED → REVIEW REQUIRED": 24,
+        "SAFE → REVIEW REQUIRED": 6,
+        "SAFE → SAFE": 15
+      }
+    },
+    "agent": {
+      "runs": 45,
+      "errors": 0,
+      "avg_llm_calls": 3.5,
+      "avg_tool_calls": 11.4,
+      "max_tool_calls": 20,
+      "avg_input_tokens": 45126.0,
+      "max_input_tokens": 170534,
+      "avg_seconds": 14.4,
+      "verified_item_ratio": 0.951,
+      "test_retrieval": {
+        "commits": 30,
+        "precision": 0.815,
+        "recall": 0.981
+      },
+      "high_on_followup": {
+        "commits": 6,
+        "run_rate": 0.333,
+        "any_run": 3,
+        "every_run": 1
+      },
+      "high_on_safe": {
+        "commits": 7,
+        "run_rate": 0.0,
+        "any_run": 0,
+        "every_run": 0
+      },
+      "consistency": {
+        "commits": 15,
+        "decision_same": 15,
+        "high_same": 13,
+        "avg_tests_jaccard": 0.806
+      }
+    }
+  },
+  "rows": [
+    {
+      "sha": "0fc36c3",
+      "subject": "Write README from the EvidenceFirst proposal",
+      "by_category": {
+        "docs": 1
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE",
+        "SAFE",
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": "SAFE",
+      "followup_fix": null,
+      "labeled_by": "user",
+      "note": "README만 변경",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "input_tokens": 9396,
+          "output_tokens": 230,
+          "seconds": 5.1,
+          "items": 0,
+          "verified_items": 0,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [],
+          "add_new": 0,
+          "actual_tests": [],
+          "summary": "이번 변경은 README.md 문서만 크게 개편한 것으로, 코드·설정 파일 변경은 확인되지 않았습니다. 따라서 런타임 동작이나 기존 기능 로직에 직접적인 영향은 없고, 주로 프로젝트 설명·범위·운영 기준 문서화가 강화된 변경입니다.",
+          "risks": [],
+          "tools_used": [
+            "git_diff {\"path\":\"README.md\"}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "input_tokens": 9389,
+          "output_tokens": 264,
+          "seconds": 5.0,
+          "items": 0,
+          "verified_items": 0,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [],
+          "add_new": 0,
+          "actual_tests": [],
+          "summary": "README.md만 변경된 문서 개정입니다. 런타임 코드, 설정, 테스트 파일은 바뀌지 않아 기능 영향은 확인되지 않았습니다.",
+          "risks": [],
+          "tools_used": [
+            "git_diff {\"path\":\"README.md\"}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "input_tokens": 9386,
+          "output_tokens": 284,
+          "seconds": 5.1,
+          "items": 0,
+          "verified_items": 0,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [],
+          "add_new": 0,
+          "actual_tests": [],
+          "summary": "이번 변경은 `README.md` 문서만 대폭 개편된 내용으로, 소스 코드나 설정 파일의 변경은 확인되지 않았습니다. 따라서 런타임 동작에 직접적인 영향은 없고, 프로젝트 설명·가이드라인·설계 문서가 업데이트된 것으로 판단됩니다.",
+          "risks": [],
+          "tools_used": [
+            "git_diff {\"path\":\"README.md\"}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "93fd788",
+      "subject": "Add roadmap checklist for the 4-week MVP",
+      "by_category": {
+        "docs": 1
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "f962d60",
+      "subject": "Record OpenDART key setup and add env example",
+      "by_category": {
+        "config": 1,
+        "docs": 1
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R03"
+      ],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": "SAFE",
+      "followup_fix": null,
+      "labeled_by": "user",
+      "note": ".env.example(예시 파일)과 문서만 변경 — 실행 동작 없음",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 7,
+          "input_tokens": 9807,
+          "output_tokens": 1134,
+          "seconds": 17.4,
+          "items": 4,
+          "verified_items": 4,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [],
+          "add_new": 1,
+          "actual_tests": [],
+          "summary": "이번 변경은 실행 코드가 아니라 설정 템플릿과 진행 문서만 바뀐 것으로 확인됩니다. `.env.example`에 `DART_API_KEY` 항목이 새로 추가되었고, `docs/progress.md`는 인증키 발급 완료와 사용 확인 상태로 갱신되었습니다.",
+          "risks": [
+            {
+              "level": "LOW",
+              "title": "환경 변수 설정 누락 가능성",
+              "detail": "새 템플릿에 `DART_API_KEY`가 추가되었지만, 실제 실행 환경에서 이 값이 채워지지 않으면 OpenDART 연동 작업은 여전히 동작하지 않을 수 있습니다. 다만 이번 변경 자체는 문서/템플릿 추가라서 코드 장애로 바로 이어지는 근거는 없습니다.",
+              "verified": true,
+              "evidence": [
+                "file:.env.example:1-3",
+                "file:README.md:256-263",
+                "file:.gitignore:1-3",
+                "tool:#1",
+                "tool:#6",
+                "tool:#7",
+                "rule:R03"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\".env.example\"}",
+            "git_diff {\"path\":\"docs/progress.md\"}",
+            "search_code {\"text\":\"DART_API_KEY\",\"path_prefix\":null}",
+            "search_code {\"text\":\"OpenDART\",\"path_prefix\":null}",
+            "list_files {\"path_prefix\":null}",
+            "read_file {\"path\":\".gitignore\",\"start_line\":1,\"end_line\":120}",
+            "read_file {\"path\":\"README.md\",\"start_line\":240,\"end_line\":275}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 9,
+          "input_tokens": 9949,
+          "output_tokens": 986,
+          "seconds": 12.8,
+          "items": 4,
+          "verified_items": 3,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "없음(문서/설정 샘플 변경만 확인)"
+          ],
+          "add_new": 0,
+          "actual_tests": [],
+          "summary": "이번 변경은 실행 로직이 아니라 환경 설정 안내와 진행 문서에만 영향을 줍니다. 새 `.env.example`이 추가되어 `DART_API_KEY`를 복사해 설정하는 흐름이 명시됐고, `docs/progress.md`는 OpenDART 키 발급/저장 완료 상태로 업데이트되었습니다.",
+          "risks": [
+            {
+              "level": "LOW",
+              "title": "문서와 실제 설정 값 불일치 가능성",
+              "detail": "`.env.example`에는 `DART_API_KEY`만 추가됐지만, 실제 애플리케이션이 다른 환경변수도 요구하는지 이 변경만으로는 확인되지 않습니다. 현재 저장소 기준으로는 문서/샘플 변경이라 직접적인 장애 가능성은 낮습니다.",
+              "verified": true,
+              "evidence": [
+                "file:.env.example:1-3",
+                "file:README.md:256-263",
+                "rule:R03"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\".env.example\"}",
+            "git_diff {\"path\":\"docs/progress.md\"}",
+            "list_files {\"path_prefix\":null}",
+            "search_code {\"text\":\"DART_API_KEY\",\"path_prefix\":null}",
+            "search_code {\"text\":\"python-dotenv\",\"path_prefix\":null}",
+            "search_code {\"text\":\"OpenDART\",\"path_prefix\":null}",
+            "search_code {\"text\":\".env\",\"path_prefix\":null}",
+            "read_file {\"path\":\".gitignore\",\"start_line\":1,\"end_line\":200}",
+            "read_file {\"path\":\"README.md\",\"start_line\":250,\"end_line\":270}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 5,
+          "input_tokens": 8223,
+          "output_tokens": 829,
+          "seconds": 10.8,
+          "items": 3,
+          "verified_items": 3,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [],
+          "add_new": 0,
+          "actual_tests": [],
+          "summary": "`.env.example`이 새로 추가되어 OpenDART용 환경변수 `DART_API_KEY`를 안내하게 되었고, `docs/progress.md`는 키 발급·저장 완료 상태로 갱신되었습니다. 확인한 범위에서는 실행 코드 변경은 없고, 설정/진행 문서만 바뀌었습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "환경변수명 불일치 여부 확인 필요",
+              "detail": "현재 확인된 변경은 예제 설정 파일과 문서뿐이어서, 실제 코드가 `DART_API_KEY`를 읽는지 여부는 이번 diff만으로 확인되지 않았습니다. 이후 코드에서 다른 이름을 기대하면 설정이 동작하지 않을 수 있으므로, 실제 소비 지점이 생기면 변수명 일치 여부를 검증해야 합니다.",
+              "verified": true,
+              "evidence": [
+                "file:.env.example:3",
+                "tool:#2",
+                "tool:#4",
+                "rule:R03"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":null}",
+            "search_code {\"text\":\"DART_API_KEY\",\"path_prefix\":null}",
+            "search_code {\"text\":\"dotenv\",\"path_prefix\":null}",
+            "search_code {\"text\":\"opendart\",\"path_prefix\":null}",
+            "read_file {\"path\":\"docs/progress.md\",\"start_line\":1,\"end_line\":35}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "c7878e3",
+      "subject": "Define the five questions, trust checks, and why V1 is a score",
+      "by_category": {
+        "docs": 2
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "60dbee2",
+      "subject": "Fix the pilot companies and the data-handling rules they surfaced",
+      "by_category": {
+        "docs": 2
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "fc58c0e",
+      "subject": "Collect pilot filings and financial API responses as immutable raw data",
+      "by_category": {
+        "config": 2,
+        "deps": 1,
+        "source": 4,
+        "test": 2
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R02",
+        "R03",
+        "R04"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/__init__.py",
+        "tests/test_dart_collector.py"
+      ],
+      "predicted_tests": [
+        "tests/test_dart_collector.py"
+      ],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "32c4dc5",
+      "subject": "Record the raw storage decision and first collection results",
+      "by_category": {
+        "docs": 2
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "99309f2",
+      "subject": "Flatten financial API responses into a per-source observation table",
+      "by_category": {
+        "docs": 2,
+        "source": 3,
+        "test": 1
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE",
+        "SAFE",
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_dart_facts.py"
+      ],
+      "predicted_tests": [
+        "tests/test_dart_facts.py"
+      ],
+      "expected": "SAFE",
+      "followup_fix": null,
+      "labeled_by": "user",
+      "note": "새 모듈과 테스트를 함께 추가, 빈 __init__.py",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 12,
+          "input_tokens": 36153,
+          "output_tokens": 1906,
+          "seconds": 15.1,
+          "items": 11,
+          "verified_items": 10,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "src/normalization/build_facts.py",
+            "tests/test_dart_facts.py"
+          ],
+          "add_new": 0,
+          "actual_tests": [
+            "tests/test_dart_facts.py"
+          ],
+          "summary": "정규화용 새 모듈이 추가되어, OpenDART 재무 API 응답을 관측값 테이블(A)로 펼치고 동일 기간 값 불일치를 별도 산출물로 남기는 흐름이 생겼습니다. 문서(D5)와 테스트가 함께 추가되어 있어 이번 변경의 직접 영향은 `src/normalization` 정규화 로직과 그 검증 테스트에 집중됩니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "기간 추출 실패 시 행이 review_needed로 남음",
+              "detail": "`flatten_snapshot`는 `sj_div`별 기간 유형이나 원문에서 회계기간을 찾지 못하면 `review_needed:period_type` 또는 `review_needed:period_not_found`로 남깁니다. 실제 원문 패턴이 테스트 범위를 벗어나면 예상보다 많은 행이 미확정 상태가 될 수 있어 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/dart_facts.py:117-129",
+                "file:tests/test_dart_facts.py:60-69"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "동일 기간 비교에서 오탐/누락 가능성",
+              "detail": "`same_period_mismatches`는 값이 `parsed`이고 `period_end`가 있는 행만 비교하며, 같은 응답 안에서 키가 중복되면 비교에서 제외합니다. 이 규칙이 실제 데이터의 중복/표기 차이를 얼마나 잘 다루는지는 추가 검증이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/dart_facts.py:168-189",
+                "file:tests/test_dart_facts.py:90-137"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "최신 유효 정정본 선택 기준의 데이터 의존성",
+              "detail": "`latest_valid_filing`은 `stored` 상태, `corp_code`, `bsns_year`, `rcept_dt`, `correction` 필드가 채워져 있어야 동작합니다. 원본 메타데이터가 일부 누락되면 기준일 비교 결과가 달라질 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/build_facts.py:18-25",
+                "file:src/normalization/build_facts.py:46-55"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/normalization/build_facts.py\"}",
+            "git_diff {\"path\":\"src/normalization/dart_facts.py\"}",
+            "git_diff {\"path\":\"tests/test_dart_facts.py\"}",
+            "git_diff {\"path\":\"src/normalization/__init__.py\"}",
+            "git_diff {\"path\":\"docs/decisions.md\"}",
+            "git_diff {\"path\":\"docs/progress.md\"}",
+            "read_file {\"path\":\"src/normalization/dart_facts.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/normalization/build_facts.py\",\"start_line\":1,\"end_line\":200}",
+            "read_file {\"path\":\"tests/test_dart_facts.py\",\"start_line\":1,\"end_line\":220}",
+            "search_code {\"text\":\"build_facts(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"same_period_mismatches\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"latest_valid_filing\", \"path_prefix\":\"src\"}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 13,
+          "input_tokens": 49978,
+          "output_tokens": 2124,
+          "seconds": 16.6,
+          "items": 7,
+          "verified_items": 5,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_dart_facts.py"
+          ],
+          "add_new": 0,
+          "actual_tests": [
+            "tests/test_dart_facts.py"
+          ],
+          "summary": "이번 변경은 D5에 따라 재무 API 응답을 ‘관측값 테이블(A)’로 펼치는 새 정규화 모듈과 그 검증 테스트를 추가하고, 진행 문서에 해당 결정을 반영한 것입니다. 기존 로직의 수정이라기보다 `src/normalization/` 아래에 새 데이터 처리 흐름과 CLI 실행 진입점을 만든 영향이 큽니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "정규화된 중간 산출물의 기간/값 분류가 실제 데이터에 맞는지 검증 필요",
+              "detail": "새 로직은 `period_type`, `period_status`, `value_status`를 기준으로 데이터를 해석합니다. 테스트는 대표 사례를 덮고 있지만, 실제 `data/raw/dart` 전체에 대해 동일하게 기대대로 동작하는지는 별도 실행으로 확인해야 합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/dart_facts.py:103-145",
+                "file:tests/test_dart_facts.py:43-85",
+                "file:tests/test_dart_facts.py:121-137",
+                "tool:#12",
+                "tool:#13"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "최신 유효 정정본 선택 규칙이 분석용 표(B)의 결과를 바꿀 수 있음",
+              "detail": "`latest_valid_filing()`은 기준일과 정정 유형(`첨부정정`, `첨부추가` 제외)에 따라 선택 접수번호를 결정합니다. 실제 원본 메타데이터와 기준일 조합에 따라 출력이 달라지므로, 산출 CSV가 의도한 보고서 버전을 고르는지 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/build_facts.py:18-25",
+                "file:tests/test_dart_facts.py:143-152",
+                "tool:#11",
+                "tool:#13"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "`src/normalization/__init__.py`는 비어 있어 외부 노출 API는 아직 없음",
+              "detail": "새 패키지 파일은 추가되었지만 내용이 없어, 현재 공개 인터페이스는 개별 모듈 직접 import에 의존합니다. 향후 사용처가 늘면 패키지 수준 exports 정리가 필요할 수 있습니다.",
+              "verified": false,
+              "evidence": [
+                "file:src/normalization/__init__.py:1",
+                "tool:#4"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/normalization/build_facts.py\"}",
+            "git_diff {\"path\":\"src/normalization/dart_facts.py\"}",
+            "git_diff {\"path\":\"tests/test_dart_facts.py\"}",
+            "git_diff {\"path\":\"src/normalization/__init__.py\"}",
+            "git_diff {\"path\":\"docs/decisions.md\"}",
+            "git_diff {\"path\":\"docs/progress.md\"}",
+            "search_code {\"text\":\"build_facts(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"same_period_mismatches(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"latest_valid_filing(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"src.normalization.build_facts\", \"path_prefix\":null}",
+            "read_file {\"path\":\"src/normalization/build_facts.py\",\"start_line\":1,\"end_line\":120}",
+            "read_file {\"path\":\"src/normalization/dart_facts.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"tests/test_dart_facts.py\",\"start_line\":1,\"end_line\":220}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 16,
+          "input_tokens": 53964,
+          "output_tokens": 1984,
+          "seconds": 21.4,
+          "items": 9,
+          "verified_items": 7,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "python -m src.normalization.build_facts",
+            "tests/test_dart_facts.py"
+          ],
+          "add_new": 0,
+          "actual_tests": [
+            "tests/test_dart_facts.py"
+          ],
+          "summary": "재무 API 응답을 펼쳐 관측값 테이블(A)을 만드는 정규화 모듈과, 그 규칙을 검증하는 테스트가 새로 추가됐습니다. 문서(D5)와 진행상태도 함께 갱신되어, 이후 분석용 표(B) 생성 방식과 값 선택 기준이 바뀌었습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "관측값 생성 로직이 다운스트림 분석 입력을 바꿀 수 있음",
+              "detail": "새 정규화 로직은 기존에 없던 행 단위 테이블과 불일치 CSV를 생성합니다. 이 출력이 이후 분석용 표(B)나 점수 계산의 입력이 되면, 기간/값 선택 기준 차이로 결과가 달라질 수 있어 생성 결과를 한 번은 확인해야 합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/dart_facts.py:1-3",
+                "file:src/normalization/dart_facts.py:103-159",
+                "file:src/normalization/build_facts.py:1-3",
+                "file:docs/decisions.md:120-123"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "기간 추출 실패 시 값이 보류 처리됨",
+              "detail": "원문에서 회계기간을 찾지 못하면 `review_needed:period_not_found`로 남기도록 되어 있어, 특정 보고서/계정은 기간이 비어 있을 수 있습니다. 이 경우 동일 기간 비교나 분석용 표 생성에서 누락이 생길 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/dart_facts.py:62-79",
+                "file:src/normalization/dart_facts.py:117-129",
+                "file:tests/test_dart_facts.py:60-69"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "기존 파일은 설정 파일이 아니라 새 파이프라인 진입점 추가",
+              "detail": "`src/normalization/__init__.py`는 비어 있고, 이번 변경은 패키지 초기화보다 새 실행 스크립트와 함수 추가에 가깝습니다. 따라서 기존 호출부 파괴 가능성은 낮습니다.",
+              "verified": false,
+              "evidence": [
+                "file:src/normalization/__init__.py:1",
+                "file:src/normalization/build_facts.py:81-82",
+                "file:src/normalization/dart_facts.py:148-159"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/normalization/build_facts.py\"}",
+            "git_diff {\"path\":\"src/normalization/dart_facts.py\"}",
+            "git_diff {\"path\":\"tests/test_dart_facts.py\"}",
+            "git_diff {\"path\":\"src/normalization/__init__.py\"}",
+            "git_diff {\"path\":\"docs/decisions.md\"}",
+            "git_diff {\"path\":\"docs/progress.md\"}",
+            "search_code {\"text\":\"build_facts(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"same_period_mismatches\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"latest_valid_filing\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"from src.normalization\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"src.normalization\", \"path_prefix\":\"tests\"}",
+            "read_file {\"path\":\"src/normalization/dart_facts.py\",\"start_line\":1,\"end_line\":198}",
+            "read_file {\"path\":\"src/normalization/build_facts.py\",\"start_line\":1,\"end_line\":82}",
+            "read_file {\"path\":\"tests/test_dart_facts.py\",\"start_line\":1,\"end_line\":152}",
+            "read_file {\"path\":\"docs/decisions.md\",\"start_line\":96,\"end_line\":133}",
+            "read_file {\"path\":\"docs/progress.md\",\"start_line\":11,\"end_line\":110}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "82e4305",
+      "subject": "Map required accounts to internal accounts and build the checklist",
+      "by_category": {
+        "config": 1,
+        "docs": 2,
+        "source": 3,
+        "test": 2
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R02",
+        "R03"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_account_map.py",
+        "tests/test_dart_facts.py"
+      ],
+      "predicted_tests": [
+        "tests/test_account_map.py",
+        "tests/test_dart_facts.py"
+      ],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "568ea41",
+      "subject": "Reconcile required-account mismatches and add manual note confirmations",
+      "by_category": {
+        "config": 1,
+        "data": 2,
+        "docs": 2,
+        "source": 4,
+        "test": 3
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R02",
+        "R03",
+        "R05"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_account_map.py",
+        "tests/test_dart_facts.py",
+        "tests/test_manual.py"
+      ],
+      "predicted_tests": [
+        "tests/test_account_map.py",
+        "tests/test_dart_facts.py",
+        "tests/test_manual.py"
+      ],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "b67e806",
+      "subject": "Confirm balance-sheet sections by arithmetic and adjust held-for-sale items",
+      "by_category": {
+        "config": 1,
+        "data": 2,
+        "docs": 2,
+        "source": 5,
+        "test": 3
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R02",
+        "R03",
+        "R05",
+        "R07"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_account_map.py",
+        "tests/test_bs_sections.py",
+        "tests/test_manual.py"
+      ],
+      "predicted_tests": [
+        "tests/test_account_map.py",
+        "tests/test_bs_sections.py",
+        "tests/test_dart_facts.py",
+        "tests/test_manual.py"
+      ],
+      "expected": "REVIEW REQUIRED",
+      "followup_fix": [
+        "c7733b3"
+      ],
+      "labeled_by": "user",
+      "note": "매각예정 항목 조정. 누락 금액을 0으로 읽던 문제가 이후 수정됨",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 18,
+          "input_tokens": 43472,
+          "output_tokens": 2171,
+          "seconds": 16.8,
+          "items": 11,
+          "verified_items": 11,
+          "high_risks": 1,
+          "verified_high": 1,
+          "recommended_existing": [
+            "tests/test_account_map.py",
+            "tests/test_bs_sections.py",
+            "tests/test_manual.py"
+          ],
+          "add_new": 0,
+          "actual_tests": [
+            "tests/test_account_map.py",
+            "tests/test_bs_sections.py",
+            "tests/test_manual.py"
+          ],
+          "summary": "이번 변경은 재무상태표 구간 판정과 매각예정항목 조정을 새로 도입하고, 그 결과를 계정 매핑/불일치 비교/점검표 생성에 반영합니다. 또한 수기 확인표의 범위 확인 여부에 따라 결과 상태를 `candidate`로 분리해, 자동 확정 대신 보류하는 흐름이 추가됐습니다.",
+          "risks": [
+            {
+              "level": "HIGH",
+              "title": "점검표 생성 로직은 변경됐지만 전용 테스트가 없음",
+              "detail": "`build_account_check.py`는 매각예정 조정 결과를 새로 생성하고 상태 집계를 바꾸지만, 규칙 단계 결과상 이 파일에 대응하는 테스트는 없습니다. 결과 CSV/출력 포맷 변화가 깨지지 않는지 실행 검증이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/build_account_check.py:43-95",
+                "rule:R02"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "구간 미확인 행이 비교/집계에서 제외됨",
+              "detail": "`account_key()`가 `bs_section_confirmed`가 없는 유동·비유동 애매 계정을 `None`으로 돌려 불일치 비교에서 제외합니다. 의도한 필터링이 맞는지, 기존에 잡히던 불일치가 누락되지 않는지 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/dart_facts.py:209-230",
+                "file:src/normalization/dart_facts.py:247-263",
+                "file:tests/test_bs_sections.py:76-85"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "수기 확인표 CSV 스키마가 확장됨",
+              "detail": "`load_confirmations()`가 새 필수 컬럼 3개를 요구합니다. 저장된 `data/manual/note_confirmations.csv`가 새 스키마를 모두 만족하지 않으면 로딩 단계에서 실패할 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/manual.py:12-30",
+                "file:src/normalization/manual.py:58-64",
+                "rule:R05"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "설정 파일에 새 `section`/`absent_ok` 규칙이 추가됨",
+              "detail": "계정 매핑 규칙이 구간 조건과 부재 허용을 전제로 바뀌었습니다. 규칙 해석이 바뀌므로 관련 계정의 상태가 `review_needed`→`mapped` 또는 `not_applicable`로 달라질 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:configs/account_map_v1.yaml:50-151",
+                "file:src/normalization/account_map.py:27-37",
+                "rule:R03"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/normalization/account_map.py\"}",
+            "git_diff {\"path\":\"src/normalization/bs_sections.py\"}",
+            "git_diff {\"path\":\"src/normalization/build_account_check.py\"}",
+            "git_diff {\"path\":\"src/normalization/dart_facts.py\"}",
+            "git_diff {\"path\":\"src/normalization/manual.py\"}",
+            "git_diff {\"path\":\"configs/account_map_v1.yaml\"}",
+            "git_diff {\"path\":\"tests/test_bs_sections.py\"}",
+            "search_code {\"text\":\"account_map_v1\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"normalize_section\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"build_account_check\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"mismatch_reviews.csv\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"note_confirmations.csv\",\"path_prefix\":\"src\"}",
+            "read_file {\"path\":\"tests/test_manual.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"tests/test_account_map.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/normalization/account_map.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/normalization/manual.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/normalization/dart_facts.py\",\"start_line\":180,\"end_line\":290}",
+            "read_file {\"path\":\"src/normalization/build_account_check.py\",\"start_line\":1,\"end_line\":180}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 20,
+          "input_tokens": 60806,
+          "output_tokens": 2349,
+          "seconds": 18.1,
+          "items": 12,
+          "verified_items": 10,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_account_map.py",
+            "tests/test_bs_sections.py",
+            "tests/test_manual.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_account_map.py",
+            "tests/test_bs_sections.py",
+            "tests/test_manual.py"
+          ],
+          "summary": "이번 변경은 재무상태표 구간 판정(D8)과 매각예정자산/부채 조정을 새로 도입하고, 그 결과를 계정 매핑·점검표·수기 확인 흐름에 연결합니다. 또한 수기 확인표의 스코프 검증을 분리해 일부 값은 mapped 대신 candidate로 남기도록 동작이 바뀝니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "build_account_check 출력 형식/집계 기준 변경",
+              "detail": "조정 계정이 새로 포함되고 candidate/not_applicable 상태가 추가되어 기존 CSV/콘솔 결과를 소비하는 후속 작업이 깨질 수 있습니다. 특히 기존에 13개 계정만 가정한 집계는 15개로 바뀌었습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/build_account_check.py:43-49",
+                "file:src/normalization/build_account_check.py:66-92",
+                "file:tests/test_account_map.py:134-137",
+                "tool:#4",
+                "tool:#9"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "구간 미확인 행이 비교에서 제외되어 불일치 탐지가 달라질 수 있음",
+              "detail": "account_key가 구간 미확인 ambiguous BS 행은 None을 반환해 same_period_mismatches에서 제외합니다. 기존에 비교되던 행이 빠질 수 있으므로 불일치 집계 수가 변하는지 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/dart_facts.py:218-245",
+                "file:tests/test_bs_sections.py:76-81",
+                "tool:#5",
+                "tool:#20"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "수기 확인값이 mapped가 아니라 candidate로 남을 수 있음",
+              "detail": "scope_check가 미확인이면 값은 반영되지만 상태가 candidate로 바뀝니다. 기존 자동/수기 매핑을 모두 mapped로 기대하는 후속 로직이 있으면 확인이 필요합니다.",
+              "verified": false,
+              "evidence": [
+                "file:src/normalization/manual.py:58-63",
+                "file:tests/test_manual.py:66-75",
+                "tool:#6",
+                "tool:#8"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "매각예정 잔액 음수 처리",
+              "detail": "held_for_sale_adjustment는 음수 잔액을 확인 필요로 반환하고 조정을 하지 않습니다. 실제 원문에서 음수 매각예정 표기가 존재하는 회사는 수동 검토가 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/bs_sections.py:84-85",
+                "file:tests/test_bs_sections.py:122-126",
+                "tool:#3",
+                "tool:#20"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"configs/account_map_v1.yaml\"}",
+            "git_diff {\"path\":\"src/normalization/account_map.py\"}",
+            "git_diff {\"path\":\"src/normalization/bs_sections.py\"}",
+            "git_diff {\"path\":\"src/normalization/build_account_check.py\"}",
+            "git_diff {\"path\":\"src/normalization/dart_facts.py\"}",
+            "git_diff {\"path\":\"src/normalization/manual.py\"}",
+            "git_diff {\"path\":\"tests/test_bs_sections.py\"}",
+            "git_diff {\"path\":\"tests/test_manual.py\"}",
+            "git_diff {\"path\":\"tests/test_account_map.py\"}",
+            "search_code {\"text\":\"held_for_sale_adjustment\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"annotate_sections\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"bs_section_confirmed\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"candidate\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"amount_check\", \"path_prefix\":\"src\"}",
+            "read_file {\"path\":\"src/normalization/bs_sections.py\",\"start_line\":1,\"end_line\":97}",
+            "read_file {\"path\":\"src/normalization/account_map.py\",\"start_line\":1,\"end_line\":110}",
+            "read_file {\"path\":\"src/normalization/dart_facts.py\",\"start_line\":210,\"end_line\":245}",
+            "read_file {\"path\":\"src/normalization/build_account_check.py\",\"start_line\":1,\"end_line\":100}",
+            "read_file {\"path\":\"src/normalization/manual.py\",\"start_line\":1,\"end_line\":80}",
+            "read_file {\"path\":\"tests/test_bs_sections.py\",\"start_line\":1,\"end_line\":131}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 18,
+          "input_tokens": 51331,
+          "output_tokens": 2178,
+          "seconds": 14.3,
+          "items": 13,
+          "verified_items": 12,
+          "high_risks": 1,
+          "verified_high": 1,
+          "recommended_existing": [
+            "tests/test_account_map.py",
+            "tests/test_bs_sections.py",
+            "tests/test_manual.py"
+          ],
+          "add_new": 0,
+          "actual_tests": [
+            "tests/test_account_map.py",
+            "tests/test_bs_sections.py",
+            "tests/test_manual.py"
+          ],
+          "summary": "이번 변경은 계정 매핑 규칙에 재무상태표 구간(유동/비유동) 확인 로직과 매각예정항목 조정을 추가하고, 수기 확인표의 범위 확인 여부에 따라 결과 상태를 `candidate`로 낮추는 방향으로 바뀌었습니다. 또한 점검표 생성 흐름에 새 조정 항목이 추가되고, 불일치 재검토 CSV/수기 확인 CSV 스키마도 확장되었습니다.",
+          "risks": [
+            {
+              "level": "HIGH",
+              "title": "비교 키에서 구간 미확인 행이 제외되어 기존 불일치/집계 결과가 바뀔 수 있음",
+              "detail": "`account_key()`가 구간 미확인 BS 항목에 대해 `None`을 반환하므로, 이전에 비교되던 행이 이제 비교에서 빠질 수 있습니다. 이는 `same_period_mismatches()`의 비교 그룹 수와 불일치 목록을 직접 바꿉니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/dart_facts.py:203-247",
+                "tool:#4"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "매각예정항목 포함/미포함 판정이 보고서별 행 순서와 소계 일치에 의존함",
+              "detail": "`held_for_sale_adjustment()`는 BS 행 순서와 소계 항등식을 기반으로 포함 여부를 판단합니다. 데이터가 이 전제를 만족하지 않으면 `review_needed`로 떨어질 수 있어, 기존에 자동으로 처리되던 케이스가 달라질 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/bs_sections.py:53-97",
+                "tool:#2"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "수기 확인표 스키마 확장으로 기존 파일/생성 파이프라인 호환성 점검 필요",
+              "detail": "`note_confirmations.csv`에 새 필수 열이 추가되었습니다. 현재 저장된 파일은 업데이트됐지만, 다른 환경이나 생성 경로가 옛 스키마를 쓰면 로드 실패가 날 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/manual.py:12-23",
+                "file:data/manual/note_confirmations.csv:1-3",
+                "tool:#5",
+                "tool:#8"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "`build_account_check`는 관련 테스트가 명시적으로 없다고 판정됨",
+              "detail": "규칙 단계에서 `src/normalization/build_account_check.py`에 대한 테스트 미발견이 발동했습니다. 출력 파일 생성과 새 상태값 처리 로직은 통합 수준에서 검증이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "rule:R02",
+                "file:src/normalization/build_account_check.py:1-90",
+                "tool:#11",
+                "tool:#3"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/normalization/account_map.py\"}",
+            "git_diff {\"path\":\"src/normalization/bs_sections.py\"}",
+            "git_diff {\"path\":\"src/normalization/build_account_check.py\"}",
+            "git_diff {\"path\":\"src/normalization/dart_facts.py\"}",
+            "git_diff {\"path\":\"src/normalization/manual.py\"}",
+            "git_diff {\"path\":\"configs/account_map_v1.yaml\"}",
+            "git_diff {\"path\":\"data/manual/mismatch_reviews.csv\"}",
+            "git_diff {\"path\":\"data/manual/note_confirmations.csv\"}",
+            "search_code {\"text\":\"account_map_v1\",\"path_prefix\":\".\"}",
+            "search_code {\"text\":\"bs_sections\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"build_account_check\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"mismatch_reviews.csv\",\"path_prefix\":\".\"}",
+            "search_code {\"text\":\"note_confirmations.csv\",\"path_prefix\":\".\"}",
+            "read_file {\"path\":\"tests/test_bs_sections.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"tests/test_manual.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"tests/test_account_map.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/normalization/account_map.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/normalization/manual.py\",\"start_line\":1,\"end_line\":220}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "3db2f31",
+      "subject": "Fix the reporting basis per company and compute the first 2025 metrics",
+      "by_category": {
+        "config": 2,
+        "data": 1,
+        "docs": 2,
+        "source": 7,
+        "test": 2
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R02",
+        "R03",
+        "R05",
+        "R07"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_bs_sections.py",
+        "tests/test_metrics.py"
+      ],
+      "predicted_tests": [
+        "tests/test_account_map.py",
+        "tests/test_bs_sections.py",
+        "tests/test_dart_facts.py",
+        "tests/test_metrics.py"
+      ],
+      "expected": "REVIEW REQUIRED",
+      "followup_fix": [
+        "c7733b3",
+        "142912b"
+      ],
+      "labeled_by": "user",
+      "note": "첫 2025 지표 계산. 기간 일치·음수 분모 문제가 이후 수정됨",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 20,
+          "input_tokens": 59836,
+          "output_tokens": 2364,
+          "seconds": 17.9,
+          "items": 10,
+          "verified_items": 10,
+          "high_risks": 1,
+          "verified_high": 1,
+          "recommended_existing": [
+            "tests/test_bs_sections.py",
+            "tests/test_metrics.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_bs_sections.py",
+            "tests/test_metrics.py"
+          ],
+          "summary": "이번 변경은 재무 지표 계산 파이프라인을 새로 추가하고, 재무상태표 구간 판정의 기준 키를 `bs_section_confirmed`에서 `bs_section_sum_ok`으로 바꾸는 영향이 있습니다. 또한 계정 매핑 규칙과 기준 설정이 바뀌어, 단기차입/사채류 계정의 매핑 결과와 점검표 상태가 달라질 수 있습니다.",
+          "risks": [
+            {
+              "level": "HIGH",
+              "title": "점검표 상태 변경이 지표 계산 결과를 바꿀 수 있음",
+              "detail": "`build_account_check.py`에서 `미포함`을 `candidate`로 바꾸면서, 지표 엔진은 이를 참고 계산으로 처리하고 점수 보류 사유를 남깁니다. 이 경로는 `metrics_2025.csv`의 계산 상태/점수 반영 가능 여부를 직접 바꾸므로 실제 산출값 차이가 날 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "tool:#5",
+                "tool:#2",
+                "file:src/normalization/build_account_check.py:65-71",
+                "file:src/metrics/run_2025.py:4-5"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "계정 매핑 규칙 재배치로 사채·차입금 매핑 결과가 달라질 수 있음",
+              "detail": "`account_map_v1.yaml`에서 유동 구간의 사채/차입금 규칙이 `current_liabilities`와 `unconfirmed`로 재정의되어, 이전처럼 산술 일치만으로 자동 매핑되던 케이스가 review_needed 또는 candidate로 바뀔 수 있습니다. 실제 데이터에서 어떤 계정이 영향을 받는지 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "tool:#9",
+                "tool:#3",
+                "tool:#4",
+                "file:configs/account_map_v1.yaml:138-153",
+                "file:src/normalization/account_map.py:26-31",
+                "file:src/normalization/bs_sections.py:1-91"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "신규 지표 엔진은 테스트는 있으나 실행 결과 검증이 필요함",
+              "detail": "지표 엔진은 새로 추가되었고 테스트 파일도 생겼지만, 실제 입력 파일(`account_check.csv`, `basis_v1.yaml`, `scope_changes.csv`) 기준으로 `python -m src.metrics.run_2025`가 기대한 CSV와 요약 표를 생성하는지까지는 여기서 확인되지 않았습니다.",
+              "verified": true,
+              "evidence": [
+                "tool:#1",
+                "tool:#2",
+                "tool:#7",
+                "tool:#10",
+                "tool:#11",
+                "file:src/metrics/run_2025.py:1-81",
+                "file:tests/test_metrics.py:1-101"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"src/metrics/run_2025.py\"}",
+            "git_diff {\"path\":\"src/normalization/account_map.py\"}",
+            "git_diff {\"path\":\"src/normalization/bs_sections.py\"}",
+            "git_diff {\"path\":\"src/normalization/build_account_check.py\"}",
+            "git_diff {\"path\":\"src/normalization/dart_facts.py\"}",
+            "git_diff {\"path\":\"tests/test_metrics.py\"}",
+            "git_diff {\"path\":\"tests/test_bs_sections.py\"}",
+            "git_diff {\"path\":\"configs/account_map_v1.yaml\"}",
+            "git_diff {\"path\":\"configs/basis_v1.yaml\"}",
+            "git_diff {\"path\":\"data/manual/scope_changes.csv\"}",
+            "search_code {\"text\":\"bs_section_confirmed\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"bs_section_sum_ok\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"from src.metrics.engine\",\"path_prefix\":\".\"}",
+            "search_code {\"text\":\"metrics_2025.csv\",\"path_prefix\":\".\"}",
+            "search_code {\"text\":\"build_account_check\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"basis_v1.yaml\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"candidate\\\", \\\"mapped\\\"\", \"path_prefix\":\"src/normalization/build_account_check.py\"}",
+            "search_code {\"text\":\"section: current_liabilities\", \"path_prefix\":\"configs/account_map_v1.yaml\"}",
+            "search_code {\"text\":\"section: unconfirmed\", \"path_prefix\":\"configs/account_map_v1.yaml\"}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 5,
+          "tool_calls": 20,
+          "input_tokens": 86128,
+          "output_tokens": 2758,
+          "seconds": 21.6,
+          "items": 10,
+          "verified_items": 10,
+          "high_risks": 1,
+          "verified_high": 1,
+          "recommended_existing": [
+            "tests/test_bs_sections.py",
+            "tests/test_metrics.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_bs_sections.py",
+            "tests/test_metrics.py"
+          ],
+          "summary": "이번 변경은 재무계정 구간 판정 기준을 `bs_section_confirmed`에서 `bs_section_sum_ok`로 바꾸고, 그 결과가 계정 매핑·사채/차입금 판정에 직접 반영되도록 바꿉니다. 또한 2025 지표 엔진과 출력 스크립트를 새로 추가해 `account_check.csv`, `basis_v1.yaml`, `scope_changes.csv`를 입력으로 지표 산출·비교군 검증까지 수행합니다.",
+          "risks": [
+            {
+              "level": "HIGH",
+              "title": "`build_account_check`의 상태 변경이 후속 지표 입력을 바꿀 수 있음",
+              "detail": "`미포함`이 `candidate`로 바뀌면서 지표 엔진은 이를 참고 계산으로 취급합니다. 이 경로는 점수 보류/계산 상태에 직접 영향을 주므로, 실제 산출값과 보류 사유가 의도대로 나오는지 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/build_account_check.py:66-74",
+                "file:src/metrics/run_2025.py:1-4",
+                "file:src/metrics/run_2025.py:41-74",
+                "tool:#18",
+                "tool:#2",
+                "rule:R02"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "구간 판정 플래그 교체로 매핑 결과가 달라질 수 있음",
+              "detail": "계정 매핑과 사채/차입금 판정은 `bs_section_sum_ok`를 기준으로 합니다. 기존 `bs_section_confirmed`와 의미가 동일한지, 그리고 산술 보조 검증만으로 자동 합산되지 않는 의도와 일치하는지 테스트로 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/bs_sections.py:4-5",
+                "file:src/normalization/bs_sections.py:31-58",
+                "file:src/normalization/account_map.py:27-32",
+                "file:src/normalization/dart_facts.py:224-227",
+                "file:tests/test_bs_sections.py:55-101",
+                "tool:#19",
+                "tool:#20",
+                "rule:R03"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "지표 엔진은 새 코드 경로라 회귀 확인 필요",
+              "detail": "새로 추가된 지표 계산 함수와 비교군 계산은 기존 실행 경로와 분리되어 있습니다. 특히 `peer_relative()`의 제외 기업 처리, 중앙값 계산, 점수 반영 가능 여부가 기대대로 동작하는지 확인해야 합니다.",
+              "verified": true,
+              "evidence": [
+                "tool:#1",
+                "file:src/metrics/run_2025.py:41-81",
+                "file:tests/test_metrics.py:69-101",
+                "tool:#13",
+                "tool:#15",
+                "rule:R03"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"src/metrics/run_2025.py\"}",
+            "git_diff {\"path\":\"src/normalization/account_map.py\"}",
+            "git_diff {\"path\":\"src/normalization/bs_sections.py\"}",
+            "git_diff {\"path\":\"src/normalization/build_account_check.py\"}",
+            "git_diff {\"path\":\"src/normalization/dart_facts.py\"}",
+            "git_diff {\"path\":\"tests/test_metrics.py\"}",
+            "git_diff {\"path\":\"tests/test_bs_sections.py\"}",
+            "git_diff {\"path\":\"configs/account_map_v1.yaml\"}",
+            "git_diff {\"path\":\"configs/basis_v1.yaml\"}",
+            "git_diff {\"path\":\"data/manual/scope_changes.csv\"}",
+            "search_code {\"text\":\"bs_section_sum_ok\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"src.metrics.run_2025\",\"path_prefix\":\".\"}",
+            "search_code {\"text\":\"build_account_check\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"metrics_2025.csv\",\"path_prefix\":\".\"}",
+            "search_code {\"text\":\"basis_v1.yaml\",\"path_prefix\":\".\"}",
+            "search_code {\"text\":\"scope_changes.csv\",\"path_prefix\":\"src\"}",
+            "read_file {\"path\":\"src/normalization/build_account_check.py\",\"start_line\":55,\"end_line\":80}",
+            "read_file {\"path\":\"src/normalization/bs_sections.py\",\"start_line\":1,\"end_line\":95}",
+            "read_file {\"path\":\"src/normalization/account_map.py\",\"start_line\":20,\"end_line\":36}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 16,
+          "input_tokens": 49323,
+          "output_tokens": 2280,
+          "seconds": 23.1,
+          "items": 11,
+          "verified_items": 11,
+          "high_risks": 1,
+          "verified_high": 1,
+          "recommended_existing": [
+            "tests/test_bs_sections.py",
+            "tests/test_metrics.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_bs_sections.py",
+            "tests/test_metrics.py"
+          ],
+          "summary": "이번 변경은 2025 지표 산출 파이프라인을 새로 도입하고, 매각예정항목/비교군 판정 로직을 보조 검증 중심으로 재정의합니다. 동시에 계정 매핑과 기준 설정, 범위 변경 데이터가 바뀌어 `account_check.csv`와 `metrics_2025.csv`의 계산 상태·점수 반영 여부가 달라질 수 있습니다.",
+          "risks": [
+            {
+              "level": "HIGH",
+              "title": "단기 부채 계정의 점검 상태가 바뀌어 downstream 계산 결과가 달라질 수 있음",
+              "detail": "`build_account_check.py`가 매각예정 조정의 `미포함`을 `candidate`로 바꾸므로, 이전에는 `mapped` 또는 `review_needed`로 분류되던 계정이 `reference`로 계산되고 `metrics_2025.csv`에서 점수 보류/반영 가능 여부가 달라질 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/build_account_check.py:66-74",
+                "file:src/metrics/engine.py:3-6",
+                "file:src/metrics/engine.py:50-62",
+                "file:src/metrics/run_2025.py:22-28",
+                "file:src/metrics/run_2025.py:65-68"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "새로 추가된 지표 엔진은 테스트가 있으나 실행 경로 전체 검증은 필요",
+              "detail": "핵심 지표 함수와 비교군 계산은 단위 테스트가 추가되었지만, 실제 CSV 입력(`account_check.csv`, `basis_v1.yaml`, `scope_changes.csv`)을 결합하는 `main()` 경로 전체는 변경 후 실제 실행 검증이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:tests/test_metrics.py:1-101",
+                "file:src/metrics/run_2025.py:39-77",
+                "rule:R03",
+                "rule:R05"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "비교군 기준이 파일럿 3개사에 의존",
+              "detail": "비교군이 평가기업 제외 3개사로 고정되어 있어, 일부 지표는 비교 상대가 없거나 중앙값 계산이 달라질 수 있습니다. 현재 코드는 비교군 제외 기업에 대해 `해당 없음`으로 처리합니다.",
+              "verified": true,
+              "evidence": [
+                "file:configs/basis_v1.yaml:16-20",
+                "file:src/metrics/engine.py:7",
+                "file:src/metrics/engine.py:217-246",
+                "file:tests/test_metrics.py:91-98"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "문서 업데이트는 실행 영향보다 설명 변경 비중이 큼",
+              "detail": "`docs/decisions.md`, `docs/progress.md`는 규칙 설명과 진행 상태를 갱신한 것으로 보이며, 직접적인 런타임 영향은 제한적입니다.",
+              "verified": true,
+              "evidence": [
+                "rule:R03",
+                "rule:R05"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"src/metrics/run_2025.py\"}",
+            "git_diff {\"path\":\"src/normalization/bs_sections.py\"}",
+            "git_diff {\"path\":\"src/normalization/build_account_check.py\"}",
+            "git_diff {\"path\":\"configs/account_map_v1.yaml\"}",
+            "git_diff {\"path\":\"configs/basis_v1.yaml\"}",
+            "git_diff {\"path\":\"data/manual/scope_changes.csv\"}",
+            "git_diff {\"path\":\"tests/test_metrics.py\"}",
+            "git_diff {\"path\":\"tests/test_bs_sections.py\"}",
+            "read_file {\"path\":\"src/metrics/engine.py\",\"start_line\":1,\"end_line\":260}",
+            "read_file {\"path\":\"src/metrics/run_2025.py\",\"start_line\":1,\"end_line\":120}",
+            "read_file {\"path\":\"src/normalization/bs_sections.py\",\"start_line\":1,\"end_line\":140}",
+            "read_file {\"path\":\"src/normalization/build_account_check.py\",\"start_line\":55,\"end_line\":85}",
+            "read_file {\"path\":\"configs/basis_v1.yaml\",\"start_line\":1,\"end_line\":40}",
+            "read_file {\"path\":\"configs/account_map_v1.yaml\",\"start_line\":120,\"end_line\":170}",
+            "read_file {\"path\":\"data/manual/scope_changes.csv\",\"start_line\":1,\"end_line\":25}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "9e9c12b",
+      "subject": "Fill 2025 note gaps with separated amount, scope, and component checks",
+      "by_category": {
+        "data": 2,
+        "docs": 2,
+        "source": 3,
+        "test": 1
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R01",
+        "R02",
+        "R05"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_manual.py"
+      ],
+      "predicted_tests": [
+        "tests/test_manual.py",
+        "tests/test_metrics.py"
+      ],
+      "expected": "REVIEW REQUIRED",
+      "followup_fix": [
+        "c7733b3"
+      ],
+      "labeled_by": "user",
+      "note": "수기 합계 보완. 미확인 값 승격 경로가 이후 수정됨",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 17,
+          "input_tokens": 38137,
+          "output_tokens": 2055,
+          "seconds": 17.5,
+          "items": 11,
+          "verified_items": 11,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_manual.py",
+            "tests/test_metrics.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_manual.py"
+          ],
+          "summary": "이번 변경은 수기 확인값 적용 로직과 관련 CSV 스키마를 확장하고, 단기 이자부채에 대한 수기 대체 규칙을 추가합니다. 또한 `debt_ratio`의 표시 라벨이 바뀌고, 사업보고서 원문에서 주석 구간을 찾는 새 유틸 파일이 추가됐지만 현재 코드상 사용처는 확인되지 않았습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "단기 이자부채가 후보값으로 남는 케이스 검증 필요",
+              "detail": "`component_check`가 `확인`이 아니면 `short_term_interest_bearing_debt`는 `candidate`로 남도록 바뀌었습니다. 이 값이 `cash_to_short_term_debt` 같은 지표에 어떻게 반영되는지 실제 데이터로 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/manual.py:66-72",
+                "file:src/metrics/engine.py:135-137",
+                "file:tests/test_manual.py:77-84"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "API 값과 다른 수기 값의 대체 조건이 좁지만 새로 생김",
+              "detail": "API 값과 다른 경우 기본적으로 review_needed로 막지만, `replaces_incomplete_api` + `component_check=확인`이면 예외적으로 수기 값을 채택합니다. 이 예외가 의도한 계정에만 적용되는지 검증이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/manual.py:57-65",
+                "file:data/manual/note_confirmations.csv:7-12",
+                "file:tests/test_manual.py:91-99"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "새 주석 구간 탐색 유틸은 아직 미사용",
+              "detail": "`filing_sections.py`는 추가됐지만 저장소 내 참조가 확인되지 않았습니다. 즉시 장애 가능성은 낮지만, 기대한 경로에 연결되지 않으면 기능이 활용되지 않을 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/filing_sections.py:1-32",
+                "tool:#8"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "지표 라벨 변경으로 출력 문구가 바뀜",
+              "detail": "`debt_ratio`의 설명 문구가 바뀌었으므로, 리포트/스냅샷 기반 테스트가 있다면 텍스트 비교가 깨질 수 있습니다. 계산 로직 자체는 변경되지 않았습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/metrics/engine.py:89-97"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"src/normalization/filing_sections.py\"}",
+            "git_diff {\"path\":\"src/normalization/manual.py\"}",
+            "git_diff {\"path\":\"tests/test_manual.py\"}",
+            "git_diff {\"path\":\"data/manual/disclosure_issues.csv\"}",
+            "git_diff {\"path\":\"data/manual/note_confirmations.csv\"}",
+            "search_code {\"text\":\"notes_section(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"filing_sections\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"api_relation\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"component_check\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"debt_ratio\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"short_term_interest_bearing_debt\", \"path_prefix\":\"src\"}",
+            "read_file {\"path\":\"src/metrics/engine.py\",\"start_line\":84,\"end_line\":98}",
+            "read_file {\"path\":\"src/metrics/engine.py\",\"start_line\":130,\"end_line\":140}",
+            "read_file {\"path\":\"src/normalization/manual.py\",\"start_line\":1,\"end_line\":90}",
+            "read_file {\"path\":\"src/normalization/filing_sections.py\",\"start_line\":1,\"end_line\":40}",
+            "read_file {\"path\":\"tests/test_manual.py\",\"start_line\":1,\"end_line\":120}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 16,
+          "input_tokens": 38745,
+          "output_tokens": 1852,
+          "seconds": 15.5,
+          "items": 8,
+          "verified_items": 8,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_manual.py",
+            "tests/test_metrics.py"
+          ],
+          "add_new": 0,
+          "actual_tests": [
+            "tests/test_manual.py"
+          ],
+          "summary": "수기 확인표 스키마와 적용 로직이 확장되어, 단기 이자부채 같은 합계 계정은 구성요소 확인 여부에 따라 candidate/mapped/review_needed가 달라지게 바뀌었습니다. 또한 debt_ratio의 표시명만 바뀌었고, 주석 구간 탐색용 새 모듈이 추가됐지만 현재 저장소 내 호출처는 확인되지 않았습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "수기 확인표 로딩 실패 가능성",
+              "detail": "load_confirmations는 새 REQUIRED 컬럼(component_check, api_relation)이 없으면 ValueError를 발생시킵니다. 저장소 내 기본 데이터 파일은 함께 갱신됐지만, 다른 입력 파일이나 외부 생성본이 같은 스키마를 따르지 않으면 로딩이 실패할 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/manual.py:12-25",
+                "file:data/manual/note_confirmations.csv:1-12",
+                "tool:#13"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "새 주석 탐색 모듈의 미사용 상태",
+              "detail": "filing_sections.py는 새로 추가됐지만 현재 코드 검색상 호출처가 없어, 실제 파이프라인에 연결되기 전까지는 동작 검증 범위 밖입니다. 연결 시 정규식/구간 탐색 결과가 기대와 다를 수 있어 추가 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/filing_sections.py:17-32",
+                "tool:#7",
+                "tool:#8",
+                "tool:#15"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "표시명 변경에 따른 비교/문서 출력 차이",
+              "detail": "debt_ratio의 라벨 문자열이 바뀌어, 리포트 출력이나 스냅샷 테스트가 라벨에 의존한다면 차이가 생길 수 있습니다. 계산값 변경은 확인되지 않았습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/metrics/engine.py:89-98",
+                "tool:#1",
+                "tool:#14"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"src/normalization/filing_sections.py\"}",
+            "git_diff {\"path\":\"src/normalization/manual.py\"}",
+            "git_diff {\"path\":\"tests/test_manual.py\"}",
+            "git_diff {\"path\":\"data/manual/note_confirmations.csv\"}",
+            "git_diff {\"path\":\"data/manual/disclosure_issues.csv\"}",
+            "search_code {\"text\":\"notes_section(\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"report_text(\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"component_check\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"api_relation\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"debt_ratio(\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"short_term_interest_bearing_debt\",\"path_prefix\":\"src\"}",
+            "read_file {\"path\":\"src/normalization/manual.py\",\"start_line\":1,\"end_line\":110}",
+            "read_file {\"path\":\"src/metrics/engine.py\",\"start_line\":80,\"end_line\":150}",
+            "read_file {\"path\":\"src/normalization/filing_sections.py\",\"start_line\":1,\"end_line\":120}",
+            "read_file {\"path\":\"tests/test_manual.py\",\"start_line\":1,\"end_line\":140}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 15,
+          "input_tokens": 31226,
+          "output_tokens": 1794,
+          "seconds": 12.6,
+          "items": 10,
+          "verified_items": 10,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_manual.py",
+            "tests/test_metrics.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_manual.py"
+          ],
+          "summary": "이번 변경은 주로 수기 확인 규칙과 관련 데이터/테스트를 보강하고, 지표 엔진의 표시명을 수정한 것입니다. 또한 새로 추가된 `filing_sections.py`는 현재 저장소 내에서 사용처가 확인되지 않았습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "수기 확인표 스키마 변경으로 인한 적재 실패 가능성",
+              "detail": "`load_confirmations()`는 `REQUIRED`에 없는 컬럼이 있으면 즉시 에러를 냅니다. 이번 변경으로 필수 컬럼이 늘어났기 때문에, 다른 환경의 CSV가 아직 옛 스키마면 적재가 실패할 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/manual.py:12-16",
+                "file:src/normalization/manual.py:19-31",
+                "file:data/manual/note_confirmations.csv:1-12",
+                "rule:R05"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "단기 이자부채의 수기 대체 조건이 강화됨",
+              "detail": "이전에는 API 값과 수기 값이 다르면 확인 필요였지만, 이제는 특정 계정과 `api_relation`, `component_check` 조건을 모두 만족해야만 수기 값으로 대체됩니다. 이 조건이 실제 데이터에 맞지 않으면 결과 상태가 `review_needed`로 남을 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/manual.py:57-65",
+                "file:tests/test_manual.py:91-99",
+                "file:data/manual/note_confirmations.csv:8-11",
+                "rule:R01"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "새 모듈이 아직 연결되지 않음",
+              "detail": "`filing_sections.py`는 추가됐지만 사용처가 확인되지 않아, 현재로서는 동작 변화보다는 향후 통합용 코드로 보입니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/filing_sections.py:1-32",
+                "tool:#5",
+                "rule:R02"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"src/normalization/filing_sections.py\"}",
+            "git_diff {\"path\":\"src/normalization/manual.py\"}",
+            "git_diff {\"path\":\"tests/test_manual.py\"}",
+            "search_code {\"text\":\"filing_sections\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"manual\", \"path_prefix\":\"src/normalization\"}",
+            "search_code {\"text\":\"compute_metrics\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"note_confirmations.csv\", \"path_prefix\":\".\"}",
+            "read_file {\"path\":\"src/normalization/manual.py\",\"start_line\":1,\"end_line\":140}",
+            "read_file {\"path\":\"src/normalization/build_account_check.py\",\"start_line\":1,\"end_line\":130}",
+            "read_file {\"path\":\"docs/decisions.md\",\"start_line\":180,\"end_line\":320}",
+            "read_file {\"path\":\"tests/test_manual.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/metrics/engine.py\",\"start_line\":80,\"end_line\":110}",
+            "read_file {\"path\":\"data/manual/note_confirmations.csv\",\"start_line\":1,\"end_line\":40}",
+            "read_file {\"path\":\"data/manual/disclosure_issues.csv\",\"start_line\":1,\"end_line\":40}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "c7733b3",
+      "subject": "Close paths that promoted unconfirmed values, per code review",
+      "by_category": {
+        "config": 1,
+        "docs": 2,
+        "source": 8,
+        "test": 5
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R02",
+        "R03"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_account_map.py",
+        "tests/test_bs_sections.py",
+        "tests/test_dart_facts.py",
+        "tests/test_manual.py",
+        "tests/test_metrics.py"
+      ],
+      "predicted_tests": [
+        "tests/test_account_map.py",
+        "tests/test_bs_sections.py",
+        "tests/test_dart_facts.py",
+        "tests/test_manual.py",
+        "tests/test_metrics.py"
+      ],
+      "expected": "SAFE",
+      "followup_fix": null,
+      "labeled_by": "user",
+      "note": "리뷰 지적 수정, 관련 테스트 5개 함께 수정. 재계산 결과 2025 지표 변화 없음을 커밋에 기록",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 16,
+          "input_tokens": 46050,
+          "output_tokens": 2238,
+          "seconds": 15.2,
+          "items": 11,
+          "verified_items": 11,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_account_map.py",
+            "tests/test_bs_sections.py",
+            "tests/test_dart_facts.py",
+            "tests/test_manual.py",
+            "tests/test_metrics.py"
+          ],
+          "add_new": 0,
+          "actual_tests": [
+            "tests/test_account_map.py",
+            "tests/test_bs_sections.py",
+            "tests/test_dart_facts.py",
+            "tests/test_manual.py",
+            "tests/test_metrics.py"
+          ],
+          "summary": "이번 변경은 계정 매핑/점검표 생성, 수기 확인 적용, 매각예정항목 조정, 2025 지표 계산의 입력 선택·상태 판정을 더 엄격하게 바꾸는 쪽입니다. 설정 파일의 `requires_completeness` 추가와 함께, 기간 확인·스냅샷 선택·중복 키 검사를 도입해 일부 값이 더 쉽게 보류/후보 상태로 내려갈 수 있습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "점검표/지표 출력이 보류로 늘어날 수 있음",
+              "detail": "새로운 선택 규칙과 기간 검증 때문에, 이전에는 계산되던 값이 `held`, `review_needed`, `candidate`, `not_computed`로 바뀔 수 있습니다. 실제 데이터에서 어떤 항목이 영향을 받는지 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/selection.py:51-65",
+                "file:src/normalization/manual.py:60-80",
+                "file:src/metrics/engine.py:35-50"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "중복 입력이 있으면 실행 중 예외 발생",
+              "detail": "점검표 생성과 지표 계산 모두에서 키 중복을 명시적으로 에러 처리합니다. 기존 데이터에 중복이 남아 있으면 파이프라인이 실패할 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/build_account_check.py:76-79",
+                "file:src/metrics/run_2025.py:26-27"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "합계 계정 후보 판정 강화",
+              "detail": "`requires_completeness`가 붙은 합계 계정은 완전성 확인이 없으면 정상값이 아니라 후보값이 됩니다. 이는 의도된 변경이지만 downstream 사용처가 후보 상태를 처리하는지 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:configs/account_map_v1.yaml:110-117",
+                "file:src/normalization/account_map.py:101-107"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"src/metrics/run_2025.py\"}",
+            "git_diff {\"path\":\"src/normalization/account_map.py\"}",
+            "git_diff {\"path\":\"src/normalization/bs_sections.py\"}",
+            "git_diff {\"path\":\"src/normalization/build_account_check.py\"}",
+            "git_diff {\"path\":\"src/normalization/build_facts.py\"}",
+            "git_diff {\"path\":\"src/normalization/manual.py\"}",
+            "git_diff {\"path\":\"src/normalization/selection.py\"}",
+            "git_diff {\"path\":\"configs/account_map_v1.yaml\"}",
+            "read_file {\"path\":\"src/normalization/selection.py\",\"start_line\":1,\"end_line\":200}",
+            "read_file {\"path\":\"src/normalization/build_account_check.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/normalization/manual.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/metrics/engine.py\",\"start_line\":1,\"end_line\":240}",
+            "read_file {\"path\":\"src/normalization/account_map.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/normalization/bs_sections.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/metrics/run_2025.py\",\"start_line\":1,\"end_line\":200}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 19,
+          "input_tokens": 73552,
+          "output_tokens": 2445,
+          "seconds": 19.1,
+          "items": 14,
+          "verified_items": 14,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_account_map.py",
+            "tests/test_bs_sections.py",
+            "tests/test_manual.py",
+            "tests/test_metrics.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_account_map.py",
+            "tests/test_bs_sections.py",
+            "tests/test_dart_facts.py",
+            "tests/test_manual.py",
+            "tests/test_metrics.py"
+          ],
+          "summary": "이번 변경은 공시 스냅샷 선택 기준을 분리하고, 계정 매핑·수기 확인·지표 계산에 기간 검증을 추가한 것이 핵심입니다. 또한 매각예정항목 조정과 점검표 생성 로직이 바뀌어, 점검표 출력값과 2025 지표 계산 결과에 직접 영향이 있습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "분석 입력 선택 실패 시 전체 점검표가 보류될 수 있음",
+              "detail": "선택된 최신 유효 보고서의 원문이 저장되지 않았거나, 선택 보고서와 일치하는 스냅샷이 없으면 해당 기업·연도·기준의 결과가 held/no_data로 내려갑니다. 선택 기준이 바뀌었기 때문에 실제 데이터셋에서 보류 건수가 늘어날 수 있어 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/selection.py:51-65",
+                "file:src/normalization/build_account_check.py:51-55",
+                "tool:#8"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "구성 항목 계정이 candidate로 내려가면서 점수 반영 범위가 줄 수 있음",
+              "detail": "short_term_interest_bearing_debt는 requires_completeness가 설정되어, 완전성 확인이 없으면 mapped가 아니라 candidate가 됩니다. 이 변경은 지표 계산에서 reference/보류로 이어질 수 있으므로 영향 범위를 확인해야 합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/account_map.py:101-107",
+                "file:configs/account_map_v1.yaml:110-116",
+                "tool:#17"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "기간 불일치가 있으면 계산 입력이 not_computed로 바뀜",
+              "detail": "입력에 period_end, period_status, period_is_annual가 추가되었고, 기간이 연도와 맞지 않거나 확인되지 않으면 calc_status가 not_computed가 됩니다. 기존에 계산되던 일부 값이 보류로 바뀔 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/metrics/engine.py:21-51",
+                "file:src/metrics/engine.py:72-86",
+                "file:src/metrics/engine.py:89-95"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "매각예정 조정 결과 포맷 변경",
+              "detail": "held_for_sale_adjustment가 period를 함께 반환하고, 매각예정 금액 0과 결측을 구분합니다. 이 출력 포맷을 소비하는 코드가 있다면 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/bs_sections.py:80-108",
+                "file:src/normalization/build_account_check.py:67-74"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"src/metrics/run_2025.py\"}",
+            "git_diff {\"path\":\"src/normalization/account_map.py\"}",
+            "git_diff {\"path\":\"src/normalization/bs_sections.py\"}",
+            "git_diff {\"path\":\"src/normalization/build_account_check.py\"}",
+            "git_diff {\"path\":\"src/normalization/build_facts.py\"}",
+            "git_diff {\"path\":\"src/normalization/manual.py\"}",
+            "git_diff {\"path\":\"src/normalization/selection.py\"}",
+            "git_diff {\"path\":\"configs/account_map_v1.yaml\"}",
+            "read_file {\"path\":\"src/normalization/selection.py\",\"start_line\":1,\"end_line\":200}",
+            "read_file {\"path\":\"src/normalization/account_map.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/normalization/manual.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/metrics/engine.py\",\"start_line\":1,\"end_line\":240}",
+            "read_file {\"path\":\"src/normalization/build_account_check.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/normalization/bs_sections.py\",\"start_line\":1,\"end_line\":220}",
+            "search_code {\"text\":\"select_snapshot(\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"requires_completeness\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"period_problem(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"load_published_filings(\", \"path_prefix\":\"src\"}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 20,
+          "input_tokens": 57264,
+          "output_tokens": 2630,
+          "seconds": 18.2,
+          "items": 14,
+          "verified_items": 14,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_account_map.py",
+            "tests/test_bs_sections.py",
+            "tests/test_dart_facts.py",
+            "tests/test_manual.py",
+            "tests/test_metrics.py"
+          ],
+          "add_new": 0,
+          "actual_tests": [
+            "tests/test_account_map.py",
+            "tests/test_bs_sections.py",
+            "tests/test_dart_facts.py",
+            "tests/test_manual.py",
+            "tests/test_metrics.py"
+          ],
+          "summary": "이번 변경은 계정 매핑·수기 확인·지표 계산 전반에 기간 검증과 스냅샷 선택 로직을 추가해, 분석 입력이 더 엄격하게 보류되도록 바꿨습니다. 또한 일부 합계 계정과 유동비율 계산에서 후보/보류 상태를 분리해 점수 반영 가능 여부를 더 보수적으로 처리합니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "선택된 보고서가 원문 미저장인 경우 전체 입력이 보류될 수 있음",
+              "detail": "새 선택 로직은 최신 유효 보고서가 있어도 그 원문이 저장되지 않았으면 이전 보고서로 내려가지 않고 held로 처리합니다. 저장 누락이 있는 종목/연도는 점검표와 지표 생성이 더 많이 보류될 수 있으므로, 실제 운영 데이터에서 영향 범위를 확인해야 합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/normalization/selection.py:51-55",
+                "file:src/normalization/build_facts.py:40-44",
+                "file:src/normalization/build_account_check.py:49-54",
+                "tool:#17"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "기간 정보가 비어 있거나 규칙과 다르면 계산 결과가 not_computed로 바뀜",
+              "detail": "계산 입력이 mapped/candidate라도 period_status가 from_filing_text 또는 from_manual가 아니거나 사업연도와 다르면 not_computed로 낮춥니다. 기간 메타데이터가 누락된 기존 데이터에서는 지표가 줄어들 수 있어 검증이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/metrics/engine.py:35-50",
+                "file:src/normalization/account_map.py:98-107",
+                "file:src/normalization/manual.py:86-93",
+                "tool:#10",
+                "tool:#15"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "합계 계정이 candidate로 내려가면서 downstream 점수 반영이 달라질 수 있음",
+              "detail": "short_term_interest_bearing_debt는 requires_completeness가 true라서 매핑 결과가 mapped가 아니라 candidate가 됩니다. 이 값은 계산상 참고 입력으로 취급되므로, 관련 지표에서 score_eligible와 hold_reasons가 달라질 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:configs/account_map_v1.yaml:110-111",
+                "file:src/normalization/account_map.py:101-107",
+                "tool:#9",
+                "tool:#13"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "유동비율 계산에서 부채 0 처리 방식이 더 보수적으로 변경됨",
+              "detail": "기존에는 계산 불가로만 처리하던 부분에 점수 보류 문구가 추가되었습니다. 계산 로직 자체는 유지되지만 결과 해석과 리포트 문구가 바뀝니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/metrics/engine.py:157-165",
+                "tool:#12"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"src/metrics/run_2025.py\"}",
+            "git_diff {\"path\":\"src/normalization/account_map.py\"}",
+            "git_diff {\"path\":\"src/normalization/bs_sections.py\"}",
+            "git_diff {\"path\":\"src/normalization/build_account_check.py\"}",
+            "git_diff {\"path\":\"src/normalization/build_facts.py\"}",
+            "git_diff {\"path\":\"src/normalization/manual.py\"}",
+            "git_diff {\"path\":\"src/normalization/selection.py\"}",
+            "git_diff {\"path\":\"configs/account_map_v1.yaml\"}",
+            "search_code {\"text\":\"period_problem(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"select_snapshot(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"finalize(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"requires_completeness\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"manual_period(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"period_status\", \"path_prefix\":\"src\"}",
+            "read_file {\"path\":\"src/metrics/engine.py\",\"start_line\":1,\"end_line\":180}",
+            "read_file {\"path\":\"src/normalization/selection.py\",\"start_line\":1,\"end_line\":120}",
+            "read_file {\"path\":\"src/normalization/manual.py\",\"start_line\":1,\"end_line\":130}",
+            "read_file {\"path\":\"src/normalization/account_map.py\",\"start_line\":1,\"end_line\":140}",
+            "read_file {\"path\":\"src/normalization/bs_sections.py\",\"start_line\":1,\"end_line\":130}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "99c3179",
+      "subject": "Add run manifests, proposed scoring rules, and coverage without redistribution",
+      "by_category": {
+        "config": 1,
+        "docs": 3,
+        "source": 6,
+        "test": 2
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R02",
+        "R03"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_dart_facts.py",
+        "tests/test_scoring.py"
+      ],
+      "predicted_tests": [
+        "tests/test_account_map.py",
+        "tests/test_bs_sections.py",
+        "tests/test_dart_facts.py",
+        "tests/test_scoring.py"
+      ],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "b515f78",
+      "subject": "Adopt scoring rules v2 as unvalidated project policy and keep v1",
+      "by_category": {
+        "config": 1,
+        "docs": 4,
+        "source": 2,
+        "test": 1
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R02",
+        "R03"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_scoring.py"
+      ],
+      "predicted_tests": [
+        "tests/test_scoring.py"
+      ],
+      "expected": "REVIEW REQUIRED",
+      "followup_fix": null,
+      "labeled_by": "user",
+      "note": "점수 규칙 v2 채택 — 정책 변경이라 사람 확인 필요",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 12,
+          "input_tokens": 38420,
+          "output_tokens": 1830,
+          "seconds": 15.4,
+          "items": 8,
+          "verified_items": 8,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_scoring.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_scoring.py"
+          ],
+          "summary": "점수 규칙이 v1에서 v2로 바뀌면서, 파이프라인이 이제 `configs/scoring_v2.yaml`을 읽고 `score_row`/`coverage`의 출력 형식과 판정 로직이 함께 변경됐습니다. 테스트도 v2 기준으로 재작성되어, 변동성 상한(CAGR 음수), 검증 상태 분리, 커버리지 범위 열 이름 변경을 검증합니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "변동성 점수 산정 기준이 바뀜",
+              "detail": "`growth_volatility`는 이제 `revenue_cagr_3y`가 음수일 때만 상한 30점을 적용하고, CAGR를 확인할 수 없으면 점수를 보류합니다. 기존 v1의 ‘3년 연속 감소’ 기준과 결과가 달라질 수 있어 실제 산출값 검증이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/scoring/score.py:47-60",
+                "file:src/scoring/score.py:91-94",
+                "file:configs/scoring_v2.yaml:40-48",
+                "tool:#10",
+                "tool:#4"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "파이프라인 결과 열 이름 변경으로 후속 소비 코드 영향 가능",
+              "detail": "커버리지 출력이 `K_confirmed_contribution`/`range_high`에서 `K_contribution`/`range_high_loose`로 바뀌었습니다. 이 CSV를 읽는 후속 스크립트나 리포트가 있으면 깨질 수 있으므로 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/scoring/score.py:115-120",
+                "file:src/pipeline/run_pilot_2025.py:119-122",
+                "file:tests/test_scoring.py:164-176",
+                "tool:#10",
+                "tool:#11",
+                "tool:#12"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "검증 상태 분리로 출력 문구가 달라짐",
+              "detail": "`rule_version`과 `K_label`에 `validation_status`가 포함되고, `confirmed`와 `validated`를 구분하는 문구가 추가됐습니다. 계산 결과 자체보다 메타정보 표시가 바뀌는 변경입니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/pipeline/run_pilot_2025.py:51-58",
+                "file:src/pipeline/run_pilot_2025.py:119-122",
+                "file:src/scoring/score.py:97-102",
+                "file:src/scoring/score.py:116-125",
+                "tool:#11",
+                "tool:#10"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/pipeline/run_pilot_2025.py\"}",
+            "git_diff {\"path\":\"src/scoring/score.py\"}",
+            "git_diff {\"path\":\"tests/test_scoring.py\"}",
+            "git_diff {\"path\":\"configs/scoring_v2.yaml\"}",
+            "search_code {\"text\":\"score_row(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"coverage(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"range_high_loose\", \"path_prefix\":\".\"}",
+            "search_code {\"text\":\"validation_status\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"cap_if_negative_cagr\", \"path_prefix\":\"src\"}",
+            "read_file {\"path\":\"src/scoring/score.py\",\"start_line\":44,\"end_line\":130}",
+            "read_file {\"path\":\"src/pipeline/run_pilot_2025.py\",\"start_line\":40,\"end_line\":125}",
+            "read_file {\"path\":\"tests/test_scoring.py\",\"start_line\":1,\"end_line\":190}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 10,
+          "input_tokens": 25210,
+          "output_tokens": 1672,
+          "seconds": 13.5,
+          "items": 9,
+          "verified_items": 9,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "src/pipeline/run_pilot_2025.py",
+            "tests/test_scoring.py"
+          ],
+          "add_new": 0,
+          "actual_tests": [
+            "tests/test_scoring.py"
+          ],
+          "summary": "점수 규칙이 v1에서 v2로 전환되며, 성장 변동성 규칙의 상한 조건이 ‘3년 연속 감소’에서 ‘3년 CAGR 음수’ 기준으로 바뀌었습니다. 또한 파일럿 실행 파이프라인이 새 설정 파일을 읽고, 점수 집계 결과의 라벨·범위·검증 상태 출력 방식도 함께 변경되었습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "새 규칙 파일은 채택됐지만 아직 검증되지 않음",
+              "detail": "`configs/scoring_v2.yaml`의 `validation_status`가 `unvalidated`이고, 파이프라인도 이를 그대로 출력·기록합니다. 따라서 실제 데이터에서 새 상한 규칙이 기대한 결과를 내는지 별도 검증이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:configs/scoring_v2.yaml:3-14",
+                "file:src/pipeline/run_pilot_2025.py:51-53",
+                "tool:#3",
+                "tool:#10"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "파일럿 실행 경로는 기존 테스트 커버리지 밖일 수 있음",
+              "detail": "규칙 단계 결과에서 `src/pipeline/run_pilot_2025.py`는 `no_test`로 표시됐고, 코드 변경으로 새 예외 조건(기여도 합 불일치)이 추가됐습니다. 실행 시 데이터/규칙 조합에 따라 중단될 수 있으므로 실제 실행 검증이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "rule:R02",
+                "file:src/pipeline/run_pilot_2025.py:60-65",
+                "tool:#10"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "커버리지 범위 출력 의미가 바뀜",
+              "detail": "`range_high`가 `range_high_loose`로 이름과 의미가 조정되어, 기존 소비 코드가 있다면 컬럼명 변경에 맞춰야 합니다. 현재 확인된 사용처는 파이프라인 출력뿐입니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/scoring/score.py:115-121",
+                "file:src/pipeline/run_pilot_2025.py:119-122",
+                "tool:#9",
+                "tool:#10"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/scoring/score.py\"}",
+            "git_diff {\"path\":\"src/pipeline/run_pilot_2025.py\"}",
+            "git_diff {\"path\":\"configs/scoring_v2.yaml\"}",
+            "search_code {\"text\":\"scoring_v2.yaml\",\"path_prefix\":null}",
+            "search_code {\"text\":\"score(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"run_pilot_2025\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"tests/test_scoring.py\",\"path_prefix\":null}",
+            "read_file {\"path\":\"tests/test_scoring.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/scoring/score.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/pipeline/run_pilot_2025.py\",\"start_line\":1,\"end_line\":220}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 15,
+          "input_tokens": 44497,
+          "output_tokens": 1686,
+          "seconds": 15.7,
+          "items": 9,
+          "verified_items": 9,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "src/pipeline/run_pilot_2025.py",
+            "tests/test_scoring.py"
+          ],
+          "add_new": 0,
+          "actual_tests": [
+            "tests/test_scoring.py"
+          ],
+          "summary": "점수 규칙이 v1에서 v2로 바뀌면서, 점수 산정 로직과 실행 파이프라인이 새 설정을 직접 사용하도록 변경되었습니다. 커버리지/출력 컬럼명도 바뀌었고, 이에 맞춰 테스트가 새 규칙을 검증하도록 갱신되었습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "CAGR 상한 적용 조건이 새로 추가되어 일부 점수 결과가 달라질 수 있음",
+              "detail": "growth_volatility는 이제 같은 기업의 revenue_cagr_3y 값을 보고 음수일 때만 상한을 적용합니다. 해당 CAGR이 없거나 계산 상태가 정상적이지 않으면 점수가 보류됩니다. 기존 결과와 달라지는지 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/scoring/score.py:47-60",
+                "file:src/scoring/score.py:75-94",
+                "tool:#1"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "파이프라인이 v2 설정 파일에 직접 의존함",
+              "detail": "run_pilot_2025가 scoring_v2.yaml을 상수로 사용합니다. 이 파일이 없거나 형식이 바뀌면 실행이 바로 실패할 수 있으므로 실행 경로 검증이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/pipeline/run_pilot_2025.py:26-27",
+                "file:src/pipeline/run_pilot_2025.py:79-80",
+                "tool:#2"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "출력 스키마 변경으로 후속 소비 코드 점검 필요",
+              "detail": "coverage 출력에서 K_confirmed_contribution 대신 K_contribution과 range_high 대신 range_high_loose를 사용합니다. 이 결과 CSV를 읽는 다른 코드나 리포트가 있으면 컬럼명 호환성을 확인해야 합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/scoring/score.py:115-121",
+                "file:src/pipeline/run_pilot_2025.py:119-122",
+                "tool:#10",
+                "tool:#2"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/scoring/score.py\"}",
+            "git_diff {\"path\":\"src/pipeline/run_pilot_2025.py\"}",
+            "git_diff {\"path\":\"configs/scoring_v2.yaml\"}",
+            "search_code {\"text\":\"scoring_v2.yaml\",\"path_prefix\":null}",
+            "search_code {\"text\":\"compute_score\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"score(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"run_pilot_2025\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"scoring\", \"path_prefix\":\"src/pipeline\"}",
+            "read_file {\"path\":\"tests/test_scoring.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/scoring/score.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/pipeline/run_pilot_2025.py\",\"start_line\":1,\"end_line\":220}",
+            "search_code {\"text\":\"range_high\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"K_confirmed_contribution\", \"path_prefix\":null}",
+            "search_code {\"text\":\"range_high_loose\", \"path_prefix\":null}",
+            "search_code {\"text\":\"validation_status\", \"path_prefix\":\"src\"}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "a75285f",
+      "subject": "Mark where to resume next session",
+      "by_category": {
+        "docs": 1
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "24faf5b",
+      "subject": "Add 2022-2025 retrospective trend with comparability flags",
+      "by_category": {
+        "config": 1,
+        "data": 2,
+        "docs": 2,
+        "source": 7,
+        "test": 1
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R02",
+        "R03",
+        "R05"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_trend.py"
+      ],
+      "predicted_tests": [
+        "tests/test_manual.py",
+        "tests/test_metrics.py",
+        "tests/test_trend.py"
+      ],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "da30a78",
+      "subject": "Split working-capital checks, add comparison spans, and evidence report",
+      "by_category": {
+        "docs": 2,
+        "source": 7,
+        "test": 1
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R01",
+        "R02"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_trend.py"
+      ],
+      "predicted_tests": [
+        "tests/test_metrics.py",
+        "tests/test_trend.py"
+      ],
+      "expected": "REVIEW REQUIRED",
+      "followup_fix": [
+        "c2fe0d1"
+      ],
+      "labeled_by": "user",
+      "note": "증거 보고서 추가(테스트 없음). 보고서 주장 범위가 이후 축소됨",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 5,
+          "tool_calls": 15,
+          "input_tokens": 128447,
+          "output_tokens": 2640,
+          "seconds": 21.7,
+          "items": 12,
+          "verified_items": 12,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_metrics.py",
+            "tests/test_trend.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_trend.py"
+          ],
+          "summary": "이번 변경은 2022~2025 추세 계산의 비교 가능성 모델을 세분화하고, 운전자본 검산/기록 방식을 강화했으며, 이를 설명하는 별도 증거 보고서 CLI를 새로 추가했습니다. 기능상 계산 결과뿐 아니라 그 결과를 어떤 근거로 읽어야 하는지까지 출력하도록 바뀌어, 추세·운전자본·근거 연결 출력 경로가 함께 영향을 받습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "추세 산출물 형식 변경에 따른 하위 소비자 영향",
+              "detail": "`trend_2022_2025.csv`에 새 컬럼(`caution_spans`, `comparability_reasons`, `input_keys`)이 추가되고, 별도 `trend_pairs_2022_2025.csv`가 생성됩니다. `pair_table()` 기반 표시가 추가된 만큼 기존 CSV 열/문자열을 전제로 한 소비 코드나 리포트가 있으면 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/metrics/run_trend.py:185-200",
+                "file:src/metrics/run_trend.py:91-120",
+                "tool:#3",
+                "tool:#10"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "운전자본 경고 의미 변경",
+              "detail": "이전에는 단순히 부호 확인 여부와 규모 경고를 붙였던 흐름이, 이제는 검산 대상과 검산 실패 사유를 구분하고 방향 표시를 검산 성공 시에만 제공합니다. 기존에 `sign_status`/`caution` 문자열을 그대로 해석하던 테스트나 보고서가 있으면 기대값 갱신이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/metrics/working_capital.py:31-33",
+                "file:src/metrics/working_capital.py:46-75",
+                "file:src/metrics/working_capital.py:78-113",
+                "file:tests/test_trend.py:129-161",
+                "tool:#4",
+                "tool:#11",
+                "tool:#13"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "증거 보고서용 파일 의존성 추가",
+              "detail": "새 보고서는 `account_check.csv`, `account_check_evidence.csv`, `trend_baseline_2021.csv`, `trend_pairs_2022_2025.csv`, `working_capital_2022_2025.csv`, `scores_2025.csv`, `coverage_2025.csv` 등 여러 interim 파일의 존재를 전제로 합니다. 해당 파일 중 일부가 누락되거나 형식이 다르면 보고서 생성 시 문제가 날 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/report/evidence_report.py:74-85",
+                "file:src/report/evidence_report.py:160-183",
+                "file:src/report/evidence_report.py:214-245",
+                "file:src/report/evidence_report.py:263-339",
+                "tool:#1",
+                "tool:#14"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "run_2025 관련 테스트 갱신 필요 가능성",
+              "detail": "`Input` 생성자에 `account`가 추가되었고 `run_2025.make_getter()`도 이를 채우도록 바뀌었습니다. 현재 변경은 호환적이지만, 관련 테스트는 함께 수정되지 않았다는 판정이 있어 실제 실행으로 회귀 여부를 확인하는 편이 좋습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/metrics/engine.py:21-35",
+                "file:src/metrics/run_2025.py:22-31",
+                "rule:R01",
+                "tool:#5",
+                "tool:#2"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "증거 보고서에 대한 테스트 부재",
+              "detail": "새로 추가된 `src/report/evidence_report.py`에 대응하는 테스트가 보이지 않습니다. 문서/리포트 성격이지만, 입력 파일 누락이나 포맷 변경에 대한 최소 검증은 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/report/evidence_report.py:1-10",
+                "rule:R02",
+                "tool:#7",
+                "tool:#14"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/report/evidence_report.py\"}",
+            "git_diff {\"path\":\"src/metrics/run_2025.py\"}",
+            "git_diff {\"path\":\"src/metrics/run_trend.py\"}",
+            "git_diff {\"path\":\"src/metrics/working_capital.py\"}",
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"tests/test_trend.py\"}",
+            "search_code {\"text\":\"evidence_report\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"run_2025\",\"path_prefix\":\"tests\"}",
+            "read_file {\"path\":\"src/report/evidence_report.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/metrics/run_trend.py\",\"start_line\":1,\"end_line\":260}",
+            "read_file {\"path\":\"src/metrics/working_capital.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/metrics/engine.py\",\"start_line\":1,\"end_line\":80}",
+            "read_file {\"path\":\"tests/test_trend.py\",\"start_line\":120,\"end_line\":260}",
+            "read_file {\"path\":\"src/report/evidence_report.py\",\"start_line\":200,\"end_line\":350}",
+            "search_code {\"text\":\"Input(\", \"path_prefix\":\"src\"}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 16,
+          "input_tokens": 72967,
+          "output_tokens": 2250,
+          "seconds": 18.4,
+          "items": 11,
+          "verified_items": 11,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_metrics.py",
+            "tests/test_trend.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_trend.py"
+          ],
+          "summary": "운전자본 검산 로직과 추세 비교 주의 표시 방식이 바뀌고, 이를 묶어 읽는 증거 보고서가 새로 추가되었습니다. 기존 2025 입력/추세 생성 흐름도 약간 수정되어, 결과 CSV와 보고서 출력 형식이 영향을 받습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "새 증거 보고서에 대한 자동 테스트 부재",
+              "detail": "`src/report/evidence_report.py`는 새로 추가됐지만, 규칙 단계 결과상 관련 테스트가 없고 확인된 사용처도 없습니다. Markdown 출력과 실행 기록 검증 로직이 실제 데이터에서 정상 동작하는지 별도 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/report/evidence_report.py:1-10",
+                "file:src/report/evidence_report.py:60-68",
+                "tool:#6",
+                "tool:#10",
+                "rule:R02"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "추세 비교 표의 새 분기 로직 검증 필요",
+              "detail": "인접 연도 쌍별 비교 상태와 전체 추세 상태를 따로 계산하도록 바뀌어, 기존 단일 연도 비교와 다르게 해석될 수 있습니다. 테스트는 추가됐지만 실제 데이터에서 `trend_pairs_2022_2025.csv`가 기대한 범위로 생성되는지 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/metrics/run_trend.py:91-120",
+                "file:src/metrics/run_trend.py:198-203",
+                "file:tests/test_trend.py:194-212",
+                "tool:#3",
+                "tool:#14",
+                "tool:#11"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "운전자본 문구/상태값 변경으로 downstream 문자열 의존 가능",
+              "detail": "`sign_status`, `ocf_direction`, `caution`의 문구가 바뀌었습니다. 문자열을 그대로 파싱하는 후속 코드가 있으면 영향이 있을 수 있으나, 현재 확인된 사용처는 테스트와 추세 생성뿐입니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/metrics/working_capital.py:31-33",
+                "file:src/metrics/working_capital.py:99-113",
+                "file:tests/test_trend.py:129-161",
+                "tool:#4",
+                "tool:#13"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"src/metrics/run_2025.py\"}",
+            "git_diff {\"path\":\"src/metrics/run_trend.py\"}",
+            "git_diff {\"path\":\"src/metrics/working_capital.py\"}",
+            "git_diff {\"path\":\"src/normalization/baseline.py\"}",
+            "git_diff {\"path\":\"src/report/evidence_report.py\"}",
+            "git_diff {\"path\":\"tests/test_trend.py\"}",
+            "search_code {\"text\":\"Input(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"report(trend, pd.DataFrame(wc_rows), baseline_df, cfg, pairs)\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"evidence_report\", \"path_prefix\":\"tests\"}",
+            "search_code {\"text\":\"pair_table(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"sign_check(\", \"path_prefix\":\"src\"}",
+            "read_file {\"path\":\"src/metrics/working_capital.py\",\"start_line\":1,\"end_line\":120}",
+            "read_file {\"path\":\"src/metrics/run_trend.py\",\"start_line\":1,\"end_line\":240}",
+            "read_file {\"path\":\"src/report/evidence_report.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"tests/test_trend.py\",\"start_line\":120,\"end_line\":240}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 5,
+          "tool_calls": 16,
+          "input_tokens": 121812,
+          "output_tokens": 2366,
+          "seconds": 20.5,
+          "items": 11,
+          "verified_items": 10,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_metrics.py",
+            "tests/test_trend.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_trend.py"
+          ],
+          "summary": "이번 변경은 추세 계산/운전자본 판정의 근거 표현을 더 세분화하고, 이를 읽어서 마크다운 증거 보고서를 생성하는 새 모듈을 추가합니다. 계산 로직 자체보다 출력 구조와 보조 정보가 크게 늘었고, `Input`에 내부 계정 키가 추가되어 추세/보고서에서 근거 추적이 가능해졌습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "새 증거 보고서 모듈은 테스트가 없습니다",
+              "detail": "`src/report/evidence_report.py`는 새로 추가됐지만 대응 테스트가 없어서, CSV 스키마 변경이나 경로/필드 누락이 있어도 바로 감지되지 않을 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "tool:#6",
+                "tool:#9",
+                "rule:R02",
+                "file:src/report/evidence_report.py:160-205",
+                "file:src/report/evidence_report.py:208-320"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "추세 출력 스키마 변화로 하위 소비자 영향 가능",
+              "detail": "`trend_2022_2025.csv`에 `caution_spans`, `comparability_reasons`, `input_keys`가 추가되고 `comparability` 해석도 더 세분화됩니다. 기존에 이 CSV를 읽는 코드가 있다면 컬럼명/의미 변경을 확인해야 합니다.",
+              "verified": true,
+              "evidence": [
+                "tool:#3",
+                "tool:#15",
+                "file:src/metrics/run_trend.py:185-201",
+                "file:src/metrics/run_trend.py:225-250"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "`Input` 생성자 인자 변경의 호환성 점검 필요",
+              "detail": "`Input`에 `account` 필드가 추가되어 `run_2025.make_getter()`는 갱신됐지만, 같은 클래스를 다른 곳에서 위치 인자로 생성하는 코드가 있으면 깨질 수 있습니다. 현재 확인된 사용처는 `run_2025` 내부뿐입니다.",
+              "verified": true,
+              "evidence": [
+                "tool:#14",
+                "tool:#16",
+                "file:src/metrics/engine.py:21-35",
+                "file:src/metrics/run_2025.py:22-33"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"src/metrics/run_2025.py\"}",
+            "git_diff {\"path\":\"src/metrics/run_trend.py\"}",
+            "git_diff {\"path\":\"src/metrics/working_capital.py\"}",
+            "git_diff {\"path\":\"src/normalization/baseline.py\"}",
+            "git_diff {\"path\":\"src/report/evidence_report.py\"}",
+            "git_diff {\"path\":\"tests/test_trend.py\"}",
+            "search_code {\"text\":\"run_2025\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"evidence_report\",\"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"working_capital\",\"path_prefix\":\"src\"}",
+            "read_file {\"path\":\"src/report/evidence_report.py\",\"start_line\":150,\"end_line\":320}",
+            "read_file {\"path\":\"src/metrics/run_trend.py\",\"start_line\":1,\"end_line\":280}",
+            "read_file {\"path\":\"src/metrics/working_capital.py\",\"start_line\":1,\"end_line\":170}",
+            "read_file {\"path\":\"src/metrics/engine.py\",\"start_line\":1,\"end_line\":80}",
+            "read_file {\"path\":\"src/metrics/run_trend.py\",\"start_line\":200,\"end_line\":260}",
+            "search_code {\"text\":\"account=\", \"path_prefix\":\"src\"}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "075e30c",
+      "subject": "Add Cosmecca Korea evidence report sample",
+      "by_category": {
+        "docs": 1
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE",
+        "SAFE",
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": "SAFE",
+      "followup_fix": null,
+      "labeled_by": "user",
+      "note": "보고서 샘플만 추가",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "input_tokens": 8971,
+          "output_tokens": 464,
+          "seconds": 5.7,
+          "items": 1,
+          "verified_items": 1,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [],
+          "add_new": 0,
+          "actual_tests": [],
+          "summary": "이번 변경은 `docs/samples/00763473_evidence_20261008.md` 문서 1개를 신규 추가한 것입니다. 코드, 설정, 테스트 파일 변경은 없어서 런타임 동작이나 기능 로직에 직접적인 영향은 확인되지 않았습니다.",
+          "risks": [
+            {
+              "level": "LOW",
+              "title": "문서 샘플 추가에 따른 제품 기능 영향 없음",
+              "detail": "변경 내용이 문서 샘플 추가뿐이라 실행 경로, API, 설정 키, 테스트 로직에 영향을 주는 흔적은 확인되지 않았습니다.",
+              "verified": true,
+              "evidence": [
+                "tool:#1"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"docs/samples/00763473_evidence_20261008.md\"}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "input_tokens": 8971,
+          "output_tokens": 329,
+          "seconds": 5.7,
+          "items": 0,
+          "verified_items": 0,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [],
+          "add_new": 0,
+          "actual_tests": [],
+          "summary": "문서 샘플 파일 1개가 새로 추가되었고, 코드/설정 변경은 확인되지 않았습니다. 따라서 런타임 동작에 직접적인 영향은 없으며, 영향 분석 대상은 문서 내용의 정확성 검토에 한정됩니다.",
+          "risks": [],
+          "tools_used": [
+            "git_diff {\"path\":\"docs/samples/00763473_evidence_20261008.md\"}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 3,
+          "input_tokens": 34719,
+          "output_tokens": 935,
+          "seconds": 11.4,
+          "items": 2,
+          "verified_items": 2,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [],
+          "add_new": 0,
+          "actual_tests": [],
+          "summary": "이번 변경은 `docs/samples/00763473_evidence_20261008.md` 문서를 새로 추가한 것으로, 코드나 설정 파일은 수정되지 않았습니다. 문서에는 2022~2025 지표, 연결 범위 주의사항, 운전자본 검산 근거가 정리되어 있어 런타임 동작보다는 보고서/증거 문서 내용에만 영향이 있습니다.",
+          "risks": [
+            {
+              "level": "LOW",
+              "title": "문서 내용의 최신성/정합성",
+              "detail": "새로 추가된 보고서이므로 실제 파이프라인 결과와 문서 표기(기준일, 비교 주의, 근거 ID)가 일치하는지 확인이 필요합니다. 다만 코드 변경은 없어 서비스 장애 위험은 낮습니다.",
+              "verified": true,
+              "evidence": [
+                "file:docs/samples/00763473_evidence_20261008.md:3-14",
+                "file:docs/samples/00763473_evidence_20261008.md:48-64",
+                "file:docs/samples/00763473_evidence_20261008.md:86-93"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"docs/samples/00763473_evidence_20261008.md\"}",
+            "read_file {\"path\":\"docs/samples/00763473_evidence_20261008.md\",\"start_line\":1,\"end_line\":40}",
+            "read_file {\"path\":\"docs/samples/00763473_evidence_20261008.md\",\"start_line\":41,\"end_line\":120}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "c2fe0d1",
+      "subject": "Check activity classification in cash-flow identity and narrow report claims",
+      "by_category": {
+        "data": 1,
+        "docs": 2,
+        "source": 5,
+        "test": 1
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R01",
+        "R02",
+        "R05"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_trend.py"
+      ],
+      "predicted_tests": [
+        "tests/test_account_map.py",
+        "tests/test_bs_sections.py",
+        "tests/test_metrics.py",
+        "tests/test_trend.py"
+      ],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "b326bd1",
+      "subject": "Update Cosmecca Korea evidence report sample",
+      "by_category": {
+        "docs": 1
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "fa03441",
+      "subject": "Match same-period rows across renamed accounts and split unverified reasons",
+      "by_category": {
+        "docs": 2,
+        "source": 2,
+        "test": 1
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R02"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_trend.py"
+      ],
+      "predicted_tests": [
+        "tests/test_trend.py"
+      ],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "59e0fb4",
+      "subject": "Update Cosmecca Korea evidence report sample",
+      "by_category": {
+        "docs": 1
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "f2d690e",
+      "subject": "Link domestic cosmetics production statistics to pilot companies",
+      "by_category": {
+        "config": 1,
+        "data": 3,
+        "docs": 2,
+        "source": 6,
+        "test": 1
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R02",
+        "R03",
+        "R05"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_market.py"
+      ],
+      "predicted_tests": [
+        "tests/test_market.py"
+      ],
+      "expected": "REVIEW REQUIRED",
+      "followup_fix": [
+        "142912b"
+      ],
+      "labeled_by": "user",
+      "note": "시장 통계 연결. 비중 해석·연속성 문제가 이후 수정됨",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 12,
+          "input_tokens": 42703,
+          "output_tokens": 1975,
+          "seconds": 14.7,
+          "items": 12,
+          "verified_items": 12,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_market.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_market.py"
+          ],
+          "summary": "시장 통계 수집·파싱·연결 로직이 새로 추가되고, 파일럿 2025 파이프라인과 증거 리포트가 이 결과를 참조하도록 연결되었습니다. 설정/수기 데이터와 새 테스트도 함께 추가되어, 이번 변경은 시장 통계 산출과 보고서 문구에 직접 영향을 줍니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "시장 통계 단계가 파이프라인 실패 지점이 될 수 있음",
+              "detail": "run_market.main은 최신 raw/stats 수집본이 없으면 FileNotFoundError를 내고, 공식 증감률이 계산값과 다르면 ValueError를 발생시킵니다. 따라서 원본 수집 상태나 표 형식 변경이 있으면 파일럿 실행이 중단될 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/market/run_market.py:26-30",
+                "file:src/market/run_market.py:187-196",
+                "file:src/pipeline/run_pilot_2025.py:92-93"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "증거 리포트가 시장 결과 파일의 컬럼 구조에 의존",
+              "detail": "market_answer는 market_links.csv와 market_summary_2021_2025.csv의 특정 컬럼(corp_code, candidate_id, judgement, differences, span, cagr)을 전제로 합니다. 파일 구조가 달라지면 질문 ① 문구 생성이 깨질 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/report/evidence_report.py:194-205"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "새 시장 테스트는 개별 함수 위주",
+              "detail": "tests/test_market.py는 파서와 build_stats/build_links 중심으로 검증하며, pipeline 통합 실행과 evidence_report 연동까지는 직접 커버하지 않습니다.",
+              "verified": true,
+              "evidence": [
+                "file:tests/test_market.py:30-86",
+                "file:src/pipeline/run_pilot_2025.py:92-123",
+                "file:src/report/evidence_report.py:194-205"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"configs/market_v1.yaml\"}",
+            "git_diff {\"path\":\"src/collectors/stats.py\"}",
+            "git_diff {\"path\":\"src/market/index_table.py\"}",
+            "git_diff {\"path\":\"src/market/run_market.py\"}",
+            "git_diff {\"path\":\"src/pipeline/run_pilot_2025.py\"}",
+            "git_diff {\"path\":\"src/report/evidence_report.py\"}",
+            "git_diff {\"path\":\"tests/test_market.py\"}",
+            "read_file {\"path\":\"src/market/run_market.py\",\"start_line\":1,\"end_line\":220}",
+            "read_file {\"path\":\"src/report/evidence_report.py\",\"start_line\":185,\"end_line\":440}",
+            "read_file {\"path\":\"src/pipeline/run_pilot_2025.py\",\"start_line\":1,\"end_line\":140}",
+            "read_file {\"path\":\"src/market/index_table.py\",\"start_line\":1,\"end_line\":120}",
+            "read_file {\"path\":\"src/collectors/stats.py\",\"start_line\":1,\"end_line\":120}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 16,
+          "input_tokens": 51253,
+          "output_tokens": 1827,
+          "seconds": 15.3,
+          "items": 11,
+          "verified_items": 11,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_market.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_market.py"
+          ],
+          "summary": "이번 변경은 시장 통계 수집/파싱/집계 기능을 새로 추가하고, 파일럿 파이프라인과 결과 리포트에 이를 연결합니다. 또한 관련 설정과 수동 데이터, 테스트가 함께 추가되어 시장 통계 결과가 실행 산출물에 포함되도록 바뀌었습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "시장 통계 단계는 파이프라인에 연결되었지만 파이프라인 자체 테스트는 없음",
+              "detail": "run_pilot_2025.py가 새로 추가된 시장 통계 실행을 호출하고 산출물을 복사하지만, 규칙 단계 결과상 이 파일에는 대응 테스트가 없습니다. 통합 실행에서 새 단계 실패 여부를 별도로 확인해야 합니다.",
+              "verified": true,
+              "evidence": [
+                "rule:R02",
+                "file:src/pipeline/run_pilot_2025.py:92-123",
+                "tool:#15"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "새 리포트 경로가 결과 파일 존재를 전제로 동작",
+              "detail": "evidence_report.py의 market_answer는 market_links.csv와 market_summary_2021_2025.csv를 읽어 조합합니다. 결과 파일 생성 순서나 누락 여부에 따라 리포트 문구가 달라질 수 있으므로 실제 실행 경로 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/report/evidence_report.py:194-205",
+                "file:src/report/evidence_report.py:424-427",
+                "tool:#13"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "설정과 수동 데이터가 함께 바뀜",
+              "detail": "market_v1.yaml과 세 개의 data/manual 파일이 함께 추가되어 있어, 설정 값과 데이터 간 정합성이 맞는지 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "rule:R03",
+                "rule:R05",
+                "file:configs/market_v1.yaml:1-25",
+                "tool:#1"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"configs/market_v1.yaml\"}",
+            "git_diff {\"path\":\"src/collectors/stats.py\"}",
+            "git_diff {\"path\":\"src/market/index_table.py\"}",
+            "git_diff {\"path\":\"src/market/run_market.py\"}",
+            "git_diff {\"path\":\"src/pipeline/run_pilot_2025.py\"}",
+            "git_diff {\"path\":\"src/report/evidence_report.py\"}",
+            "git_diff {\"path\":\"tests/test_market.py\"}",
+            "search_code {\"text\":\"market_answer(\", \"path_prefix\":\"src/report/evidence_report.py\"}",
+            "search_code {\"text\":\"parse_table(\", \"path_prefix\":\"src/market/run_market.py\"}",
+            "search_code {\"text\":\"build_stats(\", \"path_prefix\":\"src/market/run_market.py\"}",
+            "search_code {\"text\":\"build_links(\", \"path_prefix\":\"src/market/run_market.py\"}",
+            "search_code {\"text\":\"market_v1.yaml\", \"path_prefix\":\"src/pipeline/run_pilot_2025.py\"}",
+            "read_file {\"path\":\"src/report/evidence_report.py\",\"start_line\":191,\"end_line\":230}",
+            "read_file {\"path\":\"src/market/run_market.py\",\"start_line\":1,\"end_line\":120}",
+            "read_file {\"path\":\"src/pipeline/run_pilot_2025.py\",\"start_line\":24,\"end_line\":125}",
+            "read_file {\"path\":\"tests/test_market.py\",\"start_line\":1,\"end_line\":86}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 18,
+          "input_tokens": 59205,
+          "output_tokens": 2266,
+          "seconds": 18.0,
+          "items": 13,
+          "verified_items": 13,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_market.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_market.py"
+          ],
+          "summary": "이번 변경은 e-나라지표 기반 시장 통계 수집/파싱/집계 로직을 새로 추가하고, 이를 파일럿 파이프라인과 증거 보고서에 연결했습니다. 동시에 관련 설정·수동 데이터·테스트가 추가되어 시장 통계 결과가 `data/interim`과 보고서에 반영되도록 흐름이 확장되었습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "새 시장 통계 실행 단계는 외부 원본 수집본에 의존",
+              "detail": "`run_market.main()`은 `data/raw/stats/index_go_kr/.../metadata.json`가 있는 최신 수집본을 찾아 사용합니다. 수집본이 없거나 최신 HTML 구조가 예상과 다르면 파이프라인이 중단될 수 있어, 실제 실행 경로 검증이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/market/run_market.py:26-30",
+                "file:src/market/run_market.py:187-196",
+                "tool:#13",
+                "tool:#16"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "증거 보고서의 시장 답변은 생성 산출물 유무에 따라 보류될 수 있음",
+              "detail": "증거 보고서는 `market_links.csv`가 없으면 즉시 보류 메시지를 반환합니다. 파이프라인이 항상 이 파일을 생성하는지, 또는 단독 실행 시 사용자 기대와 맞는지 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/report/evidence_report.py:194-197",
+                "file:src/report/evidence_report.py:198-205",
+                "tool:#14"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "수동 연결 판정 CSV의 값 제약이 코드에만 부분 반영됨",
+              "detail": "테스트는 허용 판정값과 근거 참조 검증을 하지만, 실제 수동 CSV의 전체 일관성은 런타임 시에만 확인됩니다. 데이터 변경 시 `build_links()`의 예외 조건을 다시 검증해야 합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/market/run_market.py:84-94",
+                "file:tests/test_market.py:68-79",
+                "tool:#13",
+                "tool:#18"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"configs/market_v1.yaml\"}",
+            "git_diff {\"path\":\"src/collectors/stats.py\"}",
+            "git_diff {\"path\":\"src/market/index_table.py\"}",
+            "git_diff {\"path\":\"src/market/run_market.py\"}",
+            "git_diff {\"path\":\"src/pipeline/run_pilot_2025.py\"}",
+            "git_diff {\"path\":\"src/report/evidence_report.py\"}",
+            "git_diff {\"path\":\"tests/test_market.py\"}",
+            "search_code {\"text\":\"market_answer(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"build_links()\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"parse_table(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"fetch_index_table(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"market_v1.yaml\", \"path_prefix\":\"src\"}",
+            "read_file {\"path\":\"src/market/run_market.py\",\"start_line\":1,\"end_line\":210}",
+            "read_file {\"path\":\"src/report/evidence_report.py\",\"start_line\":190,\"end_line\":435}",
+            "read_file {\"path\":\"src/pipeline/run_pilot_2025.py\",\"start_line\":20,\"end_line\":130}",
+            "read_file {\"path\":\"src/collectors/stats.py\",\"start_line\":1,\"end_line\":70}",
+            "read_file {\"path\":\"src/market/index_table.py\",\"start_line\":1,\"end_line\":60}",
+            "read_file {\"path\":\"tests/test_market.py\",\"start_line\":1,\"end_line\":86}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "694de2e",
+      "subject": "Add market statistics sample and refresh evidence report sample",
+      "by_category": {
+        "docs": 2
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "f57b432",
+      "subject": "Link cosmetics production by product type to pilot companies",
+      "by_category": {
+        "config": 1,
+        "data": 3,
+        "docs": 2,
+        "source": 4,
+        "test": 1
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R02",
+        "R03",
+        "R05"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_market.py"
+      ],
+      "predicted_tests": [
+        "tests/test_market.py"
+      ],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "0b57374",
+      "subject": "Refresh market statistics and evidence report samples",
+      "by_category": {
+        "docs": 2
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "adb2f5b",
+      "subject": "Check M01/M02 guidelines: price basis, reporting scope, continuity (D20)",
+      "by_category": {
+        "config": 1,
+        "data": 5,
+        "docs": 2,
+        "source": 3,
+        "test": 1
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R02",
+        "R03",
+        "R05"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_market.py"
+      ],
+      "predicted_tests": [
+        "tests/test_market.py"
+      ],
+      "expected": "REVIEW REQUIRED",
+      "followup_fix": [
+        "142912b"
+      ],
+      "labeled_by": "user",
+      "note": "작성지침 판정. 판정 승격 문제가 이후 수정됨",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 10,
+          "input_tokens": 36243,
+          "output_tokens": 1747,
+          "seconds": 14.6,
+          "items": 10,
+          "verified_items": 9,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "src/market/run_market.py 관련 실행 경로(예: python -m src.market.run_market 또는 해당 프로젝트의 시장 생성 테스트)",
+            "tests/test_market.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_market.py"
+          ],
+          "summary": "이번 변경은 시장 통계 수집·검증 흐름에 작성지침(D20) 검증을 추가하고, 보고서/설정에 그 결과를 반영하도록 확장했습니다. 또한 파일럿 실행 단계가 새 작성지침 수기 데이터 3종을 함께 포함하도록 바뀌었습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "작성지침 검증 실패 시 시장 보고서 생성 중단 가능",
+              "detail": "`build_guidelines()`는 문서 등록부, 원본 경로/해시, 판정 상태, 근거 ID 불일치가 하나라도 있으면 `ValueError`로 중단합니다. 새 수기 CSV나 보존 원본이 조금만 어긋나도 `run_market.main()`이 실패할 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/market/run_market.py:157-196",
+                "file:tests/test_market.py:166-180",
+                "tool:#6",
+                "tool:#9",
+                "rule:R05"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "설정 해석 변경으로 보고서 문구/검증 기준이 바뀜",
+              "detail": "`market_v1.yaml`의 `score_use`, `cagr_span_roles`, `caution_pairs` 설명이 바뀌어, 보고서 출력과 후속 검토 기준이 이전과 달라집니다. 실제 점수 반영 여부는 여전히 미반영이지만, 문구 기반 검토나 수동 판정 과정에는 영향이 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:configs/market_v1.yaml:6-25",
+                "file:src/market/run_market.py:284-328",
+                "tool:#6",
+                "tool:#8",
+                "rule:R03"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "파이프라인 입력 파일 목록 확대",
+              "detail": "파일럿 실행 단계가 새 작성지침 CSV 3개를 추가로 다루므로, 해당 파일들의 누락/형식 변경이 있으면 실행 기록 생성 전 단계에서 문제가 드러날 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/pipeline/run_pilot_2025.py:29-31",
+                "tool:#10",
+                "rule:R02"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/collectors/stats.py\"}",
+            "git_diff {\"path\":\"src/market/run_market.py\"}",
+            "git_diff {\"path\":\"src/pipeline/run_pilot_2025.py\"}",
+            "git_diff {\"path\":\"configs/market_v1.yaml\"}",
+            "git_diff {\"path\":\"tests/test_market.py\"}",
+            "read_file {\"path\":\"src/market/run_market.py\",\"start_line\":1,\"end_line\":430}",
+            "read_file {\"path\":\"src/collectors/stats.py\",\"start_line\":1,\"end_line\":180}",
+            "read_file {\"path\":\"configs/market_v1.yaml\",\"start_line\":1,\"end_line\":80}",
+            "read_file {\"path\":\"tests/test_market.py\",\"start_line\":1,\"end_line\":260}",
+            "read_file {\"path\":\"src/pipeline/run_pilot_2025.py\",\"start_line\":1,\"end_line\":80}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 5,
+          "tool_calls": 19,
+          "input_tokens": 170534,
+          "output_tokens": 2064,
+          "seconds": 20.8,
+          "items": 10,
+          "verified_items": 10,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_market.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_market.py"
+          ],
+          "summary": "이번 변경은 시장 통계 수집·검증 흐름에 작성지침(D20) 검증을 추가하고, 시장 보고서와 설정에 그 결과를 반영하도록 확장했습니다. 또한 파일럿 파이프라인이 새 작성지침 원본/판정 파일을 수기 입력 목록에 포함하도록 바뀌었습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "작성지침 원본/해시 불일치 시 시장 실행 중단 가능",
+              "detail": "`build_guidelines()`는 등록부에 없는 문서, 원본 파일 없음, 해시 불일치, 잘못된 상태/근거 참조가 있으면 `ValueError`로 중단합니다. 작성지침 CSV나 보존 원본이 어긋나면 시장 보고서 생성이 실패할 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/market/run_market.py:157-196",
+                "file:src/collectors/stats.py:59-87"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "새 작성지침 파일 누락 시 파이프라인 입력 집합 불완전",
+              "detail": "파이프라인이 새 `stat_guideline_*.csv`를 수기 입력 목록에 포함하도록 바뀌었기 때문에, 실제 실행 환경에서 해당 파일이 없거나 경로가 달라지면 실행 기록/입력 수집 단계의 일관성이 깨질 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/pipeline/run_pilot_2025.py:27-31"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "보고서 형식 변경으로 기존 문서 비교가 어려워질 수 있음",
+              "detail": "시장 보고서에 작성지침 섹션과 기간 용도 표가 추가되어 출력 구조가 바뀌었습니다. 기존 보고서와의 diff가 커져 회귀 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/market/run_market.py:234-336",
+                "file:configs/market_v1.yaml:16-25"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"configs/market_v1.yaml\"}",
+            "git_diff {\"path\":\"src/collectors/stats.py\"}",
+            "git_diff {\"path\":\"src/market/run_market.py\"}",
+            "git_diff {\"path\":\"src/pipeline/run_pilot_2025.py\"}",
+            "git_diff {\"path\":\"tests/test_market.py\"}",
+            "git_diff {\"path\":\"data/manual/market_links.csv\"}",
+            "git_diff {\"path\":\"data/manual/market_stat_candidates.csv\"}",
+            "git_diff {\"path\":\"data/manual/stat_guideline_docs.csv\"}",
+            "git_diff {\"path\":\"data/manual/stat_guideline_facts.csv\"}",
+            "git_diff {\"path\":\"data/manual/stat_guideline_judgments.csv\"}",
+            "git_diff {\"path\":\"docs/decisions.md\"}",
+            "git_diff {\"path\":\"docs/progress.md\"}",
+            "read_file {\"path\":\"src/collectors/stats.py\",\"start_line\":1,\"end_line\":180}",
+            "read_file {\"path\":\"src/market/run_market.py\",\"start_line\":1,\"end_line\":420}",
+            "read_file {\"path\":\"src/pipeline/run_pilot_2025.py\",\"start_line\":1,\"end_line\":80}",
+            "read_file {\"path\":\"tests/test_market.py\",\"start_line\":120,\"end_line\":260}",
+            "read_file {\"path\":\"configs/market_v1.yaml\",\"start_line\":1,\"end_line\":40}",
+            "search_code {\"text\":\"build_guidelines(\", \"path_prefix\":\"src/market/run_market.py\"}",
+            "search_code {\"text\":\"guideline_evidence\",\"path_prefix\":\"src/market/run_market.py\"}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 17,
+          "input_tokens": 76989,
+          "output_tokens": 2164,
+          "seconds": 17.1,
+          "items": 12,
+          "verified_items": 11,
+          "high_risks": 1,
+          "verified_high": 1,
+          "recommended_existing": [
+            "src/market/run_market.py (실행 경로)",
+            "tests/test_market.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_market.py"
+          ],
+          "summary": "이번 변경은 시장 통계 연결 리포트에 작성지침(D20) 검증과 표기 섹션을 추가하고, 관련 수집·파이프라인·테스트·설정 파일을 함께 확장한 것입니다. 특히 `src/market/run_market.py`가 새 작성지침 데이터셋을 읽어 무결성 검증을 수행하도록 바뀌었고, `src/collectors/stats.py`는 작성지침 원문 수집 기능을 추가했습니다.",
+          "risks": [
+            {
+              "level": "HIGH",
+              "title": "작성지침 검증 실패 시 시장 리포트 전체가 중단될 수 있음",
+              "detail": "`build_guidelines()`는 문서 등록부, 사실/판정의 상태값, 원본 파일 존재 여부와 SHA-256 일치까지 검사하며, 하나라도 어긋나면 `ValueError`를 발생시킵니다. 따라서 새로 추가된 `stat_guideline_*` 데이터나 보존 원본이 실제 환경과 다르면 `src/market/run_market.py` 실행이 멈출 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/market/run_market.py:157-196",
+                "file:src/market/run_market.py:370-385",
+                "file:data/manual/stat_guideline_docs.csv:1-19",
+                "file:data/manual/stat_guideline_facts.csv:1-27",
+                "file:data/manual/stat_guideline_judgments.csv:1-6"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "새 설정 키 누락 시 리포트 문구가 달라질 수 있음",
+              "detail": "`cagr_span_roles`는 선택적 키지만, 리포트는 이를 읽어 CAGR 표의 '용도' 열을 채웁니다. 설정이 다른 환경에서 적용되면 출력 문구가 바뀌거나 기본값(`—`)으로 표시될 수 있어, 보고서 해석 기준이 달라질 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:configs/market_v1.yaml:17-25",
+                "file:src/market/run_market.py:299-308"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "수집기 CLI 추가로 외부 의존성 실패 경로가 생김",
+              "detail": "작성지침 수집은 브라우저 헤더와 특정 응답 형식(PDF/XLSX magic bytes)에 의존합니다. 협회 페이지가 HTML 안내문을 반환하거나 파일 형식이 기대와 다르면 수집이 중단되므로, 수집 재실행 시 실패 가능성을 검증해야 합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/collectors/stats.py:59-87"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"configs/market_v1.yaml\"}",
+            "git_diff {\"path\":\"src/collectors/stats.py\"}",
+            "git_diff {\"path\":\"src/market/run_market.py\"}",
+            "git_diff {\"path\":\"src/pipeline/run_pilot_2025.py\"}",
+            "git_diff {\"path\":\"tests/test_market.py\"}",
+            "git_diff {\"path\":\"data/manual/market_links.csv\"}",
+            "git_diff {\"path\":\"data/manual/market_stat_candidates.csv\"}",
+            "git_diff {\"path\":\"data/manual/stat_guideline_docs.csv\"}",
+            "git_diff {\"path\":\"data/manual/stat_guideline_facts.csv\"}",
+            "git_diff {\"path\":\"data/manual/stat_guideline_judgments.csv\"}",
+            "read_file {\"path\":\"src/market/run_market.py\",\"start_line\":1,\"end_line\":120}",
+            "read_file {\"path\":\"src/market/run_market.py\",\"start_line\":130,\"end_line\":230}",
+            "read_file {\"path\":\"src/market/run_market.py\",\"start_line\":230,\"end_line\":390}",
+            "read_file {\"path\":\"tests/test_market.py\",\"start_line\":130,\"end_line\":230}",
+            "read_file {\"path\":\"src/collectors/stats.py\",\"start_line\":1,\"end_line\":140}",
+            "read_file {\"path\":\"src/pipeline/run_pilot_2025.py\",\"start_line\":20,\"end_line\":45}",
+            "read_file {\"path\":\"configs/market_v1.yaml\",\"start_line\":1,\"end_line\":40}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "c9824b0",
+      "subject": "Sync weekly checklist with actual progress; reorder next steps after check-in",
+      "by_category": {
+        "docs": 1
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE",
+        "SAFE",
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": "SAFE",
+      "followup_fix": null,
+      "labeled_by": "user",
+      "note": "진행 체크리스트 문서만 변경",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 2,
+          "input_tokens": 13250,
+          "output_tokens": 354,
+          "seconds": 7.2,
+          "items": 0,
+          "verified_items": 0,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [],
+          "add_new": 0,
+          "actual_tests": [],
+          "summary": "이번 변경은 `docs/progress.md`의 로드맵/체크리스트 문구와 상태 표시만 조정한 문서 수정입니다. 코드, 설정, 테스트 파일 변경은 없어서 런타임 동작에 직접적인 영향은 확인되지 않았습니다.",
+          "risks": [],
+          "tools_used": [
+            "git_diff {\"path\":\"docs/progress.md\"}",
+            "read_file {\"path\":\"docs/progress.md\",\"start_line\":1,\"end_line\":120}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 2,
+          "input_tokens": 13237,
+          "output_tokens": 611,
+          "seconds": 8.5,
+          "items": 2,
+          "verified_items": 2,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [],
+          "add_new": 0,
+          "actual_tests": [],
+          "summary": "이번 변경은 `docs/progress.md`의 작업 우선순위와 완료 상태를 조정한 문서 업데이트입니다. 코드, 설정, 테스트 대상은 바뀌지 않았고 실행 로직에 직접적인 영향은 확인되지 않았습니다.",
+          "risks": [
+            {
+              "level": "LOW",
+              "title": "문서와 실제 작업 우선순위 불일치 가능성",
+              "detail": "로드맵 상 우선순위와 백로그 상태가 바뀌었으므로, 팀이 이 문서를 기준으로 작업할 때 현재 구현/테스트 상태와 어긋나지 않도록만 확인하면 됩니다. 코드 동작 자체의 변경은 확인되지 않았습니다.",
+              "verified": true,
+              "evidence": [
+                "file:docs/progress.md:11",
+                "file:docs/progress.md:48",
+                "file:docs/progress.md:109",
+                "tool:#1",
+                "tool:#2"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"docs/progress.md\"}",
+            "read_file {\"path\":\"docs/progress.md\",\"start_line\":1,\"end_line\":120}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 2,
+          "input_tokens": 13202,
+          "output_tokens": 504,
+          "seconds": 7.9,
+          "items": 1,
+          "verified_items": 1,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [],
+          "add_new": 0,
+          "actual_tests": [],
+          "summary": "이번 변경은 `docs/progress.md`의 진행 계획과 우선순위만 수정한 문서 변경입니다. 코드, 설정, 테스트 파일은 바뀌지 않았고 실행 경로에 직접적인 기능 영향은 확인되지 않았습니다.",
+          "risks": [],
+          "tools_used": [
+            "git_diff {\"path\":\"docs/progress.md\"}",
+            "read_file {\"path\":\"docs/progress.md\",\"start_line\":1,\"end_line\":120}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "142912b",
+      "subject": "Close verification gaps from external review (D21)",
+      "by_category": {
+        "config": 1,
+        "data": 3,
+        "docs": 1,
+        "source": 3,
+        "test": 2
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED",
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R02",
+        "R03",
+        "R05"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_market.py",
+        "tests/test_metrics.py"
+      ],
+      "predicted_tests": [
+        "tests/test_market.py",
+        "tests/test_metrics.py",
+        "tests/test_trend.py"
+      ],
+      "expected": "REVIEW REQUIRED",
+      "followup_fix": null,
+      "labeled_by": "user",
+      "note": "검증 경로 수정이지만 evidence_report.py 변경은 테스트로 검증되지 않음",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 10,
+          "input_tokens": 34948,
+          "output_tokens": 1563,
+          "seconds": 14.6,
+          "items": 8,
+          "verified_items": 6,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_market.py",
+            "tests/test_metrics.py"
+          ],
+          "add_new": 0,
+          "actual_tests": [
+            "tests/test_market.py",
+            "tests/test_metrics.py"
+          ],
+          "summary": "시장 통계 실행 경로가 ‘최신 수집본 자동 선택’에서 설정된 raw_run 고정 방식으로 바뀌었고, 정의 연속성/비교 가능성 판정이 연도·기간 표에 추가되었습니다. 동시에 지표 엔진은 음수 값 처리 기준을 강화해, 일부 계정의 음수 입력은 계산 보류로 바뀌었습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "고정된 raw_run 미존재 또는 해시 불일치로 실행 중단 가능",
+              "detail": "시장 실행은 이제 설정의 raw_run을 필수로 요구하고, metadata와 파일 해시가 맞지 않으면 즉시 예외를 냅니다. 설정된 수집본이 실제 저장소에 없거나 수집 후 파일이 바뀌면 산출이 멈춥니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/market/run_market.py:35-48",
+                "file:configs/market_v1.yaml:11-12",
+                "file:configs/market_v1.yaml:35-36",
+                "rule:R03"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "정의 연속성 기준 변경으로 비교 가능 판정이 달라짐",
+              "detail": "pair_status는 과거처럼 산술 일치만으로 ‘직접 비교 가능’을 주지 않고, 연속성 확인 상태일 때만 그렇게 표시합니다. 따라서 기존에 직접 비교 가능으로 보이던 연도라도 이제 연속성 미확인으로 바뀔 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/market/run_market.py:80-94",
+                "file:tests/test_market.py:47-67"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "음수 입력의 계산 보류 범위 확대",
+              "detail": "계정 정의상 음수가 될 수 없는 항목에 음수가 들어오면 not_computed로 바뀌므로, 이전에 계산되던 일부 비율/회전 지표가 보류로 전환될 수 있습니다. 다만 signed 계정은 예외로 두어 손익·현금흐름류 음수는 유지됩니다.",
+              "verified": false,
+              "evidence": [
+                "file:src/metrics/engine.py:19-21",
+                "file:src/metrics/engine.py:88-96",
+                "file:tests/test_metrics.py:155-185"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/market/run_market.py\"}",
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"src/report/evidence_report.py\"}",
+            "git_diff {\"path\":\"configs/market_v1.yaml\"}",
+            "git_diff {\"path\":\"tests/test_market.py\"}",
+            "git_diff {\"path\":\"tests/test_metrics.py\"}",
+            "read_file {\"path\":\"src/market/run_market.py\",\"start_line\":1,\"end_line\":360}",
+            "read_file {\"path\":\"src/metrics/engine.py\",\"start_line\":1,\"end_line\":180}",
+            "read_file {\"path\":\"src/report/evidence_report.py\",\"start_line\":180,\"end_line\":240}",
+            "read_file {\"path\":\"configs/market_v1.yaml\",\"start_line\":1,\"end_line\":80}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 4,
+          "tool_calls": 14,
+          "input_tokens": 62699,
+          "output_tokens": 2182,
+          "seconds": 17.4,
+          "items": 10,
+          "verified_items": 10,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_market.py",
+            "tests/test_metrics.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_market.py",
+            "tests/test_metrics.py"
+          ],
+          "summary": "시장 통계/작성지침/지표 계산 규칙이 함께 바뀌었습니다. 핵심은 원본 수집본을 설정에 고정하고, 시장 요약·보고서에서 정의 연속성을 표시하며, 음수 입력의 계산/점수 보류 규칙을 추가한 점입니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "보고서 문구 변경이 최종 산출물에 직접 반영됨",
+              "detail": "src/report/evidence_report.py에는 별도 테스트가 확인되지 않았습니다. 시장 답변 문자열이 summary.series 필터와 role/definition_continuity 조합에 의존하므로, 데이터 형태가 기대와 다르면 보고서 문구가 달라질 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/report/evidence_report.py:194-208",
+                "rule:R02"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "raw_run 미지정 또는 수집본 변경 시 실행 중단 가능",
+              "detail": "시장 실행은 최신 폴더 자동 선택을 하지 않고 raw_run이 없으면 ValueError를, 지정 run의 파일 해시가 다르면 ValueError를 발생시킵니다. 설정과 실제 수집본이 어긋나면 파이프라인이 멈춥니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/market/run_market.py:29-48",
+                "file:configs/market_v1.yaml:11",
+                "file:configs/market_v1.yaml:35",
+                "rule:R03"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "음수 입력 보류 규칙의 적용 범위 확인 필요",
+              "detail": "음수 허용 계정 목록(SIGNED_ACCOUNTS)에 포함되지 않은 항목은 보류됩니다. 변경 의도는 명확하지만, 실제 데이터에서 어떤 계정이 음수로 들어오는지 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/metrics/engine.py:18-21",
+                "file:src/metrics/engine.py:88-95",
+                "file:tests/test_metrics.py:164-184"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"configs/market_v1.yaml\"}",
+            "git_diff {\"path\":\"src/market/run_market.py\"}",
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"src/report/evidence_report.py\"}",
+            "git_diff {\"path\":\"tests/test_market.py\"}",
+            "git_diff {\"path\":\"tests/test_metrics.py\"}",
+            "read_file {\"path\":\"src/market/run_market.py\",\"start_line\":1,\"end_line\":380}",
+            "read_file {\"path\":\"src/metrics/engine.py\",\"start_line\":1,\"end_line\":140}",
+            "read_file {\"path\":\"src/report/evidence_report.py\",\"start_line\":180,\"end_line\":240}",
+            "search_code {\"text\":\"market_answer(\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"build_stats(\", \"path_prefix\":\"src/report\"}",
+            "read_file {\"path\":\"tests/test_market.py\",\"start_line\":1,\"end_line\":280}",
+            "read_file {\"path\":\"tests/test_metrics.py\",\"start_line\":1,\"end_line\":240}",
+            "read_file {\"path\":\"configs/market_v1.yaml\",\"start_line\":1,\"end_line\":80}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 5,
+          "tool_calls": 16,
+          "input_tokens": 85535,
+          "output_tokens": 2325,
+          "seconds": 19.6,
+          "items": 11,
+          "verified_items": 11,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "tests/test_market.py",
+            "tests/test_metrics.py"
+          ],
+          "add_new": 1,
+          "actual_tests": [
+            "tests/test_market.py",
+            "tests/test_metrics.py"
+          ],
+          "summary": "시장 통계 파이프라인이 수집본 고정/해시 검증/연속성 판정까지 포함하도록 바뀌었고, 지표 엔진은 음수 입력을 보류하는 규칙이 추가됐습니다. 또한 증거 보고서는 시장 요약 문구를 새 필드에 맞춰 출력하도록 변경됐지만, 해당 보고서에는 별도 테스트가 없습니다.",
+          "risks": [
+            {
+              "level": "MEDIUM",
+              "title": "고정된 수집본/해시 검증으로 파이프라인 중단 가능",
+              "detail": "`raw_run`이 비어 있거나 metadata의 해시와 실제 파일이 다르면 `pinned_raw`가 즉시 예외를 발생시킵니다. 설정값과 원본 수집본이 맞지 않으면 시장 통계 생성이 멈춥니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/market/run_market.py:29-48",
+                "file:configs/market_v1.yaml:8-10",
+                "file:configs/market_v1.yaml:31-34"
+              ]
+            },
+            {
+              "level": "MEDIUM",
+              "title": "음수 입력 처리 강화로 기존에 계산되던 지표가 보류될 수 있음",
+              "detail": "음수가 허용되지 않는 계정에 음수 값이 들어오면 `calc_status`가 `not_computed`로 바뀌고 점수도 보류됩니다. 실제 데이터에서 부호가 음수로 내려오는 계정이 있다면 결과가 달라질 수 있으므로 확인이 필요합니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/metrics/engine.py:16-18",
+                "file:src/metrics/engine.py:85-92",
+                "file:tests/test_metrics.py:164-177"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "보고서 문구가 새 요약 스키마에 종속됨",
+              "detail": "`market_answer`가 `series`/`role`/`definition_continuity` 필드를 기대하도록 바뀌어, 요약 CSV 구조가 다르면 문구 생성이 깨질 수 있습니다. 현재는 별도 테스트가 확인되지 않았습니다.",
+              "verified": true,
+              "evidence": [
+                "file:src/report/evidence_report.py:200-208",
+                "rule:R02"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":\"src/market/run_market.py\"}",
+            "git_diff {\"path\":\"src/metrics/engine.py\"}",
+            "git_diff {\"path\":\"src/report/evidence_report.py\"}",
+            "git_diff {\"path\":\"configs/market_v1.yaml\"}",
+            "search_code {\"text\":\"evidence_report\", \"path_prefix\":\"src\"}",
+            "search_code {\"text\":\"run_market\", \"path_prefix\":\"tests\"}",
+            "search_code {\"text\":\"metrics\", \"path_prefix\":\"tests\"}",
+            "read_file {\"path\":\"tests/test_market.py\",\"start_line\":1,\"end_line\":320}",
+            "read_file {\"path\":\"tests/test_metrics.py\",\"start_line\":1,\"end_line\":260}",
+            "read_file {\"path\":\"src/report/evidence_report.py\",\"start_line\":180,\"end_line\":230}",
+            "read_file {\"path\":\"src/market/run_market.py\",\"start_line\":1,\"end_line\":360}",
+            "search_code {\"text\":\"pinned_raw(\", \"path_prefix\":\"src/market/run_market.py\"}",
+            "search_code {\"text\":\"build_stats(\", \"path_prefix\":\"src/market/run_market.py\"}",
+            "search_code {\"text\":\"build_types(\", \"path_prefix\":\"src/market/run_market.py\"}",
+            "search_code {\"text\":\"build_guidelines(\", \"path_prefix\":\"src/market/run_market.py\"}",
+            "read_file {\"path\":\"src/market/run_market.py\",\"start_line\":430,\"end_line\":470}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "388da2a",
+      "subject": "Compare 2020-2025 reporting guidelines and close market research (D22)",
+      "by_category": {
+        "data": 4,
+        "docs": 2,
+        "source": 1,
+        "test": 1
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED"
+      ],
+      "rules": [
+        "R05"
+      ],
+      "has_source": true,
+      "actual_tests": [
+        "tests/test_market.py"
+      ],
+      "predicted_tests": [
+        "tests/test_market.py"
+      ],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    },
+    {
+      "sha": "a5465f0",
+      "subject": "Update README status, pilot industry and samples to current implementation",
+      "by_category": {
+        "docs": 4
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE",
+        "SAFE",
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": "SAFE",
+      "followup_fix": null,
+      "labeled_by": "user",
+      "note": "README·샘플 갱신",
+      "agent_runs": [
+        {
+          "error": null,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "input_tokens": 9566,
+          "output_tokens": 846,
+          "seconds": 7.2,
+          "items": 3,
+          "verified_items": 1,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [],
+          "add_new": 0,
+          "actual_tests": [],
+          "summary": "이번 변경은 기능 코드가 아니라 README와 샘플 문서만 갱신한 문서성 변경입니다. 실제 실행 경로나 테스트 로직은 바뀌지 않았고, 변경 내용은 현재 구현 상태·샘플 보고서·시장 통계 문서의 최신화에 집중되어 있습니다.",
+          "risks": [
+            {
+              "level": "LOW",
+              "title": "문서 참조 경로/파일명 불일치 가능성",
+              "detail": "샘플 문서가 `20261008`에서 `20261020`으로 바뀌고 기존 파일은 삭제되었으므로, README나 다른 문서/스크립트가 이전 파일명을 직접 참조하고 있으면 링크가 깨질 수 있습니다. 다만 이번 diff에서 코드 참조 변경은 확인되지 않았습니다.",
+              "verified": false,
+              "evidence": [
+                "file:docs/samples/00763473_evidence_20261020.md:6-12",
+                "file:docs/samples/market_stats_20261008.md:1-117",
+                "file:README.md:4-31"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":null}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 2,
+          "tool_calls": 1,
+          "input_tokens": 9563,
+          "output_tokens": 773,
+          "seconds": 7.4,
+          "items": 6,
+          "verified_items": 5,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [
+            "없음"
+          ],
+          "add_new": 0,
+          "actual_tests": [],
+          "summary": "이번 변경은 실행 코드가 아니라 README와 샘플 문서만 갱신한 문서성 변경입니다. 실제 기능 구현이 바뀌지 않았으므로 런타임 영향은 확인되지 않았고, 주로 프로젝트 상태 설명·샘플 경로·기준일 표기를 최신화한 것으로 보입니다.",
+          "risks": [
+            {
+              "level": "LOW",
+              "title": "문서 링크/참조 불일치 가능성",
+              "detail": "README와 샘플 문서에서 참조하는 시장 통계 파일명이 바뀌었으므로, 다른 문서나 외부 링크가 옛 파일명(`market_stats_20261008.md`)을 계속 가리키면 깨질 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "tool:#1"
+              ]
+            },
+            {
+              "level": "LOW",
+              "title": "기준일 혼동 가능성",
+              "detail": "샘플 문서의 분석 기준일과 실행 기록이 2026-10-20으로 바뀌었기 때문에, 이전 날짜 기반 샘플과 비교할 때 독자가 기준을 혼동할 수 있습니다.",
+              "verified": true,
+              "evidence": [
+                "tool:#1"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":null}"
+          ]
+        },
+        {
+          "error": null,
+          "llm_calls": 3,
+          "tool_calls": 5,
+          "input_tokens": 35616,
+          "output_tokens": 1011,
+          "seconds": 11.1,
+          "items": 4,
+          "verified_items": 4,
+          "high_risks": 0,
+          "verified_high": 0,
+          "recommended_existing": [],
+          "add_new": 0,
+          "actual_tests": [],
+          "summary": "이번 변경은 실행 코드가 아니라 README와 샘플 문서만 갱신한 문서 변경입니다. 따라서 애플리케이션 로직이나 설정 동작에는 직접적인 영향이 확인되지 않았고, 영향을 받는 범위는 문서상의 설명·실행 예시·샘플 근거 보고서로 한정됩니다.",
+          "risks": [
+            {
+              "level": "LOW",
+              "title": "문서 참조 경로 변경 가능성",
+              "detail": "README에서 실행 예시와 샘플 참조가 `market_stats_20261020.md`와 새 기준일 보고서로 바뀌었기 때문에, 외부 문서나 안내문이 옛 파일명(`*_20261008.md`)을 직접 참조하고 있으면 링크/참조를 맞춰야 합니다. 다만 코드 동작에는 영향이 확인되지 않았습니다.",
+              "verified": true,
+              "evidence": [
+                "file:README.md:27-31",
+                "file:docs/samples/00763473_evidence_20261020.md:232-235",
+                "file:docs/samples/market_stats_20261020.md:1-5"
+              ]
+            }
+          ],
+          "tools_used": [
+            "git_diff {\"path\":null}",
+            "read_file {\"path\":\"README.md\",\"start_line\":1,\"end_line\":120}",
+            "read_file {\"path\":\"docs/samples/00763473_evidence_20261020.md\",\"start_line\":1,\"end_line\":80}",
+            "read_file {\"path\":\"docs/samples/00763473_evidence_20261020.md\",\"start_line\":220,\"end_line\":260}",
+            "read_file {\"path\":\"docs/samples/market_stats_20261020.md\",\"start_line\":1,\"end_line\":80}"
+          ]
+        }
+      ]
+    },
+    {
+      "sha": "895dbe4",
+      "subject": "Set next session start: minimal lookup screen",
+      "by_category": {
+        "docs": 1
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "rules": [],
+      "has_source": false,
+      "actual_tests": [],
+      "predicted_tests": [],
+      "expected": null,
+      "followup_fix": null,
+      "labeled_by": null,
+      "note": null,
+      "agent_runs": []
+    }
+  ]
+}
