@@ -1,0 +1,75 @@
+# 분류 규칙 v1 — 위에서부터 처음 일치하는 규칙의 분류를 쓴다.
+# 패턴은 저장소 루트 기준 경로. ** 는 0개 이상의 폴더.
+version: 1
+
+rules:
+  - id: C01
+    category: deps
+    patterns:
+      - "**/requirements*.txt"
+      - "**/pyproject.toml"
+      - "**/Pipfile"
+      - "**/Pipfile.lock"
+      - "**/poetry.lock"
+      - "**/uv.lock"
+      - "**/package.json"
+      - "**/package-lock.json"
+  - id: C02
+    category: test
+    patterns:
+      - "tests/**"
+      - "**/test_*.py"
+      - "**/*_test.py"
+      - "**/conftest.py"
+  - id: C03
+    category: config
+    patterns:
+      - "configs/**"
+      - "config/**"
+      - ".github/**"
+      - "**/Dockerfile"
+      - "**/docker-compose*.yml"
+      - "**/compose*.yml"
+      - "**/.env.example"
+      - "**/.gitignore"
+      - "**/*.yaml"
+      - "**/*.yml"
+      - "**/*.toml"
+      - "**/*.ini"
+      - "**/*.cfg"
+  - id: C04
+    category: docs
+    patterns:
+      - "docs/**"
+      - "**/*.md"
+      - "**/*.rst"
+      - "**/LICENSE"
+  - id: C05
+    category: data
+    patterns:
+      - "data/**"
+      - "**/*.csv"
+      - "**/*.parquet"
+      - "**/*.xlsx"
+  - id: C06
+    category: source
+    patterns:
+      - "**/*.py"
+      - "**/*.js"
+      - "**/*.ts"
+      - "**/*.tsx"
+      - "**/*.sql"
+      - "**/*.sh"
+
+# 추가된 줄에서 찾으면 BLOCK (판정 규칙 B01)
+secrets:
+  - id: openai_key
+    pattern: "sk-[A-Za-z0-9_-]{20,}"
+  - id: anthropic_key
+    pattern: "sk-ant-[A-Za-z0-9_-]{20,}"
+  - id: aws_access_key
+    pattern: "AKIA[0-9A-Z]{16}"
+  - id: github_token
+    pattern: "gh[pousr]_[A-Za-z0-9]{36,}"
+  - id: private_key
+    pattern: "-----BEGIN [A-Z ]*PRIVATE KEY-----"

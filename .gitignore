@@ -1,0 +1,11 @@
+# 비밀값
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# 분석 결과 (공개할 샘플만 docs/samples/에 따로 커밋)
+out/
