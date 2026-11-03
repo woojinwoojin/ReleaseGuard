@@ -1,87 +1,69 @@
-from itertools import count
+from conftest import CALC, PY
 
 from releaseguard.classify import load_rules
-from releaseguard.evaluate import evaluate, metrics, to_markdown
+from releaseguard.evaluate import evaluate, run_seeds, run_szz, seeds_markdown, szz_markdown, to_markdown
+
+RULES = load_rules()
 
 
-def make_repo(repo):
-    repo.write("src/engine.py", "def f():\n    return 1\n")
-    repo.write("tests/test_engine.py", "from src.engine import f\n")
-    repo.commit("base")
-    repo.write("README.md", "# x\n")
-    docs = repo.commit("docs")
-    repo.write("src/engine.py", "def f():\n    return 2\n")
-    repo.write("tests/test_engine.py", "from src.engine import f\n\ndef test_f():\n    assert f() == 2\n")
-    src = repo.commit("src+test")
-    return docs, src
+def cases_file(tmp_path, body):
+    path = tmp_path / "cases.yaml"
+    path.write_text(f"repo: target\npython: {PY.as_posix()}\n{body}", encoding="utf-8")
+    return path
 
 
-def test_evaluate_rules_only(repo, tmp_path):
-    docs, _ = make_repo(repo)
-    cases = tmp_path / "cases.yaml"
-    cases.write_text(f"repo: target\ncases:\n  - sha: {docs[:7]}\n    expected: REVIEW REQUIRED\n", encoding="utf-8")
+def test_evaluate_commits_and_determinism(pyrepo, tmp_path):
+    pyrepo.write("README.md", "# x\n")
+    docs = pyrepo.commit("docs")
+    pyrepo.write("src/calc.py", CALC.replace("return -1", "return -2"))
+    pyrepo.write("tests/test_calc.py", (pyrepo.path / "tests/test_calc.py").read_text() + "\n")
+    gap = pyrepo.commit("gap + test touch")
+    cases = cases_file(tmp_path, f"cases:\n  - sha: {docs[:7]}\n    expected: SAFE\n  - sha: {gap[:7]}\n    expected: SAFE\n")
 
-    ev = evaluate(cases, load_rules())
+    ev = evaluate(cases, RULES, repeat=2)
     m = ev["metrics"]
     assert m["commits"] == 2  # 첫 커밋은 제외
-    assert m["test_retrieval"] == {"commits": 1, "precision": 1.0, "recall": 1.0}
-    assert m["decision"]["labeled"] == 1 and m["decision"]["under_warning"] == 1
-    assert m["agent"] is None
+    assert m["decisions"] == {"REVIEW REQUIRED": 1, "SAFE": 1}
+    assert m["decision"]["judgments"] == 4 and m["decision"]["over_warning"] == 2
+    assert m["determinism"] == {"commits": 2, "identical": 2}
+    assert m["gaps"] == {"commits_with_gap": 1, "gap_lines": 1, "executable_lines": 1}
+    # 공백 줄(7)은 아무 테스트도 실행하지 않으므로 실행한 테스트가 없다 → 정답(바뀐 테스트)과 겹치지 않음
+    assert m["test_retrieval"] == {"commits": 1, "precision": None, "recall": 0.0}
+    assert "| `" + gap[:7] + "` |" in to_markdown(ev)
 
 
-def test_evaluate_repeat_measures_consistency(repo, tmp_path):
-    docs, src = make_repo(repo)
-    cases = tmp_path / "cases.yaml"
-    cases.write_text(
-        f"repo: target\ncases:\n"
-        f"  - sha: {docs[:7]}\n    expected: SAFE\n"
-        f"  - sha: {src[:7]}\n    expected: REVIEW REQUIRED\n    followup_fix: [later]\n",
+def test_seeds_run_in_a_clone(pyrepo, tmp_path):
+    seeds = tmp_path / "seeds.yaml"
+    seeds.write_text(
+        f"repo: target\npython: {PY.as_posix()}\nseeds:\n"
+        "  - id: S1\n    description: 테스트 없는 분기 수정\n    expected: REVIEW REQUIRED\n    expect_rules: [G01]\n"
+        "    edits:\n      - path: src/calc.py\n        find: 'return -1'\n        replace: 'return -2'\n"
+        "  - id: S2\n    description: 덧셈을 깨뜨림\n    expected: BLOCK\n    expect_rules: [B03]\n"
+        "    edits:\n      - path: src/calc.py\n        find: 'return a + b'\n        replace: 'return a - b'\n"
+        "  - id: S3\n    description: 테스트 파일 삭제\n    expected: REVIEW REQUIRED\n    expect_rules: [G01]\n"
+        "    edits:\n      - path: tests/test_calc.py\n        delete: true\n      - path: src/calc.py\n        find: 'return a + b'\n        replace: 'return b + a'\n",
         encoding="utf-8",
     )
-    calls = count()
-
-    def runner(view, result):
-        n = next(calls)
-        # src 커밋에서만 실행마다 HIGH가 나왔다 안 나왔다 한다 (docs 3회 → src 3회 순서)
-        high = n >= 3 and n % 2 == 1
-        risk = {"level": "HIGH", "title": "t", "detail": "", "evidence": ["file:src/engine.py:1"]}
-        output = {"summary": "s", "impacts": [], "risks": [risk] if high else [], "recommended_tests": []}
-        return {"output": output, "meta": {"model": "m", "llm_calls": 1, "tool_calls": 0, "input_tokens": 1, "output_tokens": 1, "seconds": 0.1, "tool_log": []}}
-
-    ev = evaluate(cases, load_rules(), runner, repeat=3)
-    a = ev["metrics"]["agent"]
-    assert a["runs"] == 6
-    assert a["high_on_followup"] == {"commits": 1, "run_rate": 0.667, "any_run": 1, "every_run": 0}
-    assert a["high_on_safe"]["any_run"] == 0
-    assert a["consistency"]["commits"] == 2 and a["consistency"]["high_same"] == 1
-    # src 커밋은 HIGH가 나온 실행에서만 R07 → 판정이 갈린다
-    src_row = next(r for r in ev["rows"] if r["sha"] == src[:7])
-    assert src_row["decisions"] == ["REVIEW REQUIRED", "SAFE", "REVIEW REQUIRED"]
-    assert ev["metrics"]["decision"]["judgments"] == 6
-    assert "실행 1 · HIGH: t" in to_markdown(ev)
+    ev = run_seeds(seeds, RULES)
+    assert [(r["id"], r["decision"], r["pass"]) for r in ev["rows"]] == [
+        ("S1", "REVIEW REQUIRED", True),
+        ("S2", "BLOCK", True),
+        ("S3", "REVIEW REQUIRED", True),
+    ]
+    assert pyrepo.git("log", "--oneline").count("\n") == 1  # 원래 저장소에는 커밋이 생기지 않는다
+    assert "(3/3 통과)" in seeds_markdown(ev)
 
 
-def row(decision, expected=None, predicted=(), actual=(), rules=()):
-    return {
-        "decision": decision,
-        "decisions": [decision],
-        "expected": expected,
-        "followup_fix": None,
-        "predicted_tests": list(predicted),
-        "actual_tests": list(actual),
-        "rules": list(rules),
-        "has_source": True,
-        "agent_runs": [],
-    }
+def test_szz_traces_defect_lines_to_their_status(pyrepo, tmp_path):
+    # 결함을 들여온 커밋: 테스트된 줄 하나(add), 테스트 안 된 줄 하나(sign 음수 분기)
+    pyrepo.write("src/calc.py", CALC.replace("return a + b", "return a + b + 0").replace("return -1", "return -1 * 1"))
+    intro = pyrepo.commit("introduce")
+    pyrepo.write("src/calc.py", CALC)
+    fix = pyrepo.commit("fix")
+    cases = cases_file(tmp_path, f"fix_commits: [{fix[:7]}]\n")
 
-
-def test_metrics_retrieval_skips_unknown_and_counts_warnings():
-    m = metrics([
-        row("SAFE", "SAFE", predicted=["a", "b"], actual=["a"]),
-        row("REVIEW REQUIRED", "SAFE", predicted=["c"], actual=[], rules=["R03"]),
-        row("SAFE", "BLOCK"),
-    ])
-    assert m["test_retrieval"] == {"commits": 1, "precision": 0.5, "recall": 1.0}
-    assert m["decision"]["accuracy"] == 0.333
-    assert (m["decision"]["over_warning"], m["decision"]["under_warning"]) == (1, 1)
-    assert m["rule_fire_rate"] == {"R03": 0.333}
+    ev = run_szz(cases, RULES)
+    assert ev["introducing_commits"] == 1 and ev["rows"][0]["sha"] == intro[:7]
+    assert sorted((ln["line"], ln["status"]) for ln in ev["rows"][0]["lines"]) == [(2, "covered"), (7, "gap")]
+    assert ev["gap_ratio"] == 0.5
+    assert "공백 비율 0.5" in szz_markdown(ev)

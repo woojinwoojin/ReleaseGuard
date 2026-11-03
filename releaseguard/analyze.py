@@ -1,22 +1,54 @@
-"""1~6단계를 순서대로 실행하고 결과를 dict로 만든다 (JSON으로 그대로 저장)."""
+"""1~7단계를 순서대로 실행하고 결과를 dict로 만든다 (JSON으로 그대로 저장)."""
 
 from collections.abc import Callable
 from dataclasses import asdict
 from pathlib import Path
 
 from . import __version__
-from .agent import validate_evidence
 from .agent_tools import RepoView
 from .classify import RuleSet, classify
-from .decide import decide
+from .decide import RULES_VERSION, decide
+from .gaps import FileLines, compute
 from .git_ops import collect, list_files, read_file
-from .related_tests import Coverage, coverage_status, find_related
+from .related_tests import coverage_status, find_related
+from .runner import DEFAULT_TIMEOUT, RunResult, check_python, find_python, run_tests
 
-# (RepoView, 규칙 단계 결과) → {"output": 에이전트 답, "meta": 실행 기록}
-ImpactRunner = Callable[[RepoView, dict], dict]
+# (RepoView, 공백이 있는 파일들) → {"items": 공백별 설명, "meta": 합계}
+ExplainRunner = Callable[[RepoView, list[FileLines]], dict]
 
 
-def analyze(repo: Path, base: str, head: str, ruleset: RuleSet, run_impact: ImpactRunner | None = None) -> dict:
+def _base_status(outcome: str | None) -> str:
+    if outcome is None:
+        return "absent"  # base에 없는 테스트 (이번 변경에서 추가됨)
+    return "failed" if outcome in ("failed", "error") else "passed"
+
+
+def _estimate_tests(change, files: list[dict], ruleset: RuleSet) -> list[dict]:
+    """테스트를 돌릴 수 없을 때만 쓰는 추정 (이름 규칙 + import 검색). 보고서에 '추정'으로 표시한다."""
+    tests = {
+        p: read_file(change.repo, change.head_sha, p) if p.endswith(".py") else ""
+        for p in list_files(change.repo, change.head_sha)
+        if classify(p, ruleset)[0] == "test"
+    }
+    changed_tests = {f["path"] for f in files if f["category"] == "test" and f["status"] != "D"}
+    out = []
+    for f in files:
+        if f["category"] == "source" and f["status"] != "D":
+            related = find_related(f["path"], tests)
+            out.append({"source": f["path"], "status": coverage_status(related, changed_tests, set()), "tests": [asdict(t) for t in related]})
+    return out
+
+
+def analyze(
+    repo: Path,
+    base: str,
+    head: str,
+    ruleset: RuleSet,
+    *,
+    python: Path | None = None,
+    timeout: int = DEFAULT_TIMEOUT,
+    explain: ExplainRunner | None = None,
+) -> dict:
     change = collect(repo, base, head)
 
     files = []
@@ -24,28 +56,38 @@ def analyze(repo: Path, base: str, head: str, ruleset: RuleSet, run_impact: Impa
         category, rule_id = classify(f.path, ruleset)
         files.append({**asdict(f), "category": category, "evidence": f"rule:{rule_id}" if rule_id else None})
 
-    # 관련 테스트 후보: head의 테스트 파일 + 이번 변경에서 삭제된 테스트(base 쪽 내용)
-    is_test = lambda p: classify(p, ruleset)[0] == "test"  # noqa: E731
-    deleted_tests = {f["path"] for f in files if f["category"] == "test" and f["status"] == "D"}
-    changed_tests = {f["path"] for f in files if f["category"] == "test" and f["status"] != "D"}
-    tests = {
-        p: read_file(change.repo, change.head_sha, p) if p.endswith(".py") else ""
-        for p in list_files(change.repo, change.head_sha)
-        if is_test(p)
+    # 3단계 Run: 문서만 바뀌었으면 돌리지 않는다.
+    py = None
+    if all(f["category"] == "docs" for f in files):
+        run = RunResult("skipped", "문서만 바뀜")
+    else:
+        py = find_python(change.repo, python)
+        problem = "대상 저장소에 .venv가 없음 (--python으로 지정)" if py is None else check_python(py)
+        run = RunResult("not_run", problem) if problem else run_tests(change.repo, change.head_sha, py, timeout=timeout)
+
+    # 실패한 테스트는 base에서 다시 돌려 "이번 변경이 깨뜨림"과 "원래 깨짐"을 나눈다.
+    # 수집 오류(status=error)는 테스트 실패가 아니라 B04로만 다룬다.
+    failed = [t for t in run.tests if t.outcome in ("failed", "error")] if run.status == "failed" else []
+    base_outcomes: dict[str, str] = {}
+    if failed:
+        base_run = run_tests(change.repo, change.merge_base, py, with_coverage=False, nodeids=[t.nodeid for t in failed], timeout=timeout)
+        base_outcomes = {t.nodeid: t.outcome for t in base_run.tests}
+    test_run = {
+        "status": run.status,
+        "reason": run.reason,
+        "seconds": run.seconds,
+        "attempts": run.attempts,
+        "python": run.python,
+        "counts": run.counts(),
+        "coverage": run.coverage is not None,
+        "failures": [
+            {"nodeid": t.nodeid, "message": t.message, "base_status": _base_status(base_outcomes.get(t.nodeid))} for t in failed
+        ],
     }
-    for p in deleted_tests:
-        tests[p] = read_file(change.repo, change.merge_base, p) if p.endswith(".py") else ""
 
-    coverage = []
-    for f in files:
-        if f["category"] != "source" or f["status"] == "D":
-            continue
-        if f["added"] == 0 and f["deleted"] == 0:  # 빈 파일 추가(__init__.py 등)·이름만 변경은 검증할 동작이 없다
-            continue
-        related = find_related(f["path"], tests)
-        coverage.append(Coverage(f["path"], coverage_status(related, changed_tests, deleted_tests), related))
-
-    decision, findings = decide(files, coverage, change.added_lines, ruleset.secrets)
+    # 4단계 Gaps
+    lines = compute(files, change.added_lines, run.coverage) if run.coverage is not None else []
+    decision, findings = decide(files, test_run, lines, change.added_lines, ruleset.secrets)
 
     by_category: dict[str, int] = {}
     for f in files:
@@ -53,7 +95,8 @@ def analyze(repo: Path, base: str, head: str, ruleset: RuleSet, run_impact: Impa
     result = {
         "tool": "releaseguard",
         "version": __version__,
-        "rules_version": ruleset.version,
+        "classify_version": ruleset.version,
+        "rules_version": RULES_VERSION,
         "repo": str(change.repo),
         "base": base,
         "head": head,
@@ -66,25 +109,21 @@ def analyze(repo: Path, base: str, head: str, ruleset: RuleSet, run_impact: Impa
             "by_category": dict(sorted(by_category.items())),
         },
         "changed_files": files,
-        "coverage": [asdict(c) for c in coverage],
-        "impact": None,
-        "agent": None,
-        "agent_error": None,
+        "test_run": test_run,
+        "lines": [asdict(fl) for fl in lines],
+        "estimated_tests": _estimate_tests(change, files, ruleset) if run.status in ("not_run", "timeout") else None,
         "decision": decision,
         "findings": [asdict(f) for f in findings],
+        "explanations": None,
+        "agent": None,
+        "agent_error": None,
     }
-    if run_impact is None:
-        return result
 
-    # 4단계: 에이전트가 실패해도 규칙 결과는 그대로 남긴다.
-    view = RepoView(change.repo, change.merge_base, change.head_sha)
-    try:
-        out = run_impact(view, result)
-        impact = validate_evidence(out["output"], out["meta"], view, {f.rule_id for f in findings})
-    except Exception as e:  # API 오류, 응답 형식 오류 등
-        result["agent_error"] = f"{type(e).__name__}: {e}"
-        return result
-    high = [r for r in impact["risks"] if r["level"] == "HIGH" and r["verified"]]
-    decision, findings = decide(files, coverage, change.added_lines, ruleset.secrets, agent_high_risks=high)
-    result.update(impact=impact, agent=out["meta"], decision=decision, findings=[asdict(f) for f in findings])
+    # 6단계 Explain: 공백이 있을 때만. 실패해도 판정과 결과는 그대로 남긴다.
+    if explain is not None and any(fl.gaps for fl in lines):
+        try:
+            out = explain(RepoView(change.repo, change.merge_base, change.head_sha), lines)
+            result["explanations"], result["agent"] = out["items"], out["meta"]
+        except Exception as e:
+            result["agent_error"] = f"{type(e).__name__}: {e}"
     return result

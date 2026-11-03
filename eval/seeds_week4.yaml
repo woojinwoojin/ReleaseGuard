@@ -1,0 +1,69 @@
+# 결함을 심은 사례 — 4주차 Docker_UI_CI (FastAPI·SQLite·Docker·CI)
+# W05·W06은 "바라는 판정"을 적었다. 지금 규칙 v2는 Docker·CI 변경을 검증하지 못하므로 실패가 예상되며,
+# 그 실패가 로드맵의 근거가 된다 (보고서에 한계로 기록).
+repo: ../../2026-10/week4-docker-aws
+base: fee0039
+seeds:
+  - id: W01
+    description: 다른 데이터셋의 대화로 질문할 때 400 → 409로 변경 (테스트가 상태 코드를 확인함)
+    expected: BLOCK
+    expect_rules: [B03]
+    edits:
+      - path: api.py
+        find: raise HTTPException(400, "이 대화는 다른 데이터셋의 대화입니다.")
+        replace: raise HTTPException(409, "이 대화는 다른 데이터셋의 대화입니다.")
+  - id: W02
+    description: 테스트 없는 새 엔드포인트 추가
+    expected: REVIEW REQUIRED
+    expect_rules: [G01]
+    edits:
+      - path: api.py
+        find: |
+          @app.get("/conversations/{conversation_id}", response_model=ConversationOut)
+        replace: |
+          @app.get("/health")
+          def health() -> dict:
+              return {"status": "ok"}
+
+
+          @app.get("/conversations/{conversation_id}", response_model=ConversationOut)
+  - id: W03
+    # 처음에는 "테스트가 이 줄을 실행한다"고 가정해 SAFE로 적었으나 틀렸다: 테스트는 /conversations/{id}를
+    # 있는 id로만 부르고 404 경로는 실행하지 않는다 (2026-11-03 첫 실행에서 G01로 드러남, tests/test_api.py 확인).
+    description: 대화 조회 404 메시지 문구 변경 (404 경로는 테스트되지 않음)
+    expected: REVIEW REQUIRED
+    expect_rules: [G01]
+    edits:
+      - path: api.py
+        find: |2
+                  raise HTTPException(404, f"대화가 없습니다: {conversation_id}")
+              turns = [
+        replace: |2
+                  raise HTTPException(404, f"대화를 찾을 수 없습니다: {conversation_id}")
+              turns = [
+  - id: W04
+    description: FastAPI 버전 올림
+    expected: REVIEW REQUIRED
+    expect_rules: [R04]
+    edits:
+      - path: requirements.txt
+        find: fastapi==0.142.2
+        replace: fastapi==0.143.0
+  - id: W05
+    description: Dockerfile 실행 명령 오타 (컨테이너가 뜨지 않음) — 바라는 판정
+    expected: REVIEW REQUIRED
+    expect_rules: []
+    edits:
+      - path: Dockerfile
+        find: CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+        replace: CMD ["uvicorn", "app:api", "--host", "0.0.0.0", "--port", "8000"]
+  - id: W06
+    description: CI에서 테스트 단계 삭제 — 바라는 판정
+    expected: REVIEW REQUIRED
+    expect_rules: []
+    edits:
+      - path: .github/workflows/ci.yml
+        find: |2
+                - name: Run tests
+                  run: pytest -rs  # -rs: 건너뛴 테스트가 있으면 이유를 출력한다
+        replace: ""

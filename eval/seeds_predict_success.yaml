@@ -1,0 +1,101 @@
+# 결함을 심은 사례 — Predict_Success
+# 임시 clone의 base 커밋 위에 edits를 적용해 커밋 하나를 만들고 분석한다. 원래 저장소는 바뀌지 않는다.
+# expected: 기대 판정, expect_rules: 반드시 발동해야 하는 규칙 (판정 규칙 v2)
+repo: ../../predict-success
+base: 895dbe4
+seeds:
+  - id: S01
+    description: 테스트가 지나가지 않는 새 분기 추가 (engine.combine)
+    expected: REVIEW REQUIRED
+    expect_rules: [G01]
+    edits:
+      - path: src/metrics/engine.py
+        find: |2
+              if worst != "normal":
+                  result.score_eligible = "보류"
+        replace: |2
+              if worst != "normal":
+                  result.score_eligible = "보류"
+              if len(inputs) > 50:
+                  result.notes.append("입력이 많음")
+  - id: S02
+    description: 테스트된 줄을 같은 동작으로 리팩터 (engine.combine)
+    expected: SAFE
+    expect_rules: []
+    edits:
+      - path: src/metrics/engine.py
+        find: key=STATUS_RANK.get, default="normal")
+        replace: 'key=lambda s: STATUS_RANK[s], default="normal")'
+  - id: S03
+    description: 기간 연도 비교를 깨뜨림 (engine.Input.period_problem)
+    expected: BLOCK
+    expect_rules: [B03]
+    edits:
+      - path: src/metrics/engine.py
+        find: "if int(self.period_end[:4]) != self.year:"
+        replace: "if int(self.period_end[:4]) != self.year + 1:"
+  - id: S04
+    description: 없는 이름을 import (수집 오류)
+    expected: BLOCK
+    expect_rules: [B04]
+    edits:
+      - path: src/metrics/engine.py
+        find: from statistics import median, pstdev
+        replace: from statistics import median, pstdev, no_such_function
+  - id: S05
+    description: 소스에 API 키를 넣음
+    expected: BLOCK
+    expect_rules: [B01]
+    edits:
+      - path: src/metrics/engine.py
+        find: PERIOD_OK = {"from_filing_text", "from_manual"}
+        replace: |-
+          PERIOD_OK = {"from_filing_text", "from_manual"}
+          API_KEY = "sk-abcdefghijklmnopqrstuvwxyz012345"
+  - id: S06
+    description: README만 수정
+    expected: SAFE
+    expect_rules: []
+    edits:
+      - path: README.md
+        find: "# EvidenceFirst — 근거 기반 사업성과 분석"
+        replace: "# EvidenceFirst — 근거 기반 사업성과 분석 (seed)"
+  - id: S07
+    description: 점수 테스트 파일을 지우고 보간 계산을 같은 동작으로 바꿈
+    expected: REVIEW REQUIRED
+    expect_rules: [G01]
+    edits:
+      - path: tests/test_scoring.py
+        delete: true
+      - path: src/scoring/score.py
+        find: return y0 + (y1 - y0) * (x - x0) / (x1 - x0)
+        replace: return y0 + (x - x0) * (y1 - y0) / (x1 - x0)
+  - id: S08
+    description: 의존성 추가
+    expected: REVIEW REQUIRED
+    expect_rules: [R04]
+    edits:
+      - path: requirements.txt
+        find: pytest==9.1.1
+        replace: |-
+          pytest==9.1.1
+          rich==14.0.0
+  - id: S09
+    description: 어디서도 불리지 않는 새 모듈 추가
+    expected: REVIEW REQUIRED
+    expect_rules: [G01]
+    edits:
+      - path: src/metrics/extra.py
+        create: |
+          def ratio(a, b):
+              if b == 0:
+                  return None
+              return a / b
+  - id: S10
+    description: 설정 파일 주석만 수정
+    expected: SAFE
+    expect_rules: []
+    edits:
+      - path: configs/scoring_v2.yaml
+        find: "# 점수 규칙 v2"
+        replace: "# 점수 규칙 v2 (seed)"

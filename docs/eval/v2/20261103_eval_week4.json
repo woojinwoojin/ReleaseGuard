@@ -1,0 +1,325 @@
+{
+  "repo": "C:\\Project_Folder\\2026-10\\week4-docker-aws",
+  "repeat": 1,
+  "metrics": {
+    "commits": 8,
+    "decisions": {
+      "REVIEW REQUIRED": 2,
+      "SAFE": 6
+    },
+    "test_status": {
+      "failed": 1,
+      "passed": 5,
+      "skipped": 2
+    },
+    "rule_fire_rate": {
+      "R04": 0.125,
+      "T01": 0.125
+    },
+    "note_rate": {
+      "N03": 0.5
+    },
+    "gaps": {
+      "commits_with_gap": 0,
+      "gap_lines": 0,
+      "executable_lines": 0
+    },
+    "test_retrieval": {
+      "commits": 2,
+      "precision": null,
+      "recall": 0.0
+    },
+    "run_seconds": {
+      "avg": 42.4,
+      "max": 55.0
+    },
+    "decision": {
+      "labeled": 0,
+      "judgments": 0,
+      "accuracy": null,
+      "over_warning": 0,
+      "under_warning": 0,
+      "confusion": {}
+    },
+    "determinism": null,
+    "agent": null
+  },
+  "rows": [
+    {
+      "sha": "abe0ad4",
+      "subject": "Run UI tests on a small fake Superstore CSV",
+      "by_category": {
+        "test": 2
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED"
+      ],
+      "deterministic": null,
+      "rules": [
+        "T01"
+      ],
+      "notes": [],
+      "test_status": "failed",
+      "test_counts": {
+        "passed": 99,
+        "failed": 6,
+        "error": 0,
+        "skipped": 0
+      },
+      "test_seconds": 55.0,
+      "coverage": true,
+      "gap_lines": 0,
+      "executable_lines": 0,
+      "gaps": [],
+      "actual_tests": [
+        "tests/fixtures/superstore_sample.csv",
+        "tests/test_app.py"
+      ],
+      "executed_tests": [],
+      "expected": null,
+      "labeled_by": null,
+      "note": null,
+      "explanations": []
+    },
+    {
+      "sha": "e3867fd",
+      "subject": "Never build a real OpenAI client in tests",
+      "by_category": {
+        "test": 2
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "deterministic": null,
+      "rules": [],
+      "notes": [],
+      "test_status": "passed",
+      "test_counts": {
+        "passed": 105,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      },
+      "test_seconds": 38.0,
+      "coverage": true,
+      "gap_lines": 0,
+      "executable_lines": 0,
+      "gaps": [],
+      "actual_tests": [
+        "tests/test_api.py",
+        "tests/test_app.py"
+      ],
+      "executed_tests": [],
+      "expected": null,
+      "labeled_by": null,
+      "note": null,
+      "explanations": []
+    },
+    {
+      "sha": "6a987e0",
+      "subject": "Add GitHub Actions CI running pytest on push and PR",
+      "by_category": {
+        "config": 1
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "deterministic": null,
+      "rules": [],
+      "notes": [
+        "N03"
+      ],
+      "test_status": "passed",
+      "test_counts": {
+        "passed": 105,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      },
+      "test_seconds": 33.5,
+      "coverage": true,
+      "gap_lines": 0,
+      "executable_lines": 0,
+      "gaps": [],
+      "actual_tests": [],
+      "executed_tests": [],
+      "expected": null,
+      "labeled_by": null,
+      "note": null,
+      "explanations": []
+    },
+    {
+      "sha": "19a5c0f",
+      "subject": "Pin direct dependencies and drop unused env settings",
+      "by_category": {
+        "config": 1,
+        "deps": 1
+      },
+      "decision": "REVIEW REQUIRED",
+      "decisions": [
+        "REVIEW REQUIRED"
+      ],
+      "deterministic": null,
+      "rules": [
+        "R04"
+      ],
+      "notes": [
+        "N03"
+      ],
+      "test_status": "passed",
+      "test_counts": {
+        "passed": 105,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      },
+      "test_seconds": 43.4,
+      "coverage": true,
+      "gap_lines": 0,
+      "executable_lines": 0,
+      "gaps": [],
+      "actual_tests": [],
+      "executed_tests": [],
+      "expected": null,
+      "labeled_by": null,
+      "note": null,
+      "explanations": []
+    },
+    {
+      "sha": "f54b612",
+      "subject": "Add Dockerfile and build the image in CI after tests",
+      "by_category": {
+        "config": 2,
+        "other": 1
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "deterministic": null,
+      "rules": [],
+      "notes": [
+        "N03"
+      ],
+      "test_status": "passed",
+      "test_counts": {
+        "passed": 105,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      },
+      "test_seconds": 42.1,
+      "coverage": true,
+      "gap_lines": 0,
+      "executable_lines": 0,
+      "gaps": [],
+      "actual_tests": [],
+      "executed_tests": [],
+      "expected": null,
+      "labeled_by": null,
+      "note": null,
+      "explanations": []
+    },
+    {
+      "sha": "cc36c47",
+      "subject": "Run API and UI together with docker compose",
+      "by_category": {
+        "config": 1
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "deterministic": null,
+      "rules": [],
+      "notes": [
+        "N03"
+      ],
+      "test_status": "passed",
+      "test_counts": {
+        "passed": 105,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      },
+      "test_seconds": 42.5,
+      "coverage": true,
+      "gap_lines": 0,
+      "executable_lines": 0,
+      "gaps": [],
+      "actual_tests": [],
+      "executed_tests": [],
+      "expected": null,
+      "labeled_by": null,
+      "note": null,
+      "explanations": []
+    },
+    {
+      "sha": "2fbac93",
+      "subject": "Record Sydney region decision for AWS free plan",
+      "by_category": {
+        "docs": 1
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "deterministic": null,
+      "rules": [],
+      "notes": [],
+      "test_status": "skipped",
+      "test_counts": {
+        "passed": 0,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      },
+      "test_seconds": 0.0,
+      "coverage": false,
+      "gap_lines": 0,
+      "executable_lines": 0,
+      "gaps": [],
+      "actual_tests": [],
+      "executed_tests": [],
+      "expected": null,
+      "labeled_by": null,
+      "note": null,
+      "explanations": []
+    },
+    {
+      "sha": "fee0039",
+      "subject": "Record EC2 deployment steps and results",
+      "by_category": {
+        "docs": 1
+      },
+      "decision": "SAFE",
+      "decisions": [
+        "SAFE"
+      ],
+      "deterministic": null,
+      "rules": [],
+      "notes": [],
+      "test_status": "skipped",
+      "test_counts": {
+        "passed": 0,
+        "failed": 0,
+        "error": 0,
+        "skipped": 0
+      },
+      "test_seconds": 0.0,
+      "coverage": false,
+      "gap_lines": 0,
+      "executable_lines": 0,
+      "gaps": [],
+      "actual_tests": [],
+      "executed_tests": [],
+      "expected": null,
+      "labeled_by": null,
+      "note": null,
+      "explanations": []
+    }
+  ]
+}

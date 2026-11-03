@@ -1,29 +1,36 @@
-"""Eval Set 실행. 대상 저장소의 커밋을 하나씩 분석해 정답과 비교한다.
+"""Eval v2. 세 가지로 잰다.
 
-정답은 세 종류다.
-- 자동 정답: 같은 커밋에서 실제로 수정·추가된 테스트 파일 → 관련 테스트 탐색(3단계)과 에이전트 추천 테스트의 precision/recall
-- 수기 정답: eval/cases.yaml의 expected (기대 판정) → 판정 정확도, 과잉·과소 경고
-- 후속 수정: cases.yaml의 followup_fix (이후 커밋에서 문제가 고쳐짐) → 에이전트 HIGH 위험이 실제 문제를 잡는지
+1. evaluate — 대상 저장소의 커밋 전체를 분석한다.
+   - 자동 정답: 같은 커밋에서 바뀐 테스트 파일 ↔ 바뀐 줄을 실제로 실행한 테스트 파일
+   - 수기 정답: eval/cases.yaml의 expected → 판정 정확도 (참고 지표)
+   - 결정성: 수기 정답 커밋을 repeat번 돌려 판정·공백·테스트 목록이 같은지
+2. run_seeds — 대상 저장소를 임시로 clone해 결함을 심고, 기대 판정·규칙이 나오는지 본다.
+3. run_szz — 고친 커밋이 지우거나 바꾼 줄을 blame으로 거슬러 "결함을 들여온 커밋·줄"을 찾고,
+   그 줄이 들어올 때 검증 공백이었는지 본다. (SZZ 알고리즘의 단순판)
 
-에이전트는 비용 때문에 수기 정답이 있는 커밋에만 돌린다. repeat > 1이면 같은 커밋을 여러 번 돌려 일관성을 잰다.
+에이전트(공백 설명)는 비용 때문에 evaluate의 수기 정답 커밋에만, --agent일 때만 돌린다.
 """
 
-from itertools import combinations
-from pathlib import Path
+import re
+import subprocess
+import tempfile
+from pathlib import Path, PurePosixPath
 
 import yaml
 
-from .analyze import ImpactRunner, analyze
-from .classify import RuleSet
-from .decide import SAFE, SEVERITY
-from .git_ops import run_git
+from .analyze import ExplainRunner, analyze
+from .classify import RuleSet, classify
+from .decide import NOTE, SAFE, SEVERITY
+from .git_ops import resolve, run_git
+from .runner import find_python
 
 
-def load_cases(path: Path) -> tuple[Path, dict[str, dict]]:
-    """(대상 저장소 경로, {짧은 sha: 라벨}). 저장소 경로는 cases 파일 위치 기준."""
+def load_yaml(path: Path) -> tuple[Path, dict, Path | None]:
+    """(대상 저장소 경로, 내용, 테스트를 돌릴 Python). 경로는 yaml 파일 위치 기준. python이 없으면 대상 저장소의 .venv."""
     raw = yaml.safe_load(path.read_text(encoding="utf-8"))
     repo = (path.parent / raw["repo"]).resolve()
-    return repo, {str(c["sha"]): c for c in raw.get("cases", [])}
+    python = (path.parent / raw["python"]).resolve() if raw.get("python") else find_python(repo)
+    return repo, raw, python
 
 
 def list_commits(repo: Path) -> list[tuple[str, str]]:
@@ -32,24 +39,39 @@ def list_commits(repo: Path) -> list[tuple[str, str]]:
     return [tuple(line.split("\t", 1)) for line in out.splitlines()]
 
 
-def _label_for(sha: str, labels: dict[str, dict]) -> dict | None:
-    return next((c for short, c in labels.items() if sha.startswith(short)), None)
-
-
 def _ratio(num: int, den: int) -> float | None:
     return round(num / den, 3) if den else None
 
 
-def evaluate(cases_path: Path, ruleset: RuleSet, run_impact: ImpactRunner | None = None, repeat: int = 1) -> dict:
-    repo, labels = load_cases(cases_path)
+def _test_file(nodeid: str) -> str:
+    return nodeid.split("::", 1)[0]
+
+
+def _rules(result: dict) -> list[str]:
+    return [f["rule_id"] for f in result["findings"] if f["decision"] != NOTE]
+
+
+def _signature(result: dict) -> tuple:
+    """결정성 비교용: 판정, 규칙, 공백, 실행한 테스트."""
+    return (
+        result["decision"],
+        tuple(_rules(result)),
+        tuple((fl["path"], tuple(map(tuple, fl["gaps"]))) for fl in result["lines"]),
+        tuple(sorted({t for fl in result["lines"] for t in fl["tests"]})),
+    )
+
+
+# ---------------------------------------------------------------- 1. 커밋 전체
+
+
+def evaluate(cases_path: Path, ruleset: RuleSet, explain: ExplainRunner | None = None, repeat: int = 1) -> dict:
+    repo, raw, python = load_yaml(cases_path)
+    labels = {str(c["sha"]): c for c in raw.get("cases", [])}
     rows = []
     for sha, subject in list_commits(repo):
-        label = _label_for(sha, labels) or {}
-        with_agent = bool(label) and run_impact is not None
-        results = [
-            analyze(repo, f"{sha}~1", sha, ruleset, run_impact if with_agent else None)
-            for _ in range(repeat if with_agent else 1)
-        ]
+        label = next((c for short, c in labels.items() if sha.startswith(short)), {})
+        times = repeat if label else 1
+        results = [analyze(repo, f"{sha}~1", sha, ruleset, python=python, explain=explain if label else None) for _ in range(times)]
         first = results[0]
         actual = sorted({f["path"] for f in first["changed_files"] if f["category"] == "test" and f["status"] != "D"})
         rows.append({
@@ -57,43 +79,39 @@ def evaluate(cases_path: Path, ruleset: RuleSet, run_impact: ImpactRunner | None
             "subject": subject,
             "by_category": first["summary"]["by_category"],
             "decision": first["decision"],
-            "decisions": [r["decision"] for r in results],  # 실행마다 (규칙만이면 1개)
-            "rules": [f["rule_id"] for f in first["findings"]],
-            "has_source": bool(first["coverage"]),
+            "decisions": [r["decision"] for r in results],
+            "deterministic": len({_signature(r) for r in results}) == 1 if times > 1 else None,
+            "rules": _rules(first),
+            "notes": [f["rule_id"] for f in first["findings"] if f["decision"] == NOTE],
+            "test_status": first["test_run"]["status"],
+            "test_counts": first["test_run"]["counts"],
+            "test_seconds": first["test_run"]["seconds"],
+            "coverage": first["test_run"]["coverage"],
+            "gap_lines": sum(fl["gap_lines"] for fl in first["lines"]),
+            "executable_lines": sum(fl["executable"] for fl in first["lines"]),
+            "gaps": [f"{fl['path']}:{s}" + (f"-{e}" if e != s else "") for fl in first["lines"] for s, e in fl["gaps"]],
             "actual_tests": actual,
-            "predicted_tests": sorted({t["path"] for c in first["coverage"] for t in c["tests"]}),
+            "executed_tests": sorted({_test_file(t) for fl in first["lines"] for t in fl["tests"]}),
             "expected": label.get("expected"),
-            "followup_fix": label.get("followup_fix"),
             "labeled_by": label.get("labeled_by"),
             "note": label.get("note"),
-            "agent_runs": [_agent_row(r, actual) for r in results] if with_agent else [],
+            "explanations": [_explain_row(r) for r in results if r["explanations"] is not None or r["agent_error"]],
         })
-    return {"repo": str(repo), "rules_version": ruleset.version, "repeat": repeat, "metrics": metrics(rows), "rows": rows}
+    return {"repo": str(repo), "repeat": repeat, "metrics": metrics(rows), "rows": rows}
 
 
-def _agent_row(result: dict, actual: list[str]) -> dict:
+def _explain_row(result: dict) -> dict:
     if result["agent_error"]:
         return {"error": result["agent_error"]}
-    impact, meta = result["impact"], result["agent"]
-    items = [i for key in ("impacts", "risks", "recommended_tests") for i in impact[key]]
+    items = [i for i in result["explanations"] if not i["error"]]
     return {
         "error": None,
-        "llm_calls": meta["llm_calls"],
-        "tool_calls": meta["tool_calls"],
-        "input_tokens": meta["input_tokens"],
-        "output_tokens": meta["output_tokens"],
-        "seconds": meta["seconds"],
-        "items": len(items),
-        "verified_items": sum(i["verified"] for i in items),
-        "high_risks": sum(r["level"] == "HIGH" for r in impact["risks"]),
-        "verified_high": sum(r["level"] == "HIGH" and r["verified"] for r in impact["risks"]),  # R07에 들어가는 것
-        "recommended_existing": sorted({t["target"] for t in impact["recommended_tests"] if t["kind"] == "run_existing"}),
-        "add_new": len([t for t in impact["recommended_tests"] if t["kind"] == "add_new"]),
-        "actual_tests": actual,
-        # 위험 내용이 후속 수정과 맞는지 사람이 대조할 수 있게 남긴다
-        "summary": impact["summary"],
-        "risks": [{k: r[k] for k in ("level", "title", "detail", "verified", "evidence")} for r in impact["risks"]],
-        "tools_used": [f"{t['name']} {t['arguments']}" for t in meta["tool_log"]],
+        **{k: result["agent"][k] for k in ("gaps", "llm_calls", "tool_calls", "input_tokens", "output_tokens", "seconds", "errors")},
+        "verified": sum(i["verified"] for i in items),
+        "new_test_file": sum(i["new_test_file"] for i in items),
+        "items": [
+            {k: i[k] for k in ("path", "start", "end", "behavior", "suggested_test", "verified", "unverified")} for i in items
+        ],
     }
 
 
@@ -101,155 +119,305 @@ def _retrieval(pairs: list[tuple[list[str], list[str]]]) -> dict:
     """(예측, 실제) 목록의 micro precision/recall. 실제 정답이 빈 커밋은 정답을 알 수 없어서 뺀다."""
     pairs = [(set(p), set(a)) for p, a in pairs if a]
     tp = sum(len(p & a) for p, a in pairs)
-    return {
-        "commits": len(pairs),
-        "precision": _ratio(tp, sum(len(p) for p, _ in pairs)),
-        "recall": _ratio(tp, sum(len(a) for _, a in pairs)),
-    }
+    return {"commits": len(pairs), "precision": _ratio(tp, sum(len(p) for p, _ in pairs)), "recall": _ratio(tp, sum(len(a) for _, a in pairs))}
 
 
-def _jaccard(a: list[str], b: list[str]) -> float:
-    sa, sb = set(a), set(b)
-    return len(sa & sb) / len(sa | sb) if sa | sb else 1.0
+def _count(values) -> dict[str, int]:
+    out: dict[str, int] = {}
+    for v in values:
+        out[v] = out.get(v, 0) + 1
+    return dict(sorted(out.items()))
 
 
 def metrics(rows: list[dict]) -> dict:
     n = len(rows)
-    rule_counts: dict[str, int] = {}
-    for r in rows:
-        for rule in r["rules"]:
-            rule_counts[rule] = rule_counts.get(rule, 0) + 1
-    decisions: dict[str, int] = {}
-    for r in rows:
-        decisions[r["decision"]] = decisions.get(r["decision"], 0) + 1
-
-    # 판정은 (커밋, 실행) 단위로 센다. 규칙만이면 커밋당 1개.
     labeled = [r for r in rows if r["expected"]]
     pairs = [(r["expected"], d) for r in labeled for d in r["decisions"]]
-    confusion: dict[str, int] = {}
-    for exp, got in pairs:
-        confusion[f"{exp} → {got}"] = confusion.get(f"{exp} → {got}", 0) + 1
-
+    ran = [r for r in rows if r["test_status"] not in ("skipped",)]
     out = {
         "commits": n,
-        "decisions": dict(sorted(decisions.items())),
-        "rule_fire_rate": {k: _ratio(v, n) for k, v in sorted(rule_counts.items())},
-        "test_retrieval": _retrieval([(r["predicted_tests"], r["actual_tests"]) for r in rows if r["has_source"]]),
+        "decisions": _count(r["decision"] for r in rows),
+        "test_status": _count(r["test_status"] for r in rows),
+        "rule_fire_rate": {k: _ratio(v, n) for k, v in _count(x for r in rows for x in r["rules"]).items()},
+        "note_rate": {k: _ratio(v, n) for k, v in _count(x for r in rows for x in r["notes"]).items()},
+        "gaps": {
+            "commits_with_gap": sum(r["gap_lines"] > 0 for r in rows),
+            "gap_lines": sum(r["gap_lines"] for r in rows),
+            "executable_lines": sum(r["executable_lines"] for r in rows),
+        },
+        # 바뀐 줄을 실행한 테스트 파일 ↔ 같은 커밋에서 바뀐 테스트 파일
+        "test_retrieval": _retrieval([(r["executed_tests"], r["actual_tests"]) for r in rows if r["coverage"]]),
+        "run_seconds": {
+            "avg": round(sum(r["test_seconds"] for r in ran) / len(ran), 1) if ran else None,
+            "max": max((r["test_seconds"] for r in ran), default=None),
+        },
         "decision": {
             "labeled": len(labeled),
             "judgments": len(pairs),
-            "accuracy": _ratio(sum(exp == got for exp, got in pairs), len(pairs)),
-            "over_warning": sum(SEVERITY[got] > SEVERITY[exp] for exp, got in pairs),
-            "under_warning": sum(SEVERITY[got] < SEVERITY[exp] for exp, got in pairs),
-            "confusion": dict(sorted(confusion.items())),
+            "accuracy": _ratio(sum(e == g for e, g in pairs), len(pairs)),
+            "over_warning": sum(SEVERITY[g] > SEVERITY[e] for e, g in pairs),
+            "under_warning": sum(SEVERITY[g] < SEVERITY[e] for e, g in pairs),
+            "confusion": _count(f"{e} → {g}" for e, g in pairs),
         },
+        "determinism": None,
         "agent": None,
     }
-
-    ran = [a for r in rows for a in r["agent_runs"]]
-    ok = [a for a in ran if not a["error"]]
-    if not ran:
-        return out
-    avg = lambda key: round(sum(a[key] for a in ok) / len(ok), 1) if ok else None  # noqa: E731
-
-    def high_hits(subset: list[dict]) -> dict:
-        """커밋별로 verified HIGH가 나온 실행 수를 센다."""
-        per = [sum(a["verified_high"] > 0 for a in r["agent_runs"] if not a["error"]) for r in subset]
-        runs = sum(len([a for a in r["agent_runs"] if not a["error"]]) for r in subset)
-        return {
-            "commits": len(subset),
-            "run_rate": _ratio(sum(per), runs),  # 실행 단위 비율
-            "any_run": sum(p > 0 for p in per),  # 한 번이라도 HIGH
-            "every_run": sum(p > 0 and p == len([a for a in r["agent_runs"] if not a["error"]]) for p, r in zip(per, subset)),
+    multi = [r for r in rows if r["deterministic"] is not None]
+    if multi:
+        out["determinism"] = {"commits": len(multi), "identical": sum(r["deterministic"] for r in multi)}
+    runs = [x for r in rows for x in r["explanations"]]
+    ok = [x for x in runs if not x["error"]]
+    if runs:
+        explained = sum(x["gaps"] - x["errors"] for x in ok)
+        out["agent"] = {
+            "runs": len(runs),
+            "errors": len(runs) - len(ok) + sum(x["errors"] for x in ok),
+            "gaps_explained": explained,
+            "verified_ratio": _ratio(sum(x["verified"] for x in ok), explained),
+            "new_test_file_ratio": _ratio(sum(x["new_test_file"] for x in ok), explained),
+            "avg_tool_calls_per_gap": round(sum(x["tool_calls"] for x in ok) / explained, 1) if explained else None,
+            "avg_input_tokens_per_gap": round(sum(x["input_tokens"] for x in ok) / explained) if explained else None,
         }
-
-    with_runs = [r for r in rows if r["agent_runs"]]
-    multi = [r for r in with_runs if len([a for a in r["agent_runs"] if not a["error"]]) >= 2]
-    jaccards = [
-        _jaccard(a["recommended_existing"], b["recommended_existing"])
-        for r in multi
-        for a, b in combinations([x for x in r["agent_runs"] if not x["error"]], 2)
-    ]
-    out["agent"] = {
-        "runs": len(ran),
-        "errors": len(ran) - len(ok),
-        "avg_llm_calls": avg("llm_calls"),
-        "avg_tool_calls": avg("tool_calls"),
-        "max_tool_calls": max((a["tool_calls"] for a in ok), default=None),
-        "avg_input_tokens": avg("input_tokens"),
-        "max_input_tokens": max((a["input_tokens"] for a in ok), default=None),
-        "avg_seconds": avg("seconds"),
-        "verified_item_ratio": _ratio(sum(a["verified_items"] for a in ok), sum(a["items"] for a in ok)),
-        "test_retrieval": _retrieval([(a["recommended_existing"], a["actual_tests"]) for a in ok]),
-        # 후속 수정이 있었던 커밋에서 HIGH가 나왔는가 (높을수록 좋음)
-        "high_on_followup": high_hits([r for r in with_runs if r["followup_fix"]]),
-        # SAFE 기대 커밋에서 HIGH가 나왔는가 (낮을수록 좋음)
-        "high_on_safe": high_hits([r for r in with_runs if r["expected"] == SAFE]),
-        "consistency": {
-            "commits": len(multi),
-            "decision_same": sum(len(set(r["decisions"])) == 1 for r in multi),
-            "high_same": sum(len({a["verified_high"] > 0 for a in r["agent_runs"] if not a["error"]}) == 1 for r in multi),
-            "avg_tests_jaccard": round(sum(jaccards) / len(jaccards), 3) if jaccards else None,
-        },
-    }
     return out
 
 
 def to_markdown(ev: dict) -> str:
     m = ev["metrics"]
-    tr, d = m["test_retrieval"], m["decision"]
+    d, tr, g = m["decision"], m["test_retrieval"], m["gaps"]
     lines = [
-        "# ReleaseGuard Eval 결과",
+        "# ReleaseGuard Eval v2 — 커밋 전체",
         "",
-        f"- 저장소: `{ev['repo']}` · 커밋 {m['commits']}개 · 분류 규칙 v{ev['rules_version']} · 에이전트 반복 {ev['repeat']}회",
-        f"- 판정 분포 (첫 실행): " + ", ".join(f"{k} {v}" for k, v in m["decisions"].items()),
-        f"- 규칙 발동률 (첫 실행): " + ", ".join(f"{k} {v:.0%}" for k, v in m["rule_fire_rate"].items()),
-        f"- 관련 테스트 탐색 (규칙, 테스트가 함께 바뀐 커밋 {tr['commits']}개): precision {tr['precision']}, recall {tr['recall']}",
-        f"- 판정 (수기 정답 {d['labeled']}개, 판정 {d['judgments']}회): 정확도 {d['accuracy']}, "
-        f"과잉 경고 {d['over_warning']}, 과소 경고 {d['under_warning']}",
+        f"- 저장소: `{ev['repo']}` · 커밋 {m['commits']}개 · 수기 정답 커밋 반복 {ev['repeat']}회",
+        "- 판정 분포 (첫 실행): " + ", ".join(f"{k} {v}" for k, v in m["decisions"].items()),
+        "- 테스트 실행 상태: " + ", ".join(f"{k} {v}" for k, v in m["test_status"].items())
+        + f" · 평균 {m['run_seconds']['avg']}초, 최대 {m['run_seconds']['max']}초",
+        "- 규칙 발동률: " + (", ".join(f"{k} {v:.0%}" for k, v in m["rule_fire_rate"].items()) or "없음"),
+        "- 참고 표시율: " + (", ".join(f"{k} {v:.0%}" for k, v in m["note_rate"].items()) or "없음"),
+        f"- 검증 공백: 커밋 {g['commits_with_gap']}개, 바뀐 실행 줄 {g['executable_lines']}줄 중 {g['gap_lines']}줄",
+        f"- 바뀐 줄을 실행한 테스트 ↔ 같은 커밋에서 바뀐 테스트 (커밋 {tr['commits']}개): precision {tr['precision']}, recall {tr['recall']}",
+        f"- 판정 (수기 정답 {d['labeled']}개, 판정 {d['judgments']}회): 정확도 {d['accuracy']}, 과잉 경고 {d['over_warning']}, 과소 경고 {d['under_warning']}",
     ]
-    for k, v in d["confusion"].items():
-        lines.append(f"  - {k}: {v}")
+    lines += [f"  - {k}: {v}" for k, v in d["confusion"].items()]
+    if det := m["determinism"]:
+        lines.append(f"- 결정성: 반복 실행 결과가 완전히 같은 커밋 {det['identical']}/{det['commits']}")
     if a := m["agent"]:
-        atr, fu, sf, c = a["test_retrieval"], a["high_on_followup"], a["high_on_safe"], a["consistency"]
-        lines += [
-            f"- 에이전트 ({a['runs']}회, 실패 {a['errors']}): 평균 LLM {a['avg_llm_calls']}회, 도구 {a['avg_tool_calls']}회 (최대 {a['max_tool_calls']}), "
-            f"입력 토큰 {a['avg_input_tokens']:,} (최대 {a['max_input_tokens']:,}), {a['avg_seconds']}초",
-            f"  - 근거 확인 비율 {a['verified_item_ratio']}",
-            f"  - 추천 기존 테스트: precision {atr['precision']}, recall {atr['recall']}",
-            f"  - 후속 수정 커밋 {fu['commits']}개의 verified HIGH: 실행 비율 {fu['run_rate']}, 한 번이라도 {fu['any_run']}개, 매번 {fu['every_run']}개",
-            f"  - SAFE 커밋 {sf['commits']}개의 verified HIGH: 실행 비율 {sf['run_rate']}, 한 번이라도 {sf['any_run']}개",
-            f"  - 일관성 (커밋 {c['commits']}개): 판정 같음 {c['decision_same']}, HIGH 여부 같음 {c['high_same']}, 추천 테스트 Jaccard {c['avg_tests_jaccard']}",
-        ]
-    lines += ["", "## 커밋별", "", "| 커밋 | 제목 | 판정 | 기대 | 규칙 | 실제 테스트 | 예측 테스트 | 에이전트 |", "|---|---|---|---|---|---|---|---|"]
+        lines.append(
+            f"- 공백 설명 에이전트: 실행 {a['runs']}회, 오류 {a['errors']}, 설명한 공백 {a['gaps_explained']}개, "
+            f"근거 확인 {a['verified_ratio']}, 새 테스트 파일 제안 {a['new_test_file_ratio']}, "
+            f"공백당 도구 {a['avg_tool_calls_per_gap']}회·입력 {a['avg_input_tokens_per_gap']} 토큰"
+        )
+    lines += [
+        "",
+        "## 커밋별",
+        "",
+        "| 커밋 | 제목 | 판정 | 기대 | 규칙 | 테스트 | 공백/실행 줄 | 바뀐 테스트 | 실행한 테스트 |",
+        "|---|---|---|---|---|---|---|---|---|",
+    ]
     for r in ev["rows"]:
-        decision = " / ".join(r["decisions"])
+        decision = " / ".join(dict.fromkeys(r["decisions"]))
         mark = "" if not r["expected"] else (" ✓" if all(x == r["expected"] for x in r["decisions"]) else " ✗")
-        agent = "-"
-        if r["agent_runs"]:
-            parts = []
-            for ag in r["agent_runs"]:
-                parts.append("실패" if ag["error"] else f"도구 {ag['tool_calls']}, 토큰 {ag['input_tokens']:,}, HIGH {ag['verified_high']}/{ag['high_risks']}")
-            agent = "<br>".join(parts)
         lines.append(
             f"| `{r['sha']}` | {r['subject']} | {decision}{mark} | {r['expected'] or '-'} | {', '.join(r['rules']) or '-'} | "
-            f"{'<br>'.join(r['actual_tests']) or '-'} | {'<br>'.join(r['predicted_tests']) or '-'} | {agent} |"
+            f"{r['test_status']} | {r['gap_lines']}/{r['executable_lines']} | {'<br>'.join(r['actual_tests']) or '-'} | "
+            f"{'<br>'.join(r['executed_tests']) or '-'} |"
         )
-
-    risky = [r for r in ev["rows"] if any(not a["error"] and a["risks"] for a in r["agent_runs"])]
-    if risky:
-        lines += ["", "## 에이전트 위험 (HIGH·MEDIUM)", ""]
-        for r in risky:
-            fix = f" · 후속 수정 {', '.join(r['followup_fix'])}" if r["followup_fix"] else ""
-            lines.append(f"### `{r['sha']}` {r['subject']} (기대 {r['expected']}{fix})")
+    explained = [r for r in ev["rows"] if any(not x["error"] for x in r["explanations"])]
+    if explained:
+        lines += ["", "## 공백 설명 (첫 실행)", ""]
+        for r in explained:
+            x = next(x for x in r["explanations"] if not x["error"])
+            lines.append(f"### `{r['sha']}` {r['subject']}")
             lines.append("")
-            for i, ag in enumerate(r["agent_runs"], 1):
-                if ag["error"]:
-                    continue
-                for risk in ag["risks"]:
-                    if risk["level"] != "LOW":
-                        ok = "" if risk["verified"] else " (근거 미확인)"
-                        lines.append(f"- 실행 {i} · {risk['level']}{ok}: {risk['title']}")
+            for i in x["items"]:
+                t = i["suggested_test"]
+                ok = "" if i["verified"] else " (근거 미확인)"
+                lines.append(f"- `{i['path']}` {i['start']}-{i['end']}{ok}: {i['behavior']} → `{t['file']}::{t['name']}`")
             lines.append("")
     lines.append("")
+    return "\n".join(lines)
+
+
+# ---------------------------------------------------------------- 2. 결함을 심은 사례
+
+
+def _apply(clone: Path, edit: dict) -> None:
+    path = clone / edit["path"]
+    if edit.get("delete"):
+        path.unlink()
+    elif "create" in edit:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(edit["create"], encoding="utf-8", newline="\n")
+    else:
+        text = path.read_text(encoding="utf-8")
+        if text.count(edit["find"]) != 1:
+            raise ValueError(f"{edit['path']}: find가 정확히 한 번 나와야 합니다 ({text.count(edit['find'])}번)")
+        path.write_text(text.replace(edit["find"], edit["replace"]), encoding="utf-8", newline="\n")
+
+
+def _git(clone: Path, *args: str) -> str:
+    return run_git(clone, "-c", "user.name=releaseguard", "-c", "user.email=releaseguard@localhost", *args)
+
+
+def run_seeds(seeds_path: Path, ruleset: RuleSet) -> dict:
+    """대상 저장소를 임시 폴더에 clone해서 사례마다 변경을 심고 분석한다. 원래 저장소는 건드리지 않는다."""
+    repo, raw, python = load_yaml(seeds_path)
+    rows = []
+    with tempfile.TemporaryDirectory(prefix="rg_seeds_", ignore_cleanup_errors=True) as tmp:
+        clone = Path(tmp) / "clone"
+        subprocess.run(["git", "clone", "--quiet", "--no-hardlinks", str(repo), str(clone)], check=True)
+        base = resolve(clone, raw.get("base", "HEAD"))
+        for seed in raw["seeds"]:
+            _git(clone, "checkout", "--quiet", "--detach", base)
+            for edit in seed["edits"]:
+                _apply(clone, edit)
+            _git(clone, "add", "-A")
+            _git(clone, "commit", "--quiet", "--allow-empty", "-m", f"seed {seed['id']}")
+            result = analyze(clone, base, "HEAD", ruleset, python=python)
+            rules = _rules(result)
+            expect_rules = seed.get("expect_rules", [])
+            ok = result["decision"] == seed["expected"] and set(expect_rules) <= set(rules)
+            rows.append({
+                "id": seed["id"],
+                "description": seed["description"],
+                "expected": seed["expected"],
+                "expect_rules": expect_rules,
+                "decision": result["decision"],
+                "rules": rules,
+                "gaps": [f"{fl['path']}:{s}" + (f"-{e}" if e != s else "") for fl in result["lines"] for s, e in fl["gaps"]],
+                "failures": [f"{f['nodeid']} ({f['base_status']})" for f in result["test_run"]["failures"]],
+                "test_status": result["test_run"]["status"],
+                "pass": ok,
+            })
+    return {"repo": str(repo), "base": base, "passed": sum(r["pass"] for r in rows), "total": len(rows), "rows": rows}
+
+
+def seeds_markdown(ev: dict) -> str:
+    lines = [
+        f"# ReleaseGuard Eval v2 — 결함을 심은 사례 ({ev['passed']}/{ev['total']} 통과)",
+        "",
+        f"- 저장소: `{ev['repo']}` (임시 clone에서 실행) · base `{ev['base'][:7]}`",
+        "",
+        "| id | 심은 변경 | 기대 | 결과 | 기대 규칙 | 발동 규칙 | 근거 | 통과 |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
+    for r in ev["rows"]:
+        evidence = "<br>".join(r["failures"] + r["gaps"]) or "-"
+        lines.append(
+            f"| {r['id']} | {r['description']} | {r['expected']} | {r['decision']} | {', '.join(r['expect_rules']) or '-'} | "
+            f"{', '.join(r['rules']) or '-'} | {evidence} | {'✓' if r['pass'] else '✗'} |"
+        )
+    lines.append("")
+    return "\n".join(lines)
+
+
+# ---------------------------------------------------------------- 3. SZZ
+
+
+_HUNK = re.compile(r"^@@ -(\d+)(?:,(\d+))? \+\d+(?:,\d+)? @@")
+
+
+def removed_lines(repo: Path, fix: str, ruleset: RuleSet) -> dict[str, list[int]]:
+    """고친 커밋이 지우거나 바꾼 줄 (fix~1 기준 줄 번호). Python 소스만."""
+    out: dict[str, list[int]] = {}
+    path = None
+    for line in run_git(repo, "diff", "-U0", "--no-color", "--no-ext-diff", f"{fix}~1", fix).splitlines():
+        if line.startswith("--- "):
+            target = line[4:]
+            path = target[2:] if target.startswith("a/") else None
+            if path and not (path.endswith(".py") and classify(path, ruleset)[0] == "source"):
+                path = None
+        elif path and (m := _HUNK.match(line)):
+            start, count = int(m.group(1)), int(m.group(2) or 1)
+            out.setdefault(path, []).extend(range(start, start + count))  # count가 0이면 순수 추가라 blame할 줄이 없다
+    return out
+
+
+def blame_origins(repo: Path, fix: str, path: str, lines: list[int]) -> list[dict]:
+    """줄마다 그 줄을 마지막으로 바꾼 커밋과 그 커밋에서의 경로·줄 번호. 빈 줄·주석은 뺀다."""
+    out = []
+    for n in lines:
+        porcelain = run_git(repo, "blame", "-w", "--porcelain", "-L", f"{n},{n}", f"{fix}~1", "--", path)
+        rows = porcelain.splitlines()
+        sha, orig_line = rows[0].split()[:2]
+        orig_path = next((r[9:] for r in rows if r.startswith("filename ")), path)
+        content = next((r[1:] for r in rows if r.startswith("\t")), "")
+        if content.strip() and not content.strip().startswith("#"):
+            out.append({"sha": sha, "path": orig_path, "line": int(orig_line), "fix": fix, "text": content.strip()[:120]})
+    return out
+
+
+def run_szz(cases_path: Path, ruleset: RuleSet) -> dict:
+    repo, raw, python = load_yaml(cases_path)
+    fixes = [resolve(repo, str(f)) for f in raw.get("fix_commits", [])]
+    origins: list[dict] = []
+    for fix in fixes:
+        for path, lines in removed_lines(repo, fix, ruleset).items():
+            origins += blame_origins(repo, fix, path, lines)
+
+    roots = set(run_git(repo, "rev-list", "--max-parents=0", "HEAD").split())
+    by_commit: dict[str, list[dict]] = {}
+    for o in origins:
+        by_commit.setdefault(o["sha"], []).append(o)
+
+    rows = []
+    for sha, items in sorted(by_commit.items(), key=lambda kv: kv[0]):
+        subject = run_git(repo, "log", "-1", "--format=%s", sha).strip()
+        if sha in roots:
+            rows.append({"sha": sha[:7], "subject": subject, "status": "root", "lines": [{**o, "status": "unknown"} for o in items]})
+            continue
+        result = analyze(repo, f"{sha}~1", sha, ruleset, python=python)
+        status_of = {fl["path"]: fl["line_status"] for fl in result["lines"]}
+        lines = []
+        for o in items:
+            st = status_of.get(o["path"], {}).get(o["line"])
+            lines.append({**o, "status": st or ("unknown" if not result["test_run"]["coverage"] else "not_changed")})
+        rows.append({
+            "sha": sha[:7],
+            "subject": subject,
+            "status": result["test_run"]["status"],
+            "decision": result["decision"],
+            "rules": _rules(result),
+            "lines": lines,
+        })
+    all_lines = [ln for r in rows for ln in r["lines"]]
+    counts = _count(ln["status"] for ln in all_lines)
+    judged = sum(counts.get(k, 0) for k in ("gap", "covered", "import_only"))
+    return {
+        "repo": str(repo),
+        "fix_commits": [f[:7] for f in fixes],
+        "defect_lines": len(all_lines),
+        "introducing_commits": len(rows),
+        "line_status": counts,
+        "gap_ratio": _ratio(counts.get("gap", 0), judged),
+        "rows": rows,
+    }
+
+
+def szz_markdown(ev: dict) -> str:
+    c = ev["line_status"]
+    lines = [
+        "# ReleaseGuard Eval v2 — SZZ (결함 줄이 들어올 때 검증 공백이었나)",
+        "",
+        f"- 저장소: `{ev['repo']}` · 고친 커밋: {', '.join(f'`{f}`' for f in ev['fix_commits'])}",
+        f"- 결함 줄 {ev['defect_lines']}개 (고친 커밋이 지우거나 바꾼 Python 소스 줄, 빈 줄·주석 제외), 들여온 커밋 {ev['introducing_commits']}개",
+        "- 들여올 때 상태: " + ", ".join(f"{k} {v}" for k, v in c.items()),
+        f"- **공백 비율 {ev['gap_ratio']}** = gap / (gap + covered + import_only)",
+        "",
+        "| 들여온 커밋 | 제목 | 테스트 | 판정 | 결함 줄 | gap | covered | import_only | 기타 |",
+        "|---|---|---|---|---|---|---|---|---|",
+    ]
+    for r in ev["rows"]:
+        cc = _count(ln["status"] for ln in r["lines"])
+        other = sum(v for k, v in cc.items() if k not in ("gap", "covered", "import_only"))
+        lines.append(
+            f"| `{r['sha']}` | {r['subject']} | {r['status']} | {r.get('decision', '-')} | {len(r['lines'])} | "
+            f"{cc.get('gap', 0)} | {cc.get('covered', 0)} | {cc.get('import_only', 0)} | {other} |"
+        )
+    lines += [
+        "",
+        "상태 설명: gap = 들어올 때 어떤 테스트도 실행하지 않음, covered = 테스트가 실행함(그런데도 결함이 남음), "
+        "import_only = 모듈을 불러올 때만 실행, not_changed = blame 결과가 그 커밋의 변경 줄과 맞지 않음, "
+        "unknown = coverage 없음(첫 커밋·실행 실패).",
+        "",
+    ]
     return "\n".join(lines)

@@ -1,0 +1,102 @@
+{
+  "repo": "C:\\Project_Folder\\2026-10\\week4-docker-aws",
+  "base": "fee00394c47b3135d949f376969988ce5b174a1d",
+  "passed": 4,
+  "total": 6,
+  "rows": [
+    {
+      "id": "W01",
+      "description": "다른 데이터셋의 대화로 질문할 때 400 → 409로 변경 (테스트가 상태 코드를 확인함)",
+      "expected": "BLOCK",
+      "expect_rules": [
+        "B03"
+      ],
+      "decision": "BLOCK",
+      "rules": [
+        "B03"
+      ],
+      "gaps": [],
+      "failures": [
+        "tests/test_api.py::test_chat_conversation_of_other_dataset (passed)"
+      ],
+      "test_status": "failed",
+      "pass": true
+    },
+    {
+      "id": "W02",
+      "description": "테스트 없는 새 엔드포인트 추가",
+      "expected": "REVIEW REQUIRED",
+      "expect_rules": [
+        "G01"
+      ],
+      "decision": "REVIEW REQUIRED",
+      "rules": [
+        "G01"
+      ],
+      "gaps": [
+        "api.py:411-411"
+      ],
+      "failures": [],
+      "test_status": "passed",
+      "pass": true
+    },
+    {
+      "id": "W03",
+      "description": "대화 조회 404 메시지 문구 변경 (404 경로는 테스트되지 않음)",
+      "expected": "REVIEW REQUIRED",
+      "expect_rules": [
+        "G01"
+      ],
+      "decision": "REVIEW REQUIRED",
+      "rules": [
+        "G01"
+      ],
+      "gaps": [
+        "api.py:413-413"
+      ],
+      "failures": [],
+      "test_status": "passed",
+      "pass": true
+    },
+    {
+      "id": "W04",
+      "description": "FastAPI 버전 올림",
+      "expected": "REVIEW REQUIRED",
+      "expect_rules": [
+        "R04"
+      ],
+      "decision": "REVIEW REQUIRED",
+      "rules": [
+        "R04"
+      ],
+      "gaps": [],
+      "failures": [],
+      "test_status": "passed",
+      "pass": true
+    },
+    {
+      "id": "W05",
+      "description": "Dockerfile 실행 명령 오타 (컨테이너가 뜨지 않음) — 바라는 판정",
+      "expected": "REVIEW REQUIRED",
+      "expect_rules": [],
+      "decision": "SAFE",
+      "rules": [],
+      "gaps": [],
+      "failures": [],
+      "test_status": "passed",
+      "pass": false
+    },
+    {
+      "id": "W06",
+      "description": "CI에서 테스트 단계 삭제 — 바라는 판정",
+      "expected": "REVIEW REQUIRED",
+      "expect_rules": [],
+      "decision": "SAFE",
+      "rules": [],
+      "gaps": [],
+      "failures": [],
+      "test_status": "passed",
+      "pass": false
+    }
+  ]
+}

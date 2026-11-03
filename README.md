@@ -1,31 +1,30 @@
 # ReleaseGuard
 
-코드 변경(`base...head`)을 분석해 **영향 범위, 필요한 테스트, 배포 위험**을 근거와 함께 알려주는 개발자용 도구.
+머지하기 전에, 바뀐 코드 중 **어떤 테스트도 실행하지 않는 곳(검증 공백)**을 찾고, 테스트를 **실제로 돌려서** SAFE / REVIEW REQUIRED / BLOCK으로 알려주는 로컬 CLI.
 
-- 제안서: [docs/proposal.md](docs/proposal.md)
-- 문제 정의: [docs/problem.md](docs/problem.md)
-- 설계: [docs/design.md](docs/design.md)
+- **현재 상태와 로드맵: [docs/status_roadmap.md](docs/status_roadmap.md)**
+- 문제 정의: [docs/problem.md](docs/problem.md) · 설계: [docs/design.md](docs/design.md) · 제안서: [docs/proposal.md](docs/proposal.md)
+- 평가 보고서: [#1](docs/eval/20261103_eval_report.md), [#2](docs/eval/20261103_eval_report_2.md) (v1), [#3](docs/eval/20261103_eval_report_3.md) (v2)
+- 보고서 샘플: [docs/samples/report_142912b.md](docs/samples/report_142912b.md)
 
 ## 실행
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python -m pip install -r requirements.txt
-.\.venv\Scripts\python -m releaseguard analyze --repo ..\predict-success --base HEAD~1 --head HEAD
+
+# 분석 (대상 저장소의 .venv로 테스트를 돌린다. coverage는 처음 실행 때 .rg/tools에 설치된다)
+.\.venv\Scripts\python -m releaseguard analyze --repo ..\predict-success --base HEAD~1 --head HEAD --no-agent
+
+# 평가
+.\.venv\Scripts\python -m releaseguard eval --repeat 2          # 커밋 전체 + 결정성
+.\.venv\Scripts\python -m releaseguard seeds                    # 결함을 심은 사례 (임시 clone)
+.\.venv\Scripts\python -m releaseguard szz                      # 결함 줄이 들어올 때 공백이었나
+
 .\.venv\Scripts\python -m pytest
 ```
 
-결과는 `out/<날짜>_<head>.json`(판정과 근거)과 `.md`(보고서)로 저장된다.
-에이전트(4단계)는 `.env`의 `OPENAI_API_KEY`가 필요하다 (`.env.example` 참고). 규칙만 돌리려면 `--no-agent`.
+결과는 `out/`에 JSON(판정과 근거)과 Markdown(보고서)으로 저장된다.
+공백 설명 에이전트(`--no-agent`를 빼면 실행)는 `.env`의 `OPENAI_API_KEY`가 필요하다 (`.env.example` 참고).
 
-## 현재 상태 (Stage 1)
-
-| 단계 | 상태 |
-|---|---|
-| 1. Collect — 변경 파일·줄 수·추가된 줄 | 완료 |
-| 2. Classify — 규칙 분류 (`configs/rules.yaml`) | 완료 |
-| 3. Related tests — 이름 규칙 + import 검색 | 완료 |
-| 4. Impact — 에이전트 영향 분석 (읽기 전용 도구 4개, 근거 코드 검증) | 완료 |
-| 5. Decide — 판정 규칙 v1 (B01·B02·R01~R07) | 완료 |
-| 6. Report — JSON + Markdown | 완료 |
-| Eval Set — Predict_Success 커밋 34개 (`eval/cases.yaml`, `python -m releaseguard eval [--agent]`) | [보고서 #1](docs/eval/20261103_eval_report.md) (1회), [#2](docs/eval/20261103_eval_report_2.md) (3회 반복·위험 내용 대조) |
+**주의**: 대상 저장소의 테스트 코드를 그대로 실행한다. 신뢰하는 저장소에만 쓴다.

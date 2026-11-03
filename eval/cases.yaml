@@ -9,6 +9,8 @@
 #
 # labeled_by: claude-draft = Claude 초안 (사용자 확인 전), user = 사용자 확인 (2026-11-03 15개 일괄 확인)
 repo: ../../predict-success
+# SZZ용: 앞선 커밋의 결함을 고친 커밋 (커밋 메시지로 확인)
+fix_commits: [c7733b3, 142912b, c2fe0d1]
 cases:
   # --- SAFE 기대 ---
   - sha: 0fc36c3

@@ -1,0 +1,1428 @@
+{
+  "repo": "C:\\Project_Folder\\predict-success",
+  "fix_commits": [
+    "c7733b3",
+    "142912b",
+    "c2fe0d1"
+  ],
+  "defect_lines": 161,
+  "introducing_commits": 11,
+  "line_status": {
+    "covered": 41,
+    "gap": 74,
+    "import_only": 10,
+    "not_executable": 36
+  },
+  "gap_ratio": 0.592,
+  "rows": [
+    {
+      "sha": "24faf5b",
+      "subject": "Add 2022-2025 retrospective trend with comparability flags",
+      "status": "passed",
+      "decision": "REVIEW REQUIRED",
+      "rules": [
+        "G01"
+      ],
+      "lines": [
+        {
+          "sha": "24faf5be028010b81951c49342623aa4337f9e83",
+          "path": "src/metrics/run_trend.py",
+          "line": 101,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "wc = working_capital(cf_by_snapshot.get(snapshot_id, []), avg_assets(get, y), threshold)",
+          "status": "gap"
+        },
+        {
+          "sha": "24faf5be028010b81951c49342623aa4337f9e83",
+          "path": "src/metrics/working_capital.py",
+          "line": 21,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "OUTFLOW_IDS = (\"ifrs-full_InterestPaidClassifiedAsOperatingActivities\", \"ifrs-full_IncomeTaxesPaidRefundClassifiedAsOper",
+          "status": "import_only"
+        },
+        {
+          "sha": "24faf5be028010b81951c49342623aa4337f9e83",
+          "path": "src/metrics/working_capital.py",
+          "line": 22,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "\"ifrs-full_IncomeTaxesPaidRefund\")",
+          "status": "not_executable"
+        },
+        {
+          "sha": "24faf5be028010b81951c49342623aa4337f9e83",
+          "path": "src/metrics/working_capital.py",
+          "line": 23,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "INFLOW_IDS = (\"ifrs-full_InterestReceivedClassifiedAsOperatingActivities\", \"ifrs-full_DividendsReceivedClassifiedAsOpera",
+          "status": "import_only"
+        },
+        {
+          "sha": "24faf5be028010b81951c49342623aa4337f9e83",
+          "path": "src/metrics/working_capital.py",
+          "line": 24,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "\"ifrs-full_DividendsReceivedClassifiedAsInvestingActivities\")",
+          "status": "not_executable"
+        },
+        {
+          "sha": "24faf5be028010b81951c49342623aa4337f9e83",
+          "path": "src/metrics/working_capital.py",
+          "line": 52,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "def working_capital(cf: list[dict], avg_assets: Decimal | None, threshold: float) -> dict:",
+          "status": "import_only"
+        },
+        {
+          "sha": "24faf5be028010b81951c49342623aa4337f9e83",
+          "path": "src/pipeline/run_pilot_2025.py",
+          "line": 28,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "MANUAL = [\"note_confirmations.csv\", \"mismatch_reviews.csv\", \"scope_changes.csv\", \"disclosure_issues.csv\", \"hfs_confirmat",
+          "status": "gap"
+        }
+      ]
+    },
+    {
+      "sha": "3db2f31",
+      "subject": "Fix the reporting basis per company and compute the first 2025 metrics",
+      "status": "passed",
+      "decision": "REVIEW REQUIRED",
+      "rules": [
+        "G01"
+      ],
+      "lines": [
+        {
+          "sha": "3db2f3107c105ff8cb9524020023ad594c93b1e4",
+          "path": "src/metrics/engine.py",
+          "line": 56,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "if i.calc_status == \"reference\":",
+          "status": "covered"
+        },
+        {
+          "sha": "3db2f3107c105ff8cb9524020023ad594c93b1e4",
+          "path": "src/metrics/engine.py",
+          "line": 125,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "r.calc_status = \"not_computed\"",
+          "status": "covered"
+        },
+        {
+          "sha": "3db2f3107c105ff8cb9524020023ad594c93b1e4",
+          "path": "src/metrics/engine.py",
+          "line": 126,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "r.hold_reasons.append(\"유동부채 0 — 무한대 처리 금지, 점수 단계에서 상한 적용\")",
+          "status": "covered"
+        },
+        {
+          "sha": "3db2f3107c105ff8cb9524020023ad594c93b1e4",
+          "path": "src/metrics/engine.py",
+          "line": 131,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "out.append(r)",
+          "status": "covered"
+        },
+        {
+          "sha": "3db2f3107c105ff8cb9524020023ad594c93b1e4",
+          "path": "src/metrics/run_2025.py",
+          "line": 12,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "from src.metrics.engine import OWN_METRICS, Input, peer_relative",
+          "status": "gap"
+        },
+        {
+          "sha": "3db2f3107c105ff8cb9524020023ad594c93b1e4",
+          "path": "src/metrics/run_2025.py",
+          "line": 28,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "return Input(r[\"label\"], year, r[\"status\"], value, f\"{r['rcept_no']} {r['extraction_method'] or ''}\".strip(), r[\"note\"] ",
+          "status": "gap"
+        },
+        {
+          "sha": "3db2f3107c105ff8cb9524020023ad594c93b1e4",
+          "path": "src/metrics/run_2025.py",
+          "line": 59,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "for r in list(own[corp].values()) + peer[corp]:",
+          "status": "gap"
+        }
+      ]
+    },
+    {
+      "sha": "568ea41",
+      "subject": "Reconcile required-account mismatches and add manual note confirmations",
+      "status": "passed",
+      "decision": "REVIEW REQUIRED",
+      "rules": [
+        "G01"
+      ],
+      "lines": [
+        {
+          "sha": "568ea41d7803bcaf3787f8f9835d644aa79d89ac",
+          "path": "src/normalization/build_account_check.py",
+          "line": 52,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "end = current_end.get(s[\"snapshot_id\"])",
+          "status": "gap"
+        },
+        {
+          "sha": "568ea41d7803bcaf3787f8f9835d644aa79d89ac",
+          "path": "src/normalization/build_account_check.py",
+          "line": 55,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "linked = reviews[(reviews.corp_code == s[\"corp_code\"]) & (reviews.fs_div == s[\"fs_div\"]) & (reviews.period_end == end)",
+          "status": "gap"
+        },
+        {
+          "sha": "568ea41d7803bcaf3787f8f9835d644aa79d89ac",
+          "path": "src/normalization/build_account_check.py",
+          "line": 58,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "results.append({**key, **{k: v for k, v in m.items() if k != \"evidence\"}, \"period_end\": end, \"mismatch_review\": review_n",
+          "status": "gap"
+        },
+        {
+          "sha": "568ea41d7803bcaf3787f8f9835d644aa79d89ac",
+          "path": "src/normalization/build_account_check.py",
+          "line": 59,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "\"rcept_no\": selected, \"snapshot_id\": s[\"snapshot_id\"]})",
+          "status": "not_executable"
+        },
+        {
+          "sha": "568ea41d7803bcaf3787f8f9835d644aa79d89ac",
+          "path": "src/normalization/manual.py",
+          "line": 54,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "if result[\"status\"] == \"mapped\" and Decimal(result[\"value\"]) != manual_value:",
+          "status": "covered"
+        },
+        {
+          "sha": "568ea41d7803bcaf3787f8f9835d644aa79d89ac",
+          "path": "src/normalization/manual.py",
+          "line": 55,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "return {**result, \"status\": \"review_needed\", \"value\": None, \"extraction_method\": \"\",",
+          "status": "covered"
+        },
+        {
+          "sha": "568ea41d7803bcaf3787f8f9835d644aa79d89ac",
+          "path": "src/normalization/manual.py",
+          "line": 56,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "\"note\": f\"API 값 {result['value']}와 수기 확인값 {manual_value}({entry['confirmation_id']})이 다름\"}",
+          "status": "not_executable"
+        },
+        {
+          "sha": "568ea41d7803bcaf3787f8f9835d644aa79d89ac",
+          "path": "src/normalization/manual.py",
+          "line": 57,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "return {**result, \"status\": \"mapped\", \"value\": str(manual_value), \"extraction_method\": \"manual\",",
+          "status": "covered"
+        },
+        {
+          "sha": "568ea41d7803bcaf3787f8f9835d644aa79d89ac",
+          "path": "src/normalization/manual.py",
+          "line": 58,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "\"note\": \"; \".join(filter(None, [f\"수기 확인 {entry['confirmation_id']}: {entry['source_location']}\", entry.get(\"components\",",
+          "status": "not_executable"
+        }
+      ]
+    },
+    {
+      "sha": "82e4305",
+      "subject": "Map required accounts to internal accounts and build the checklist",
+      "status": "passed",
+      "decision": "REVIEW REQUIRED",
+      "rules": [
+        "G01"
+      ],
+      "lines": [
+        {
+          "sha": "82e430593a83c3549b34eb899c974aef01a8925b",
+          "path": "src/normalization/account_map.py",
+          "line": 69,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "return {**base, \"status\": \"mapped\", \"value\": str(total), \"evidence\": ev,",
+          "status": "covered"
+        },
+        {
+          "sha": "82e430593a83c3549b34eb899c974aef01a8925b",
+          "path": "src/normalization/account_map.py",
+          "line": 70,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "\"note\": \"; \".join([f\"구성 {len(found)}개: \" + \", \".join(r[\"account_nm\"] for r, _ in found)] + notes)}",
+          "status": "not_executable"
+        },
+        {
+          "sha": "82e430593a83c3549b34eb899c974aef01a8925b",
+          "path": "src/normalization/account_map.py",
+          "line": 75,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "return {**base, \"status\": status, \"value\": row[\"value\"], \"evidence\": ev, \"note\": \"; \".join(notes)}",
+          "status": "covered"
+        },
+        {
+          "sha": "82e430593a83c3549b34eb899c974aef01a8925b",
+          "path": "src/normalization/build_account_check.py",
+          "line": 16,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "from src.normalization.build_facts import INTERIM, RAW, ROOT, latest_valid_filing",
+          "status": "gap"
+        },
+        {
+          "sha": "82e430593a83c3549b34eb899c974aef01a8925b",
+          "path": "src/normalization/build_account_check.py",
+          "line": 33,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "for s in snaps:",
+          "status": "gap"
+        },
+        {
+          "sha": "82e430593a83c3549b34eb899c974aef01a8925b",
+          "path": "src/normalization/build_account_check.py",
+          "line": 34,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "key = {\"corp_code\": s[\"corp_code\"], \"company\": NAMES.get(s[\"corp_code\"], s[\"corp_code\"]), \"fs_div\": s[\"fs_div\"], \"bsns_y",
+          "status": "gap"
+        },
+        {
+          "sha": "82e430593a83c3549b34eb899c974aef01a8925b",
+          "path": "src/normalization/build_account_check.py",
+          "line": 35,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "if s[\"status\"] == \"013\":",
+          "status": "gap"
+        },
+        {
+          "sha": "82e430593a83c3549b34eb899c974aef01a8925b",
+          "path": "src/normalization/build_account_check.py",
+          "line": 39,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "selected = latest_valid_filing(filings, s[\"corp_code\"], int(s[\"bsns_year\"]), as_of)",
+          "status": "gap"
+        },
+        {
+          "sha": "82e430593a83c3549b34eb899c974aef01a8925b",
+          "path": "src/normalization/build_account_check.py",
+          "line": 40,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "if s[\"rcept_nos\"] != [selected]:",
+          "status": "gap"
+        },
+        {
+          "sha": "82e430593a83c3549b34eb899c974aef01a8925b",
+          "path": "src/normalization/build_account_check.py",
+          "line": 42,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "\"note\": f\"기준일 {as_of}의 선택 보고서 {selected} ≠ API 값의 보고서 {s['rcept_nos']}\", \"snapshot_id\": s[\"snapshot_id\"]}",
+          "status": "not_executable"
+        },
+        {
+          "sha": "82e430593a83c3549b34eb899c974aef01a8925b",
+          "path": "src/normalization/build_account_check.py",
+          "line": 44,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "continue",
+          "status": "gap"
+        },
+        {
+          "sha": "82e430593a83c3549b34eb899c974aef01a8925b",
+          "path": "src/normalization/build_account_check.py",
+          "line": 45,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "for m in map_report(by_snapshot.get(s[\"snapshot_id\"], []), config):",
+          "status": "gap"
+        },
+        {
+          "sha": "82e430593a83c3549b34eb899c974aef01a8925b",
+          "path": "src/normalization/account_map.py",
+          "line": 81,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "return {**base, \"status\": \"review_needed\", \"value\": None, \"evidence\": ev, \"note\": \"; \".join([\"해당 계정 행 없음 — 원문 확인\"] + not",
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "sha": "99309f2",
+      "subject": "Flatten financial API responses into a per-source observation table",
+      "status": "passed",
+      "decision": "REVIEW REQUIRED",
+      "rules": [
+        "G01"
+      ],
+      "lines": [
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 11,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "from src.normalization.dart_facts import NON_BODY_CORRECTIONS, build_facts, load_filings, mismatch_kind, same_period_mis",
+          "status": "import_only"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 18,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "def latest_valid_filing(filings: dict, corp_code: str, bsns_year: int, as_of: str) -> str | None:",
+          "status": "import_only"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 19,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "\"\"\"기준일(YYYYMMDD) 이전에 공개된 해당 사업연도 보고서 중 최신 유효 정정본의 접수번호.\"\"\"",
+          "status": "not_executable"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 20,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "candidates = [",
+          "status": "covered"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 21,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "f for f in filings.values()",
+          "status": "not_executable"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 22,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "if f[\"link\"] == \"stored\" and f.get(\"corp_code\") == corp_code and f.get(\"bsns_year\") == bsns_year",
+          "status": "not_executable"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 23,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "and f[\"rcept_dt\"] <= as_of and f.get(\"correction\") not in NON_BODY_CORRECTIONS",
+          "status": "not_executable"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 24,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "]",
+          "status": "not_executable"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 25,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "return max(candidates, key=lambda f: (f[\"rcept_dt\"], f[\"rcept_no\"]))[\"rcept_no\"] if candidates else None",
+          "status": "covered"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 49,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "for s in snaps:",
+          "status": "gap"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 50,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "if s[\"status\"] != \"000\":",
+          "status": "gap"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 51,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "link[\"자료 없음\"] += 1",
+          "status": "gap"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 52,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "continue",
+          "status": "gap"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 53,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "selected = latest_valid_filing(filings, s[\"corp_code\"], int(s[\"bsns_year\"]), as_of)",
+          "status": "gap"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 54,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "link[\"최신 유효 정정본과 같음\" if s[\"rcept_nos\"] == [selected] else f\"다름 (선택 {selected}, API {s['rcept_nos']})\"] += 1",
+          "status": "gap"
+        },
+        {
+          "sha": "99309f27ac4761127a58df1246752c0f9efbe937",
+          "path": "src/normalization/build_facts.py",
+          "line": 55,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "print(f\"[API 값 ↔ 기준일 {as_of}의 최신 유효 정정본]\", dict(link))",
+          "status": "gap"
+        }
+      ]
+    },
+    {
+      "sha": "9e9c12b",
+      "subject": "Fill 2025 note gaps with separated amount, scope, and component checks",
+      "status": "passed",
+      "decision": "REVIEW REQUIRED",
+      "rules": [
+        "G01"
+      ],
+      "lines": [
+        {
+          "sha": "9e9c12bff5de4f0fbde92560b7fd607b83e933cc",
+          "path": "src/normalization/manual.py",
+          "line": 59,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "replaces = (entry.get(\"api_relation\") == \"replaces_incomplete_api\" and result[\"canonical_account\"] in COMPONENT_ACCOUNTS",
+          "status": "covered"
+        },
+        {
+          "sha": "9e9c12bff5de4f0fbde92560b7fd607b83e933cc",
+          "path": "src/normalization/manual.py",
+          "line": 60,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "and entry.get(\"component_check\") == \"확인\")",
+          "status": "not_executable"
+        },
+        {
+          "sha": "9e9c12bff5de4f0fbde92560b7fd607b83e933cc",
+          "path": "src/normalization/manual.py",
+          "line": 61,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "if not replaces:",
+          "status": "covered"
+        },
+        {
+          "sha": "9e9c12bff5de4f0fbde92560b7fd607b83e933cc",
+          "path": "src/normalization/manual.py",
+          "line": 64,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "return {**result, \"status\": \"mapped\", \"value\": str(manual_value), \"extraction_method\": \"manual\",",
+          "status": "covered"
+        },
+        {
+          "sha": "9e9c12bff5de4f0fbde92560b7fd607b83e933cc",
+          "path": "src/normalization/manual.py",
+          "line": 65,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "\"note\": f\"수기 확인 {entry['confirmation_id']}가 구성이 빠진 API 합계 {result['value']}를 대체: {entry.get('note', '')}\"}",
+          "status": "not_executable"
+        },
+        {
+          "sha": "9e9c12bff5de4f0fbde92560b7fd607b83e933cc",
+          "path": "src/normalization/manual.py",
+          "line": 71,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "return {**result, \"status\": \"candidate\", \"value\": str(manual_value), \"extraction_method\": \"manual\",",
+          "status": "covered"
+        }
+      ]
+    },
+    {
+      "sha": "adb2f5b",
+      "subject": "Check M01/M02 guidelines: price basis, reporting scope, continuity (D20)",
+      "status": "passed",
+      "decision": "REVIEW REQUIRED",
+      "rules": [
+        "G01"
+      ],
+      "lines": [
+        {
+          "sha": "adb2f5b110fb34951e50ce7252e9ec209ff0f0d7",
+          "path": "src/market/run_market.py",
+          "line": 187,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "fact_ids = set(facts.fact_id)",
+          "status": "covered"
+        },
+        {
+          "sha": "adb2f5b110fb34951e50ce7252e9ec209ff0f0d7",
+          "path": "src/market/run_market.py",
+          "line": 192,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "if missing := [e for e in j.evidence.split(\";\") if e not in fact_ids]:",
+          "status": "covered"
+        },
+        {
+          "sha": "adb2f5b110fb34951e50ce7252e9ec209ff0f0d7",
+          "path": "src/market/run_market.py",
+          "line": 242,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "w(\"| ID | 질문 | 적용 연도 | 상태 | 확인한 것 | 남은 불확실성 | 결과 | 근거 |\")",
+          "status": "gap"
+        },
+        {
+          "sha": "adb2f5b110fb34951e50ce7252e9ec209ff0f0d7",
+          "path": "src/market/run_market.py",
+          "line": 243,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "w(\"|---|---|---|---|---|---|---|---|\")",
+          "status": "gap"
+        },
+        {
+          "sha": "adb2f5b110fb34951e50ce7252e9ec209ff0f0d7",
+          "path": "src/market/run_market.py",
+          "line": 245,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "w(f\"| {j.judgment_id} | {j.question} | {j.applies_years} | **{j.status}** | {j.confirmed} | {j.remaining_uncertainty} | ",
+          "status": "gap"
+        },
+        {
+          "sha": "adb2f5b110fb34951e50ce7252e9ec209ff0f0d7",
+          "path": "src/market/run_market.py",
+          "line": 300,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "w(\"| 기간 | 용도 | 연평균 성장률 | 주의 |\")",
+          "status": "gap"
+        },
+        {
+          "sha": "adb2f5b110fb34951e50ce7252e9ec209ff0f0d7",
+          "path": "src/market/run_market.py",
+          "line": 301,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "w(\"|---|---|---:|---|\")",
+          "status": "gap"
+        },
+        {
+          "sha": "adb2f5b110fb34951e50ce7252e9ec209ff0f0d7",
+          "path": "src/market/run_market.py",
+          "line": 303,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "w(f\"| {s.span} ({s.years}년) | {roles.get(s.span, '—')} | {fmt(s.cagr)} | {s.caution or '—'} |\")",
+          "status": "gap"
+        },
+        {
+          "sha": "adb2f5b110fb34951e50ce7252e9ec209ff0f0d7",
+          "path": "src/market/run_market.py",
+          "line": 338,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "w(\"어느 기업도 '비교 가능'으로 판정하지 않았다. 통계(책임판매업자가 보고한 국내 제조품의 부가세 포함 출하가 기준 금액)와 기업 매출(부가세 제외, 연결 범위)은 \"",
+          "status": "gap"
+        },
+        {
+          "sha": "adb2f5b110fb34951e50ce7252e9ec209ff0f0d7",
+          "path": "src/market/run_market.py",
+          "line": 339,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "\"측정 대상·평가 기준이 다르다고 작성 안내로 확인됐다(J01·J02). 국내 고객사의 ODM 물량은 고객사 실적에 들어가므로 통계는 ODM 수요의 직접 측정이 아니라 \"",
+          "status": "not_executable"
+        },
+        {
+          "sha": "adb2f5b110fb34951e50ce7252e9ec209ff0f0d7",
+          "path": "src/market/run_market.py",
+          "line": 340,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "\"고객 측 생산 활동의 간접 지표 후보일 뿐이다. 시장점유율이나 '시장 대비 성장 격차'를 계산하지 않는다.\")",
+          "status": "not_executable"
+        },
+        {
+          "sha": "adb2f5b110fb34951e50ce7252e9ec209ff0f0d7",
+          "path": "src/market/run_market.py",
+          "line": 373,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "guidelines = build_guidelines()",
+          "status": "gap"
+        }
+      ]
+    },
+    {
+      "sha": "b67e806",
+      "subject": "Confirm balance-sheet sections by arithmetic and adjust held-for-sale items",
+      "status": "passed",
+      "decision": "REVIEW REQUIRED",
+      "rules": [
+        "G01"
+      ],
+      "lines": [
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/bs_sections.py",
+          "line": 51,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "confirmed = regular == total or (hfs != 0 and regular + hfs == total)",
+          "status": "covered"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/bs_sections.py",
+          "line": 77,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "hfs = sum((_value(r) for r in hfs_rows), Decimal(0))",
+          "status": "covered"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/bs_sections.py",
+          "line": 78,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "out = {\"reported\": None if current is None else current[\"value\"], \"held_for_sale\": str(hfs) if hfs_rows else None,",
+          "status": "covered"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/bs_sections.py",
+          "line": 79,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "\"included\": \"해당 없음\", \"adjusted\": None if current is None else current[\"value\"], \"evidence\": \"\"}",
+          "status": "not_executable"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/bs_sections.py",
+          "line": 82,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "if not hfs_rows or hfs == 0:",
+          "status": "covered"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/bs_sections.py",
+          "line": 83,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "return out",
+          "status": "covered"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/build_account_check.py",
+          "line": 48,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "results += [{**key, \"canonical_account\": n, \"label\": label, \"status\": \"no_data\", \"value\": None,",
+          "status": "gap"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/build_account_check.py",
+          "line": 49,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "\"note\": \"API 응답: 조회된 데이터 없음\", \"snapshot_id\": s[\"snapshot_id\"]} for n, label in all_labels.items()]",
+          "status": "not_executable"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/build_account_check.py",
+          "line": 53,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "results += [{**key, \"canonical_account\": n, \"label\": label, \"status\": \"held\", \"value\": None,",
+          "status": "gap"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/build_account_check.py",
+          "line": 55,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "for n, label in all_labels.items()]",
+          "status": "not_executable"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/build_account_check.py",
+          "line": 67,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "adj = held_for_sale_adjustment(by_snapshot.get(s[\"snapshot_id\"], []), kind)",
+          "status": "gap"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/build_account_check.py",
+          "line": 69,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "results.append({**key, \"canonical_account\": name, \"label\": label, \"basis\": \"매각예정항목 포함\", \"status\": status,",
+          "status": "gap"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/build_account_check.py",
+          "line": 70,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "\"value\": adj[\"adjusted\"], \"reported_value\": adj[\"reported\"], \"held_for_sale\": adj[\"held_for_sale\"],",
+          "status": "not_executable"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/build_account_check.py",
+          "line": 73,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "\"period_end\": end, \"mismatch_review\": \"\", \"rcept_no\": selected, \"snapshot_id\": s[\"snapshot_id\"]})",
+          "status": "not_executable"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/manual.py",
+          "line": 59,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "scope_ok = not result.get(\"basis\") or entry.get(\"scope_check\") == \"확인\"",
+          "status": "covered"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/manual.py",
+          "line": 60,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "if not scope_ok:",
+          "status": "covered"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/manual.py",
+          "line": 61,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "return {**result, \"status\": \"candidate\", \"value\": str(manual_value), \"extraction_method\": \"manual\",",
+          "status": "covered"
+        },
+        {
+          "sha": "b67e8065069c1316ca464e146a77c13085cd0c11",
+          "path": "src/normalization/manual.py",
+          "line": 62,
+          "fix": "c7733b3f4937a6f33ee60a7117d40b78d5869bdb",
+          "text": "\"note\": f\"수기 확인 {entry['confirmation_id']}: 금액 {entry.get('amount_check', '')}, '{result['basis']}' 범위 {entry.get('scope",
+          "status": "not_executable"
+        }
+      ]
+    },
+    {
+      "sha": "da30a78",
+      "subject": "Split working-capital checks, add comparison spans, and evidence report",
+      "status": "passed",
+      "decision": "REVIEW REQUIRED",
+      "rules": [
+        "G01"
+      ],
+      "lines": [
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 46,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "def sign_check(cf: list[dict], wc_row: dict) -> dict:",
+          "status": "import_only"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 47,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "\"\"\"현금흐름표 항등식으로 운전자본 소계 부호의 산술적 일관성을 확인한다.\"\"\"",
+          "status": "not_executable"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 48,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "wc = Decimal(wc_row[\"value\"])",
+          "status": "covered"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 51,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "out = {\"sign_status\": UNCHECKED, \"identity_target\": \"\", \"identity_rows\": \"\", \"sign_evidence\": \"\"}",
+          "status": "covered"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 54,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "generated = Decimal(ni[\"value\"]) + Decimal(adj[\"value\"]) + wc",
+          "status": "covered"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 55,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "used = [ni, adj, wc_row]",
+          "status": "covered"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 58,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "if generated == Decimal(cgo[\"value\"]):",
+          "status": "covered"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 59,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "return {\"sign_status\": CHECKED, \"identity_target\": \"영업에서 창출된 현금\", \"identity_rows\": \" + \".join(map(_where, used)) + \" = \"",
+          "status": "covered"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 60,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "\"sign_evidence\": f\"{Decimal(ni['value']):,} + {Decimal(adj['value']):,} + {wc:,} = {Decimal(cgo['value']):,}\"}",
+          "status": "not_executable"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 61,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "return {**out, \"identity_target\": \"영업에서 창출된 현금\", \"sign_evidence\": f\"합 {generated:,} ≠ 영업에서 창출된 현금 {Decimal(cgo['value'])",
+          "status": "covered"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 65,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "outs = [r for r in (_row(cf, i) for i in OUTFLOW_IDS) if r is not None]",
+          "status": "covered"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 66,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "ins = [r for r in (_row(cf, i) for i in INFLOW_IDS) if r is not None]",
+          "status": "covered"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 67,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "sum_out, sum_in = sum(Decimal(r[\"value\"]) for r in outs), sum(Decimal(r[\"value\"]) for r in ins)",
+          "status": "covered"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 69,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "for label, total in ((\"지급 양수 표기\", generated - sum_out + sum_in), (\"부호 포함 표기\", generated + sum_out + sum_in)):",
+          "status": "covered"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 70,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "if total == Decimal(ocf[\"value\"]):",
+          "status": "covered"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 71,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "return {\"sign_status\": CHECKED, \"identity_target\": f\"영업현금흐름 (영업에서 창출된 현금 행 없음 — 이자·배당·법인세 행 경유, {label})\",",
+          "status": "covered"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 72,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "\"identity_rows\": \" + \".join(map(_where, used)) + \" ± \" + \", \".join(map(_where, outs + ins)) + \" = \" + _where(ocf),",
+          "status": "not_executable"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 73,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "\"sign_evidence\": f\"{total:,} = 영업현금흐름 {Decimal(ocf['value']):,}\"}",
+          "status": "not_executable"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 74,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "return {**out, \"identity_target\": \"영업현금흐름 (이자·배당·법인세 행 경유)\",",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 75,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "\"sign_evidence\": \"원 단위로 맞지 않음 — 본문에 다른 영업 항목이 있을 수 있음\"}",
+          "status": "not_executable"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/metrics/working_capital.py",
+          "line": 98,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "check = sign_check(cf, row)",
+          "status": "covered"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 36,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "STATUS_KO = {\"mapped\": \"정상\", \"candidate\": \"후보값\", \"review_needed\": \"확인 필요\", \"empty_value\": \"값 없음\", \"no_data\": \"자료 없음\",",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 37,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "\"held\": \"보류\", \"not_applicable\": \"해당 없음\", \"없음\": \"없음\"}",
+          "status": "not_executable"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 74,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "def __init__(self, corp: str, fs: str, published: dict):",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 75,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "self.corp, self.fs, self.published = corp, fs, published",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 109,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "return {\"value\": \"\", \"status\": \"없음\", \"report\": \"\", \"where\": \"\", \"method\": \"\", \"link\": \"\"}",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 113,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "\"method\": f\"{b.extraction_method} — 2021 기초값 예외 (2022 보고서 전기 열), 다른 보고서 대조 결과 '{b.cross_check}'\",",
+          "status": "not_executable"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 117,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "return {\"value\": \"\", \"status\": \"없음\", \"report\": \"\", \"where\": \"\", \"method\": \"\", \"link\": \"\"}",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 126,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "return {**out, \"where\": f\"수기 확인 {m.confirmation_id}: {m.source_location} (금액 {m.amount_check}, 범위 {m.scope_check or '—'}",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 128,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "return {**out, \"where\": f\"보고 소계 + 매각예정 조정: {c.held_for_sale_included or ''} — {c.note}\"}",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 139,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "return {**out, \"where\": where}",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 182,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "ev = Evidence(corp, fs, load_published_filings(RAW))",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 189,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "w(\"> 이 보고서는 새 계산을 하지 않고 파이프라인 결과만 모은 것이다. **점수·확률이 아니며, 종합점수는 보류 상태다** (5절).\")",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 268,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "w(\"| 연도 | 금액 | 소계 존재 | 항등식 검산 (대상) | 현금흐름 영향 방향 | 구성·완전성 | 규모 경고 | 일회성 여부 |\")",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 269,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "w(\"|---|---:|---|---|---|---|---|---|\")",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 273,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "target = f\" — 대상: {r.identity_target}\" if r.identity_target else \"\"",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 274,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "w(f\"| {r.year} | {eok(r.wc_amount)} | {esc(r.wc_status)} | {esc(r.sign_status + target)} | {esc(r.ocf_direction or '—')}",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 275,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "f\"{'소계 1행만 사용 — 범위·완전성 미확인' if r.wc_amount else esc(r.completeness)} | {esc(caution)} | {r.one_off} |\")",
+          "status": "not_executable"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 277,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "w(\"검산에 사용한 행 (같은 보고서 현금흐름표):\")",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 280,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "if r.identity_rows:",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 281,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "w(f\"- {r.year}: {r.identity_rows} — {r.sign_evidence}\")",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 282,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "elif r.wc_amount:",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 283,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "w(f\"- {r.year}: 검증 미완료 — {r.sign_evidence}\")",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 294,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "w(\"| ID | 계정 | 연도 | 값 | 상태 | 보고서 | 원문 위치 | 추출 방법 |\")",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 295,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "w(\"|---|---|---|---:|---|---|---|---|\")",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 312,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "w(f\"| ③ 4년간 매출·이익 변화와 이익의 현금 전환 | **답할 수 있음 (비교 주의 포함)** | {flows}. \"",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 315,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "w(f\"| ④ 단기 지급의무·이자 부담 여력 | **2025는 답할 수 있음, 과거는 일부 보류** | 2025: 이자보상배율 {fmt_value('interest_coverage', ic.loc['2025'].va",
+          "status": "gap"
+        },
+        {
+          "sha": "da30a785b8ef69e110904e73f2641d3dbe3f5e04",
+          "path": "src/report/evidence_report.py",
+          "line": 338,
+          "fix": "c2fe0d148ede7997d076b7ad2114eade15d1c3b9",
+          "text": "f\"범위 하한 {float(cover.range_low):.1f} ~ 느슨한 상한 {float(cover.range_high_loose):.1f}.\")",
+          "status": "not_executable"
+        }
+      ]
+    },
+    {
+      "sha": "f2d690e",
+      "subject": "Link domestic cosmetics production statistics to pilot companies",
+      "status": "passed",
+      "decision": "REVIEW REQUIRED",
+      "rules": [
+        "G01"
+      ],
+      "lines": [
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 26,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "def latest_raw(source: str) -> Path:",
+          "status": "import_only"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 27,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "runs = sorted(p for p in (ROOT / source).iterdir() if (p / \"metadata.json\").exists())",
+          "status": "gap"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 28,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "if not runs:",
+          "status": "gap"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 29,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "raise FileNotFoundError(f\"{source}에 수집본 없음 — python -m src.collectors.stats\")",
+          "status": "gap"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 30,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "return runs[-1]",
+          "status": "gap"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 49,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "def build_stats(table: dict, config: dict, raw_dir: Path, meta: dict) -> tuple[pd.DataFrame, pd.DataFrame]:",
+          "status": "import_only"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 61,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "check = \"\" if g is None or off is None else (\"일치\" if pct1(g) == off else f\"불일치 (계산 {pct1(g)}%)\")",
+          "status": "covered"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 66,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "\"comparability\": \"비교 주의\" if (y - 1, y) in cautions else (\"기초값\" if y == config[\"years\"][0] else \"직접 비교 가능\"),",
+          "status": "not_executable"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 67,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "\"caution\": cautions.get((y - 1, y), \"\"),",
+          "status": "not_executable"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 132,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "w(\"| 연도 | 생산금액 (백만원) | 전년 대비 | 공식 증감률 | 대조 | \" + \" | \".join(c.replace(\"context_\", \"보고 \") for c in ctx) + \" | 비교 |\")",
+          "status": "gap"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 133,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "w(\"|---|---:|---:|---:|---|\" + \"---:|\" * len(ctx) + \"---|\")",
+          "status": "gap"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 137,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "f\"{'' if r.official_yoy_pct is None else str(r.official_yoy_pct) + '%'} | {r.yoy_check or '—'} | {extra} | {r.comparabil",
+          "status": "not_executable"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 187,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "def main(as_of: str) -> dict:",
+          "status": "import_only"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 189,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "raw_dir = latest_raw(config[\"base_statistic\"][\"raw_source\"])",
+          "status": "gap"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 190,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "meta = json.loads((raw_dir / \"metadata.json\").read_text(encoding=\"utf-8\"))",
+          "status": "gap"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 192,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "stats, summary = build_stats(table, config, raw_dir, meta)",
+          "status": "gap"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 203,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "print(\"[시장 통계]\", stats[[\"year\", \"value\", \"yoy_check\", \"comparability\"]].to_string(index=False))",
+          "status": "gap"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/market/run_market.py",
+          "line": 210,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "main(sys.argv[1] if len(sys.argv) > 1 else \"20261008\")",
+          "status": "gap"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/report/evidence_report.py",
+          "line": 201,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "cagr = \"; \".join(f\"{r.span} 연평균 {float(r.cagr) * 100:.1f}%\" for r in summary.itertuples() if r.cagr)",
+          "status": "gap"
+        },
+        {
+          "sha": "f2d690e154a49fad51a629491c8b094b6649973a",
+          "path": "src/report/evidence_report.py",
+          "line": 204,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "f\"(시작 연도에 민감, 2021→2022 -18.4% 원인 미확인). 이 회사와의 연결: **{esc(judge)}**. \"",
+          "status": "not_executable"
+        }
+      ]
+    },
+    {
+      "sha": "f57b432",
+      "subject": "Link cosmetics production by product type to pilot companies",
+      "status": "passed",
+      "decision": "REVIEW REQUIRED",
+      "rules": [
+        "G01"
+      ],
+      "lines": [
+        {
+          "sha": "f57b4320e36c0376eeaecd220de0385724bc875d",
+          "path": "src/market/run_market.py",
+          "line": 82,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "def build_types(parsed: dict, config: dict, m01: pd.DataFrame, raw_dir: Path, meta: dict) -> tuple[pd.DataFrame, pd.Data",
+          "status": "import_only"
+        },
+        {
+          "sha": "f57b4320e36c0376eeaecd220de0385724bc875d",
+          "path": "src/market/run_market.py",
+          "line": 117,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "\"comparability\": \"비교 주의\" if (y - 1, y) in cautions else (\"기초값\" if y == config[\"years\"][0] else \"직접 비교 가능\"),",
+          "status": "not_executable"
+        },
+        {
+          "sha": "f57b4320e36c0376eeaecd220de0385724bc875d",
+          "path": "src/market/run_market.py",
+          "line": 282,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "type_dir = latest_raw(ts[\"raw_source\"])",
+          "status": "gap"
+        },
+        {
+          "sha": "f57b4320e36c0376eeaecd220de0385724bc875d",
+          "path": "src/market/run_market.py",
+          "line": 283,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "type_meta = json.loads((type_dir / \"metadata.json\").read_text(encoding=\"utf-8\"))",
+          "status": "gap"
+        },
+        {
+          "sha": "f57b4320e36c0376eeaecd220de0385724bc875d",
+          "path": "src/market/run_market.py",
+          "line": 285,
+          "fix": "142912bc01669bc0771174c8de46549557b9de57",
+          "text": "types, type_summary = build_types(parsed, config, stats, type_dir, type_meta)",
+          "status": "gap"
+        }
+      ]
+    }
+  ]
+}

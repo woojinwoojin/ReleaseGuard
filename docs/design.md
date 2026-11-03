@@ -1,13 +1,17 @@
-# 설계 (Stage 1 MVP)
+# 설계 v2 (Stage 1 MVP)
 
-작성: 2026-11-03 · 문제 정의: `docs/problem.md`
+작성: 2026-11-03 · 문제 정의: `docs/problem.md` (v2) · v1 설계는 이 문서의 git 기록 참고
 
 ## 실행
 
 ```
-python -m releaseguard analyze --repo ../predict-success --base HEAD~1 --head HEAD
-→ out/<YYYYMMDD>_<head 7자리>.json  (판정 + 근거, 평가용)
-→ out/<YYYYMMDD>_<head 7자리>.md    (사람이 읽는 보고서)
+python -m releaseguard analyze --repo ../predict-success --base HEAD~1 --head HEAD [--python <경로>] [--no-agent]
+→ out/<YYYYMMDD>_<head 7자리>.json  (판정 + 근거)
+→ out/<YYYYMMDD>_<head 7자리>.md    (보고서)
+
+python -m releaseguard eval  [--cases eval/cases.yaml] [--repeat N] [--agent]   # 커밋 전체
+python -m releaseguard seeds [--seeds eval/seeds_predict_success.yaml]           # 결함을 심은 사례
+python -m releaseguard szz   [--cases eval/cases.yaml]                           # 결함 줄 추적
 ```
 
 `base...head` 비교는 `git merge-base base head`에서 head까지의 변경이다 (PR diff와 같은 기준).
@@ -16,95 +20,82 @@ python -m releaseguard analyze --repo ../predict-success --base HEAD~1 --head HE
 
 | 단계 | 하는 일 | 방식 | 모듈 |
 |---|---|---|---|
-| 1. Collect | 변경 파일, 추가·삭제 줄 수, 추가된 줄 | 코드 (읽기 전용 git) | `git_ops.py` |
-| 2. Classify | 파일마다 `source / test / config / docs / data / deps / other` | 규칙 (`configs/rules.yaml`) | `classify.py` |
-| 3. Related tests | 소스 ↔ 테스트 연결 (이름 규칙 + import 검색) | 규칙 + 검색 | `related_tests.py` |
-| 4. Impact | 호출 관계, 영향 기능, 위험 | 에이전트 (tool calling) | 미구현 |
-| 5. Decide | SAFE / REVIEW REQUIRED / BLOCK | 규칙 | `decide.py` |
-| 6. Report | JSON + Markdown | 템플릿 (+ LLM 설명은 4단계 이후) | `report.py` |
+| 1. Collect | 변경 파일, 추가·수정된 줄 | git (읽기 전용) | `git_ops.py` |
+| 2. Classify | 파일 분류, 비밀값 패턴 | 규칙 (`configs/rules.yaml`) | `classify.py` |
+| 3. Run | head를 임시 폴더에 풀고 pytest + coverage 실행, 테스트별로 실행한 줄 기록. 실패한 테스트는 base에서 다시 실행 | 실행 (결정적) | `runner.py` |
+| 4. Gaps | 바뀐 실행 가능 줄 중 어떤 테스트도 실행하지 않은 줄 = 검증 공백 | 결정적 | `gaps.py` |
+| 5. Decide | 판정 규칙 v2 | 규칙 | `decide.py` |
+| 6. Explain | 공백마다 "바뀐 동작 + 필요한 테스트" | 에이전트 (좁은 질문, 판정에 안 들어감) | `agent.py`, `agent_tools.py` |
+| 7. Report | JSON + Markdown | 템플릿 | `report.py` |
 
-## 에이전트 도구 (4단계)
+테스트를 돌릴 수 없으면(.venv 없음, 시간 초과) 판정은 E01(REVIEW)이고, 이름 규칙·import로 **추정**한 관련 테스트를 보여준다 (`related_tests.py`, v1의 방식).
 
-읽기 전용 4개만: `git_diff`, `read_file`, `search_code`, `list_files`. 경로는 대상 저장소 안으로 제한하고, 파일은 head 커밋 기준으로 `git show`로 읽는다 (작업 폴더를 건드리지 않음).
+## 3단계 Run 상세
 
-## 4단계 Impact 상세
+- **스냅샷**: `git archive <sha>`를 임시 폴더에 푼다. 대상 저장소의 작업 폴더·`.git`은 바뀌지 않는다. git에 없는 파일(`.env`, 로컬 데이터)은 들어가지 않는다.
+- **Python**: 대상 저장소의 `.venv` (또는 `--python`). 대상 환경에는 아무것도 설치하지 않는다.
+- **coverage**: ReleaseGuard가 `.rg/tools`에 설치한 coverage 7.17.0을 `PYTHONPATH`로 넣는다. 대상 Python과 버전(3.13)이 달라야 하면 실행하지 않고 사유를 남긴다.
+- **테스트별 실행 줄**: coverage `dynamic_context = test_function`. pytest JUnit XML(xunit1)로 context를 node id(`tests/test_x.py::test_f`)에 연결한다.
+- **전체 테스트 실행**: 선택 실행은 하지 않는다 (Predict_Success 약 12초). 시간 상한 기본 300초.
+- **base 재실행**: head에서 실패한 테스트만 base에서 coverage 없이 다시 돌려 "이번 변경이 깨뜨림 / 원래 깨짐 / 새 테스트"를 나눈다.
+- 문서만 바뀌었으면 실행하지 않는다.
 
-### 입력 (Context)
-규칙 단계 결과만 준다: 변경 파일 목록(경로·상태·분류·줄 수), 소스별 관련 테스트, 발동한 판정 규칙. diff 본문은 넣지 않고 에이전트가 `git_diff`로 필요한 파일만 꺼내 본다 (Minimum Sufficient Context).
+## 4단계 Gaps 상세
 
-### 도구 (모두 head 커밋 기준 읽기 전용, 결과 크기 상한 있음)
+바뀐 줄 하나는 넷 중 하나다.
 
-| 도구 | 인자 | 상한 |
-|---|---|---|
-| `git_diff` | path (null이면 전체) | 12,000자 |
-| `read_file` | path, start_line, end_line | 한 번에 200줄, 줄 번호 붙임 |
-| `search_code` | text (고정 문자열), path_prefix | 50건 |
-| `list_files` | path_prefix | 300개 |
-
-경로에 `..`·절대 경로는 거부한다. 파일은 git 객체에서 읽으므로 저장소 밖으로 나갈 수 없다.
-
-### 출력 (Structured Output)
-
-```
-summary            변경 요약 (2~3문장)
-impacts[]          area, files[], reason, evidence[]
-risks[]            level(HIGH|MEDIUM|LOW), title, detail, evidence[]
-recommended_tests[] target, kind(run_existing|add_new), reason, evidence[]
-```
-
-### 근거 형식과 검증
-에이전트는 근거를 아래 형식으로만 쓴다. 실행 후 코드가 하나씩 확인해 항목마다 `verified`를 붙인다.
-
-| 형식 | 확인 내용 |
+| 상태 | 뜻 |
 |---|---|
-| `file:<경로>:<줄>` 또는 `file:<경로>:<시작>-<끝>` | head에 파일이 있고 줄 범위가 파일 안 |
-| `tool:#<n>` | n번째 도구 호출이 실제로 있었고 성공 |
-| `rule:<id>` | 이번 결과에서 발동한 판정 규칙 |
+| covered | 어떤 테스트가 실행함 (테스트 목록이 남는다) |
+| import_only | 모듈을 불러올 때만 실행됨 (def·클래스·상수 줄) — 공백으로 보지 않음 |
+| gap | 실행 가능한 줄인데 어떤 테스트도 실행하지 않음 → **검증 공백** |
+| not_executable | 빈 줄·주석·docstring 등 |
 
-- 근거가 비었거나 하나라도 확인되지 않으면 `verified: false` → 보고서에 "근거 미확인"
-- `run_existing` 추천은 대상 테스트 파일이 head에 있어야 확인됨
-- **R07은 verified인 HIGH 위험만** 반영한다
+연속된 공백 줄은 사이에 실행 불가 줄만 있으면 하나의 범위로 묶는다. Python 소스(테스트 제외)만 본다.
 
-### 한도와 실패 처리
-- LLM 호출 최대 8회, 도구 호출 최대 20회. 마지막 호출은 도구 없이 답하게 한다.
-- 에이전트가 실패해도 규칙 결과는 그대로 저장하고 `agent_error`에 사유를 남긴다 (fallback).
-- `--no-agent`로 규칙만 실행할 수 있다 (Eval 반복 실행·비용 절감용).
-- 실행 기록(`agent`): 모델, LLM 호출 수, 도구 호출 목록, 토큰, 소요 시간.
+## 판정 규칙 v2
 
-## 근거 추적
-
-결과의 모든 판단 항목에 `evidence`를 붙인다.
-
-- 분류: `rule:C03` (rules.yaml 규칙 id)
-- 관련 테스트: `name:test_metrics.py` 또는 `import:tests/test_metrics.py:5`
-- 판정: 발동한 판정 규칙 id + 해당 파일 목록
-- 에이전트 위험: `tool:<호출 번호>`, `file:<경로>:<줄>` — 근거가 없으면 보고서에 "근거 미확인"
-
-## 판정 규칙 v1
-
-가장 심각한 규칙의 판정을 최종 판정으로 쓴다. 아무 규칙도 발동하지 않으면 SAFE.
+가장 심각한 규칙의 판정이 최종 판정. 아무 규칙도 발동하지 않으면 SAFE. NOTE는 판정에 영향 없음.
 
 | id | 판정 | 조건 |
 |---|---|---|
-| B01 | BLOCK | 추가된 줄에 비밀값 패턴 (`rules.yaml`의 `secrets`) |
-| B02 | BLOCK | 수정된 소스의 관련 테스트가 삭제됨 |
-| R01 | REVIEW REQUIRED | 소스 수정, 관련 테스트는 있으나 하나도 수정되지 않음 |
-| R02 | REVIEW REQUIRED | 소스 수정, 관련 테스트를 찾지 못함 (빈 파일·줄 변화 없는 이름 변경은 제외) |
-| R03 | REVIEW REQUIRED | 설정 변경 |
-| R04 | REVIEW REQUIRED | 의존성 변경 |
-| R05 | REVIEW REQUIRED | 데이터 변경 (결과에 직접 영향) |
-| R06 | REVIEW REQUIRED | 소스 삭제 |
-| R07 | REVIEW REQUIRED | 에이전트가 근거와 함께 HIGH 위험 제시 (4단계 이후) |
+| B01 | BLOCK | 추가된 줄에 비밀값 패턴 |
+| B03 | BLOCK | head에서 실패하는 테스트가 base에서는 통과했거나 base에 없음 (이번 변경이 깨뜨림) |
+| B04 | BLOCK | head에서 테스트 수집·실행 오류 (import 실패 등) |
+| G01 | REVIEW REQUIRED | 검증 공백이 1줄 이상 |
+| T01 | REVIEW REQUIRED | base에서도 실패하던 테스트 |
+| R04 | REVIEW REQUIRED | 의존성 변경 (테스트 환경이 실제와 다를 수 있음) |
+| E01 | REVIEW REQUIRED | 테스트 미실행·시간 초과·coverage 없음 → 검증하지 못함 |
+| N03 | NOTE | 설정 변경 |
+| N05 | NOTE | 데이터 변경 |
+| N06 | NOTE | 소스 삭제 (참조가 남으면 B03·B04로 드러남) |
 
-## Eval Set
+v1에서 없어진 것: R01·R02(이름·import 추측), R03·R05(설정·데이터 → NOTE), R06(소스 삭제 → NOTE), R07(에이전트 HIGH), B02(테스트 삭제 → G01·B03으로 드러남).
 
-Predict_Success 커밋을 그대로 쓴다.
+## 6단계 Explain 상세
 
-- 자동 정답: 같은 커밋에서 실제로 수정된 테스트 파일 → 관련 테스트 탐색 precision / recall
-- 수기 정답: 10~15개 커밋의 기대 판정 → 판정 정확도
+- 공백이 있을 때만, 큰 공백부터 최대 5개. 공백 하나에 tool calling 루프 하나 (LLM 최대 4회, 도구 최대 6회).
+- 입력: 공백 위치, 앞뒤 15줄(줄 번호 포함), 그 파일의 diff, 같은 파일의 다른 변경을 실행하는 테스트 목록.
+- 출력: `behavior`(바뀐 동작), `trigger`(실행 조건), `suggested_test`(file·name·scenario·assertion), `evidence`.
+- "코드가 맞는지"는 판단하지 않는다. 무엇이 검증되지 않았는지만 다룬다.
+- 검증: 근거(`file:경로:줄`, `tool:#n`)가 실제로 있는지, 제안 테스트 파일이 테스트 분류 경로인지. 새 파일인지도 표시.
+- 실패해도 판정·결과는 그대로 남는다.
 
-## 기술 선택
+도구는 v1과 같은 읽기 전용 4개 (`git_diff`, `read_file`, `search_code`, `list_files`), head 커밋 기준.
 
-- Python 3.13, 의존성 최소 (PyYAML, pytest; 4단계에서 openai)
-- LLM: OpenAI Responses API (2주차와 같은 방식)
-- 오케스트레이션: 직접 만든 tool calling 루프. LangGraph는 Stage 2에서 상태 전이가 생길 때 검토
+## Eval v2
+
+| 평가 | 무엇을 재나 | 정답 |
+|---|---|---|
+| `eval` | 커밋 전체의 판정 분포, 공백, 실행 시간, 결정성(반복 실행 결과가 완전히 같은가) | 수기 판정 15개(참고), 같은 커밋에서 바뀐 테스트 |
+| `seeds` | 결함을 심은 사례에서 기대 판정·규칙이 나오는가 | `eval/seeds_*.yaml`의 expected·expect_rules |
+| `szz` | 나중에 고쳐진 결함 줄이 들어올 때 검증 공백이었는가 | 고친 커밋(`fix_commits`)이 지우거나 바꾼 줄을 `git blame`으로 추적 |
+
+SZZ의 공백 비율이 낮으면 "테스트가 실행은 했지만 결함을 못 잡았다"는 뜻이다. coverage만으로는 결함을 잡지 못한다는 한계를 숫자로 보여준다.
+
+## 보안·안전
+
+- 대상 저장소는 읽기만 한다. 테스트는 임시 폴더의 스냅샷에서 돌린다.
+- 결함 심기(`seeds`)는 임시 clone에서만 한다.
+- 대상 저장소의 테스트 코드를 실행하므로, **신뢰하는 저장소에만** 쓴다 (샌드박스는 이후 단계).
+- 비밀값은 위치만 남기고 값은 저장하지 않는다.

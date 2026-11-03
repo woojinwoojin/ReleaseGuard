@@ -1,0 +1,704 @@
+{
+  "tool": "releaseguard",
+  "version": "0.2.0",
+  "classify_version": 1,
+  "rules_version": 2,
+  "repo": "C:\\Project_Folder\\predict-success",
+  "base": "142912b~1",
+  "head": "142912b",
+  "merge_base": "c9824b0f6106188678fd637b974b9f69446fd3b5",
+  "head_sha": "142912bc01669bc0771174c8de46549557b9de57",
+  "summary": {
+    "files": 10,
+    "added": 289,
+    "deleted": 85,
+    "by_category": {
+      "config": 1,
+      "data": 3,
+      "docs": 1,
+      "source": 3,
+      "test": 2
+    }
+  },
+  "changed_files": [
+    {
+      "path": "configs/market_v1.yaml",
+      "status": "M",
+      "old_path": null,
+      "added": 2,
+      "deleted": 0,
+      "category": "config",
+      "evidence": "rule:C03"
+    },
+    {
+      "path": "data/manual/market_links.csv",
+      "status": "M",
+      "old_path": null,
+      "added": 10,
+      "deleted": 10,
+      "category": "data",
+      "evidence": "rule:C05"
+    },
+    {
+      "path": "data/manual/stat_guideline_facts.csv",
+      "status": "M",
+      "old_path": null,
+      "added": 28,
+      "deleted": 27,
+      "category": "data",
+      "evidence": "rule:C05"
+    },
+    {
+      "path": "data/manual/stat_guideline_judgments.csv",
+      "status": "M",
+      "old_path": null,
+      "added": 7,
+      "deleted": 6,
+      "category": "data",
+      "evidence": "rule:C05"
+    },
+    {
+      "path": "docs/decisions.md",
+      "status": "M",
+      "old_path": null,
+      "added": 12,
+      "deleted": 0,
+      "category": "docs",
+      "evidence": "rule:C04"
+    },
+    {
+      "path": "src/market/run_market.py",
+      "status": "M",
+      "old_path": null,
+      "added": 120,
+      "deleted": 35,
+      "category": "source",
+      "evidence": "rule:C06"
+    },
+    {
+      "path": "src/metrics/engine.py",
+      "status": "M",
+      "old_path": null,
+      "added": 9,
+      "deleted": 0,
+      "category": "source",
+      "evidence": "rule:C06"
+    },
+    {
+      "path": "src/report/evidence_report.py",
+      "status": "M",
+      "old_path": null,
+      "added": 5,
+      "deleted": 2,
+      "category": "source",
+      "evidence": "rule:C06"
+    },
+    {
+      "path": "tests/test_market.py",
+      "status": "M",
+      "old_path": null,
+      "added": 69,
+      "deleted": 5,
+      "category": "test",
+      "evidence": "rule:C02"
+    },
+    {
+      "path": "tests/test_metrics.py",
+      "status": "M",
+      "old_path": null,
+      "added": 27,
+      "deleted": 0,
+      "category": "test",
+      "evidence": "rule:C02"
+    }
+  ],
+  "test_run": {
+    "status": "passed",
+    "reason": null,
+    "seconds": 5.5,
+    "attempts": 1,
+    "python": "C:\\Project_Folder\\predict-success\\.venv\\Scripts\\python.exe",
+    "counts": {
+      "passed": 180,
+      "failed": 0,
+      "error": 0,
+      "skipped": 1
+    },
+    "coverage": true,
+    "failures": []
+  },
+  "lines": [
+    {
+      "path": "src/market/run_market.py",
+      "measured": true,
+      "changed": 112,
+      "executable": 81,
+      "covered": 47,
+      "import_only": 8,
+      "gap_lines": 26,
+      "gaps": [
+        [
+          71,
+          71
+        ],
+        [
+          90,
+          90
+        ],
+        [
+          265,
+          265
+        ],
+        [
+          308,
+          308
+        ],
+        [
+          317,
+          318
+        ],
+        [
+          320,
+          320
+        ],
+        [
+          368,
+          369
+        ],
+        [
+          376,
+          377
+        ],
+        [
+          379,
+          381
+        ],
+        [
+          417,
+          417
+        ],
+        [
+          442,
+          444
+        ],
+        [
+          446,
+          448
+        ],
+        [
+          453,
+          453
+        ],
+        [
+          455,
+          455
+        ],
+        [
+          465,
+          465
+        ],
+        [
+          475,
+          476
+        ]
+      ],
+      "tests": [
+        "tests/test_market.py::test_continuity_judgment_flows_to_year_rows_and_spans",
+        "tests/test_market.py::test_full_confirmation_passes_only_for_explicitly_covered_years",
+        "tests/test_market.py::test_guidelines_pass_when_raw_hash_and_evidence_match",
+        "tests/test_market.py::test_guidelines_stop_on_broken_evidence",
+        "tests/test_market.py::test_official_growth_mismatch_is_reported",
+        "tests/test_market.py::test_pinned_raw_stops_when_file_changed_after_collection",
+        "tests/test_market.py::test_pinned_raw_uses_the_named_run_not_the_latest",
+        "tests/test_market.py::test_stats_check_computed_growth_against_official_and_mark_caution_pair",
+        "tests/test_market.py::test_types_check_sum_and_total_against_m01_with_rounding_bound"
+      ],
+      "line_status": {
+        "29": "import_only",
+        "30": "not_executable",
+        "32": "not_executable",
+        "33": "not_executable",
+        "34": "not_executable",
+        "35": "covered",
+        "36": "covered",
+        "37": "covered",
+        "38": "covered",
+        "39": "covered",
+        "40": "covered",
+        "41": "covered",
+        "42": "covered",
+        "43": "covered",
+        "44": "covered",
+        "45": "covered",
+        "46": "covered",
+        "47": "covered",
+        "48": "covered",
+        "67": "import_only",
+        "68": "not_executable",
+        "69": "covered",
+        "70": "covered",
+        "71": "gap",
+        "72": "covered",
+        "73": "covered",
+        "74": "covered",
+        "75": "covered",
+        "76": "covered",
+        "77": "covered",
+        "80": "import_only",
+        "81": "not_executable",
+        "83": "not_executable",
+        "84": "not_executable",
+        "85": "covered",
+        "86": "covered",
+        "87": "covered",
+        "88": "covered",
+        "89": "covered",
+        "90": "gap",
+        "91": "not_executable",
+        "92": "covered",
+        "93": "covered",
+        "94": "covered",
+        "97": "import_only",
+        "98": "covered",
+        "99": "covered",
+        "102": "import_only",
+        "114": "covered",
+        "115": "not_executable",
+        "120": "not_executable",
+        "129": "not_executable",
+        "130": "not_executable",
+        "135": "import_only",
+        "136": "not_executable",
+        "171": "not_executable",
+        "178": "not_executable",
+        "179": "not_executable",
+        "210": "import_only",
+        "219": "not_executable",
+        "220": "not_executable",
+        "245": "covered",
+        "250": "covered",
+        "251": "covered",
+        "253": "covered",
+        "254": "not_executable",
+        "255": "covered",
+        "256": "covered",
+        "257": "covered",
+        "258": "covered",
+        "259": "covered",
+        "260": "not_executable",
+        "261": "covered",
+        "262": "not_executable",
+        "263": "covered",
+        "264": "covered",
+        "265": "gap",
+        "266": "covered",
+        "267": "covered",
+        "308": "gap",
+        "317": "gap",
+        "318": "gap",
+        "320": "gap",
+        "321": "not_executable",
+        "368": "gap",
+        "369": "gap",
+        "373": "not_executable",
+        "376": "gap",
+        "377": "gap",
+        "379": "gap",
+        "380": "gap",
+        "381": "gap",
+        "382": "not_executable",
+        "417": "gap",
+        "418": "not_executable",
+        "419": "not_executable",
+        "420": "not_executable",
+        "421": "not_executable",
+        "439": "import_only",
+        "440": "not_executable",
+        "442": "gap",
+        "443": "gap",
+        "444": "gap",
+        "446": "gap",
+        "447": "gap",
+        "448": "gap",
+        "453": "gap",
+        "455": "gap",
+        "465": "gap",
+        "474": "not_executable",
+        "475": "gap",
+        "476": "gap"
+      }
+    },
+    {
+      "path": "src/metrics/engine.py",
+      "measured": true,
+      "changed": 9,
+      "executable": 6,
+      "covered": 5,
+      "import_only": 1,
+      "gap_lines": 0,
+      "gaps": [],
+      "tests": [
+        "tests/test_metrics.py::test_cagr_uses_2022_and_2025_and_refuses_non_positive_start",
+        "tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score",
+        "tests/test_metrics.py::test_excluded_company_gets_no_peer_score_not_zero",
+        "tests/test_metrics.py::test_negative_denominator_or_balance_is_held_not_scored",
+        "tests/test_metrics.py::test_negative_numerator_from_losses_stays_an_observation",
+        "tests/test_metrics.py::test_normal_inputs_give_normal_result",
+        "tests/test_metrics.py::test_peer_median_excludes_the_company_itself_and_is_validation_only",
+        "tests/test_metrics.py::test_period_year_must_match_requested_year",
+        "tests/test_metrics.py::test_reported_current_ratio_is_view_only_and_hfs_ratio_is_the_scoring_one",
+        "tests/test_metrics.py::test_short_fiscal_period_does_not_enter_cagr",
+        "tests/test_metrics.py::test_three_year_decline_is_not_called_stable",
+        "tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason",
+        "tests/test_metrics.py::test_unconfirmed_period_blocks_calculation",
+        "tests/test_metrics.py::test_zero_current_liabilities_is_never_infinite",
+        "tests/test_metrics.py::test_zero_current_liabilities_is_not_score_eligible",
+        "tests/test_trend.py::test_missing_opening_balance_holds_only_that_metric_no_ending_balance_substitute",
+        "tests/test_trend.py::test_past_year_uses_prior_year_balances",
+        "tests/test_trend.py::test_revenue_yoy_growth"
+      ],
+      "line_status": {
+        "19": "not_executable",
+        "20": "not_executable",
+        "21": "import_only",
+        "88": "covered",
+        "89": "not_executable",
+        "90": "covered",
+        "91": "covered",
+        "92": "covered",
+        "93": "covered"
+      }
+    },
+    {
+      "path": "src/report/evidence_report.py",
+      "measured": true,
+      "changed": 5,
+      "executable": 2,
+      "covered": 0,
+      "import_only": 0,
+      "gap_lines": 2,
+      "gaps": [
+        [
+          201,
+          202
+        ]
+      ],
+      "tests": [],
+      "line_status": {
+        "201": "gap",
+        "202": "gap",
+        "203": "not_executable",
+        "204": "not_executable",
+        "207": "not_executable"
+      }
+    }
+  ],
+  "estimated_tests": null,
+  "decision": "REVIEW REQUIRED",
+  "findings": [
+    {
+      "rule_id": "G01",
+      "decision": "REVIEW REQUIRED",
+      "message": "바뀐 줄 중 어떤 테스트도 실행하지 않는 곳이 있습니다.",
+      "evidence": [
+        "src/market/run_market.py:71",
+        "src/market/run_market.py:90",
+        "src/market/run_market.py:265",
+        "src/market/run_market.py:308",
+        "src/market/run_market.py:317-318",
+        "src/market/run_market.py:320",
+        "src/market/run_market.py:368-369",
+        "src/market/run_market.py:376-377",
+        "src/market/run_market.py:379-381",
+        "src/market/run_market.py:417",
+        "src/market/run_market.py:442-444",
+        "src/market/run_market.py:446-448",
+        "src/market/run_market.py:453",
+        "src/market/run_market.py:455",
+        "src/market/run_market.py:465",
+        "src/market/run_market.py:475-476",
+        "src/report/evidence_report.py:201-202"
+      ]
+    },
+    {
+      "rule_id": "N03",
+      "decision": "NOTE",
+      "message": "설정이 바뀌었습니다 (판정에는 반영하지 않음).",
+      "evidence": [
+        "configs/market_v1.yaml"
+      ]
+    },
+    {
+      "rule_id": "N05",
+      "decision": "NOTE",
+      "message": "데이터가 바뀌었습니다 (판정에는 반영하지 않음).",
+      "evidence": [
+        "data/manual/market_links.csv",
+        "data/manual/stat_guideline_facts.csv",
+        "data/manual/stat_guideline_judgments.csv"
+      ]
+    }
+  ],
+  "explanations": [
+    {
+      "path": "src/market/run_market.py",
+      "start": 379,
+      "end": 381,
+      "behavior": "연평균 성장률 요약 표의 각 구간 행에 `cagr_span_roles`에서 가져온 용도와 `definition_continuity`, `caution`을 함께 출력하도록 바뀌었습니다. 또 바로 아래 설명 문구에서 ‘대조’와 ‘정의 연속성’, ‘직접 비교 가능’의 의미를 분리해 안내합니다.",
+      "trigger": "`summary` 데이터프레임을 렌더링해 `| 기간 | 용도 | 연평균 성장률 | 정의 연속성 (Q3) | 주의 |` 표를 쓰는 경로에서, 특히 `config['cagr_span_roles']`에 해당 구간 역할이 있고 `summary.itertuples()`가 한 줄 이상 돌 때 실행됩니다.",
+      "suggested_test": {
+        "file": "tests/test_market.py",
+        "name": "test_summary_table_includes_role_continuity_and_caution",
+        "scenario": "`build_stats()`가 `summary`를 만든 뒤, `run_market`의 마크다운 렌더링 경로를 한 번 실행하도록 `config['cagr_span_roles']`에 `2022→2025` 역할을 넣고, `continuity`에 인접 연도 판정 1개를 제공한 입력으로 보고서를 생성한다.",
+        "assertion": "생성된 출력에 `| 2022→2025 (3년) |` 행이 있고, 같은 행의 용도 칸에 `config['cagr_span_roles']['2022→2025']` 값이 들어가며, `정의 연속성 (Q3)` 칸과 `주의` 칸이 함께 렌더링되는 것을 확인한다. 또한 설명 문구로 `- '대조'는 계산 증감률과 공식 증감률의 산술 일치일 뿐이다.`가 포함되는지 확인한다."
+      },
+      "evidence": [
+        "file:src/market/run_market.py:378-382",
+        "tool:#1"
+      ],
+      "new_test_file": false,
+      "verified": false,
+      "unverified": [
+        "tool:#1"
+      ],
+      "error": null,
+      "tool_log": []
+    },
+    {
+      "path": "src/market/run_market.py",
+      "start": 442,
+      "end": 444,
+      "behavior": "`main()`이 설정 파일의 `base_statistic`를 읽은 뒤, `runs`로 전달된 실행 ID가 있으면 그 값을 우선해 `pinned_raw()`에 넘기고, 없으면 설정의 `raw_run`을 쓰도록 선택합니다. 즉, 같은 후보 ID라도 명령행/호출 인자로 넘긴 수집본이 설정값보다 우선합니다.",
+      "trigger": "`main(as_of, runs)` 호출 시 `runs` 딕셔너리에 `base_statistic.candidate_id`에 해당하는 run_id가 들어 있고, 동시에 설정의 `base_statistic.raw_run`도 존재하는 경우입니다.",
+      "suggested_test": {
+        "file": "tests/test_market.py",
+        "name": "test_main_prefers_explicit_runs_over_config_raw_run",
+        "scenario": "`yaml.safe_load`는 `base_statistic.candidate_id='M01'`, `base_statistic.raw_run='config-run'`인 설정을 반환하게 하고, `runs={'M01': 'explicit-run'}`으로 `main()`을 호출한다. `pinned_raw()`는 전달받은 run_id를 기록만 하게, `parse_table`/`build_stats`/`build_types`/`build_links`는 더미 반환으로 패치해 실행을 끝낸다.",
+        "assertion": "`run_market.pinned_raw(base['raw_source'], 'explicit-run')`가 호출되고 `run_market.pinned_raw(base['raw_source'], 'config-run')`는 호출되지 않으며, `main()`이 최종적으로 `pinned_raw`에 넘긴 run_id가 `runs.get(base['candidate_id'])`였음을 확인한다."
+      },
+      "evidence": [
+        "file:src/market/run_market.py:439-445",
+        "file:tests/test_market.py:241-250"
+      ],
+      "new_test_file": false,
+      "verified": true,
+      "unverified": [],
+      "error": null,
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_market.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "search_code",
+          "arguments": "{\"text\":\"main(\", \"path_prefix\":\"tests/test_market.py\"}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "search_code",
+          "arguments": "{\"text\":\"pinned_raw(\", \"path_prefix\":\"tests/test_market.py\"}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_market.py\",\"start_line\":220,\"end_line\":264}",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "path": "src/market/run_market.py",
+      "start": 446,
+      "end": 448,
+      "behavior": "`main()`이 작성지침 판단 결과(`build_guidelines`)에서 연속성 판정을 뽑아(`continuity_by_pair`) 이를 `build_stats(..., continuity)`로 넘기도록 바뀌었습니다. 즉, 연속성 판단이 연도별 통계 행과 기간 요약의 비교 가능성 계산에 반영되는 흐름을 추가했습니다.",
+      "trigger": "`src/market/run_market.py`의 `main(as_of, runs)`를 실행할 때, 특히 `build_guidelines()`가 Q3 연속성 판정을 포함한 판단표를 반환하는 경우에 동작합니다.",
+      "suggested_test": {
+        "file": "tests/test_market.py",
+        "name": "test_main_passes_guideline_continuity_into_build_stats",
+        "scenario": "`build_guidelines()`는 Q3 연속성 판정이 들어있는 더미 judgment DataFrame을 반환하고, `build_stats()`는 전달받은 `continuity` 인자를 캡처만 하도록 monkeypatch한 뒤 `main()`을 호출합니다. `pinned_raw()`, `parse_table()`, `build_types()`, `build_links()`도 더미로 바꿔 파일 I/O 없이 실행합니다.",
+        "assertion": "`run_market.main('2026-01-01', runs={'M01': 'r1', 'M02': 'r2'})` 실행 후 `captured_continuity == {(2021, 2022): '연속성 확인 (J1)'}` 이고, `build_stats()`가 실제로 같은 dict를 네 번째 인자로 받았는지 확인합니다."
+      },
+      "evidence": [
+        "file:src/market/run_market.py:446-448",
+        "file:tests/test_market.py:60-72"
+      ],
+      "new_test_file": false,
+      "verified": true,
+      "unverified": [],
+      "error": null,
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "search_code",
+          "arguments": "{\"text\":\"def test_continuity_judgment_flows_to_year_rows_and_spans\", \"path_prefix\":\"tests/test_market.py\"}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "search_code",
+          "arguments": "{\"text\":\"def test_full_confirmation_passes_only_for_explicitly_covered_years\", \"path_prefix\":\"tests/test_market.py\"}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "search_code",
+          "arguments": "{\"text\":\"def test_stats_check_computed_growth_against_official_and_mark_caution_pair\", \"path_prefix\":\"tests/test_market.py\"}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_market.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        },
+        {
+          "n": 5,
+          "name": "search_code",
+          "arguments": "{\"text\":\"def main(\", \"path_prefix\":\"tests/test_market.py\"}",
+          "ok": true
+        },
+        {
+          "n": 6,
+          "name": "search_code",
+          "arguments": "{\"text\":\"run_market.main(\", \"path_prefix\":\"tests/test_market.py\"}",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "path": "src/market/run_market.py",
+      "start": 317,
+      "end": 318,
+      "behavior": "`guideline_section()`가 작성지침 확인 섹션의 표 머리글을 두 줄로 출력합니다. 첫 번째 표는 판단 항목(질문/적용 연도/상태/근거 등)을, 두 번째 표는 사실 항목(주제/근거 수준/문서/해석 등)을 구분해 보여 주도록 문서 구조를 고정합니다.",
+      "trigger": "`report()`가 `guidelines`를 받아 작성지침 확인 섹션을 렌더링할 때 실행됩니다. 즉, 지침 사실/판정 데이터가 존재하여 `guideline_section()`이 호출되는 경우에 이 두 줄이 출력됩니다.",
+      "suggested_test": {
+        "file": "tests/test_market.py",
+        "name": "test_guideline_section_renders_both_table_headers",
+        "scenario": "`guideline_tables(tmp_path)`로 만든 사실/판정 테이블을 `run_guidelines()`로 준비한 뒤, `run_market.report(...)`를 호출해 생성된 마크다운 문자열을 확인한다. `guidelines` 인자로 `(facts, judgments)`를 넘기고, 나머지 인자에는 기존 테스트에서 쓰는 `stats`, `summary`, `links`, `meta`, `table`, `types`, `type_summary`를 넣는다.",
+        "assertion": "`report_text`에 `| ID | 질문 | 적용 연도 | 상태 | 확인한 것 | 남은 불확실성 | 결과 | 확인 근거 | 미해결 쟁점 근거 |`와 `| ID | 질문 | 주제 | 적용 연도 | 근거 수준 | 문서 (판·위치) | 해석 |`가 모두 포함되는지 `assert ... in report_text`로 확인한다."
+      },
+      "evidence": [
+        "file:tests/test_market.py:152-200",
+        "file:src/market/run_market.py:312-326"
+      ],
+      "new_test_file": false,
+      "verified": true,
+      "unverified": [],
+      "error": null,
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "search_code",
+          "arguments": "{\"text\":\"guideline_section\", \"path_prefix\":\"tests/test_market.py\"}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "search_code",
+          "arguments": "{\"text\":\"작성지침 확인\", \"path_prefix\":\"tests\"}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_market.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "search_code",
+          "arguments": "{\"text\":\"def build_guidelines\",\"path_prefix\":\"src/market/run_market.py\"}",
+          "ok": true
+        },
+        {
+          "n": 5,
+          "name": "read_file",
+          "arguments": "{\"path\":\"src/market/run_market.py\",\"start_line\":280,\"end_line\":360}",
+          "ok": true
+        },
+        {
+          "n": 6,
+          "name": "search_code",
+          "arguments": "{\"text\":\"report(\", \"path_prefix\":\"tests/test_market.py\"}",
+          "ok": true
+        }
+      ]
+    },
+    {
+      "path": "src/market/run_market.py",
+      "start": 368,
+      "end": 369,
+      "behavior": "국내 화장품 생산금액 추세 표의 헤더에 새 열인 `정의 연속성 (Q3)`와 `비교`가 포함되고, 각 연도 행이 그에 맞는 값으로 렌더링되도록 바뀝니다. 기존의 `전년 대비/공식 증감률/대조`만 있는 표가 아니라, 정의 연속성 판정과 직접 비교 가능 여부를 함께 노출합니다.",
+      "trigger": "`build_stats()`로 생성된 `stats`를 이용해 `src/market/run_market.py`의 보고서 본문을 출력할 때, 특히 `stats.columns`에 `context_` 열이 있거나 `continuity` 판정이 전달된 경우에 실행됩니다.",
+      "suggested_test": {
+        "file": "tests/test_market.py",
+        "name": "test_market_report_includes_definition_continuity_and_comparability_columns",
+        "scenario": "`build_stats()`로 만든 `stats`와 `summary`를 바탕으로, `stats.columns`에 `context_업체수`가 있고 Q3 판정이 포함된 `cont`를 넣은 뒤 보고서 표 헤더 문자열을 직접 조립한다.",
+        "assertion": "`header == '| 연도 | 생산금액 (백만원) | 전년 대비 | 공식 증감률 | 대조 | 보고 업체수 | 정의 연속성 (Q3) | 비교 |'`"
+      },
+      "evidence": [
+        "file:src/market/run_market.py:367-369",
+        "file:src/market/run_market.py:372-373",
+        "file:tests/test_market.py:46-57"
+      ],
+      "new_test_file": false,
+      "verified": true,
+      "unverified": [],
+      "error": null,
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "search_code",
+          "arguments": "{\"text\":\"test_stats_check_computed_growth_against_official_and_mark_caution_pair\", \"path_prefix\":\"tests/test_market.py\"}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_market.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "search_code",
+          "arguments": "{\"text\":\"build_stats(\", \"path_prefix\":\"src/market/run_market.py\"}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "search_code",
+          "arguments": "{\"text\":\"w(\\\"## 2. 국내 화장품 생산금액 추세\\\")\",\"path_prefix\":\"src/market/run_market.py\"}",
+          "ok": true
+        },
+        {
+          "n": 5,
+          "name": "read_file",
+          "arguments": "{\"path\":\"src/market/run_market.py\",\"start_line\":340,\"end_line\":390}",
+          "ok": true
+        },
+        {
+          "n": 6,
+          "name": "search_code",
+          "arguments": "{\"text\":\"def render(\", \"path_prefix\":\"src/market/run_market.py\"}",
+          "ok": true
+        }
+      ]
+    }
+  ],
+  "agent": {
+    "model": "gpt-5.4-mini",
+    "gaps": 5,
+    "llm_calls": 15,
+    "tool_calls": 22,
+    "input_tokens": 116642,
+    "output_tokens": 3987,
+    "seconds": 51.0,
+    "errors": 0
+  },
+  "agent_error": null
+}

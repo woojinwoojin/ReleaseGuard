@@ -1,14 +1,15 @@
-"""가짜 OpenAI 클라이언트로 루프·근거 검증·판정 반영을 확인한다 (실제 API 호출 없음)."""
+"""가짜 OpenAI 클라이언트로 공백 설명 루프·검증을 확인한다 (실제 API 호출 없음)."""
 
 import json
 from types import SimpleNamespace
 
-import pytest
+from conftest import CALC, PY
 
-from releaseguard.agent import Limits, run_agent, validate_evidence
+from releaseguard.agent import Limits, build_input, explain_gaps, pick_gaps, run_loop, validate
 from releaseguard.agent_tools import RepoView
 from releaseguard.analyze import analyze
 from releaseguard.classify import load_rules
+from releaseguard.gaps import FileLines
 from releaseguard.report import to_markdown
 
 RULES = load_rules()
@@ -42,112 +43,96 @@ class FakeClient:
         return next(self._responses)
 
 
-IMPACT = {
-    "summary": "compute의 반환값이 두 배가 됩니다.",
-    "impacts": [
-        {
-            "area": "보고서 출력",
-            "files": ["src/report.py"],
-            "reason": "compute를 호출합니다.",
-            "evidence": ["file:src/report.py:3", "tool:#1"],
-        }
-    ],
-    "risks": [
-        {"level": "HIGH", "title": "출력값 변경", "detail": "보고서 숫자가 바뀝니다.", "evidence": ["file:src/report.py:3"]},
-        {"level": "HIGH", "title": "추측", "detail": "근거 없음", "evidence": []},
-        {"level": "MEDIUM", "title": "없는 줄", "detail": "", "evidence": ["file:src/report.py:99", "tool:#7"]},
-    ],
-    "recommended_tests": [
-        {"target": "tests/test_engine.py", "kind": "run_existing", "reason": "", "evidence": ["rule:R01"]},
-        {"target": "tests/test_report.py", "kind": "run_existing", "reason": "", "evidence": ["rule:R01"]},
-    ],
+GOOD = {
+    "behavior": "음수 입력이면 -2를 돌려준다.",
+    "trigger": "x < 0",
+    "suggested_test": {"file": "tests/test_calc.py", "name": "test_sign_negative", "scenario": "sign(-5)", "assertion": "sign(-5) == -2"},
+    "evidence": ["file:src/calc.py:6-7", "tool:#1"],
 }
 
 
-@pytest.fixture
-def setup(repo):
-    repo.write("src/engine.py", "def compute(x):\n    return x\n")
-    repo.write("src/report.py", "from src.engine import compute\n\nprint(compute(1))\n")
-    repo.write("tests/test_engine.py", "from src.engine import compute\n")
-    repo.commit("base")
-    repo.write("src/engine.py", "def compute(x):\n    return x * 2\n")
-    repo.commit("change")
-    return repo
+def gap_repo(pyrepo):
+    pyrepo.write("src/calc.py", CALC.replace("return -1", "return -2"))
+    pyrepo.commit("gap")
+    result = analyze(pyrepo.path, "HEAD~1", "HEAD", RULES, python=PY)
+    view = RepoView(pyrepo.path, result["merge_base"], result["head_sha"])
+    lines = [FileLines(**{**fl, "gaps": [tuple(g) for g in fl["gaps"]]}) for fl in result["lines"]]
+    return view, lines
 
 
-def test_loop_numbers_tool_calls_and_records_meta(setup):
-    client = FakeClient([
-        tool_turn(call("search_code", {"text": "compute", "path_prefix": None}, "c1"), call("read_file", {"path": "x.py", "start_line": None, "end_line": None}, "c2")),
-        answer(IMPACT),
-    ])
-    result = analyze(setup.path, "HEAD~1", "HEAD", RULES)
-    view = RepoView(setup.path, result["merge_base"], result["head_sha"])
-    out = run_agent(client, "fake-model", view, result)
-
-    assert out["output"] == IMPACT
-    assert [(t["n"], t["name"], t["ok"]) for t in out["meta"]["tool_log"]] == [(1, "search_code", True), (2, "read_file", False)]
-    assert out["meta"]["llm_calls"] == 2 and out["meta"]["input_tokens"] == 110
-    # 두 번째 요청에는 call 번호가 붙은 도구 결과가 들어간다
-    outputs = [json.loads(i["output"]) for i in client.requests[1]["input"] if isinstance(i, dict) and i.get("type") == "function_call_output"]
-    assert [o["call"] for o in outputs] == ["tool:#1", "tool:#2"]
-    # 첫 입력에는 규칙 결과만 있고 diff 본문은 없다
-    first = client.requests[0]["input"][0]["content"]
-    assert "src/engine.py" in first and "return x * 2" not in first
+def test_build_input_has_code_diff_and_test_hints(pyrepo):
+    view, lines = gap_repo(pyrepo)
+    text = build_input(view, lines[0], 7, 7)
+    assert "src/calc.py 7~7줄" in text
+    assert "7:         return -2" in text  # 줄 번호가 붙은 주변 코드
+    assert "+        return -2" in text  # diff
 
 
-def test_last_step_disables_tools(setup):
-    turns = [tool_turn(call("list_files", {"path_prefix": None}, f"c{i}")) for i in range(2)] + [answer(IMPACT)]
+def test_loop_numbers_tool_calls(pyrepo):
+    view, _ = gap_repo(pyrepo)
+    client = FakeClient([tool_turn(call("search_code", {"text": "sign(", "path_prefix": None}, "c1")), answer(GOOD)])
+    out = run_loop(client, "m", view, "입력")
+    assert out["output"] == GOOD
+    assert [(t["n"], t["ok"]) for t in out["meta"]["tool_log"]] == [(1, True)]
+    sent = json.loads(client.requests[1]["input"][-1]["output"])
+    assert sent["call"] == "tool:#1"
+
+
+def test_last_step_disables_tools(pyrepo):
+    view, _ = gap_repo(pyrepo)
+    turns = [tool_turn(call("list_files", {"path_prefix": None}, f"c{i}")) for i in range(2)] + [answer(GOOD)]
     client = FakeClient(turns)
-    result = analyze(setup.path, "HEAD~1", "HEAD", RULES)
-    view = RepoView(setup.path, result["merge_base"], result["head_sha"])
-    run_agent(client, "m", view, result, Limits(max_steps=3))
+    run_loop(client, "m", view, "입력", Limits(max_steps=3))
     assert [r["tool_choice"] for r in client.requests] == ["auto", "auto", "none"]
 
 
-def test_tool_call_cap(setup):
-    many = tool_turn(*[call("list_files", {"path_prefix": None}, f"c{i}") for i in range(3)])
-    client = FakeClient([many, answer(IMPACT)])
-    result = analyze(setup.path, "HEAD~1", "HEAD", RULES)
-    view = RepoView(setup.path, result["merge_base"], result["head_sha"])
-    out = run_agent(client, "m", view, result, Limits(max_tool_calls=2))
-    assert out["meta"]["tool_calls"] == 2
-    last = json.loads(client.requests[1]["input"][-1]["output"])
-    assert "상한" in last["error"]
+def test_validate_checks_evidence_and_test_path(pyrepo):
+    view, _ = gap_repo(pyrepo)
+    meta = {"tool_log": [{"n": 1, "ok": True}]}
+    ok = validate(GOOD, meta, view, RULES)
+    assert ok["verified"] is True and ok["new_test_file"] is False
+
+    bad = {**GOOD, "suggested_test": {**GOOD["suggested_test"], "file": "src/calc.py"}, "evidence": ["file:src/calc.py:99", "tool:#2"]}
+    out = validate(bad, meta, view, RULES)
+    assert out["verified"] is False
+    assert out["unverified"] == ["file:src/calc.py:99", "tool:#2", "suggested_test.file:src/calc.py (테스트 파일 경로가 아님)"]
+
+    new = {**GOOD, "suggested_test": {**GOOD["suggested_test"], "file": "tests/test_sign.py"}}
+    assert validate(new, meta, view, RULES)["new_test_file"] is True
 
 
-def test_validate_evidence(setup):
-    result = analyze(setup.path, "HEAD~1", "HEAD", RULES)
-    view = RepoView(setup.path, result["merge_base"], result["head_sha"])
-    meta = {"tool_log": [{"n": 1, "ok": True}, {"n": 2, "ok": False}]}
-    checked = validate_evidence(IMPACT, meta, view, {"R01"})
-    assert checked["impacts"][0]["verified"] is True
-    assert [(r["title"], r["verified"]) for r in checked["risks"]] == [("출력값 변경", True), ("추측", False), ("없는 줄", False)]
-    assert checked["risks"][2]["unverified"] == ["file:src/report.py:99", "tool:#7"]
-    tests = checked["recommended_tests"]
-    assert tests[0]["verified"] is True
-    assert tests[1]["unverified"] == ["target:tests/test_report.py (head에 없음)"]
+def test_pick_gaps_largest_first_and_capped():
+    a = FileLines("a.py", True, 0, gaps=[(1, 1), (10, 14)])
+    b = FileLines("b.py", True, 0, gaps=[(3, 5)])
+    picked = [(fl.path, s, e) for fl, s, e in pick_gaps([a, b], limit=2)]
+    assert picked == [("a.py", 10, 14), ("b.py", 3, 5)]
 
 
-def test_only_verified_high_risk_adds_r07(setup):
-    client = FakeClient([tool_turn(call("search_code", {"text": "compute", "path_prefix": None}, "c1")), answer(IMPACT)])
-    runner = lambda view, result: run_agent(client, "m", view, result)  # noqa: E731
-    result = analyze(setup.path, "HEAD~1", "HEAD", RULES, runner)
-    r07 = [f for f in result["findings"] if f["rule_id"] == "R07"]
-    assert r07 == [{
-        "rule_id": "R07",
-        "decision": "REVIEW REQUIRED",
-        "message": "에이전트가 근거와 함께 HIGH 위험을 제시했습니다.",
-        "evidence": ["출력값 변경 (file:src/report.py:3)"],
-    }]
+def test_explain_gaps_end_to_end_with_report(pyrepo):
+    client = FakeClient([tool_turn(call("search_code", {"text": "sign(", "path_prefix": None}, "c1")), answer(GOOD)])
+    explain = lambda view, lines: explain_gaps(client, "m", view, lines, RULES)  # noqa: E731
+    pyrepo.write("src/calc.py", CALC.replace("return -1", "return -2"))
+    pyrepo.commit("gap")
+    result = analyze(pyrepo.path, "HEAD~1", "HEAD", RULES, python=PY, explain=explain)
+    [item] = result["explanations"]
+    assert (item["path"], item["start"], item["end"], item["verified"]) == ("src/calc.py", 7, 7, True)
+    assert result["agent"]["gaps"] == 1 and result["agent"]["llm_calls"] == 2
+    assert result["decision"] == "REVIEW REQUIRED"  # 에이전트는 판정을 바꾸지 않는다
     md = to_markdown(result)
-    assert "**근거 미확인**" in md and "LLM 2회" in md
+    assert "`tests/test_calc.py` → `test_sign_negative`" in md and "근거 확인됨" in md
 
 
-def test_agent_failure_keeps_rule_result(setup):
-    def broken(view, result):
-        raise RuntimeError("API down")
+def test_explain_gaps_keeps_going_after_one_failure(pyrepo):
+    view, lines = gap_repo(pyrepo)
+    two = [FileLines("src/calc.py", True, 0, gaps=[(7, 7)]), FileLines("src/calc.py", True, 0, gaps=[(2, 2)])]
 
-    result = analyze(setup.path, "HEAD~1", "HEAD", RULES, broken)
-    assert result["decision"] == "REVIEW REQUIRED"
-    assert result["impact"] is None and result["agent_error"] == "RuntimeError: API down"
-    assert "에이전트 실행 실패" in to_markdown(result)
+    class Broken(FakeClient):
+        def create(self, **kwargs):
+            if not self.requests:
+                self.requests.append(kwargs)
+                raise RuntimeError("boom")
+            return super().create(**kwargs)
+
+    out = explain_gaps(Broken([answer(GOOD)]), "m", view, two, RULES)
+    assert [i["error"] for i in out["items"]] == ["RuntimeError: boom", None]
+    assert out["meta"]["errors"] == 1
