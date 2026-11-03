@@ -1,16 +1,22 @@
 """1~6단계를 순서대로 실행하고 결과를 dict로 만든다 (JSON으로 그대로 저장)."""
 
+from collections.abc import Callable
 from dataclasses import asdict
 from pathlib import Path
 
 from . import __version__
+from .agent import validate_evidence
+from .agent_tools import RepoView
 from .classify import RuleSet, classify
 from .decide import decide
 from .git_ops import collect, list_files, read_file
 from .related_tests import Coverage, coverage_status, find_related
 
+# (RepoView, 규칙 단계 결과) → {"output": 에이전트 답, "meta": 실행 기록}
+ImpactRunner = Callable[[RepoView, dict], dict]
 
-def analyze(repo: Path, base: str, head: str, ruleset: RuleSet) -> dict:
+
+def analyze(repo: Path, base: str, head: str, ruleset: RuleSet, run_impact: ImpactRunner | None = None) -> dict:
     change = collect(repo, base, head)
 
     files = []
@@ -42,7 +48,7 @@ def analyze(repo: Path, base: str, head: str, ruleset: RuleSet) -> dict:
     by_category: dict[str, int] = {}
     for f in files:
         by_category[f["category"]] = by_category.get(f["category"], 0) + 1
-    return {
+    result = {
         "tool": "releaseguard",
         "version": __version__,
         "rules_version": ruleset.version,
@@ -59,7 +65,24 @@ def analyze(repo: Path, base: str, head: str, ruleset: RuleSet) -> dict:
         },
         "changed_files": files,
         "coverage": [asdict(c) for c in coverage],
-        "impact": None,  # 4단계 에이전트 (미구현)
+        "impact": None,
+        "agent": None,
+        "agent_error": None,
         "decision": decision,
         "findings": [asdict(f) for f in findings],
     }
+    if run_impact is None:
+        return result
+
+    # 4단계: 에이전트가 실패해도 규칙 결과는 그대로 남긴다.
+    view = RepoView(change.repo, change.merge_base, change.head_sha)
+    try:
+        out = run_impact(view, result)
+        impact = validate_evidence(out["output"], out["meta"], view, {f.rule_id for f in findings})
+    except Exception as e:  # API 오류, 응답 형식 오류 등
+        result["agent_error"] = f"{type(e).__name__}: {e}"
+        return result
+    high = [r for r in impact["risks"] if r["level"] == "HIGH" and r["verified"]]
+    decision, findings = decide(files, coverage, change.added_lines, ruleset.secrets, agent_high_risks=high)
+    result.update(impact=impact, agent=out["meta"], decision=decision, findings=[asdict(f) for f in findings])
+    return result

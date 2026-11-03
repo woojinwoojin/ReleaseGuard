@@ -13,7 +13,8 @@ class GitError(RuntimeError):
     pass
 
 
-def run_git(repo: Path, *args: str) -> str:
+def run_git(repo: Path, *args: str, ok_codes: tuple[int, ...] = (0,)) -> str:
+    """ok_codes: 오류가 아닌 종료 코드 (git grep은 결과가 없으면 1)."""
     proc = subprocess.run(
         ["git", "-c", "core.quotepath=false", *args],
         cwd=repo,
@@ -22,7 +23,7 @@ def run_git(repo: Path, *args: str) -> str:
         encoding="utf-8",
         errors="replace",
     )
-    if proc.returncode != 0:
+    if proc.returncode not in ok_codes:
         raise GitError(f"git {' '.join(args)}: {proc.stderr.strip()}")
     return proc.stdout
 

@@ -45,5 +45,46 @@ def to_markdown(result: dict) -> str:
         delta = "바이너리" if f["added"] is None else f"+{f['added']} / -{f['deleted']}"
         lines.append(f"| {path} | {_STATUS[f['status']]} | {f['category']} | {delta} |")
 
-    lines += ["", "## 영향 분석", "", "에이전트 영향 분석은 아직 구현되지 않았습니다 (4단계).", ""]
+    lines += ["", "## 영향 분석 (에이전트)", ""]
+    lines += _impact_lines(result)
+    lines.append("")
     return "\n".join(lines)
+
+
+def _evidence(item: dict) -> str:
+    text = ", ".join(f"`{e}`" for e in item["evidence"]) or "-"
+    if not item["verified"]:
+        text += " — **근거 미확인**" + (f" ({', '.join(item['unverified'])})" if item["unverified"] else "")
+    return text
+
+
+def _impact_lines(result: dict) -> list[str]:
+    if result["agent_error"]:
+        return [f"에이전트 실행 실패 — 규칙 결과만 표시합니다. (`{result['agent_error']}`)"]
+    impact = result["impact"]
+    if impact is None:
+        return ["에이전트를 실행하지 않았습니다 (`--no-agent`)."]
+    lines = [impact["summary"], ""]
+    if impact["impacts"]:
+        lines += ["### 영향 범위", "", "| 영역 | 파일 | 이유 | 근거 |", "|---|---|---|---|"]
+        for i in impact["impacts"]:
+            files = "<br>".join(f"`{f}`" for f in i["files"])
+            lines.append(f"| {i['area']} | {files} | {i['reason']} | {_evidence(i)} |")
+        lines.append("")
+    if impact["risks"]:
+        lines += ["### 위험", "", "| 수준 | 위험 | 설명 | 근거 |", "|---|---|---|---|"]
+        for r in impact["risks"]:
+            lines.append(f"| {r['level']} | {r['title']} | {r['detail']} | {_evidence(r)} |")
+        lines.append("")
+    if impact["recommended_tests"]:
+        kinds = {"run_existing": "기존 테스트 실행", "add_new": "새 테스트 추가"}
+        lines += ["### 추천 테스트", "", "| 종류 | 대상 | 이유 | 근거 |", "|---|---|---|---|"]
+        for t in impact["recommended_tests"]:
+            lines.append(f"| {kinds[t['kind']]} | `{t['target']}` | {t['reason']} | {_evidence(t)} |")
+        lines.append("")
+    a = result["agent"]
+    lines.append(
+        f"_실행 기록: {a['model']}, LLM {a['llm_calls']}회, 도구 {a['tool_calls']}회, "
+        f"토큰 {a['input_tokens']:,} / {a['output_tokens']:,}, {a['seconds']}초_"
+    )
+    return lines

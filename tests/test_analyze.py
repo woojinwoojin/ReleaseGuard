@@ -120,7 +120,7 @@ def test_cli_writes_json_and_markdown(repo, base, tmp_path):
     repo.write("src/util.py", "x = 1\n")
     head = repo.commit("add util")
     out = tmp_path / "out"
-    assert main(["analyze", "--repo", str(repo.path), "--base", "HEAD~1", "--out", str(out)]) == 0
+    assert main(["analyze", "--repo", str(repo.path), "--base", "HEAD~1", "--out", str(out), "--no-agent"]) == 0
     [json_file] = out.glob(f"*_{head[:7]}.json")
     result = json.loads(json_file.read_text(encoding="utf-8"))
     assert result["decision"] == "REVIEW REQUIRED"

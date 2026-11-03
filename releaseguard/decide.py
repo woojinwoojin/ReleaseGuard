@@ -39,7 +39,10 @@ def decide(
     secrets: tuple[SecretPattern, ...],
     agent_high_risks: list[dict] = (),
 ) -> tuple[str, list[Finding]]:
-    """files: {"path", "status", "category"} 목록. 발동한 규칙을 모두 돌려준다."""
+    """files: {"path", "status", "category"} 목록. 발동한 규칙을 모두 돌려준다.
+
+    agent_high_risks: 근거가 확인된(verified) HIGH 위험만 넘긴다.
+    """
     findings: list[Finding] = []
 
     def by(category: str, deleted: bool | None = None) -> list[str]:
@@ -66,7 +69,7 @@ def decide(
     if paths := by("source", deleted=True):
         findings.append(Finding("R06", REVIEW, "소스가 삭제되었습니다.", paths))
     if agent_high_risks:
-        evidence = [e for r in agent_high_risks for e in r.get("evidence", [])]
+        evidence = [f"{r['title']} ({', '.join(r['evidence'])})" for r in agent_high_risks]
         findings.append(Finding("R07", REVIEW, "에이전트가 근거와 함께 HIGH 위험을 제시했습니다.", evidence))
 
     decision = max((f.decision for f in findings), key=SEVERITY.get, default=SAFE)
