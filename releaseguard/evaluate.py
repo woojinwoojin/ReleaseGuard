@@ -84,6 +84,9 @@ def _agent_row(result: dict, actual: list[str]) -> dict:
         "recommended_existing": sorted({t["target"] for t in impact["recommended_tests"] if t["kind"] == "run_existing"}),
         "add_new": len([t for t in impact["recommended_tests"] if t["kind"] == "add_new"]),
         "actual_tests": actual,
+        # 위험 내용이 후속 수정과 맞는지 사람이 대조할 수 있게 남긴다
+        "risks": [{k: r[k] for k in ("level", "title", "verified", "evidence")} for r in impact["risks"]],
+        "tools_used": [t["name"] for t in meta["tool_log"]],
     }
 
 

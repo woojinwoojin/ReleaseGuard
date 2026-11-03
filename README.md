@@ -28,4 +28,4 @@ python -m venv .venv
 | 4. Impact — 에이전트 영향 분석 (읽기 전용 도구 4개, 근거 코드 검증) | 완료 |
 | 5. Decide — 판정 규칙 v1 (B01·B02·R01~R07) | 완료 |
 | 6. Report — JSON + Markdown | 완료 |
-| Eval Set — Predict_Success 커밋 34개 (`eval/cases.yaml`, `python -m releaseguard eval [--agent]`) | 규칙 평가 완료, 수기 정답 확인·에이전트 평가 대기 |
+| Eval Set — Predict_Success 커밋 34개 (`eval/cases.yaml`, `python -m releaseguard eval [--agent]`) | 1차 완료 — [보고서](docs/eval/20261103_eval_report.md) |
