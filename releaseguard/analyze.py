@@ -40,6 +40,8 @@ def analyze(repo: Path, base: str, head: str, ruleset: RuleSet, run_impact: Impa
     for f in files:
         if f["category"] != "source" or f["status"] == "D":
             continue
+        if f["added"] == 0 and f["deleted"] == 0:  # 빈 파일 추가(__init__.py 등)·이름만 변경은 검증할 동작이 없다
+            continue
         related = find_related(f["path"], tests)
         coverage.append(Coverage(f["path"], coverage_status(related, changed_tests, deleted_tests), related))
 

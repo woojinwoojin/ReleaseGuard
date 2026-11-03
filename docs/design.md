@@ -89,7 +89,7 @@ recommended_tests[] target, kind(run_existing|add_new), reason, evidence[]
 | B01 | BLOCK | 추가된 줄에 비밀값 패턴 (`rules.yaml`의 `secrets`) |
 | B02 | BLOCK | 수정된 소스의 관련 테스트가 삭제됨 |
 | R01 | REVIEW REQUIRED | 소스 수정, 관련 테스트는 있으나 하나도 수정되지 않음 |
-| R02 | REVIEW REQUIRED | 소스 수정, 관련 테스트를 찾지 못함 |
+| R02 | REVIEW REQUIRED | 소스 수정, 관련 테스트를 찾지 못함 (빈 파일·줄 변화 없는 이름 변경은 제외) |
 | R03 | REVIEW REQUIRED | 설정 변경 |
 | R04 | REVIEW REQUIRED | 의존성 변경 |
 | R05 | REVIEW REQUIRED | 데이터 변경 (결과에 직접 영향) |

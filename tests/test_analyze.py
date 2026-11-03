@@ -66,6 +66,14 @@ def test_source_without_test_change_needs_review(repo, base):
     assert rules == {"R01": ["src/metrics/engine.py"], "R02": ["src/util.py"]}
 
 
+def test_empty_source_is_not_covered(repo, base):
+    repo.write("src/pkg/__init__.py", "")
+    repo.commit("package marker")
+    result = run(repo)
+    assert result["coverage"] == []
+    assert result["decision"] == "SAFE"
+
+
 def test_deleted_related_test_blocks(repo, base):
     repo.write("src/metrics/engine.py", "def compute(x):\n    return x * 2\n")
     repo.git("rm", "-q", "tests/test_metrics.py")
