@@ -43,14 +43,26 @@ python -m releaseguard szz   [--cases eval/cases.yaml]                          
   |---|---|---|
   | REGRESSION | base에서 통과(또는 건너뜀) | B03 |
   | NEW_TEST_FAILING | base에 그 파일·테스트가 없음 | B03 |
-  | PRE_EXISTING | base에서도 실패, 테스트 파일·conftest·의존성이 안 바뀜 | T01 |
-  | INCOMPARABLE | base에서도 실패, 하지만 위 셋 중 하나가 바뀜 (head·base가 같은 `.venv`를 쓰므로 의존성 변경도 포함) | B03 |
+  | PRE_EXISTING | base에서도 실패하고 **같은 실패로 확인됨** (아래 v3.1 조건) | T01 |
+  | INCOMPARABLE | base에서도 실패, 하지만 같은 실패로 확인하지 못함 | B03 |
   | UNKNOWN | base 실행이 결과를 못 냄 (수집 오류·시간 초과) | B03 |
   | FLAKY | head 재실행에서 통과 | T02 |
 
   원래부터 실패했다고 **확인된 경우에만** BLOCK을 REVIEW로 낮춘다.
+
+  **같은 실패 조건 (v3.1, 2026-11-04, `compare.py`)** — 모두 확인돼야 PRE_EXISTING, 하나라도 아니거나 확인 못 하면 INCOMPARABLE:
+  1. 같은 node id가 base·head에서 수집되고 실패
+  2. 테스트 파일이 안 바뀌었거나, **새 테스트 함수만 추가됨** (기존 테스트·헬퍼·fixture·import가 AST 기준으로 모두 같음. 데코레이터 포함, 줄 번호 제외) — 처음 구현은 이 좁은 경우만
+  3. 공유 테스트 맥락 그대로: 의존성, conftest, pytest 설정(`pytest.ini`·`setup.cfg`·`tox.ini`), 테스트 헬퍼 모듈(테스트 폴더의 `test_*.py`가 아닌 파일)
+  4. 실패 지문 같음: 정규화한 전체 메시지(임시 경로·메모리 주소만 제거, 숫자는 유지) + 예외가 난 파일·종류 + traceback 프레임(파일·함수, 줄 번호 제외)
+
+  근거는 `failures[].comparison_evidence`에 남는다. v3에서는 테스트 파일이 안 바뀌면 지문 비교 없이 PRE_EXISTING이었다 → v3.1은 그 경우에도 지문이 같아야 한다 (더 엄격).
+  계기: Eval #4에서 week3의 옛 결함 하나(`93abf12`)가 같은 파일에 테스트가 추가될 때마다 INCOMPARABLE → BLOCK 5번.
+  PRE_EXISTING은 "관찰된 실패가 원래도 있었다"는 뜻이지 이번 커밋에 다른 회귀가 없다는 보증이 아니다.
 - **스냅샷 예외**: head 트리에 `.gitmodules`, `.gitattributes`의 `export-ignore`·`filter=lfs`가 있으면 E03.
 - **실행 기록**: 명령(임시 폴더는 `<tmp>`), Python 경로·버전, coverage 버전, SHA, timeout, 시도 횟수, 재실행 목록을 `test_run.record`에 남긴다. 임시 폴더는 작업 폴더 보호이지 샌드박스가 아니다.
+- **깨끗한 스냅샷 ≠ 격리된 실행 환경**: 스냅샷은 git에 없는 파일(`.env`, gitignore된 데이터)을 빼지만, 호스트 환경 변수는 테스트에 그대로 넘어간다. 그래서 자격 증명류 변수 **이름**(KEY·TOKEN·SECRET·PASSWORD·CREDENTIAL, 값은 저장 안 함)을 `record.host_secret_env`에 남긴다.
+- **건너뛴 테스트**: `test_run.skipped`에 node id와 사유. 판정에는 아직 넣지 않는다 — 새로 추가한 테스트가 전부 skip돼도 SAFE가 나올 수 있다 (알려진 한계).
 - 문서만 바뀌었으면 실행하지 않는다.
 
 ## 4단계 Gaps 상세
@@ -98,6 +110,7 @@ python -m releaseguard szz   [--cases eval/cases.yaml]                          
 | PARTIAL | 일부 변경을 검증하지 못함 |
 | UNSUPPORTED | 문서를 뺀 모든 변경을 검증하지 못함 (테스트 실행이 근거를 못 만들면 소스·테스트도 검증 못 한 것으로 봄) |
 
+v3 → v3.1 변경 (2026-11-04): 같은 실패 조건(위 3단계 상세), skip 목록, 호스트 자격 증명 변수 이름.
 v2 → v3 변경: N03·N05(설정·데이터 NOTE) → E02, base 비교 상태 6개로 분리(T02 추가, UNKNOWN·INCOMPARABLE은 낮추지 않음), E03 추가, `scope` 추가.
 v1에서 없어진 것: R01·R02(이름·import 추측), R03·R05(설정·데이터), R06(소스 삭제 → NOTE), R07(에이전트 HIGH), B02(테스트 삭제 → G01·B03으로 드러남).
 

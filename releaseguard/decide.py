@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from .classify import SecretPattern
 from .gaps import FileLines
 
-RULES_VERSION = 3
+RULES_VERSION = "3.1"  # 3.1 (2026-11-04): 실패 비교에 테스트 정의·공유 맥락·실패 지문 조건 (compare.py)
 SAFE, REVIEW, BLOCK, NOTE = "SAFE", "REVIEW REQUIRED", "BLOCK", "NOTE"
 SEVERITY = {NOTE: -1, SAFE: 0, REVIEW: 1, BLOCK: 2}
 
@@ -24,8 +24,8 @@ RUN_NOT_ESTABLISHED = ("error", "timeout", "not_run")
 # head에서 실패한 테스트의 비교 상태 (analyze.compare_failures가 정한다)
 REGRESSION = "REGRESSION"  # base에서는 통과
 NEW_TEST_FAILING = "NEW_TEST_FAILING"  # base에 없는 테스트
-PRE_EXISTING = "PRE_EXISTING"  # base에서도 실패, 비교 조건 같음
-INCOMPARABLE = "INCOMPARABLE"  # base에서도 실패지만 그 테스트 파일·conftest·의존성이 이번에 바뀜
+PRE_EXISTING = "PRE_EXISTING"  # base에서도 실패, 같은 실패로 확인됨 (compare.py의 조건)
+INCOMPARABLE = "INCOMPARABLE"  # base에서도 실패지만 같은 실패로 확인하지 못함
 UNKNOWN = "UNKNOWN"  # base 재실행이 결과를 내지 못함
 FLAKY = "FLAKY"  # head에서 다시 돌리니 통과
 # 원래부터 실패했다고 확인되지 않은 실패 → B03 (BLOCK)

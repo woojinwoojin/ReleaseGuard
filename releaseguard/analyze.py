@@ -2,11 +2,12 @@
 
 from collections.abc import Callable
 from dataclasses import asdict
-from pathlib import Path, PurePosixPath
+from pathlib import Path
 
 from . import __version__
 from .agent_tools import RepoView
 from .classify import RuleSet, classify
+from .compare import shared_test_context_changes, file_change_evidence
 from .decide import (
     FLAKY, INCOMPARABLE, NEW_TEST_FAILING, PRE_EXISTING, REGRESSION, RULES_VERSION, UNKNOWN, decide,
 )
@@ -14,7 +15,8 @@ from .gaps import FileLines, compute
 from .git_ops import Change, collect, list_files, read_file
 from .related_tests import coverage_status, find_related
 from .runner import (
-    COVERAGE_VERSION, DEFAULT_TIMEOUT, RunResult, TestCase, check_python, find_python, python_version, run_tests, snapshot_warnings,
+    COVERAGE_VERSION, DEFAULT_TIMEOUT, RunResult, TestCase, check_python, find_python, host_secret_names, python_version, run_tests,
+    snapshot_warnings,
 )
 
 # (RepoView, 공백이 있는 파일들) → {"items": 공백별 설명, "meta": 합계}
@@ -33,8 +35,10 @@ def compare_failures(change: Change, files: list[dict], failed: list[TestCase], 
        - base에 파일이 없거나 그 테스트가 수집되지 않음 → NEW_TEST_FAILING
        - base 실행이 결과를 내지 못함 (수집 오류·시간 초과) → UNKNOWN
        - base에서 통과(또는 건너뜀) → REGRESSION
-       - base에서도 실패 → 그 테스트 파일·conftest·의존성이 이번에 바뀌었으면 INCOMPARABLE, 아니면 PRE_EXISTING
+       - base에서도 실패 → compare.py의 조건(테스트 정의·공유 맥락·실패 지문)이 모두 확인되면 PRE_EXISTING,
+         하나라도 아니거나 확인하지 못하면 INCOMPARABLE. 근거는 comparison_evidence에 남긴다.
     head와 base는 같은 .venv로 돌린다. 그래서 의존성이 바뀐 커밋은 비교 조건이 같다고 볼 수 없다.
+    PRE_EXISTING은 "관찰된 실패가 원래도 있었다"는 뜻이지, 이번 커밋에 다른 회귀가 없다는 보증이 아니다.
     """
     reruns = []
     ids = [t.nodeid for t in failed]
@@ -45,32 +49,58 @@ def compare_failures(change: Change, files: list[dict], failed: list[TestCase], 
 
     base_files = set(list_files(change.repo, change.merge_base))
     to_run = sorted({_test_file(n) for n in ids if n not in flaky and _test_file(n) in base_files})
-    base_out: dict[str, str] | None = {}
+    base_out: dict[str, TestCase] | None = {}
     if to_run:
         base = run_tests(change.repo, change.merge_base, python, with_coverage=False, nodeids=to_run, timeout=timeout)
         reruns.append(_rerun_record("base 실행 (이번 변경 전에도 실패했는지)", change.merge_base, base))
-        base_out = {t.nodeid: t.outcome for t in base.tests} if base.status in ("passed", "failed") else None
+        base_out = {t.nodeid: t for t in base.tests} if base.status in ("passed", "failed") else None
 
     changed_tests = {f["path"] for f in files if f["category"] == "test"}
-    shared_changed = any(f["category"] == "deps" or PurePosixPath(f["path"]).name == "conftest.py" for f in files)
+    shared = shared_test_context_changes(files)
     out = []
     for t in failed:
         file = _test_file(t.nodeid)
+        evidence = None
         if t.nodeid in flaky:
             comparison, base_status = FLAKY, None
         elif file not in base_files:
             comparison, base_status = NEW_TEST_FAILING, "absent"
         elif base_out is None:
             comparison, base_status = UNKNOWN, "unknown"
-        elif (outcome := base_out.get(t.nodeid)) is None:
+        elif (base_t := base_out.get(t.nodeid)) is None:
             comparison, base_status = NEW_TEST_FAILING, "absent"
-        elif outcome in ("passed", "skipped"):
-            comparison, base_status = REGRESSION, outcome
+        elif base_t.outcome in ("passed", "skipped"):
+            comparison, base_status = REGRESSION, base_t.outcome
         else:
-            incomparable = file in changed_tests or shared_changed
-            comparison, base_status = (INCOMPARABLE if incomparable else PRE_EXISTING), "failed"
-        out.append({"nodeid": t.nodeid, "message": t.message, "base_status": base_status, "comparison": comparison})
+            evidence = _same_failure_evidence(change, file, file in changed_tests, t, base_t, shared)
+            comparison = PRE_EXISTING if evidence["method"] else INCOMPARABLE
+            base_status = "failed"
+        out.append({
+            "nodeid": t.nodeid, "message": t.message, "base_status": base_status, "comparison": comparison,
+            "comparison_evidence": evidence,
+        })
     return out, reruns
+
+
+def _same_failure_evidence(change: Change, file: str, file_changed: bool, head: TestCase, base: TestCase, shared: list[str]) -> dict:
+    """base·head 모두 실패한 테스트가 같은 실패인지의 근거. method가 None이면 확인되지 않은 것 (INCOMPARABLE)."""
+    if file_changed:
+        structure = file_change_evidence(read_file(change.repo, change.merge_base, file), read_file(change.repo, change.head_sha, file), head.nodeid)
+    else:
+        structure = {"test_function_same": True, "only_new_tests_added": None}
+    evidence = {
+        "test_nodeid_same": True,
+        "test_file_changed": file_changed,
+        **structure,
+        "shared_test_context_unchanged": not shared,
+        "shared_test_context_changes": shared,
+        "failure_fingerprint_same": bool(head.fingerprint) and head.fingerprint == base.fingerprint,
+        "method": None,
+    }
+    structure_ok = evidence["test_function_same"] is True and (not file_changed or evidence["only_new_tests_added"] is True)
+    if structure_ok and evidence["shared_test_context_unchanged"] and evidence["failure_fingerprint_same"]:
+        evidence["method"] = "matched_existing_failure_only_new_tests" if file_changed else "matched_existing_failure"
+    return evidence
 
 
 def _rerun_record(purpose: str, sha: str, run: RunResult) -> dict:
@@ -133,6 +163,9 @@ def analyze(
         "counts": run.counts(),
         "coverage": run.coverage is not None,
         "failures": failures,
+        # 건너뛴 테스트와 사유. 스냅샷에 없는 파일(gitignore된 데이터 등) 때문에 skip되면 그 테스트가 실행했을 줄은
+        # G01 공백으로만 보인다. 판정에는 아직 넣지 않는다 (새 테스트가 전부 skip돼도 SAFE가 나올 수 있음 — 한계).
+        "skipped": [{"nodeid": t.nodeid, "reason": t.message} for t in run.tests if t.outcome == "skipped"],
         "snapshot_warnings": snapshot_warnings(change.repo, change.head_sha) if ran else [],
         # 무엇을 어떻게 돌렸는지: 보고서만 보고 같은 실행을 재현할 수 있게
         "record": {
@@ -145,6 +178,8 @@ def analyze(
             "timeout": timeout,
             "attempts": run.attempts,
             "reruns": reruns,
+            # 테스트에 그대로 넘어가는 자격 증명류 호스트 환경 변수 이름 (값은 남기지 않음). 격리된 실행 환경이 아니라는 표시
+            "host_secret_env": host_secret_names() if ran else [],
         },
     }
 

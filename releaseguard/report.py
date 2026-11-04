@@ -16,7 +16,7 @@ _COMPARISON = {
     "REGRESSION": "base에서는 통과 → 이번 변경 후 실패",
     "NEW_TEST_FAILING": "base에 없는 테스트",
     "PRE_EXISTING": "base에서도 같은 조건으로 실패 (원래 깨짐)",
-    "INCOMPARABLE": "base에서도 실패, 하지만 테스트·conftest·의존성이 바뀌어 비교 불가",
+    "INCOMPARABLE": "base에서도 실패, 하지만 같은 실패로 확인하지 못함",
     "UNKNOWN": "base 실행이 결과를 내지 못해 확인 불가",
     "FLAKY": "다시 돌리니 통과 (불안정)",
 }
@@ -89,7 +89,11 @@ def to_markdown(result: dict) -> str:
         lines += ["", "| 실패한 테스트 | 비교 상태 | 메시지 |", "|---|---|---|"]
         for f in run["failures"]:
             msg = f["message"].replace("|", "/").splitlines()[0] if f["message"] else "-"
-            lines.append(f"| `{f['nodeid']}` | {f['comparison']} — {_COMPARISON[f['comparison']]} | {msg} |")
+            lines.append(f"| `{f['nodeid']}` | {f['comparison']} — {_COMPARISON[f['comparison']]}{_evidence_note(f)} | {msg} |")
+    if run.get("skipped"):
+        lines += ["", f"건너뛴 테스트 {len(run['skipped'])}개 (판정에 반영하지 않음 — 이 테스트가 실행했을 줄은 검증 공백으로 보임):", "",
+                  "| 테스트 | 사유 |", "|---|---|"]
+        lines += [f"| `{s['nodeid']}` | {(s['reason'] or '-').replace('|', '/').splitlines()[0]} |" for s in run["skipped"]]
 
     lines += ["", "## 바뀐 줄의 검증 상태", ""]
     if result["lines"]:
@@ -136,7 +140,33 @@ def _record_lines(run: dict) -> list[str]:
         out.append(f"- {x['purpose']}: `{x['sha'][:7]}` → {x['status']} ({x['seconds']}초)")
     if run.get("snapshot_warnings"):
         out += [f"- 스냅샷 주의: {w}" for w in run["snapshot_warnings"]]
+    if r.get("host_secret_env"):
+        out.append(
+            "- 테스트에 그대로 넘어간 자격 증명류 호스트 환경 변수 (이름만): "
+            + ", ".join(f"`{n}`" for n in r["host_secret_env"])
+            + " — 이 변수가 없는 환경(CI)에서는 결과가 다를 수 있음"
+        )
     return out
+
+
+def _evidence_note(f: dict) -> str:
+    """base·head 모두 실패한 경우, 같은 실패로 본(또는 못 본) 근거를 짧게."""
+    e = f.get("comparison_evidence")
+    if not e:
+        return ""
+    if e["method"]:
+        how = "새 테스트만 추가됨" if e["test_file_changed"] else "테스트 파일 안 바뀜"
+        return f" <br>근거: 같은 실패 지문, {how}, 공유 맥락 그대로"
+    why = []
+    if e["test_function_same"] is not True:
+        why.append("테스트 정의가 바뀜" if e["test_function_same"] is False else "테스트 정의를 비교하지 못함")
+    elif e["test_file_changed"] and e["only_new_tests_added"] is not True:
+        why.append("같은 파일의 기존 코드(헬퍼·다른 테스트·import)가 바뀜")
+    if not e["shared_test_context_unchanged"]:
+        why.append("공유 맥락 변경: " + ", ".join(e["shared_test_context_changes"]))
+    if not e["failure_fingerprint_same"]:
+        why.append("실패 지문이 다름")
+    return " <br>같은 실패로 확인 못 함: " + "; ".join(why)
 
 
 def _explain_lines(result: dict) -> list[str]:

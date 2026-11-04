@@ -35,7 +35,34 @@ class RunnerError(RuntimeError):
 class TestCase:
     nodeid: str  # pytest node id (예: tests/test_x.py::test_f[1])
     outcome: str  # passed | failed | error | skipped
-    message: str = ""
+    message: str = ""  # 보고서용 (300자까지). skipped면 skip 사유
+    fingerprint: str = ""  # 실패 지문 (failure_fingerprint). base·head 실패가 같은 실패인지 비교할 때 쓴다
+
+
+_ADDR = re.compile(r"0x[0-9a-fA-F]+")
+_TMP = re.compile(r"[^\s'\"]*?rg_[^/\s]+/src/")  # 임시 스냅샷 폴더 접두사 (경로 구분자는 /로 바꾼 뒤 적용)
+_FRAME = re.compile(r"^(\S+?):\d+: in (\S+)$")  # traceback 중간 프레임: 파일:줄: in 함수
+_CRASH = re.compile(r"^(\S+?):\d+: (\w[\w.]*)$")  # 마지막 줄: 파일:줄: 예외 종류
+
+
+def failure_fingerprint(message: str, text: str) -> str:
+    """같은 실패인지 비교하는 지문: 예외 종류 + 정규화한 전체 메시지 + traceback 위치(파일·함수, 줄 번호 제외).
+
+    - 메시지는 자르지 않는다 (보고서용 300자 메시지로 비교하면 다른 실패가 같아 보일 수 있다).
+    - 임시 폴더 경로·메모리 주소만 지운다. 숫자는 남긴다 (assert 500 == 200의 500은 원인의 일부).
+    - 줄 번호는 뺀다. 같은 파일에 테스트가 추가되면 줄이 밀리기 때문이다. 대신 프레임의 파일·함수 순서를 본다.
+    """
+    def norm(x: str) -> str:
+        return _ADDR.sub("0x?", _TMP.sub("", x.replace("\\", "/"))).strip()
+
+    frames, crash = [], ""
+    for line in (text or "").splitlines():
+        line = norm(line)
+        if m := _FRAME.match(line):
+            frames.append(f"{m.group(1)}::{m.group(2)}")
+        elif m := _CRASH.match(line):
+            crash = f"{m.group(1)}::{m.group(2)}"
+    return "\n".join([norm(message or ""), crash, *frames])
 
 
 @dataclass
@@ -111,6 +138,18 @@ def snapshot_warnings(repo: Path, sha: str) -> list[str]:
     return out
 
 
+_SECRET_NAME = re.compile(r"KEY|TOKEN|SECRET|PASSWORD|CREDENTIAL", re.I)
+
+
+def host_secret_names() -> list[str]:
+    """테스트에 그대로 넘어가는 호스트 환경 변수 중 자격 증명으로 보이는 이름 (값은 남기지 않는다).
+
+    스냅샷은 git에 없는 .env를 빼지만, 호스트 환경 변수는 넘어간다. 그래서 같은 커밋이라도 이 변수가 있는
+    호스트와 없는 호스트(CI)의 결과가 다를 수 있다 — 깨끗한 스냅샷이지 격리된 실행 환경은 아니다.
+    """
+    return sorted(k for k in os.environ if _SECRET_NAME.search(k))
+
+
 def _env(tools: Path | None) -> dict[str, str]:
     env = {k: v for k, v in os.environ.items() if k not in ("PYTHONPATH", "VIRTUAL_ENV")}
     if tools:
@@ -135,14 +174,16 @@ def parse_junit(path: Path) -> tuple[list[TestCase], dict[str, str]]:
         module = _module_of(file) if file else classname
         cls = classname[len(module) + 1 :] if classname.startswith(module + ".") else ""
         prefix = f"{file}::{cls + '::' if cls else ''}" if file else f"{classname}::"
-        outcome, message = "passed", ""
+        outcome, message, fingerprint = "passed", "", ""
         for tag in ("failure", "error", "skipped"):
             el = tc.find(tag)
             if el is not None:
                 outcome = {"failure": "failed", "error": "error", "skipped": "skipped"}[tag]
                 message = (el.get("message") or "")[:300]
+                if tag != "skipped":
+                    fingerprint = failure_fingerprint(el.get("message") or "", el.text or "")
                 break
-        cases.append(TestCase(prefix + name, outcome, message))
+        cases.append(TestCase(prefix + name, outcome, message, fingerprint))
         func = re.sub(r"\[.*\]$", "", name)  # context에는 parametrize 값이 없다
         ctx_map[f"{classname}.{func}"] = prefix + func
     return cases, ctx_map

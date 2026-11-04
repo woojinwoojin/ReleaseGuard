@@ -3,34 +3,35 @@
 #   risky_area = 테스트가 있어도 사람이 봐야 하는 영역 (DB 마이그레이션, 스레드·동시성, LLM 도구 인터페이스 등)
 # 라벨은 ReleaseGuard를 돌리기 전에 diff·커밋 메시지·이후 커밋만 보고 달았다 (판정 결과를 보고 맞추지 않음).
 # followup_fix는 사후 라벨(이후 커밋 정보를 씀). 기능 확장·일반화는 followup_fix가 아니다.
-# need_labeled_by / scope_labeled_by: claude-draft (2026-11-04 초안 → 같은 날 외부 검토 반영, 사용자 확인 전)
+# need_labeled_by / scope_labeled_by: user — 2026-11-04 Claude 초안 → 외부 검토 2회 반영 → 사용자 확정
+#   (확정은 라벨 설명·스키마의 일관성 기준. 외부 검토자는 week1~3의 git 이력을 직접 보지 않았다)
 repo: ../../2026-10/week1-csv-llm-report
 cases:
   - sha: 44ed326
     need: yes
     need_reason: untested
     expected_scope: PARTIAL
-    need_labeled_by: claude-draft
-    scope_labeled_by: claude-draft
+    need_labeled_by: user
+    scope_labeled_by: user
     note: 분석·LLM 보고서 모듈을 테스트 없이 추가. (f483ebe의 payload 변경은 데이터셋을 인자로 받게 한 일반화라 followup_fix가 아님 — 외부 검토 후 diff로 확인)
   - sha: f483ebe
     need: yes
     need_reason: untested
     expected_scope: PARTIAL
-    need_labeled_by: claude-draft
-    scope_labeled_by: claude-draft
+    need_labeled_by: user
+    scope_labeled_by: user
     note: Streamlit UI 186줄은 smoke test만. 분석·payload는 테스트 함께 추가
   - sha: 06a8bd0
     need: no
     need_reason: none
     expected_scope: COMPLETE
-    need_labeled_by: claude-draft
-    scope_labeled_by: claude-draft
+    need_labeled_by: user
+    scope_labeled_by: user
     note: REPORT.md만
   - sha: 0fce2c7
     need: no
     need_reason: none
     expected_scope: UNSUPPORTED
-    need_labeled_by: claude-draft
-    scope_labeled_by: claude-draft
+    need_labeled_by: user
+    scope_labeled_by: user
     note: .gitignore만
