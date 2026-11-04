@@ -1,6 +1,6 @@
 # 결함을 심은 사례 — Predict_Success
 # 임시 clone의 base 커밋 위에 edits를 적용해 커밋 하나를 만들고 분석한다. 원래 저장소는 바뀌지 않는다.
-# expected: 기대 판정, expect_rules: 반드시 발동해야 하는 규칙 (판정 규칙 v2)
+# expected: 기대 판정, expect_rules: 반드시 발동해야 하는 규칙, expect_scope: 기대 검증 범위 (판정 규칙 v3)
 repo: ../../predict-success
 base: 895dbe4
 seeds:
@@ -56,6 +56,7 @@ seeds:
     description: README만 수정
     expected: SAFE
     expect_rules: []
+    expect_scope: COMPLETE
     edits:
       - path: README.md
         find: "# EvidenceFirst — 근거 기반 사업성과 분석"
@@ -92,9 +93,10 @@ seeds:
                   return None
               return a / b
   - id: S10
-    description: 설정 파일 주석만 수정
-    expected: SAFE
-    expect_rules: []
+    description: 설정 파일 주석만 수정 — v3부터 검증 범위 밖이라 SAFE가 아님 (주석인지 판단하지 않는다)
+    expected: REVIEW REQUIRED
+    expect_rules: [E02]
+    expect_scope: UNSUPPORTED
     edits:
       - path: configs/scoring_v2.yaml
         find: "# 점수 규칙 v2"

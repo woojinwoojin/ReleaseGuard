@@ -1,5 +1,7 @@
 """분석 결과를 사람이 읽는 Markdown 보고서로 만든다 (7단계 Report)."""
 
+from .decide import NOT_VERIFIED_RULES
+
 _STATUS = {"A": "추가", "M": "수정", "D": "삭제", "R": "이름 변경"}
 _RUN = {
     "passed": "모두 통과",
@@ -10,7 +12,26 @@ _RUN = {
     "not_run": "실행하지 못함",
     "skipped": "실행 안 함",
 }
-_BASE = {"passed": "base에서는 통과 → 이번 변경이 깨뜨림", "failed": "base에서도 실패 (원래 깨짐)", "absent": "이번에 추가된 테스트"}
+_COMPARISON = {
+    "REGRESSION": "base에서는 통과 → 이번 변경 후 실패",
+    "NEW_TEST_FAILING": "base에 없는 테스트",
+    "PRE_EXISTING": "base에서도 같은 조건으로 실패 (원래 깨짐)",
+    "INCOMPARABLE": "base에서도 실패, 하지만 테스트·conftest·의존성이 바뀌어 비교 불가",
+    "UNKNOWN": "base 실행이 결과를 내지 못해 확인 불가",
+    "FLAKY": "다시 돌리니 통과 (불안정)",
+}
+_SCOPE = {
+    "COMPLETE": "바뀐 내용을 모두 검증 범위 안에서 확인함",
+    "PARTIAL": "일부 변경은 검증하지 못함",
+    "UNSUPPORTED": "변경의 핵심을 검증하지 못함",
+}
+
+
+def _rule_table(findings: list[dict]) -> list[str]:
+    out = ["| 규칙 | 판정 | 내용 | 근거 |", "|---|---|---|---|"]
+    for f in findings:
+        out.append(f"| {f['rule_id']} | {f['decision']} | {f['message']} | {'<br>'.join(f'`{e}`' for e in f['evidence'])} |")
+    return out
 
 
 def _range(s: int, e: int) -> str:
@@ -21,24 +42,36 @@ def to_markdown(result: dict) -> str:
     s, run = result["summary"], result["test_run"]
     rules = [f for f in result["findings"] if f["decision"] != "NOTE"]
     notes = [f for f in result["findings"] if f["decision"] == "NOTE"]
+    scope = result["scope"]
+    not_verified = [f for f in rules if f["rule_id"] in NOT_VERIFIED_RULES]
+    found = [f for f in rules if f["rule_id"] not in NOT_VERIFIED_RULES]
     lines = [
-        f"# ReleaseGuard 보고서 — {result['decision']}",
+        f"# ReleaseGuard 보고서 — {result['decision']} (검증 범위: {scope['status']})",
         "",
         f"- 저장소: `{result['repo']}`",
         f"- 비교: `{result['base']}...{result['head']}` "
         f"(merge-base `{result['merge_base'][:7]}` → head `{result['head_sha'][:7]}`)",
         f"- 변경: 파일 {s['files']}개, +{s['added']} / -{s['deleted']} ("
         + ", ".join(f"{k} {v}" for k, v in s["by_category"].items()) + ")",
+        f"- 검증 범위: **{scope['status']}** — {_SCOPE[scope['status']]}",
         "",
-        "## 판정 근거",
+        "> SAFE는 코드가 맞다는 보증이 아니라, ReleaseGuard의 검증 절차(테스트 실행·바뀐 줄 coverage·규칙)에서 "
+        "검토 사유를 찾지 못했다는 뜻입니다.",
         "",
     ]
-    if rules:
-        lines += ["| 규칙 | 판정 | 내용 | 근거 |", "|---|---|---|---|"]
-        for f in rules:
-            lines.append(f"| {f['rule_id']} | {f['decision']} | {f['message']} | {'<br>'.join(f'`{e}`' for e in f['evidence'])} |")
-    else:
+    if scope["unverified"]:
+        lines += ["## 검증하지 못한 변경", "", "| 파일 | 분류 | 이유 |", "|---|---|---|"]
+        lines += [f"| `{u['path']}` | {u['category']} | {u['reason']} |" for u in scope["unverified"]]
+        lines.append("")
+    lines += ["## 판정 근거", "", "### 검증이 성립하지 않은 것", ""]
+    lines += _rule_table(not_verified) if not_verified else ["없음."]
+    lines += ["", "### 검증해서 찾은 것", ""]
+    if found:
+        lines += _rule_table(found)
+    elif not not_verified:
         lines.append("발동한 규칙이 없습니다: 테스트가 모두 통과했고, 바뀐 실행 줄을 모두 테스트가 실행했습니다.")
+    else:
+        lines.append("없음.")
     if notes:
         lines += ["", "참고 (판정에 반영하지 않음):"]
         lines += [f"- {f['rule_id']} {f['message']} {', '.join(f'`{e}`' for e in f['evidence'])}" for f in notes]
@@ -53,9 +86,10 @@ def to_markdown(result: dict) -> str:
     if run["reason"] and run["status"] != "failed":
         lines += ["", "```", run["reason"], "```"]
     if run["failures"]:
-        lines += ["", "| 실패한 테스트 | base | 메시지 |", "|---|---|---|"]
+        lines += ["", "| 실패한 테스트 | 비교 상태 | 메시지 |", "|---|---|---|"]
         for f in run["failures"]:
-            lines.append(f"| `{f['nodeid']}` | {_BASE[f['base_status']]} | {f['message'].replace('|', '/').splitlines()[0] if f['message'] else '-'} |")
+            msg = f["message"].replace("|", "/").splitlines()[0] if f["message"] else "-"
+            lines.append(f"| `{f['nodeid']}` | {f['comparison']} — {_COMPARISON[f['comparison']]} | {msg} |")
 
     lines += ["", "## 바뀐 줄의 검증 상태", ""]
     if result["lines"]:
@@ -76,6 +110,9 @@ def to_markdown(result: dict) -> str:
     lines += ["", "## 검증 공백 설명 (에이전트, 판정에 반영하지 않음)", ""]
     lines += _explain_lines(result)
 
+    lines += ["", "## 실행 기록", ""]
+    lines += _record_lines(run)
+
     lines += ["", "## 변경 파일", "", "| 파일 | 상태 | 분류 | +/- |", "|---|---|---|---|"]
     for f in result["changed_files"]:
         path = f"`{f['old_path']}` → `{f['path']}`" if f["old_path"] else f"`{f['path']}`"
@@ -83,6 +120,23 @@ def to_markdown(result: dict) -> str:
         lines.append(f"| {path} | {_STATUS[f['status']]} | {f['category']} | {delta} |")
     lines.append("")
     return "\n".join(lines)
+
+
+def _record_lines(run: dict) -> list[str]:
+    r = run.get("record")
+    if not r or not r["command"]:
+        return ["테스트를 실행하지 않았습니다."]
+    out = [
+        f"- head `{r['head_sha'][:12]}` · merge-base `{r['merge_base'][:12]}`",
+        f"- Python {r['python_version'] or '?'} (`{r['python']}`) · coverage {r['coverage_version']} · 시간 상한 {r['timeout']}초 · 시도 {r['attempts']}회",
+        f"- 명령: `{' '.join(r['command'])}`",
+        "- 실행 위치: `git archive`로 푼 임시 폴더 (대상 작업 폴더는 건드리지 않음, 샌드박스는 아님)",
+    ]
+    for x in r["reruns"]:
+        out.append(f"- {x['purpose']}: `{x['sha'][:7]}` → {x['status']} ({x['seconds']}초)")
+    if run.get("snapshot_warnings"):
+        out += [f"- 스냅샷 주의: {w}" for w in run["snapshot_warnings"]]
+    return out
 
 
 def _explain_lines(result: dict) -> list[str]:

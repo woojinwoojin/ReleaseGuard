@@ -55,6 +55,7 @@ def _signature(result: dict) -> tuple:
     """결정성 비교용: 판정, 규칙, 공백, 실행한 테스트."""
     return (
         result["decision"],
+        result["scope"]["status"],
         tuple(_rules(result)),
         tuple((fl["path"], tuple(map(tuple, fl["gaps"]))) for fl in result["lines"]),
         tuple(sorted({t for fl in result["lines"] for t in fl["tests"]})),
@@ -79,6 +80,7 @@ def evaluate(cases_path: Path, ruleset: RuleSet, explain: ExplainRunner | None =
             "subject": subject,
             "by_category": first["summary"]["by_category"],
             "decision": first["decision"],
+            "scope": first["scope"]["status"],
             "decisions": [r["decision"] for r in results],
             "deterministic": len({_signature(r) for r in results}) == 1 if times > 1 else None,
             "rules": _rules(first),
@@ -137,6 +139,7 @@ def metrics(rows: list[dict]) -> dict:
     out = {
         "commits": n,
         "decisions": _count(r["decision"] for r in rows),
+        "scope": _count(r["scope"] for r in rows),
         "test_status": _count(r["test_status"] for r in rows),
         "rule_fire_rate": {k: _ratio(v, n) for k, v in _count(x for r in rows for x in r["rules"]).items()},
         "note_rate": {k: _ratio(v, n) for k, v in _count(x for r in rows for x in r["notes"]).items()},
@@ -185,10 +188,11 @@ def to_markdown(ev: dict) -> str:
     m = ev["metrics"]
     d, tr, g = m["decision"], m["test_retrieval"], m["gaps"]
     lines = [
-        "# ReleaseGuard Eval v2 — 커밋 전체",
+        "# ReleaseGuard Eval — 커밋 전체",
         "",
         f"- 저장소: `{ev['repo']}` · 커밋 {m['commits']}개 · 수기 정답 커밋 반복 {ev['repeat']}회",
         "- 판정 분포 (첫 실행): " + ", ".join(f"{k} {v}" for k, v in m["decisions"].items()),
+        "- 검증 범위: " + ", ".join(f"{k} {v}" for k, v in m["scope"].items()),
         "- 테스트 실행 상태: " + ", ".join(f"{k} {v}" for k, v in m["test_status"].items())
         + f" · 평균 {m['run_seconds']['avg']}초, 최대 {m['run_seconds']['max']}초",
         "- 규칙 발동률: " + (", ".join(f"{k} {v:.0%}" for k, v in m["rule_fire_rate"].items()) or "없음"),
@@ -210,14 +214,14 @@ def to_markdown(ev: dict) -> str:
         "",
         "## 커밋별",
         "",
-        "| 커밋 | 제목 | 판정 | 기대 | 규칙 | 테스트 | 공백/실행 줄 | 바뀐 테스트 | 실행한 테스트 |",
-        "|---|---|---|---|---|---|---|---|---|",
+        "| 커밋 | 제목 | 판정 | 범위 | 기대 | 규칙 | 테스트 | 공백/실행 줄 | 바뀐 테스트 | 실행한 테스트 |",
+        "|---|---|---|---|---|---|---|---|---|---|",
     ]
     for r in ev["rows"]:
         decision = " / ".join(dict.fromkeys(r["decisions"]))
         mark = "" if not r["expected"] else (" ✓" if all(x == r["expected"] for x in r["decisions"]) else " ✗")
         lines.append(
-            f"| `{r['sha']}` | {r['subject']} | {decision}{mark} | {r['expected'] or '-'} | {', '.join(r['rules']) or '-'} | "
+            f"| `{r['sha']}` | {r['subject']} | {decision}{mark} | {r['scope']} | {r['expected'] or '-'} | {', '.join(r['rules']) or '-'} | "
             f"{r['test_status']} | {r['gap_lines']}/{r['executable_lines']} | {'<br>'.join(r['actual_tests']) or '-'} | "
             f"{'<br>'.join(r['executed_tests']) or '-'} |"
         )
@@ -275,16 +279,23 @@ def run_seeds(seeds_path: Path, ruleset: RuleSet) -> dict:
             result = analyze(clone, base, "HEAD", ruleset, python=python)
             rules = _rules(result)
             expect_rules = seed.get("expect_rules", [])
-            ok = result["decision"] == seed["expected"] and set(expect_rules) <= set(rules)
+            scope = result["scope"]["status"]
+            ok = (
+                result["decision"] == seed["expected"]
+                and set(expect_rules) <= set(rules)
+                and seed.get("expect_scope", scope) == scope
+            )
             rows.append({
                 "id": seed["id"],
                 "description": seed["description"],
                 "expected": seed["expected"],
                 "expect_rules": expect_rules,
                 "decision": result["decision"],
+                "expect_scope": seed.get("expect_scope"),
+                "scope": scope,
                 "rules": rules,
                 "gaps": [f"{fl['path']}:{s}" + (f"-{e}" if e != s else "") for fl in result["lines"] for s, e in fl["gaps"]],
-                "failures": [f"{f['nodeid']} ({f['base_status']})" for f in result["test_run"]["failures"]],
+                "failures": [f"{f['nodeid']} ({f['comparison']})" for f in result["test_run"]["failures"]],
                 "test_status": result["test_run"]["status"],
                 "pass": ok,
             })
@@ -293,17 +304,18 @@ def run_seeds(seeds_path: Path, ruleset: RuleSet) -> dict:
 
 def seeds_markdown(ev: dict) -> str:
     lines = [
-        f"# ReleaseGuard Eval v2 — 결함을 심은 사례 ({ev['passed']}/{ev['total']} 통과)",
+        f"# ReleaseGuard Eval — 결함을 심은 사례 ({ev['passed']}/{ev['total']} 통과)",
         "",
         f"- 저장소: `{ev['repo']}` (임시 clone에서 실행) · base `{ev['base'][:7]}`",
         "",
-        "| id | 심은 변경 | 기대 | 결과 | 기대 규칙 | 발동 규칙 | 근거 | 통과 |",
-        "|---|---|---|---|---|---|---|---|",
+        "| id | 심은 변경 | 기대 | 결과 | 기대 범위 | 범위 | 기대 규칙 | 발동 규칙 | 근거 | 통과 |",
+        "|---|---|---|---|---|---|---|---|---|---|",
     ]
     for r in ev["rows"]:
         evidence = "<br>".join(r["failures"] + r["gaps"]) or "-"
         lines.append(
-            f"| {r['id']} | {r['description']} | {r['expected']} | {r['decision']} | {', '.join(r['expect_rules']) or '-'} | "
+            f"| {r['id']} | {r['description']} | {r['expected']} | {r['decision']} | {r['expect_scope'] or '-'} | {r['scope']} | "
+            f"{', '.join(r['expect_rules']) or '-'} | "
             f"{', '.join(r['rules']) or '-'} | {evidence} | {'✓' if r['pass'] else '✗'} |"
         )
     lines.append("")

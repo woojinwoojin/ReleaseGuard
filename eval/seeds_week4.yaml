@@ -1,6 +1,6 @@
 # 결함을 심은 사례 — 4주차 Docker_UI_CI (FastAPI·SQLite·Docker·CI)
-# W05·W06은 "바라는 판정"을 적었다. 지금 규칙 v2는 Docker·CI 변경을 검증하지 못하므로 실패가 예상되며,
-# 그 실패가 로드맵의 근거가 된다 (보고서에 한계로 기록).
+# W05·W06: 규칙 v2에서는 SAFE(실패)였다. v3는 Docker·CI를 여전히 검증하지 못하지만, 그 사실을 E02 + UNSUPPORTED로 표시한다.
+# 실제 검증(docker build, 워크플로 검사)은 Stage 2b.
 repo: ../../2026-10/week4-docker-aws
 base: fee0039
 seeds:
@@ -50,17 +50,19 @@ seeds:
         find: fastapi==0.142.2
         replace: fastapi==0.143.0
   - id: W05
-    description: Dockerfile 실행 명령 오타 (컨테이너가 뜨지 않음) — 바라는 판정
+    description: Dockerfile 실행 명령 오타 (컨테이너가 뜨지 않음) — 검증 범위 밖으로 표시
     expected: REVIEW REQUIRED
-    expect_rules: []
+    expect_rules: [E02]
+    expect_scope: UNSUPPORTED
     edits:
       - path: Dockerfile
         find: CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
         replace: CMD ["uvicorn", "app:api", "--host", "0.0.0.0", "--port", "8000"]
   - id: W06
-    description: CI에서 테스트 단계 삭제 — 바라는 판정
+    description: CI에서 테스트 단계 삭제 — 검증 범위 밖으로 표시
     expected: REVIEW REQUIRED
-    expect_rules: []
+    expect_rules: [E02]
+    expect_scope: UNSUPPORTED
     edits:
       - path: .github/workflows/ci.yml
         find: |2

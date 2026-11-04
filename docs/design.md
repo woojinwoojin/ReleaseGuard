@@ -24,7 +24,7 @@ python -m releaseguard szz   [--cases eval/cases.yaml]                          
 | 2. Classify | 파일 분류, 비밀값 패턴 | 규칙 (`configs/rules.yaml`) | `classify.py` |
 | 3. Run | head를 임시 폴더에 풀고 pytest + coverage 실행, 테스트별로 실행한 줄 기록. 실패한 테스트는 base에서 다시 실행 | 실행 (결정적) | `runner.py` |
 | 4. Gaps | 바뀐 실행 가능 줄 중 어떤 테스트도 실행하지 않은 줄 = 검증 공백 | 결정적 | `gaps.py` |
-| 5. Decide | 판정 규칙 v2 | 규칙 | `decide.py` |
+| 5. Decide | 판정 규칙 v3 + 검증 범위 | 규칙 | `decide.py` |
 | 6. Explain | 공백마다 "바뀐 동작 + 필요한 테스트" | 에이전트 (좁은 질문, 판정에 안 들어감) | `agent.py`, `agent_tools.py` |
 | 7. Report | JSON + Markdown | 템플릿 | `report.py` |
 
@@ -37,7 +37,20 @@ python -m releaseguard szz   [--cases eval/cases.yaml]                          
 - **coverage**: ReleaseGuard가 `.rg/tools`에 설치한 coverage 7.17.0을 `PYTHONPATH`로 넣는다. 대상 Python과 버전(3.13)이 달라야 하면 실행하지 않고 사유를 남긴다.
 - **테스트별 실행 줄**: coverage `dynamic_context = test_function`. pytest JUnit XML(xunit1)로 context를 node id(`tests/test_x.py::test_f`)에 연결한다.
 - **전체 테스트 실행**: 선택 실행은 하지 않는다 (Predict_Success 약 12초). 시간 상한 기본 300초.
-- **base 재실행**: head에서 실패한 테스트만 base에서 coverage 없이 다시 돌려 "이번 변경이 깨뜨림 / 원래 깨짐 / 새 테스트"를 나눈다.
+- **실패 비교** (v3, `analyze.compare_failures`): head에서 실패한 테스트만 head에서 한 번 더 → 통과하면 FLAKY. 남은 실패의 테스트 **파일**을 base에서 실행 (node id로 돌리면 base에 없는 테스트가 수집 오류로 섞여 구분이 안 됨).
+
+  | 비교 상태 | 조건 | 규칙 |
+  |---|---|---|
+  | REGRESSION | base에서 통과(또는 건너뜀) | B03 |
+  | NEW_TEST_FAILING | base에 그 파일·테스트가 없음 | B03 |
+  | PRE_EXISTING | base에서도 실패, 테스트 파일·conftest·의존성이 안 바뀜 | T01 |
+  | INCOMPARABLE | base에서도 실패, 하지만 위 셋 중 하나가 바뀜 (head·base가 같은 `.venv`를 쓰므로 의존성 변경도 포함) | B03 |
+  | UNKNOWN | base 실행이 결과를 못 냄 (수집 오류·시간 초과) | B03 |
+  | FLAKY | head 재실행에서 통과 | T02 |
+
+  원래부터 실패했다고 **확인된 경우에만** BLOCK을 REVIEW로 낮춘다.
+- **스냅샷 예외**: head 트리에 `.gitmodules`, `.gitattributes`의 `export-ignore`·`filter=lfs`가 있으면 E03.
+- **실행 기록**: 명령(임시 폴더는 `<tmp>`), Python 경로·버전, coverage 버전, SHA, timeout, 시도 횟수, 재실행 목록을 `test_run.record`에 남긴다. 임시 폴더는 작업 폴더 보호이지 샌드박스가 아니다.
 - 문서만 바뀌었으면 실행하지 않는다.
 
 ## 4단계 Gaps 상세
@@ -53,24 +66,40 @@ python -m releaseguard szz   [--cases eval/cases.yaml]                          
 
 연속된 공백 줄은 사이에 실행 불가 줄만 있으면 하나의 범위로 묶는다. Python 소스(테스트 제외)만 본다.
 
-## 판정 규칙 v2
+## 판정 규칙 v3 (2026-11-04)
+
+**SAFE는 "코드가 맞다"가 아니라 "정의된 검증 절차에서 검토 사유를 찾지 못했다"는 뜻.** 검증하지 못한 변경이 있으면 SAFE를 내지 않는다 (외부 설계 리뷰 반영, 방식 A).
 
 가장 심각한 규칙의 판정이 최종 판정. 아무 규칙도 발동하지 않으면 SAFE. NOTE는 판정에 영향 없음.
 
-| id | 판정 | 조건 |
-|---|---|---|
-| B01 | BLOCK | 추가된 줄에 비밀값 패턴 |
-| B03 | BLOCK | head에서 실패하는 테스트가 base에서는 통과했거나 base에 없음 (이번 변경이 깨뜨림) |
-| B04 | BLOCK | head에서 테스트 수집·실행 오류 (import 실패 등) |
-| G01 | REVIEW REQUIRED | 검증 공백이 1줄 이상 |
-| T01 | REVIEW REQUIRED | base에서도 실패하던 테스트 |
-| R04 | REVIEW REQUIRED | 의존성 변경 (테스트 환경이 실제와 다를 수 있음) |
-| E01 | REVIEW REQUIRED | 테스트 미실행·시간 초과·coverage 없음 → 검증하지 못함 |
-| N03 | NOTE | 설정 변경 |
-| N05 | NOTE | 데이터 변경 |
-| N06 | NOTE | 소스 삭제 (참조가 남으면 B03·B04로 드러남) |
+| id | 판정 | 조건 | 묶음 |
+|---|---|---|---|
+| B01 | BLOCK | 추가된 줄에 비밀값 패턴 | 찾은 것 |
+| B03 | BLOCK | head에서 실패, 원래부터 실패했다고 확인되지 않음 (REGRESSION·NEW_TEST_FAILING·INCOMPARABLE·UNKNOWN) | 찾은 것 |
+| B04 | BLOCK | head에서 테스트 수집·실행 오류 (import 실패 등) | 검증 불성립 |
+| G01 | REVIEW REQUIRED | 검증 공백이 1줄 이상 | 찾은 것 |
+| T01 | REVIEW REQUIRED | 같은 조건으로 base에서도 실패 (PRE_EXISTING) | 찾은 것 |
+| T02 | REVIEW REQUIRED | 다시 돌리면 통과 (FLAKY) | 찾은 것 |
+| R04 | REVIEW REQUIRED | 의존성 변경 (테스트 환경이 실제와 다를 수 있음) | 찾은 것 |
+| E01 | REVIEW REQUIRED | 테스트 미실행·시간 초과·coverage 없음 | 검증 불성립 |
+| E02 | REVIEW REQUIRED | 검증 범위 밖 변경: 설정·데이터·분류 규칙에 없는 파일·Python이 아닌 소스 | 검증 불성립 |
+| E03 | REVIEW REQUIRED | 스냅샷이 저장소와 다를 수 있음 (서브모듈·export-ignore·LFS) | 검증 불성립 |
+| N06 | NOTE | 소스 삭제 (참조가 남으면 B03·B04로 드러남) | 참고 |
 
-v1에서 없어진 것: R01·R02(이름·import 추측), R03·R05(설정·데이터 → NOTE), R06(소스 삭제 → NOTE), R07(에이전트 HIGH), B02(테스트 삭제 → G01·B03으로 드러남).
+보고서는 "검증이 성립하지 않은 것"과 "검증해서 찾은 것"을 나눠 보여준다.
+
+### 검증 범위 (`scope`)
+
+판정과 따로 기록한다. 파일마다 검증함 / 해당 없음(문서) / 검증 못 함(이유와 함께).
+
+| 상태 | 뜻 |
+|---|---|
+| COMPLETE | 문서를 뺀 모든 변경을 검증함 (문서만 바뀐 경우 포함) |
+| PARTIAL | 일부 변경을 검증하지 못함 |
+| UNSUPPORTED | 문서를 뺀 모든 변경을 검증하지 못함 (테스트 실행이 근거를 못 만들면 소스·테스트도 검증 못 한 것으로 봄) |
+
+v2 → v3 변경: N03·N05(설정·데이터 NOTE) → E02, base 비교 상태 6개로 분리(T02 추가, UNKNOWN·INCOMPARABLE은 낮추지 않음), E03 추가, `scope` 추가.
+v1에서 없어진 것: R01·R02(이름·import 추측), R03·R05(설정·데이터), R06(소스 삭제 → NOTE), R07(에이전트 HIGH), B02(테스트 삭제 → G01·B03으로 드러남).
 
 ## 6단계 Explain 상세
 

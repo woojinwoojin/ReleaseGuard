@@ -19,7 +19,7 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 
-from .git_ops import GitError
+from .git_ops import GitError, list_files, read_file
 
 ROOT = Path(__file__).resolve().parent.parent
 TOOLS_DIR = ROOT / ".rg" / "tools"
@@ -54,6 +54,7 @@ class RunResult:
     tests: list[TestCase] = field(default_factory=list)
     coverage: dict[str, FileCoverage] | None = None  # 저장소 기준 경로(/) → 줄 단위 coverage
     attempts: int = 1  # 시간 초과로 다시 시도했으면 2
+    command: list[str] = field(default_factory=list)  # 실제 실행한 명령 (임시 폴더는 <tmp>로 바꿈)
 
     def counts(self) -> dict[str, int]:
         out = {"passed": 0, "failed": 0, "error": 0, "skipped": 0}
@@ -81,7 +82,7 @@ def find_python(repo: Path, explicit: Path | None = None) -> Path | None:
     return None
 
 
-def _version(python: Path) -> str:
+def python_version(python: Path) -> str:
     out = subprocess.run([str(python), "-c", "import sys; print('%d.%d' % sys.version_info[:2])"], capture_output=True, text=True)
     return out.stdout.strip()
 
@@ -93,6 +94,21 @@ def snapshot(repo: Path, sha: str, dest: Path) -> None:
         raise GitError(f"git archive {sha}: {proc.stderr.decode('utf-8', 'replace').strip()}")
     with tarfile.open(fileobj=io.BytesIO(proc.stdout)) as tar:
         tar.extractall(dest, filter="data")
+
+
+def snapshot_warnings(repo: Path, sha: str) -> list[str]:
+    """git archive 스냅샷이 저장소의 실제 파일과 다를 수 있는 이유. 없으면 빈 목록."""
+    files = set(list_files(repo, sha))
+    out = []
+    if ".gitmodules" in files:
+        out.append(".gitmodules: 서브모듈 내용은 스냅샷에 들어가지 않음")
+    for path in sorted(f for f in files if PurePosixPath(f).name == ".gitattributes"):
+        text = read_file(repo, sha, path)
+        if "export-ignore" in text:
+            out.append(f"{path}: export-ignore 대상은 스냅샷에서 빠짐")
+        if "filter=lfs" in text:
+            out.append(f"{path}: LFS 파일은 포인터만 들어감")
+    return out
 
 
 def _env(tools: Path | None) -> dict[str, str]:
@@ -158,7 +174,7 @@ def run_tests(
     nodeids: list[str] | None = None,
     timeout: int = DEFAULT_TIMEOUT,
 ) -> RunResult:
-    """sha 시점의 테스트를 실행한다. nodeids를 주면 그 테스트만 (coverage 없이 쓰는 base 재실행용).
+    """sha 시점의 테스트를 실행한다. nodeids(node id 또는 테스트 파일 경로)를 주면 그것만 (coverage 없이 쓰는 재실행용).
 
     시간 초과는 한 번 다시 시도한다. 같은 테스트가 1초에 끝나는 커밋에서도 실행 환경 때문에 멈춘 적이 있다
     (Eval v2, da30a78). 두 번 모두 넘기면 timeout으로 남긴다.
@@ -198,7 +214,7 @@ def _run_once(repo: Path, sha: str, python: Path, with_coverage: bool, nodeids: 
             with open(log_path, "w", encoding="utf-8") as log:
                 proc = subprocess.run(cmd, cwd=work, env=_env(tools), stdout=log, stderr=subprocess.STDOUT, timeout=timeout)
         except subprocess.TimeoutExpired:
-            return RunResult("timeout", f"{timeout}초 안에 끝나지 않음", round(time.perf_counter() - started, 1), str(python))
+            return RunResult("timeout", f"{timeout}초 안에 끝나지 않음", round(time.perf_counter() - started, 1), str(python), command=_shown(cmd, tmp))
         output = log_path.read_text(encoding="utf-8", errors="replace")
 
         tests, ctx_map = parse_junit(junit)
@@ -218,14 +234,18 @@ def _run_once(repo: Path, sha: str, python: Path, with_coverage: bool, nodeids: 
                 coverage = parse_coverage(report, ctx_map)
             else:
                 reason = f"coverage 보고서 생성 실패: {_tail(cov.stdout + cov.stderr, 5)}"
-        return RunResult(status, reason, round(time.perf_counter() - started, 1), str(python), tests, coverage)
+        return RunResult(status, reason, round(time.perf_counter() - started, 1), str(python), tests, coverage, command=_shown(cmd, tmp))
+
+
+def _shown(cmd: list[str], tmp: Path) -> list[str]:
+    return [c.replace(str(tmp), "<tmp>") for c in cmd]
 
 
 def check_python(python: Path) -> str | None:
     """coverage(.rg/tools)와 대상 Python의 버전이 맞지 않으면 사유를 돌려준다."""
     if not python.exists():
         return f"Python이 없음: {python}"
-    target = _version(python)
+    target = python_version(python)
     own = "%d.%d" % sys.version_info[:2]
     if not target:
         return f"Python을 실행할 수 없음: {python}"

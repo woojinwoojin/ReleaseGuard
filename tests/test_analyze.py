@@ -69,14 +69,17 @@ def test_breaking_change_blocks_with_base_check(pyrepo):
     assert result["decision"] == "BLOCK"
     assert result["test_run"]["failures"][0]["nodeid"] == "tests/test_calc.py::test_add"
     assert result["test_run"]["failures"][0]["base_status"] == "passed"
+    assert result["test_run"]["failures"][0]["comparison"] == "REGRESSION"
     assert rules(result) == ["B03"]
+    purposes = [x["purpose"] for x in result["test_run"]["record"]["reruns"]]
+    assert len(purposes) == 2 and purposes[0].startswith("head") and purposes[1].startswith("base")
 
 
 def test_new_failing_test_blocks(pyrepo):
     pyrepo.write("tests/test_new.py", "def test_new():\n    assert False\n")
     pyrepo.commit("new failing test")
     result = run(pyrepo)
-    assert result["test_run"]["failures"][0]["base_status"] == "absent"
+    assert result["test_run"]["failures"][0]["comparison"] == "NEW_TEST_FAILING"
     assert rules(result) == ["B03"]
 
 
@@ -88,6 +91,7 @@ def test_preexisting_failure_is_review(pyrepo):
     result = run(pyrepo)
     assert result["decision"] == "REVIEW REQUIRED"
     assert rules(result) == ["T01"]
+    assert result["test_run"]["failures"][0]["comparison"] == "PRE_EXISTING"
 
 
 def test_import_error_blocks(pyrepo):
@@ -105,7 +109,8 @@ def test_repo_without_tests(repo):
     repo.commit("config only")
     result = run(repo)
     assert result["test_run"]["status"] == "no_tests"
-    assert result["decision"] == "SAFE"  # 바뀐 소스가 없으면 테스트가 없어도 검증할 것이 없다
+    # 분류 규칙에 없는 파일은 검증 범위 밖 (v2에서는 SAFE였다)
+    assert (result["decision"], rules(result), result["scope"]["status"]) == ("REVIEW REQUIRED", ["E02"], "UNSUPPORTED")
 
     repo.write("a.py", "x = 2\n")
     repo.commit("source")
@@ -151,7 +156,8 @@ def test_cli_writes_json_and_markdown(pyrepo, tmp_path):
     result = json.loads(json_file.read_text(encoding="utf-8"))
     assert result["decision"] == "REVIEW REQUIRED"
     md = json_file.with_suffix(".md").read_text(encoding="utf-8")
-    assert md.startswith("# ReleaseGuard 보고서 — REVIEW REQUIRED")
+    assert md.startswith("# ReleaseGuard 보고서 — REVIEW REQUIRED (검증 범위: COMPLETE)")
+    assert "## 실행 기록" in md and "coverage 7.17.0" in md
     assert "**1** (7)" in md
 
 
