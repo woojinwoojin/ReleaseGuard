@@ -1,9 +1,11 @@
-"""대상 커밋에서 테스트를 실행하고 줄 단위 coverage를 잰다 (3단계 Run).
+"""대상 커밋에서 테스트를 실행하고 줄·분기 coverage를 잰다 (3단계 Run).
 
 - 대상 커밋을 git archive로 임시 폴더에 풀어서 실행한다. 대상 저장소의 작업 폴더와 .git은 바뀌지 않는다.
-- Python은 대상 저장소의 .venv를 쓰고, coverage는 ReleaseGuard의 .rg/tools에서 PYTHONPATH로 넣는다.
+- Python은 대상 저장소의 .venv를 쓰고, coverage·pytest-cov는 ReleaseGuard의 .rg/tools에서 PYTHONPATH로 넣는다.
   대상 프로젝트의 환경에는 아무것도 설치하지 않는다.
-- 테스트별로 어느 줄을 실행했는지(coverage dynamic context)를 기록한다.
+- 테스트별로 어느 줄을 실행했는지 기록한다. pytest-cov의 --cov-context=test로 context가 "node id|단계"가 되어
+  테스트 본문(run)과 fixture(setup·teardown)에서 실행된 줄을 구분한다.
+- branch = True로 분기(arc: 줄 A → 줄 B)도 잰다. 분기에는 테스트 context가 없다.
 """
 
 import io
@@ -24,6 +26,7 @@ from .git_ops import GitError, list_files, read_file
 ROOT = Path(__file__).resolve().parent.parent
 TOOLS_DIR = ROOT / ".rg" / "tools"
 COVERAGE_VERSION = "7.17.0"
+PYTEST_COV_VERSION = "7.1.0"
 DEFAULT_TIMEOUT = 300  # 초
 
 
@@ -69,7 +72,10 @@ def failure_fingerprint(message: str, text: str) -> str:
 class FileCoverage:
     executed: set[int] = field(default_factory=set)
     missing: set[int] = field(default_factory=set)
-    tests: dict[int, list[str]] = field(default_factory=dict)  # 줄 → 그 줄을 실행한 테스트 (import 시점 실행은 제외)
+    tests: dict[int, list[str]] = field(default_factory=dict)  # 줄 → 그 줄을 실행한 테스트 (모든 단계, import 시점 실행은 제외)
+    run_lines: set[int] = field(default_factory=set)  # 테스트 본문(run 단계)에서 실행된 줄. tests에만 있으면 fixture에서만 실행
+    executed_branches: dict[int, list[int]] = field(default_factory=dict)  # 출발 줄 → 실행된 도착 줄 (음수 = 함수에서 나감)
+    missing_branches: dict[int, list[int]] = field(default_factory=dict)  # 출발 줄 → 실행되지 않은 도착 줄
 
 
 @dataclass
@@ -91,10 +97,12 @@ class RunResult:
 
 
 def ensure_coverage() -> Path:
-    """coverage를 .rg/tools에 한 번만 설치한다 (ReleaseGuard의 pip 사용)."""
-    if not (TOOLS_DIR / "coverage" / "__init__.py").exists():
+    """coverage·pytest-cov를 .rg/tools에 한 번만 설치한다 (ReleaseGuard의 pip 사용, pytest는 대상 .venv의 것을 쓴다)."""
+    wanted = {"coverage": f"coverage=={COVERAGE_VERSION}", "pytest_cov": f"pytest-cov=={PYTEST_COV_VERSION}"}
+    missing = [spec for pkg, spec in wanted.items() if not (TOOLS_DIR / pkg / "__init__.py").exists()]
+    if missing:
         subprocess.run(
-            [sys.executable, "-m", "pip", "install", "--quiet", "--target", str(TOOLS_DIR), f"coverage=={COVERAGE_VERSION}"],
+            [sys.executable, "-m", "pip", "install", "--quiet", "--no-deps", "--target", str(TOOLS_DIR), *missing],
             check=True,
         )
     return TOOLS_DIR
@@ -163,11 +171,11 @@ def _module_of(file: str) -> str:
     return ".".join(PurePosixPath(file.replace("\\", "/")).with_suffix("").parts)
 
 
-def parse_junit(path: Path) -> tuple[list[TestCase], dict[str, str]]:
-    """(테스트 결과, coverage context → node id). junit_family=xunit1이라 file 속성이 있다."""
+def parse_junit(path: Path) -> list[TestCase]:
+    """테스트 결과. junit_family=xunit1이라 file 속성이 있다."""
     if not path.exists():
-        return [], {}
-    cases, ctx_map = [], {}
+        return []
+    cases = []
     for tc in ET.parse(path).getroot().iter("testcase"):
         file = (tc.get("file") or "").replace("\\", "/")
         classname, name = tc.get("classname") or "", tc.get("name") or ""
@@ -184,21 +192,42 @@ def parse_junit(path: Path) -> tuple[list[TestCase], dict[str, str]]:
                     fingerprint = failure_fingerprint(el.get("message") or "", el.text or "")
                 break
         cases.append(TestCase(prefix + name, outcome, message, fingerprint))
-        func = re.sub(r"\[.*\]$", "", name)  # context에는 parametrize 값이 없다
-        ctx_map[f"{classname}.{func}"] = prefix + func
-    return cases, ctx_map
+    return cases
 
 
-def parse_coverage(path: Path, ctx_map: dict[str, str]) -> dict[str, FileCoverage]:
+def parse_context(ctx: str) -> tuple[str, str]:
+    """pytest-cov context "tests/x.py::test_f[1]|setup" → ("tests/x.py::test_f", "setup").
+
+    parametrize 값은 떼어 함수 단위로 묶는다 (보고서에 같은 테스트 함수가 값마다 나오지 않게).
+    """
+    nodeid, sep, phase = ctx.rpartition("|")
+    if not sep:
+        nodeid, phase = ctx, "run"
+    return re.sub(r"\[.*\]$", "", nodeid), phase
+
+
+def _arcs(pairs: list[list[int]]) -> dict[int, list[int]]:
+    out: dict[int, list[int]] = {}
+    for a, b in pairs:
+        out.setdefault(a, []).append(b)
+    return out
+
+
+def parse_coverage(path: Path) -> dict[str, FileCoverage]:
     data = json.loads(path.read_text(encoding="utf-8"))
     out = {}
     for name, f in data["files"].items():
-        tests = {}
+        tests, run_lines = {}, set()
         for line, ctxs in f.get("contexts", {}).items():
-            names = sorted({ctx_map.get(c, c) for c in ctxs if c})
-            if names:
-                tests[int(line)] = names
-        out[name.replace("\\", "/")] = FileCoverage(set(f["executed_lines"]), set(f["missing_lines"]), tests)
+            parsed = [parse_context(c) for c in ctxs if c]  # 빈 context = 테스트 밖(수집·import)에서 실행
+            if parsed:
+                tests[int(line)] = sorted({n for n, _ in parsed})
+                if any(ph == "run" for _, ph in parsed):
+                    run_lines.add(int(line))
+        out[name.replace("\\", "/")] = FileCoverage(
+            set(f["executed_lines"]), set(f["missing_lines"]), tests, run_lines,
+            _arcs(f.get("executed_branches", [])), _arcs(f.get("missing_branches", [])),
+        )
     return out
 
 
@@ -242,10 +271,12 @@ def _run_once(repo: Path, sha: str, python: Path, with_coverage: bool, nodeids: 
         if with_coverage:
             rc = tmp / "rg.rc"
             rc.write_text(
-                f"[run]\ndynamic_context = test_function\nrelative_files = True\nsource = .\ndata_file = {tmp / 'rg.cov'}\n",
+                f"[run]\nbranch = True\nrelative_files = True\nsource = .\ndata_file = {tmp / 'rg.cov'}\n",
                 encoding="utf-8",
             )
-            cmd = [str(python), "-m", "coverage", "run", f"--rcfile={rc}", *pytest_args]
+            # -p pytest_cov: 플러그인 자동 로드가 꺼져 있어도 불러온다. --cov-report=: 보고서는 아래 coverage json으로 따로 만든다
+            cov_args = ["-p", "pytest_cov", "--cov", f"--cov-config={rc}", "--cov-context=test", "--cov-report="]
+            cmd = [str(python), *pytest_args, *cov_args]
         else:
             cmd = [str(python), *pytest_args]
         # 출력은 파이프가 아니라 파일로 받는다. 파이프로 받으면 시간 초과 후에도 자식 프로세스가 파이프를 쥐고 있어
@@ -258,7 +289,7 @@ def _run_once(repo: Path, sha: str, python: Path, with_coverage: bool, nodeids: 
             return RunResult("timeout", f"{timeout}초 안에 끝나지 않음", round(time.perf_counter() - started, 1), str(python), command=_shown(cmd, tmp))
         output = log_path.read_text(encoding="utf-8", errors="replace")
 
-        tests, ctx_map = parse_junit(junit)
+        tests = parse_junit(junit)
         # pytest 종료 코드: 0 통과, 1 실패, 5 테스트 없음, 그 밖은 수집 오류·사용 오류
         status = {0: "passed", 1: "failed", 5: "no_tests"}.get(proc.returncode, "error")
         reason = None if status in ("passed", "no_tests") else _tail(output)
@@ -272,7 +303,7 @@ def _run_once(repo: Path, sha: str, python: Path, with_coverage: bool, nodeids: 
                 cwd=work, env=_env(tools), capture_output=True, text=True, encoding="utf-8", errors="replace",
             )
             if cov.returncode == 0:
-                coverage = parse_coverage(report, ctx_map)
+                coverage = parse_coverage(report)
             else:
                 reason = f"coverage 보고서 생성 실패: {_tail(cov.stdout + cov.stderr, 5)}"
         return RunResult(status, reason, round(time.perf_counter() - started, 1), str(python), tests, coverage, command=_shown(cmd, tmp))

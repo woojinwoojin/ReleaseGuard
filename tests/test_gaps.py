@@ -19,6 +19,29 @@ def test_file_lines_classifies_each_changed_line():
     assert fl.tests == ["t::a", "t::b"]
 
 
+def test_fixture_only_lines_are_covered_and_counted_separately():
+    cov = FileCoverage(executed={1, 2}, tests={1: ["t::a"], 2: ["t::a"]}, run_lines={2})
+    fl = file_lines("src/x.py", [1, 2], cov)
+    assert fl.line_status == {1: "covered", 2: "covered"}
+    assert (fl.covered, fl.fixture_only, fl.import_only) == (2, 1, 0)
+
+
+def test_branch_gaps_only_from_changed_executed_lines():
+    cov = FileCoverage(
+        executed={5, 6, 10, 11, 20},
+        missing={7, 21, 30},
+        tests={5: ["t::a"], 6: ["t::a"], 10: ["t::a"], 11: ["t::a"], 20: ["t::a"]},
+        run_lines={5, 6, 10, 11, 20},
+        executed_branches={5: [6], 10: [11, -9], 20: [-19]},
+        missing_branches={5: [7], 20: [21], 30: [31, 32]},
+    )
+    # 5: 바뀜, 한쪽 분기 빠짐 / 10: 바뀜, 분기 다 실행 / 20: 바뀌지 않음 / 30: 바뀌었지만 줄 자체가 실행 안 됨(줄 공백)
+    fl = file_lines("src/x.py", [5, 6, 10, 30], cov)
+    assert fl.branch_gaps == [(5, 7)]
+    assert (fl.branch_lines, fl.branches) == (2, 4)
+    assert fl.gaps == [(30, 30)]  # 30은 줄 공백으로만 센다
+
+
 def test_unmeasured_file_counts_every_changed_line_as_gap():
     fl = file_lines("tools/script.py", [3, 4], None)
     assert fl.measured is False and fl.gaps == [(3, 4)]

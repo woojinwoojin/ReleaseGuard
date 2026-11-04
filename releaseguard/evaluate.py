@@ -103,6 +103,10 @@ def evaluate(cases_path: Path, ruleset: RuleSet, explain: ExplainRunner | None =
             "gap_lines": sum(fl["gap_lines"] for fl in first["lines"]),
             "executable_lines": sum(fl["executable"] for fl in first["lines"]),
             "gaps": [f"{fl['path']}:{s}" + (f"-{e}" if e != s else "") for fl in first["lines"] for s, e in fl["gaps"]],
+            # 분기 공백 (판정 미반영): 바뀐 분기 줄의 분기 수와 실행 안 된 분기
+            "branches": sum(fl["branches"] for fl in first["lines"]),
+            "branch_gaps": [f"{fl['path']}:{a}->{b}" for fl in first["lines"] for a, b in fl["branch_gaps"]],
+            "fixture_only": sum(fl["fixture_only"] for fl in first["lines"]),
             "actual_tests": actual,
             "executed_tests": sorted({_test_file(t) for fl in first["lines"] for t in fl["tests"]}),
             "need": _need(label.get("need")),
@@ -161,6 +165,14 @@ def metrics(rows: list[dict]) -> dict:
             "commits_with_gap": sum(r["gap_lines"] > 0 for r in rows),
             "gap_lines": sum(r["gap_lines"] for r in rows),
             "executable_lines": sum(r["executable_lines"] for r in rows),
+            "fixture_only_lines": sum(r["fixture_only"] for r in rows),
+        },
+        # 줄 공백과 따로 센다. branch_gap_only = 줄 공백은 없고 분기 공백만 있는 커밋 (줄 단위로는 놓쳤을 커밋)
+        "branch_gaps": {
+            "commits_with_branch_gap": sum(bool(r["branch_gaps"]) for r in rows),
+            "commits_branch_gap_only": sum(bool(r["branch_gaps"]) and r["gap_lines"] == 0 for r in rows),
+            "branch_gaps": sum(len(r["branch_gaps"]) for r in rows),
+            "branches": sum(r["branches"] for r in rows),
         },
         # Changed-test Retrieval: 바뀐 줄을 실행한 테스트 파일 ↔ 같은 커밋에서 바뀐 테스트 파일.
         # 실제 "관련 테스트" 정답이 아니라 대리 지표다 (바뀌지 않은 관련 테스트는 정답에 없다).
@@ -246,7 +258,11 @@ def to_markdown(ev: dict) -> str:
         + f" · 평균 {m['run_seconds']['avg']}초, 최대 {m['run_seconds']['max']}초",
         "- 규칙 발동률: " + (", ".join(f"{k} {v:.0%}" for k, v in m["rule_fire_rate"].items()) or "없음"),
         "- 참고 표시율: " + (", ".join(f"{k} {v:.0%}" for k, v in m["note_rate"].items()) or "없음"),
-        f"- 검증 공백: 커밋 {g['commits_with_gap']}개, 바뀐 실행 줄 {g['executable_lines']}줄 중 {g['gap_lines']}줄",
+        f"- 검증 공백: 커밋 {g['commits_with_gap']}개, 바뀐 실행 줄 {g['executable_lines']}줄 중 {g['gap_lines']}줄"
+        f" (covered 중 fixture에서만 실행 {g['fixture_only_lines']}줄)",
+        f"- 분기 공백 (판정 미반영): 커밋 {m['branch_gaps']['commits_with_branch_gap']}개 "
+        f"(그중 줄 공백 없이 분기 공백만 {m['branch_gaps']['commits_branch_gap_only']}개), "
+        f"바뀐 분기 줄의 분기 {m['branch_gaps']['branches']}개 중 {m['branch_gaps']['branch_gaps']}개",
         f"- Changed-test Retrieval (바뀐 줄을 실행한 테스트 ↔ 같은 커밋에서 바뀐 테스트, 대리 지표, 커밋 {tr['commits']}개): "
         f"precision {tr['precision']}, recall {tr['recall']}",
     ]
@@ -272,8 +288,8 @@ def to_markdown(ev: dict) -> str:
         "",
         "## 커밋별",
         "",
-        "| 커밋 | 제목 | 판정 | 범위 | 봐야 했나 | 기대 범위 | 규칙 | 테스트 | 공백/실행 줄 | 바뀐 테스트 | 실행한 테스트 |",
-        "|---|---|---|---|---|---|---|---|---|---|---|",
+        "| 커밋 | 제목 | 판정 | 범위 | 봐야 했나 | 기대 범위 | 규칙 | 테스트 | 공백/실행 줄 | 분기 공백/분기 | 바뀐 테스트 | 실행한 테스트 |",
+        "|---|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for r in ev["rows"]:
         decision = " / ".join(dict.fromkeys(r["decisions"]))
@@ -284,7 +300,8 @@ def to_markdown(ev: dict) -> str:
             mark = " △ 과잉"
         lines.append(
             f"| `{r['sha']}` | {r['subject']} | {decision}{mark} | {r['scope']} | {r['need'] or '-'} | {r['expected_scope'] or '-'} | {', '.join(r['rules']) or '-'} | "
-            f"{r['test_status']} | {r['gap_lines']}/{r['executable_lines']} | {'<br>'.join(r['actual_tests']) or '-'} | "
+            f"{r['test_status']} | {r['gap_lines']}/{r['executable_lines']} | {len(r['branch_gaps'])}/{r['branches']} | "
+            f"{'<br>'.join(r['actual_tests']) or '-'} | "
             f"{'<br>'.join(r['executed_tests']) or '-'} |"
         )
     explained = [r for r in ev["rows"] if any(not x["error"] for x in r["explanations"])]
@@ -441,10 +458,15 @@ def run_szz(cases_path: Path, ruleset: RuleSet) -> dict:
             continue
         result = analyze(repo, f"{sha}~1", sha, ruleset, python=python)
         status_of = {fl["path"]: fl["line_status"] for fl in result["lines"]}
+        branch_from = {(fl["path"], a) for fl in result["lines"] for a, _ in fl["branch_gaps"]}
         lines = []
         for o in items:
             st = status_of.get(o["path"], {}).get(o["line"])
-            lines.append({**o, "status": st or ("unknown" if not result["test_run"]["coverage"] else "not_changed")})
+            lines.append({
+                **o,
+                "status": st or ("unknown" if not result["test_run"]["coverage"] else "not_changed"),
+                "branch_gap": (o["path"], o["line"]) in branch_from,  # 이 결함 줄에서 나가는 분기 중 실행 안 된 것이 있었나
+            })
         rows.append({
             "sha": sha[:7],
             "subject": subject,
@@ -463,6 +485,8 @@ def run_szz(cases_path: Path, ruleset: RuleSet) -> dict:
         "introducing_commits": len(rows),
         "line_status": counts,
         "gap_ratio": _ratio(counts.get("gap", 0), judged),
+        # covered인데 결함이었던 줄 중, 그 줄의 분기 일부가 실행되지 않았던 줄 (분기 coverage로 더 잡을 수 있었나)
+        "covered_with_branch_gap": sum(ln["status"] == "covered" and ln.get("branch_gap", False) for ln in all_lines),
         "rows": rows,
     }
 
@@ -476,6 +500,7 @@ def szz_markdown(ev: dict) -> str:
         f"- 결함 줄 {ev['defect_lines']}개 (고친 커밋이 지우거나 바꾼 Python 소스 줄, 빈 줄·주석 제외), 들여온 커밋 {ev['introducing_commits']}개",
         "- 들여올 때 상태: " + ", ".join(f"{k} {v}" for k, v in c.items()),
         f"- **공백 비율 {ev['gap_ratio']}** = gap / (gap + covered + import_only)",
+        f"- covered 결함 줄 {c.get('covered', 0)}개 중 그 줄의 분기 일부가 실행되지 않았던 줄: {ev.get('covered_with_branch_gap', '-')}개",
         "",
         "| 들여온 커밋 | 제목 | 테스트 | 판정 | 결함 줄 | gap | covered | import_only | 기타 |",
         "|---|---|---|---|---|---|---|---|---|",

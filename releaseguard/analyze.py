@@ -15,7 +15,7 @@ from .gaps import FileLines, compute
 from .git_ops import Change, collect, list_files, read_file
 from .related_tests import coverage_status, find_related
 from .runner import (
-    COVERAGE_VERSION, DEFAULT_TIMEOUT, RunResult, TestCase, check_python, find_python, host_secret_names, python_version, run_tests,
+    COVERAGE_VERSION, DEFAULT_TIMEOUT, PYTEST_COV_VERSION, RunResult, TestCase, check_python, find_python, host_secret_names, python_version, run_tests,
     snapshot_warnings,
 )
 
@@ -175,6 +175,8 @@ def analyze(
             "python": run.python,
             "python_version": python_version(py) if ran and py else None,
             "coverage_version": COVERAGE_VERSION,
+            "pytest_cov_version": PYTEST_COV_VERSION,
+            "branch": True,  # 1.5부터 분기도 잰다
             "timeout": timeout,
             "attempts": run.attempts,
             "reruns": reruns,

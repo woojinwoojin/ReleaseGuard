@@ -97,12 +97,21 @@ def to_markdown(result: dict) -> str:
 
     lines += ["", "## 바뀐 줄의 검증 상태", ""]
     if result["lines"]:
-        lines += ["| 파일 | 바뀐 실행 줄 | 테스트가 실행 | import 시점만 | 검증 공백 | 실행한 테스트 |", "|---|---|---|---|---|---|"]
+        lines += [
+            "| 파일 | 바뀐 실행 줄 | 테스트가 실행 | import 시점만 | 검증 공백 | 분기 공백 (참고) | 실행한 테스트 |",
+            "|---|---|---|---|---|---|---|",
+        ]
         for fl in result["lines"]:
             gaps = ", ".join(_range(s, e) for s, e in fl["gaps"]) or "-"
             measured = "" if fl["measured"] else " (coverage 밖: 전체를 공백으로 봄)"
             tests = "<br>".join(f"`{t}`" for t in fl["tests"][:8]) + (f"<br>외 {len(fl['tests']) - 8}개" if len(fl["tests"]) > 8 else "")
-            lines.append(f"| `{fl['path']}`{measured} | {fl['executable']} | {fl['covered']} | {fl['import_only']} | **{fl['gap_lines']}** ({gaps}) | {tests or '-'} |")
+            covered = f"{fl['covered']}" + (f" (fixture만 {fl['fixture_only']})" if fl.get("fixture_only") else "")
+            lines.append(
+                f"| `{fl['path']}`{measured} | {fl['executable']} | {covered} | {fl['import_only']} | **{fl['gap_lines']}** ({gaps}) | "
+                f"{_branch_cell(fl)} | {tests or '-'} |"
+            )
+        lines += ["", "분기 공백: 바뀐 조건문(if·while·for 등)이 실행됐지만 그중 한쪽 분기는 어떤 테스트도 지나가지 않음. "
+                  "줄 공백과 따로 세며 판정에는 반영하지 않습니다."]
     elif result["estimated_tests"] is not None:
         lines.append("테스트를 실행하지 못해 이름 규칙·import로 **추정**한 관련 테스트입니다.")
         lines += ["", "| 소스 | 추정 관련 테스트 |", "|---|---|"]
@@ -126,13 +135,23 @@ def to_markdown(result: dict) -> str:
     return "\n".join(lines)
 
 
+def _branch_cell(fl: dict) -> str:
+    """분기 공백 n/전체 (출발→도착, …). 도착이 음수면 함수에서 나가는 분기."""
+    if "branch_gaps" not in fl:  # 1.5 이전 결과
+        return "-"
+    if not fl["branches"]:
+        return "분기 없음"
+    arcs = ", ".join(f"{a}→{'나감' if b < 0 else b}" for a, b in fl["branch_gaps"][:6]) + (" …" if len(fl["branch_gaps"]) > 6 else "")
+    return f"{len(fl['branch_gaps'])}/{fl['branches']}" + (f" ({arcs})" if arcs else "")
+
+
 def _record_lines(run: dict) -> list[str]:
     r = run.get("record")
     if not r or not r["command"]:
         return ["테스트를 실행하지 않았습니다."]
     out = [
         f"- head `{r['head_sha'][:12]}` · merge-base `{r['merge_base'][:12]}`",
-        f"- Python {r['python_version'] or '?'} (`{r['python']}`) · coverage {r['coverage_version']} · 시간 상한 {r['timeout']}초 · 시도 {r['attempts']}회",
+        f"- Python {r['python_version'] or '?'} (`{r['python']}`) · coverage {r['coverage_version']}{' + pytest-cov ' + r['pytest_cov_version'] + ' (분기 포함)' if r.get('pytest_cov_version') else ''} · 시간 상한 {r['timeout']}초 · 시도 {r['attempts']}회",
         f"- 명령: `{' '.join(r['command'])}`",
         "- 실행 위치: `git archive`로 푼 임시 폴더 (대상 작업 폴더는 건드리지 않음, 샌드박스는 아님)",
     ]

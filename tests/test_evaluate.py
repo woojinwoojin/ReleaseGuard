@@ -34,7 +34,8 @@ def test_evaluate_commits_and_determinism(pyrepo, tmp_path):
     assert (lb["over_warning"]["count"], lb["over_warning"]["of"], lb["over_warning"]["by_cause"]) == (2, 4, {"G01": 2})
     assert lb["scope_agreement"]["agree"] == 1 and lb["scope_agreement"]["mismatch"] == [f"{gap[:7]} (PARTIAL → COMPLETE)"]
     assert m["determinism"] == {"commits": 2, "identical": 2}
-    assert m["gaps"] == {"commits_with_gap": 1, "gap_lines": 1, "executable_lines": 1}
+    assert m["gaps"] == {"commits_with_gap": 1, "gap_lines": 1, "executable_lines": 1, "fixture_only_lines": 0}
+    assert m["branch_gaps"] == {"commits_with_branch_gap": 0, "commits_branch_gap_only": 0, "branch_gaps": 0, "branches": 0}
     # 공백 줄(7)은 아무 테스트도 실행하지 않으므로 실행한 테스트가 없다 → 정답(바뀐 테스트)과 겹치지 않음
     assert m["changed_test_retrieval"] == {"commits": 1, "precision": None, "recall": 0.0}
     assert "| `" + gap[:7] + "` |" in to_markdown(ev)

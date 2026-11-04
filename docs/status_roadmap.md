@@ -61,8 +61,8 @@ base...head
 |---|---|---|---|
 | 수집 | merge-base 기준 변경 파일·줄, 이름 변경, 추가된 줄 | 완료 | `git_ops.py` |
 | 분류 | 7가지 분류 규칙(YAML), 비밀값 패턴 5종 | 완료 | `classify.py`, `configs/rules.yaml` |
-| 실행 | 스냅샷 실행, 대상 `.venv` 사용, coverage 별도 공급, 테스트별 실행 줄, 시간 상한·재시도, base 재실행 | 완료 | `runner.py` |
-| 공백 | 줄 상태 4종(covered / import_only / gap / not_executable), 범위 묶기 | 완료 | `gaps.py` |
+| 실행 | 스냅샷 실행, 대상 `.venv` 사용, coverage·pytest-cov 별도 공급, 테스트별·단계별(setup·run·teardown) 실행 줄, 분기 coverage, 시간 상한·재시도, base 재실행 | 완료 | `runner.py` |
+| 공백 | 줄 상태 4종(covered / import_only / gap / not_executable), 범위 묶기, fixture에서만 실행된 줄, 분기 공백(판정 미반영) | 완료 | `gaps.py` |
 | 판정 | 규칙 v2 (BLOCK 3, REVIEW 4, NOTE 3) | 완료 | `decide.py` |
 | 설명 | 공백당 좁은 질문 에이전트, 읽기 전용 도구 4개, 근거·테스트 경로 검증 | 완료 (평가는 1회뿐) | `agent.py`, `agent_tools.py` |
 | 대체 | 테스트를 못 돌릴 때 이름·import로 관련 테스트 추정 | 완료 | `related_tests.py` |
@@ -110,8 +110,8 @@ base...head
    - `.js`·`.sh`·`.sql`은 source로 분류되지만 공백 계산은 `.py`만 해서, 이것만 바뀌면 아무 표시 없이 SAFE (`gaps.py`).
 9. **base 재실행이 실패하면 "이번 변경으로 실패"로 기록된다**: base 결과가 비면 `absent`로 처리 (`analyze.py`). 판정(BLOCK)은 보수적이지만 근거 문장이 사실과 다름.
 10. head와 base를 같은 `.venv`로 실행한다. 의존성이 바뀐 커밋은 비교 조건이 다르다는 표시가 없다.
-11. fixture에서만 실행된 줄이 `import_only`로 분류된다 (`test_function` context는 setup·teardown을 구분하지 않음).
-12. 줄 단위 coverage만 쓴다. 바뀐 조건문의 한쪽 분기만 실행돼도 공백이 아니다.
+11. ~~fixture에서만 실행된 줄이 `import_only`로 분류된다~~ → 1.5에서 해소 (pytest-cov 단계 context, `fixture_only`).
+12. ~~줄 단위 coverage만 쓴다~~ → 1.5에서 분기 공백을 따로 표시. **판정에는 넣지 않는다**: 분기 공백만 있는 커밋 0/58, SZZ covered 결함 줄 중 분기 공백 2/41 ([보고서 #6](eval/20261104_eval_report_6.md)). 분기에는 테스트 context가 없다.
 14. **skip된 테스트는 판정에 들어가지 않는다**: 보고서에 목록·사유만 나온다. 새로 추가한 테스트가 전부 skip돼도 SAFE가 나올 수 있다.
 15. **깨끗한 스냅샷이지 격리된 환경이 아니다**: 호스트 환경 변수(예: `OPENAI_API_KEY`)가 테스트에 그대로 넘어간다. 변수 이름만 기록한다.
 16. **같은 실패 판단은 좁게 시작했다 (v3.1)**: 같은 파일의 헬퍼·다른 테스트가 바뀌면 실패한 테스트와 관련이 없어도 INCOMPARABLE(BLOCK). 관련성(테스트가 실제로 쓰는 헬퍼·fixture)은 아직 따지지 않는다.
@@ -128,8 +128,8 @@ base...head
 | 1 | 1.1 판정 의미 | `scope_status`(COMPLETE·PARTIAL·UNSUPPORTED)를 판정과 따로 기록. 검증하지 못한 변경이 있으면 SAFE 대신 REVIEW (E02, 결정: 방식 A). 문서만 바뀌면 COMPLETE + SAFE | 한계 8 해소, Eval 재실행으로 바뀐 판정 확인 (예상: Predict 0개, 4주차 3개) |
 | 1 | 1.2 Runner 검증 | 실패 비교 상태 분리(REGRESSION·PRE_EXISTING·FLAKY·INCOMPARABLE·UNKNOWN), 실행 기록(명령·Python·SHA·timeout) 저장, 스냅샷 예외(export-ignore·서브모듈·LFS) 감지 | 한계 9·10 해소, 상태별 테스트 |
 | 2 | 1.3 Eval 정비 | 수기 라벨 v2 기준 재정의(15개는 회귀용), 정상 변경·범위 밖 변경 사례 추가, 지표 이름 정정 | 라벨 기준 문서, 과잉 경고율을 따로 잼 |
-| 3 | 1.5 Branch coverage | `branch = True`, 바뀐 조건문의 실행 안 된 분기 표시. 테스트 단계(setup·run·teardown) 구분 검토 | 한계 11·12 해소 |
-| 4 | 1.4 G01 우선순위 | 판정(REVIEW)은 그대로, 공백 크기·비율·구조(AST: 조건·예외·반환)·분기 누락으로 검토 순서 HIGH·MEDIUM·LOW | 같은 Eval에서 결함 줄이 위쪽에 오는지 비교 (REVIEW 비율 줄이기는 기준이 아님) |
+| 3 | ~~1.5 Branch coverage~~ **완료** | `branch = True`, 바뀐 조건문의 실행 안 된 분기 표시(판정 미반영), pytest-cov로 테스트 단계 구분 | 한계 11·12 해소, 58커밋 판정 변화 0, 실행 시간 약 1/3 ([#6](eval/20261104_eval_report_6.md)) |
+| 4 | 1.4 G01 우선순위 (**다음**) | 판정(REVIEW)은 그대로, 공백 크기·비율·구조(AST: 조건·예외·반환)·분기 누락으로 검토 순서 HIGH·MEDIUM·LOW. #6 관찰: G01 과잉 7개 중 3개는 파일 전체가 공백(실험 스크립트) — 구조 신호 후보 | 같은 Eval에서 결함 줄이 위쪽에 오고 G01 과잉 7개가 아래쪽에 오는지 비교 (REVIEW 비율 줄이기는 기준이 아님) |
 | 5 | 1.6 에이전트 Eval | 근거 일치, 제안 테스트가 공백을 메우는지. 제안 테스트 자동 실행은 실행 격리 뒤로 | 근거 확인 비율, 공백 메움 비율 |
 | 6 | — | 기술 블로그 (v1 실패 → v2 재설계) | 초안 1개 |
 
