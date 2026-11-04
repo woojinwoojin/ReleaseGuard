@@ -1,82 +1,117 @@
-# Eval Set — 대상 저장소와 수기 정답(기대 판정)
+# Eval Set — 대상 저장소와 수기 라벨 (회귀용 15개)
 # 자동 정답(같은 커밋에서 바뀐 테스트)은 실행할 때 계산하므로 여기 적지 않는다.
 #
-# 라벨 기준 (판정 규칙 v1과 독립적으로, "머지 전에 사람이 봐야 했는가"로 정한다)
-# - SAFE: 문서·샘플만 바뀌었거나, 동작 변경이 함께 바뀐 테스트로 검증됨
-# - REVIEW REQUIRED: 동작·출력이 바뀌는데 검증되지 않은 부분이 있음,
-#   또는 이후 커밋에서 이 변경의 문제가 고쳐짐 (followup_fix에 기록)
-# - BLOCK: 비밀값 노출, 테스트 삭제 등 머지하면 안 되는 변경 (이 저장소에는 없음)
+# 라벨 v2 (2026-11-04) — 두 가지를 따로 단다. 판정 규칙과 독립적으로 정한다.
+# - need: 머지 전에 사람이 봐야 했는가 (yes / no). 결과 기준.
+#   need_reason: followup_fix(이후 커밋에서 이 변경의 문제가 고쳐짐, followup_fix에 기록)
+#              | policy(정책·기준 변경이라 사람 확인 필요) | untested(동작이 바뀌는데 검증 안 된 부분이 보임)
+#              | risky_area(테스트가 있어도 사람이 봐야 하는 영역: DB 마이그레이션, 동시성 등) | none
+# - expected_scope: 변경 파일만 보고 정한 검증 범위 (판정 규칙 v3의 정의)
+#   COMPLETE: 문서를 뺀 변경이 모두 Python 소스·테스트 / PARTIAL: 일부가 설정·데이터·비Python 등
+#   UNSUPPORTED: 문서를 뺀 변경이 모두 그런 파일
+# 라벨 v1(expected: SAFE/REVIEW/BLOCK)은 need로 옮겼다: SAFE → no, REVIEW → yes. 판정 정확도는 더 쓰지 않는다
+# (v3는 범위 밖 변경을 의도적으로 REVIEW로 올리므로, need=no인 경고는 원인별로 따로 센다).
 #
-# labeled_by: claude-draft = Claude 초안 (사용자 확인 전), user = 사용자 확인 (2026-11-03 15개 일괄 확인)
+# labeled_by: user = 사용자 확인 (need: 2026-11-03 15개 일괄 확인), expected_scope는 claude-draft (2026-11-04, 확인 전)
 repo: ../../predict-success
 # SZZ용: 앞선 커밋의 결함을 고친 커밋 (커밋 메시지로 확인)
 fix_commits: [c7733b3, 142912b, c2fe0d1]
 cases:
-  # --- SAFE 기대 ---
+  # --- need: no ---
   - sha: 0fc36c3
-    expected: SAFE
+    need: no
+    need_reason: none
+    expected_scope: COMPLETE
     labeled_by: user
     note: README만 변경
   - sha: f962d60
-    expected: SAFE
+    need: no
+    need_reason: none
+    expected_scope: UNSUPPORTED
     labeled_by: user
     note: .env.example(예시 파일)과 문서만 변경 — 실행 동작 없음
   - sha: 99309f2
-    expected: SAFE
+    need: no
+    need_reason: none
+    expected_scope: COMPLETE
     labeled_by: user
     note: 새 모듈과 테스트를 함께 추가, 빈 __init__.py
   - sha: 075e30c
-    expected: SAFE
+    need: no
+    need_reason: none
+    expected_scope: COMPLETE
     labeled_by: user
     note: 보고서 샘플만 추가
   - sha: c9824b0
-    expected: SAFE
+    need: no
+    need_reason: none
+    expected_scope: COMPLETE
     labeled_by: user
     note: 진행 체크리스트 문서만 변경
   - sha: a5465f0
-    expected: SAFE
+    need: no
+    need_reason: none
+    expected_scope: COMPLETE
     labeled_by: user
     note: README·샘플 갱신
   - sha: c7733b3
-    expected: SAFE
+    need: no
+    need_reason: none
+    expected_scope: PARTIAL
     labeled_by: user
     note: 리뷰 지적 수정, 관련 테스트 5개 함께 수정. 재계산 결과 2025 지표 변화 없음을 커밋에 기록
-  # --- REVIEW 기대 ---
+  # --- need: yes ---
   - sha: 3db2f31
-    expected: REVIEW REQUIRED
+    need: yes
+    need_reason: followup_fix
+    expected_scope: PARTIAL
     labeled_by: user
     followup_fix: [c7733b3, 142912b]
     note: 첫 2025 지표 계산. 기간 일치·음수 분모 문제가 이후 수정됨
   - sha: 9e9c12b
-    expected: REVIEW REQUIRED
+    need: yes
+    need_reason: followup_fix
+    expected_scope: PARTIAL
     labeled_by: user
     followup_fix: [c7733b3]
     note: 수기 합계 보완. 미확인 값 승격 경로가 이후 수정됨
   - sha: b67e806
-    expected: REVIEW REQUIRED
+    need: yes
+    need_reason: followup_fix
+    expected_scope: PARTIAL
     labeled_by: user
     followup_fix: [c7733b3]
     note: 매각예정 항목 조정. 누락 금액을 0으로 읽던 문제가 이후 수정됨
   - sha: f2d690e
-    expected: REVIEW REQUIRED
+    need: yes
+    need_reason: followup_fix
+    expected_scope: PARTIAL
     labeled_by: user
     followup_fix: [142912b]
     note: 시장 통계 연결. 비중 해석·연속성 문제가 이후 수정됨
   - sha: adb2f5b
-    expected: REVIEW REQUIRED
+    need: yes
+    need_reason: followup_fix
+    expected_scope: PARTIAL
     labeled_by: user
     followup_fix: [142912b]
     note: 작성지침 판정. 판정 승격 문제가 이후 수정됨
   - sha: b515f78
-    expected: REVIEW REQUIRED
+    need: yes
+    need_reason: policy
+    expected_scope: PARTIAL
     labeled_by: user
     note: 점수 규칙 v2 채택 — 정책 변경이라 사람 확인 필요
   - sha: da30a78
-    expected: REVIEW REQUIRED
+    need: yes
+    need_reason: followup_fix
+    expected_scope: COMPLETE
     labeled_by: user
     followup_fix: [c2fe0d1]
     note: 증거 보고서 추가(테스트 없음). 보고서 주장 범위가 이후 축소됨
   - sha: 142912b
-    expected: REVIEW REQUIRED
+    need: yes
+    need_reason: untested
+    expected_scope: PARTIAL
     labeled_by: user
     note: 검증 경로 수정이지만 evidence_report.py 변경은 테스트로 검증되지 않음

@@ -101,3 +101,130 @@ seeds:
       - path: configs/scoring_v2.yaml
         find: "# 점수 규칙 v2"
         replace: "# 점수 규칙 v2 (seed)"
+  # --- 정상 변경 (1.3, 2026-11-04): 불필요한 경고를 잰다. 기대는 SAFE + COMPLETE ---
+  - id: N01
+    description: 테스트된 함수를 같은 동작으로 리팩터 (interpolate의 xs·ys를 zip으로)
+    expected: SAFE
+    expect_rules: []
+    expect_scope: COMPLETE
+    edits:
+      - path: src/scoring/score.py
+        find: |2
+              xs = [p[0] for p in points]
+              ys = [p[1] for p in points]
+        replace: |2
+              xs, ys = (list(c) for c in zip(*points))
+  - id: N02
+    description: 테스트만 추가 (기존 함수의 경계값)
+    expected: SAFE
+    expect_rules: []
+    expect_scope: COMPLETE
+    edits:
+      - path: tests/test_seed_boundary.py
+        create: |
+          from src.scoring.score import interpolate
+
+
+          def test_interpolate_clamps_both_ends():
+              points = [[0, 0], [10, 100]]
+              assert interpolate(-5, points) == 0
+              assert interpolate(15, points) == 100
+              assert interpolate(5, points) == 50
+  - id: N03
+    description: 테스트된 함수의 지역 변수 이름 변경
+    expected: SAFE
+    expect_rules: []
+    expect_scope: COMPLETE
+    edits:
+      - path: src/scoring/score.py
+        find: |2
+              i = bisect_right(xs, x) - 1
+              x0, x1, y0, y1 = xs[i], xs[i + 1], ys[i], ys[i + 1]
+        replace: |2
+              seg = bisect_right(xs, x) - 1
+              x0, x1, y0, y1 = xs[seg], xs[seg + 1], ys[seg], ys[seg + 1]
+  - id: N04
+    description: 소스의 주석·docstring만 수정
+    expected: SAFE
+    expect_rules: []
+    expect_scope: COMPLETE
+    edits:
+      - path: src/scoring/score.py
+        find: '    """고정 구간 선형 보간. 경계점 사이는 직선, 양 끝 밖은 끝점 점수로 고정 (README 7.1 B)."""'
+        replace: '    """고정 구간 선형 보간. 경계점 사이는 직선, 양 끝 밖은 끝점 점수로 고정한다 (README 7.1 B, seed)."""'
+  - id: N05
+    description: 새 함수와 그 테스트를 함께 추가
+    expected: SAFE
+    expect_rules: []
+    expect_scope: COMPLETE
+    edits:
+      - path: src/scoring/score.py
+        find: "def raw_score(metric: dict, rule: dict) -> float | None:"
+        replace: |-
+          def clamp_score(s: float) -> float:
+              if s < 0:
+                  return 0.0
+              if s > 100:
+                  return 100.0
+              return s
+
+
+          def raw_score(metric: dict, rule: dict) -> float | None:
+      - path: tests/test_seed_clamp.py
+        create: |
+          from src.scoring.score import clamp_score
+
+
+          def test_clamp_score():
+              assert clamp_score(-1) == 0.0
+              assert clamp_score(101) == 100.0
+              assert clamp_score(50) == 50
+  # --- 범위 밖 변경 (1.3): 검증하지 못한 것을 정직하게 표시하는지 본다 ---
+  - id: U01
+    description: JavaScript 파일 추가 (Python이 아닌 소스)
+    expected: REVIEW REQUIRED
+    expect_rules: [E02]
+    expect_scope: UNSUPPORTED
+    edits:
+      - path: web/app.js
+        create: |
+          export function ratio(a, b) {
+            return b === 0 ? null : a / b;
+          }
+  - id: U02
+    description: 새 데이터 파일 추가
+    expected: REVIEW REQUIRED
+    expect_rules: [E02]
+    expect_scope: UNSUPPORTED
+    edits:
+      - path: data/manual/seed_notes.csv
+        create: |
+          corp_code,note
+          00000000,seed
+  - id: U03
+    description: CI 워크플로 추가
+    expected: REVIEW REQUIRED
+    expect_rules: [E02]
+    expect_scope: UNSUPPORTED
+    edits:
+      - path: .github/workflows/ci.yml
+        create: |
+          name: ci
+          on: [push]
+          jobs:
+            test:
+              runs-on: ubuntu-latest
+              steps:
+                - uses: actions/checkout@v4
+                - run: pytest
+  - id: U04
+    description: 분류 규칙에 없는 파일(Makefile) + 소스 주석 수정 — 일부만 검증
+    expected: REVIEW REQUIRED
+    expect_rules: [E02]
+    expect_scope: PARTIAL
+    edits:
+      - path: Makefile
+        create: "test:\n\tpytest\n"
+      - path: src/scoring/score.py
+        find: '    """고정 구간 선형 보간. 경계점 사이는 직선, 양 끝 밖은 끝점 점수로 고정 (README 7.1 B)."""'
+        replace: '    """고정 구간 선형 보간 (README 7.1 B)."""'

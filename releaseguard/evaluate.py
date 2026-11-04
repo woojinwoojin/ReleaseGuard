@@ -2,7 +2,7 @@
 
 1. evaluate — 대상 저장소의 커밋 전체를 분석한다.
    - 자동 정답: 같은 커밋에서 바뀐 테스트 파일 ↔ 바뀐 줄을 실제로 실행한 테스트 파일
-   - 수기 정답: eval/cases.yaml의 expected → 판정 정확도 (참고 지표)
+   - 수기 라벨 v2 (eval/cases*.yaml): need(사람이 봐야 했나) → 과소·과잉 경고, expected_scope → 검증 범위 일치
    - 결정성: 수기 정답 커밋을 repeat번 돌려 판정·공백·테스트 목록이 같은지
 2. run_seeds — 대상 저장소를 임시로 clone해 결함을 심고, 기대 판정·규칙이 나오는지 본다.
 3. run_szz — 고친 커밋이 지우거나 바꾼 줄을 blame으로 거슬러 "결함을 들여온 커밋·줄"을 찾고,
@@ -20,7 +20,7 @@ import yaml
 
 from .analyze import ExplainRunner, analyze
 from .classify import RuleSet, classify
-from .decide import NOTE, SAFE, SEVERITY
+from .decide import NOTE, SAFE
 from .git_ops import resolve, run_git
 from .runner import find_python
 
@@ -49,6 +49,17 @@ def _test_file(nodeid: str) -> str:
 
 def _rules(result: dict) -> list[str]:
     return [f["rule_id"] for f in result["findings"] if f["decision"] != NOTE]
+
+
+def _need(value) -> str | None:
+    """YAML 1.1은 yes/no를 불리언으로 읽는다. 라벨은 문자열 yes/no로 맞춘다."""
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return "yes" if value else "no"
+    if value not in ("yes", "no"):
+        raise ValueError(f"need는 yes 또는 no: {value!r}")
+    return value
 
 
 def _signature(result: dict) -> tuple:
@@ -94,7 +105,10 @@ def evaluate(cases_path: Path, ruleset: RuleSet, explain: ExplainRunner | None =
             "gaps": [f"{fl['path']}:{s}" + (f"-{e}" if e != s else "") for fl in first["lines"] for s, e in fl["gaps"]],
             "actual_tests": actual,
             "executed_tests": sorted({_test_file(t) for fl in first["lines"] for t in fl["tests"]}),
-            "expected": label.get("expected"),
+            "need": _need(label.get("need")),
+            "need_reason": label.get("need_reason"),
+            "expected_scope": label.get("expected_scope"),
+            "followup_fix": label.get("followup_fix", []),
             "labeled_by": label.get("labeled_by"),
             "note": label.get("note"),
             "explanations": [_explain_row(r) for r in results if r["explanations"] is not None or r["agent_error"]],
@@ -133,8 +147,7 @@ def _count(values) -> dict[str, int]:
 
 def metrics(rows: list[dict]) -> dict:
     n = len(rows)
-    labeled = [r for r in rows if r["expected"]]
-    pairs = [(r["expected"], d) for r in labeled for d in r["decisions"]]
+    labeled = [r for r in rows if r["need"] is not None]
     ran = [r for r in rows if r["test_status"] not in ("skipped",)]
     out = {
         "commits": n,
@@ -148,20 +161,14 @@ def metrics(rows: list[dict]) -> dict:
             "gap_lines": sum(r["gap_lines"] for r in rows),
             "executable_lines": sum(r["executable_lines"] for r in rows),
         },
-        # 바뀐 줄을 실행한 테스트 파일 ↔ 같은 커밋에서 바뀐 테스트 파일
-        "test_retrieval": _retrieval([(r["executed_tests"], r["actual_tests"]) for r in rows if r["coverage"]]),
+        # Changed-test Retrieval: 바뀐 줄을 실행한 테스트 파일 ↔ 같은 커밋에서 바뀐 테스트 파일.
+        # 실제 "관련 테스트" 정답이 아니라 대리 지표다 (바뀌지 않은 관련 테스트는 정답에 없다).
+        "changed_test_retrieval": _retrieval([(r["executed_tests"], r["actual_tests"]) for r in rows if r["coverage"]]),
         "run_seconds": {
             "avg": round(sum(r["test_seconds"] for r in ran) / len(ran), 1) if ran else None,
             "max": max((r["test_seconds"] for r in ran), default=None),
         },
-        "decision": {
-            "labeled": len(labeled),
-            "judgments": len(pairs),
-            "accuracy": _ratio(sum(e == g for e, g in pairs), len(pairs)),
-            "over_warning": sum(SEVERITY[g] > SEVERITY[e] for e, g in pairs),
-            "under_warning": sum(SEVERITY[g] < SEVERITY[e] for e, g in pairs),
-            "confusion": _count(f"{e} → {g}" for e, g in pairs),
-        },
+        "labels": label_metrics(labeled),
         "determinism": None,
         "agent": None,
     }
@@ -184,9 +191,37 @@ def metrics(rows: list[dict]) -> dict:
     return out
 
 
+def over_warning_cause(rules: list[str]) -> str:
+    """need=no인데 경고한 이유. E02만이면 범위 정책의 비용(의도된 것), G01이 있으면 공백, 그 밖."""
+    if rules and set(rules) <= {"E02"}:
+        return "scope_only"
+    return "G01" if "G01" in rules else "other"
+
+
+def label_metrics(labeled: list[dict]) -> dict:
+    """수기 라벨 v2. 반복 실행이면 실행마다 센다 (판정이 흔들리면 그대로 드러난다)."""
+    need = [(r, d) for r in labeled if r["need"] == "yes" for d in r["decisions"]]
+    no_need = [(r, d) for r in labeled if r["need"] == "no" for d in r["decisions"]]
+    over = [r for r, d in no_need if d != SAFE]
+    scoped = [r for r in labeled if r["expected_scope"]]
+    return {
+        "labeled": len(labeled),
+        "need_yes": sum(r["need"] == "yes" for r in labeled),
+        "need_no": sum(r["need"] == "no" for r in labeled),
+        # 가장 위험: 봐야 했는데 SAFE
+        "under_warning": {"count": sum(d == SAFE for _, d in need), "of": len(need),
+                          "commits": sorted({r["sha"] for r, d in need if d == SAFE})},
+        "over_warning": {"count": len(over), "of": len(no_need),
+                         "by_cause": _count(over_warning_cause(r["rules"]) for r in over),
+                         "commits": sorted({r["sha"] for r in over})},
+        "scope_agreement": {"agree": sum(r["expected_scope"] == r["scope"] for r in scoped), "of": len(scoped),
+                            "mismatch": [f"{r['sha']} ({r['expected_scope']} → {r['scope']})" for r in scoped if r["expected_scope"] != r["scope"]]},
+    }
+
+
 def to_markdown(ev: dict) -> str:
     m = ev["metrics"]
-    d, tr, g = m["decision"], m["test_retrieval"], m["gaps"]
+    lb, tr, g = m["labels"], m["changed_test_retrieval"], m["gaps"]
     lines = [
         "# ReleaseGuard Eval — 커밋 전체",
         "",
@@ -198,10 +233,18 @@ def to_markdown(ev: dict) -> str:
         "- 규칙 발동률: " + (", ".join(f"{k} {v:.0%}" for k, v in m["rule_fire_rate"].items()) or "없음"),
         "- 참고 표시율: " + (", ".join(f"{k} {v:.0%}" for k, v in m["note_rate"].items()) or "없음"),
         f"- 검증 공백: 커밋 {g['commits_with_gap']}개, 바뀐 실행 줄 {g['executable_lines']}줄 중 {g['gap_lines']}줄",
-        f"- 바뀐 줄을 실행한 테스트 ↔ 같은 커밋에서 바뀐 테스트 (커밋 {tr['commits']}개): precision {tr['precision']}, recall {tr['recall']}",
-        f"- 판정 (수기 정답 {d['labeled']}개, 판정 {d['judgments']}회): 정확도 {d['accuracy']}, 과잉 경고 {d['over_warning']}, 과소 경고 {d['under_warning']}",
+        f"- Changed-test Retrieval (바뀐 줄을 실행한 테스트 ↔ 같은 커밋에서 바뀐 테스트, 대리 지표, 커밋 {tr['commits']}개): "
+        f"precision {tr['precision']}, recall {tr['recall']}",
     ]
-    lines += [f"  - {k}: {v}" for k, v in d["confusion"].items()]
+    if lb["labeled"]:
+        u, o, sc = lb["under_warning"], lb["over_warning"], lb["scope_agreement"]
+        lines += [
+            f"- 수기 라벨 {lb['labeled']}개 (봐야 했음 {lb['need_yes']}, 아님 {lb['need_no']})",
+            f"  - 과소 경고 (봐야 했는데 SAFE): **{u['count']}/{u['of']}** " + ", ".join(f"`{c}`" for c in u["commits"]),
+            f"  - 과잉 경고 (안 봐도 됐는데 경고): {o['count']}/{o['of']} — 원인 "
+            + (", ".join(f"{k} {v}" for k, v in o["by_cause"].items()) or "-") + " " + ", ".join(f"`{c}`" for c in o["commits"]),
+            f"  - 검증 범위 일치: {sc['agree']}/{sc['of']}" + (" — 불일치 " + ", ".join(sc["mismatch"]) if sc["mismatch"] else ""),
+        ]
     if det := m["determinism"]:
         lines.append(f"- 결정성: 반복 실행 결과가 완전히 같은 커밋 {det['identical']}/{det['commits']}")
     if a := m["agent"]:
@@ -214,14 +257,18 @@ def to_markdown(ev: dict) -> str:
         "",
         "## 커밋별",
         "",
-        "| 커밋 | 제목 | 판정 | 범위 | 기대 | 규칙 | 테스트 | 공백/실행 줄 | 바뀐 테스트 | 실행한 테스트 |",
-        "|---|---|---|---|---|---|---|---|---|---|",
+        "| 커밋 | 제목 | 판정 | 범위 | 봐야 했나 | 기대 범위 | 규칙 | 테스트 | 공백/실행 줄 | 바뀐 테스트 | 실행한 테스트 |",
+        "|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for r in ev["rows"]:
         decision = " / ".join(dict.fromkeys(r["decisions"]))
-        mark = "" if not r["expected"] else (" ✓" if all(x == r["expected"] for x in r["decisions"]) else " ✗")
+        mark = ""
+        if r["need"] == "yes" and SAFE in r["decisions"]:
+            mark = " ✗ 과소"
+        elif r["need"] == "no" and any(x != SAFE for x in r["decisions"]):
+            mark = " △ 과잉"
         lines.append(
-            f"| `{r['sha']}` | {r['subject']} | {decision}{mark} | {r['scope']} | {r['expected'] or '-'} | {', '.join(r['rules']) or '-'} | "
+            f"| `{r['sha']}` | {r['subject']} | {decision}{mark} | {r['scope']} | {r['need'] or '-'} | {r['expected_scope'] or '-'} | {', '.join(r['rules']) or '-'} | "
             f"{r['test_status']} | {r['gap_lines']}/{r['executable_lines']} | {'<br>'.join(r['actual_tests']) or '-'} | "
             f"{'<br>'.join(r['executed_tests']) or '-'} |"
         )

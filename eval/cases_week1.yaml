@@ -1,0 +1,32 @@
+# Eval Set — 1주차 CSV_LLM_Report (독립 일반화 평가용, 1.3에서 추가)
+# 라벨 기준은 eval/cases.yaml의 "라벨 v2"와 같다. need_reason에 risky_area 추가:
+#   risky_area = 테스트가 있어도 사람이 봐야 하는 영역 (DB 마이그레이션, 스레드·동시성, LLM 도구 인터페이스 등)
+# 라벨은 ReleaseGuard를 돌리기 전에 diff·커밋 메시지·이후 커밋만 보고 달았다 (판정 결과를 보고 맞추지 않음).
+# labeled_by: claude-draft (2026-11-04, 사용자 확인 전)
+repo: ../../2026-10/week1-csv-llm-report
+cases:
+  - sha: 44ed326
+    need: yes
+    need_reason: untested
+    expected_scope: PARTIAL
+    followup_fix: [f483ebe]
+    labeled_by: claude-draft
+    note: 분석·LLM 보고서 모듈을 테스트 없이 추가. 다음 커밋에서 payload를 모든 매핑 데이터로 일반화
+  - sha: f483ebe
+    need: yes
+    need_reason: untested
+    expected_scope: PARTIAL
+    labeled_by: claude-draft
+    note: Streamlit UI 186줄은 smoke test만. 분석·payload는 테스트 함께 추가
+  - sha: 06a8bd0
+    need: no
+    need_reason: none
+    expected_scope: COMPLETE
+    labeled_by: claude-draft
+    note: REPORT.md만
+  - sha: 0fce2c7
+    need: no
+    need_reason: none
+    expected_scope: UNSUPPORTED
+    labeled_by: claude-draft
+    note: .gitignore만
