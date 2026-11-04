@@ -6,13 +6,18 @@
 #   need_reason: followup_fix(이후 커밋에서 이 변경의 문제가 고쳐짐, followup_fix에 기록)
 #              | policy(정책·기준 변경이라 사람 확인 필요) | untested(동작이 바뀌는데 검증 안 된 부분이 보임)
 #              | risky_area(테스트가 있어도 사람이 봐야 하는 영역: DB 마이그레이션, 동시성 등) | none
+#   followup_fix는 이후 커밋을 보고 단 사후 라벨이다. ReleaseGuard 실행과는 독립이지만 미래 정보를 쓴다.
+#   기능 확장·일반화는 followup_fix가 아니다 — 이전 구현의 구체적인 결함을 고친 경우만.
 # - expected_scope: 변경 파일만 보고 정한 검증 범위 (판정 규칙 v3의 정의)
+#   COMPLETE는 "검증하지 못한 변경 파일이 없다"는 뜻이지 코드의 모든 경로가 검증됐다는 뜻이 아니다 (경로는 G01이 본다).
 #   COMPLETE: 문서를 뺀 변경이 모두 Python 소스·테스트 / PARTIAL: 일부가 설정·데이터·비Python 등
 #   UNSUPPORTED: 문서를 뺀 변경이 모두 그런 파일
 # 라벨 v1(expected: SAFE/REVIEW/BLOCK)은 need로 옮겼다: SAFE → no, REVIEW → yes. 판정 정확도는 더 쓰지 않는다
 # (v3는 범위 밖 변경을 의도적으로 REVIEW로 올리므로, need=no인 경고는 원인별로 따로 센다).
 #
-# labeled_by: user = 사용자 확인 (need: 2026-11-03 15개 일괄 확인), expected_scope는 claude-draft (2026-11-04, 확인 전)
+# need_labeled_by / scope_labeled_by: 필드마다 누가 확인했는지
+#   user = 사용자 확인, claude-draft = Claude 초안 (사용자 확인 전)
+#   15개: need는 user (2026-11-03), expected_scope는 claude-draft (2026-11-04, 외부 검토에서 분포 동의 — COMPLETE 6·PARTIAL 8·UNSUPPORTED 1)
 repo: ../../predict-success
 # SZZ용: 앞선 커밋의 결함을 고친 커밋 (커밋 메시지로 확인)
 fix_commits: [c7733b3, 142912b, c2fe0d1]
@@ -22,96 +27,111 @@ cases:
     need: no
     need_reason: none
     expected_scope: COMPLETE
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     note: README만 변경
   - sha: f962d60
     need: no
     need_reason: none
     expected_scope: UNSUPPORTED
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     note: .env.example(예시 파일)과 문서만 변경 — 실행 동작 없음
   - sha: 99309f2
     need: no
     need_reason: none
     expected_scope: COMPLETE
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     note: 새 모듈과 테스트를 함께 추가, 빈 __init__.py
   - sha: 075e30c
     need: no
     need_reason: none
     expected_scope: COMPLETE
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     note: 보고서 샘플만 추가
   - sha: c9824b0
     need: no
     need_reason: none
     expected_scope: COMPLETE
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     note: 진행 체크리스트 문서만 변경
   - sha: a5465f0
     need: no
     need_reason: none
     expected_scope: COMPLETE
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     note: README·샘플 갱신
   - sha: c7733b3
     need: no
     need_reason: none
     expected_scope: PARTIAL
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     note: 리뷰 지적 수정, 관련 테스트 5개 함께 수정. 재계산 결과 2025 지표 변화 없음을 커밋에 기록
   # --- need: yes ---
   - sha: 3db2f31
     need: yes
     need_reason: followup_fix
     expected_scope: PARTIAL
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     followup_fix: [c7733b3, 142912b]
     note: 첫 2025 지표 계산. 기간 일치·음수 분모 문제가 이후 수정됨
   - sha: 9e9c12b
     need: yes
     need_reason: followup_fix
     expected_scope: PARTIAL
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     followup_fix: [c7733b3]
     note: 수기 합계 보완. 미확인 값 승격 경로가 이후 수정됨
   - sha: b67e806
     need: yes
     need_reason: followup_fix
     expected_scope: PARTIAL
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     followup_fix: [c7733b3]
     note: 매각예정 항목 조정. 누락 금액을 0으로 읽던 문제가 이후 수정됨
   - sha: f2d690e
     need: yes
     need_reason: followup_fix
     expected_scope: PARTIAL
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     followup_fix: [142912b]
     note: 시장 통계 연결. 비중 해석·연속성 문제가 이후 수정됨
   - sha: adb2f5b
     need: yes
     need_reason: followup_fix
     expected_scope: PARTIAL
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     followup_fix: [142912b]
     note: 작성지침 판정. 판정 승격 문제가 이후 수정됨
   - sha: b515f78
     need: yes
     need_reason: policy
     expected_scope: PARTIAL
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     note: 점수 규칙 v2 채택 — 정책 변경이라 사람 확인 필요
   - sha: da30a78
     need: yes
     need_reason: followup_fix
     expected_scope: COMPLETE
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     followup_fix: [c2fe0d1]
     note: 증거 보고서 추가(테스트 없음). 보고서 주장 범위가 이후 축소됨
   - sha: 142912b
     need: yes
     need_reason: untested
     expected_scope: PARTIAL
-    labeled_by: user
+    need_labeled_by: user
+    scope_labeled_by: claude-draft
     note: 검증 경로 수정이지만 evidence_report.py 변경은 테스트로 검증되지 않음

@@ -109,7 +109,8 @@ def evaluate(cases_path: Path, ruleset: RuleSet, explain: ExplainRunner | None =
             "need_reason": label.get("need_reason"),
             "expected_scope": label.get("expected_scope"),
             "followup_fix": label.get("followup_fix", []),
-            "labeled_by": label.get("labeled_by"),
+            "need_labeled_by": label.get("need_labeled_by"),
+            "scope_labeled_by": label.get("scope_labeled_by"),
             "note": label.get("note"),
             "explanations": [_explain_row(r) for r in results if r["explanations"] is not None or r["agent_error"]],
         })
@@ -192,10 +193,14 @@ def metrics(rows: list[dict]) -> dict:
 
 
 def over_warning_cause(rules: list[str]) -> str:
-    """need=no인데 경고한 이유. E02만이면 범위 정책의 비용(의도된 것), G01이 있으면 공백, 그 밖."""
+    """need=no인데 경고한 이유. 심각한 쪽부터: BLOCK 규칙 → G01 → E02만(범위 정책의 비용, 의도된 것) → 그 밖."""
+    if block := [r for r in rules if r in ("B01", "B03", "B04")]:
+        return block[0]
+    if "G01" in rules:
+        return "G01"
     if rules and set(rules) <= {"E02"}:
         return "scope_only"
-    return "G01" if "G01" in rules else "other"
+    return "other"
 
 
 def label_metrics(labeled: list[dict]) -> dict:
@@ -203,14 +208,23 @@ def label_metrics(labeled: list[dict]) -> dict:
     need = [(r, d) for r in labeled if r["need"] == "yes" for d in r["decisions"]]
     no_need = [(r, d) for r in labeled if r["need"] == "no" for d in r["decisions"]]
     over = [r for r, d in no_need if d != SAFE]
-    scoped = [r for r in labeled if r["expected_scope"]]
+    # 실행 환경이 정상인 커밋만: 실행 실패로 생긴 범위 불일치를 라벨 오류로 오해하지 않도록
+    scoped = [r for r in labeled if r["expected_scope"] and r["test_status"] not in ("error", "timeout", "not_run")]
+
+    def under(pairs: list) -> dict:
+        return {"count": sum(d == SAFE for _, d in pairs), "of": len(pairs), "commits": sorted({r["sha"] for r, d in pairs if d == SAFE})}
     return {
         "labeled": len(labeled),
         "need_yes": sum(r["need"] == "yes" for r in labeled),
         "need_no": sum(r["need"] == "no" for r in labeled),
         # 가장 위험: 봐야 했는데 SAFE
-        "under_warning": {"count": sum(d == SAFE for _, d in need), "of": len(need),
-                          "commits": sorted({r["sha"] for r, d in need if d == SAFE})},
+        "under_warning": under(need),
+        # need_reason별: untested·followup_fix는 이 도구가 잡아야 할 것, risky_area·policy는 원리상 못 보는 것 (제품 범위의 한계)
+        # followup_fix는 이후 커밋을 보고 단 사후 라벨이다 (ReleaseGuard 실행과는 독립이지만 미래 정보를 쓴다)
+        "under_warning_by_reason": {
+            reason: under([(r, d) for r, d in need if r["need_reason"] == reason])
+            for reason in sorted({r["need_reason"] for r, _ in need if r["need_reason"]})
+        },
         "over_warning": {"count": len(over), "of": len(no_need),
                          "by_cause": _count(over_warning_cause(r["rules"]) for r in over),
                          "commits": sorted({r["sha"] for r in over})},
@@ -241,9 +255,10 @@ def to_markdown(ev: dict) -> str:
         lines += [
             f"- 수기 라벨 {lb['labeled']}개 (봐야 했음 {lb['need_yes']}, 아님 {lb['need_no']})",
             f"  - 과소 경고 (봐야 했는데 SAFE): **{u['count']}/{u['of']}** " + ", ".join(f"`{c}`" for c in u["commits"]),
+            *(f"    - {k}: {v['count']}/{v['of']} " + ", ".join(f"`{c}`" for c in v["commits"]) for k, v in lb["under_warning_by_reason"].items()),
             f"  - 과잉 경고 (안 봐도 됐는데 경고): {o['count']}/{o['of']} — 원인 "
             + (", ".join(f"{k} {v}" for k, v in o["by_cause"].items()) or "-") + " " + ", ".join(f"`{c}`" for c in o["commits"]),
-            f"  - 검증 범위 일치: {sc['agree']}/{sc['of']}" + (" — 불일치 " + ", ".join(sc["mismatch"]) if sc["mismatch"] else ""),
+            f"  - 검증 범위 일치 (실행 정상 커밋): {sc['agree']}/{sc['of']}" + (" — 불일치 " + ", ".join(sc["mismatch"]) if sc["mismatch"] else ""),
         ]
     if det := m["determinism"]:
         lines.append(f"- 결정성: 반복 실행 결과가 완전히 같은 커밋 {det['identical']}/{det['commits']}")

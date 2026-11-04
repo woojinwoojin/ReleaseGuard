@@ -69,9 +69,17 @@ def test_run_not_established_makes_python_changes_unverified():
         assert (decision, ids(findings), scope.status) == (REVIEW, ["E01"], UNSUPPORTED)
 
 
-def test_missing_coverage_is_review():
-    decision, findings, _ = judge([file("src/x.py", "source")], run("passed", coverage=False))
-    assert (decision, ids(findings)) == (REVIEW, ["E01"])
+def test_missing_coverage_is_review_and_unsupported():
+    # 테스트는 통과했지만 coverage 보고서를 못 만들면 검증 근거가 없다 (외부 리뷰 2026-11-04 지적)
+    decision, findings, scope = judge([file("src/x.py", "source")], run("passed", coverage=False))
+    assert (decision, ids(findings), scope.status) == (REVIEW, ["E01"], UNSUPPORTED)
+
+
+def test_no_tests_is_a_measurement_not_missing_evidence():
+    # 테스트가 없으면 "아무 테스트도 실행하지 않음"이 측정 결과다 → 범위는 COMPLETE, 결과는 G01
+    fl = FileLines("src/a.py", False, 2, 2, 0, 0, 2, [(1, 2)])
+    decision, findings, scope = judge([file("src/a.py", "source")], run("no_tests", coverage=True), [fl])
+    assert (decision, ids(findings), scope.status) == (REVIEW, ["G01"], COMPLETE)
 
 
 def test_collection_error_blocks_and_is_unsupported():

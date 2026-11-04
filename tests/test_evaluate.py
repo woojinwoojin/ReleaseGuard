@@ -83,4 +83,24 @@ def test_over_warning_cause_and_yaml_booleans():
     assert over_warning_cause(["E02"]) == "scope_only"
     assert over_warning_cause(["G01", "E02"]) == "G01"
     assert over_warning_cause(["R04"]) == "other"
+    assert over_warning_cause(["B03", "G01"]) == "B03"
     assert (_need(True), _need(False), _need("yes"), _need(None)) == ("yes", "no", "yes", None)
+
+
+def test_under_warning_split_by_reason_and_scope_skips_broken_runs():
+    from releaseguard.evaluate import label_metrics
+
+    def row(sha, need, reason, decision, scope="COMPLETE", expected_scope="COMPLETE", status="passed"):
+        return {"sha": sha, "need": need, "need_reason": reason, "decisions": [decision], "rules": [],
+                "scope": scope, "expected_scope": expected_scope, "test_status": status}
+
+    m = label_metrics([
+        row("a", "yes", "untested", "REVIEW REQUIRED"),
+        row("b", "yes", "risky_area", "SAFE"),
+        row("c", "yes", "risky_area", "SAFE"),
+        row("d", "no", "none", "SAFE", scope="UNSUPPORTED", status="timeout"),  # 실행 실패 → 범위 비교에서 뺀다
+    ])
+    assert m["under_warning"] == {"count": 2, "of": 3, "commits": ["b", "c"]}
+    assert m["under_warning_by_reason"]["untested"]["count"] == 0
+    assert m["under_warning_by_reason"]["risky_area"] == {"count": 2, "of": 2, "commits": ["b", "c"]}
+    assert m["scope_agreement"]["of"] == 3

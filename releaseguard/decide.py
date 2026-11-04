@@ -49,7 +49,20 @@ class Scope:
     unverified: list[dict] = field(default_factory=list)  # {"path", "category", "kind", "reason"}
 
 
-def _unverified(f: dict, run_status: str) -> tuple[str, str] | None:
+def run_established(run_status: str, has_coverage: bool) -> bool:
+    """테스트 실행이 검증 근거(테스트별 실행 줄)를 만들었는가.
+
+    no_tests는 근거가 있다고 본다: "어떤 테스트도 이 줄을 실행하지 않는다"는 측정 결과이고, G01로 드러난다.
+    passed·failed인데 coverage를 못 얻었으면 근거가 없다 (E01).
+    """
+    if run_status in RUN_NOT_ESTABLISHED:
+        return False
+    if run_status in ("passed", "failed", "no_tests"):
+        return has_coverage
+    return True  # skipped (문서만 바뀜): 검증할 소스가 없다
+
+
+def _unverified(f: dict, established: bool) -> tuple[str, str] | None:
     """이 변경 파일을 검증하지 못하는 (종류, 이유). 검증했거나 검증할 필요가 없으면(문서) None.
 
     종류: run(테스트 실행이 근거를 못 만듦 → E01·B04) | deps(R04) | outside(검증 범위 밖 → E02)
@@ -58,7 +71,7 @@ def _unverified(f: dict, run_status: str) -> tuple[str, str] | None:
     if category == "docs":
         return None
     if category == "test" or (category == "source" and path.endswith(".py")):
-        return ("run", "테스트 실행이 근거를 만들지 못함") if run_status in RUN_NOT_ESTABLISHED else None
+        return None if established else ("run", "테스트 실행이 근거(coverage)를 만들지 못함")
     if category == "deps":
         return "deps", "의존성 변경은 테스트 환경에 반영되지 않음"
     reason = {
@@ -69,12 +82,13 @@ def _unverified(f: dict, run_status: str) -> tuple[str, str] | None:
     return "outside", reason
 
 
-def compute_scope(files: list[dict], run_status: str) -> Scope:
+def compute_scope(files: list[dict], run_status: str, has_coverage: bool = True) -> Scope:
+    established = run_established(run_status, has_coverage)
     relevant = [f for f in files if f["category"] != "docs"]
     unverified = [
         {"path": f["path"], "category": f["category"], "kind": u[0], "reason": u[1]}
         for f in relevant
-        if (u := _unverified(f, run_status))
+        if (u := _unverified(f, established))
     ]
     if not unverified:
         return Scope(COMPLETE)
@@ -105,7 +119,7 @@ def decide(
     run["snapshot_warnings"]: 스냅샷이 저장소와 다를 수 있는 이유
     """
     findings: list[Finding] = []
-    scope = compute_scope(files, run["status"])
+    scope = compute_scope(files, run["status"], bool(run["coverage"]))
 
     def by(category: str, deleted: bool | None = None) -> list[str]:
         return [f["path"] for f in files if f["category"] == category and (deleted is None or (f["status"] == "D") == deleted)]
