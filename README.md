@@ -4,7 +4,7 @@
 
 - **현재 상태와 로드맵: [docs/status_roadmap.md](docs/status_roadmap.md)**
 - 문제 정의: [docs/problem.md](docs/problem.md) · 설계: [docs/design.md](docs/design.md) · 제안서: [docs/proposal.md](docs/proposal.md)
-- 평가 보고서: [#1](docs/eval/20261103_eval_report.md), [#2](docs/eval/20261103_eval_report_2.md) (v1), [#3](docs/eval/20261103_eval_report_3.md) (v2), [#4](docs/eval/20261104_eval_report_4.md), [#5](docs/eval/20261104_eval_report_5.md) (v3·v3.1), [#6](docs/eval/20261104_eval_report_6.md) (분기 coverage), [#7](docs/eval/20261107_eval_report_7.md) (함수별 공백 그룹), [#8](docs/eval/20261107_eval_report_8.md) (공백 설명 에이전트)
+- 평가 보고서: [#1](docs/eval/20261103_eval_report.md), [#2](docs/eval/20261103_eval_report_2.md) (v1), [#3](docs/eval/20261103_eval_report_3.md) (v2), [#4](docs/eval/20261104_eval_report_4.md), [#5](docs/eval/20261104_eval_report_5.md) (v3·v3.1), [#6](docs/eval/20261104_eval_report_6.md) (분기 coverage), [#7](docs/eval/20261107_eval_report_7.md) (함수별 공백 그룹), [#8](docs/eval/20261107_eval_report_8.md), [#9](docs/eval/20261107_eval_report_9.md) (공백 설명 에이전트)
 - 보고서 샘플: [docs/samples/report_142912b.md](docs/samples/report_142912b.md)
 
 ## 실행

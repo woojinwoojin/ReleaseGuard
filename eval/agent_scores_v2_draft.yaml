@@ -1,0 +1,52 @@
+# Agent Eval 실험 2 채점 — **Claude 초안, 사용자 확인 전**
+# 기준: docs/eval/agent_eval_protocol.md. 채점자는 실험 1 결과와 후속 수정 내용을 이미 안다 (눈가림 아님).
+scored_by: claude-draft
+cases:
+  F3:
+    run1: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
+    run2: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
+    consistency: 2
+    added_value: 1
+    note: 실험 1과 같음
+  N1:
+    run1: {grounding: 2, behavior: 2, trigger: 1, feasibility: 2, assertion: 2}
+    run2: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
+    consistency: 1
+    added_value: 1
+    note: 실행 1은 유효한 카테고리 경로라 300줄(return error)에 닿지 않음. 실행 2는 없는 카테고리 경로
+  F1:
+    run1: {grounding: 2, behavior: 1, trigger: 2, feasibility: 1, assertion: 2}
+    run2: {grounding: 2, behavior: 2, trigger: 1, feasibility: 1, assertion: 1}
+    consistency: 1
+    added_value: 1
+    note: 실행 1 동작 설명에 다른 언어 단어가 섞임(출력 품질 문제). 실행 2는 예외 경로만 보고 ROOT 교체를 말하지 않음. stats 폴더가 없으면 메시지 assertion이 실패
+  F2:
+    run1: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
+    run2: {grounding: 2, behavior: 2, trigger: 2, feasibility: 1, assertion: 1}
+    consistency: 1
+    added_value: 1
+    note: 실행 1은 guideline_section 직접 호출로 좋아짐 (추가 검증 17/17). 입력에 이 함수의 기존 테스트가 없어 입력 보강의 효과라고 볼 근거는 없음. 실행 2는 여전히 report() 경유
+  N2:
+    run1: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
+    run2: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
+    consistency: 2
+    added_value: 1
+    note: 실험 1과 같은 수준
+  N3:
+    run1: {grounding: 1, behavior: 2, trigger: 1, feasibility: 1, assertion: 2}
+    run2: {grounding: 1, behavior: 2, trigger: 2, feasibility: 1, assertion: 2}
+    consistency: 2
+    added_value: 0
+    note: 둘 다 기존 테스트와 같은 이름을 제안 (그대로 넣으면 기존 함수를 덮어씀), 여전히 skip 파일, skip 언급 없음. 도구를 안 쓰고 없는 참조(142줄 파일의 1-200, 호출한 적 없는 tool:#1)를 인용
+  B1:
+    run1: {grounding: 2, behavior: 2, trigger: 2, feasibility: 1, assertion: 2}
+    run2: {grounding: 2, behavior: 2, trigger: 2, feasibility: 1, assertion: 2}
+    consistency: 1
+    added_value: 1
+    note: 실행 1은 202~203줄을 겨냥, 실행 2는 시간 표시로 빠져 실험 1보다 약함. 둘 다 skip 파일, skip 언급 없음
+  B2:
+    run1: {grounding: 2, behavior: 2, trigger: 2, feasibility: 1, assertion: 2}
+    run2: {grounding: 2, behavior: 2, trigger: 2, feasibility: 1, assertion: 2}
+    consistency: 2
+    added_value: 2
+    note: 패치 지점은 그대로 맞음. 도구를 안 써서 저장소의 fixture·read_sse를 쓰지 않아 실험 1보다 바로 쓰기 어려움

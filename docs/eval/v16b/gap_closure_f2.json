@@ -1,0 +1,12 @@
+{
+  "id": "F2",
+  "commit": "adb2f5b",
+  "target": "src/market/run_market.py:238-254",
+  "runnable": true,
+  "gap_lines": 17,
+  "gap_lines_executed": 17,
+  "missing": [],
+  "behavior_checked": true,
+  "human_changes": "DataFrame 생성과 출력 수집 코드 (값은 제안 그대로)",
+  "output": null
+}
