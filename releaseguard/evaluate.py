@@ -15,12 +15,14 @@ import re
 import subprocess
 import tempfile
 from pathlib import Path, PurePosixPath
+from statistics import median
 
 import yaml
 
 from .analyze import ExplainRunner, analyze
 from .classify import RuleSet, classify
 from .decide import NOTE, SAFE
+from .gap_groups import preservation
 from .git_ops import resolve, run_git
 from .runner import find_python
 
@@ -69,6 +71,7 @@ def _signature(result: dict) -> tuple:
         result["scope"]["status"],
         tuple(_rules(result)),
         tuple((fl["path"], tuple(map(tuple, fl["gaps"]))) for fl in result["lines"]),
+        tuple((g["path"], g["name"], g["gap_lines"], g["review_priority"]) for g in result["gap_groups"]),  # 그룹과 순서까지
         tuple(sorted({t for fl in result["lines"] for t in fl["tests"]})),
     )
 
@@ -103,6 +106,12 @@ def evaluate(cases_path: Path, ruleset: RuleSet, explain: ExplainRunner | None =
             "gap_lines": sum(fl["gap_lines"] for fl in first["lines"]),
             "executable_lines": sum(fl["executable"] for fl in first["lines"]),
             "gaps": [f"{fl['path']}:{s}" + (f"-{e}" if e != s else "") for fl in first["lines"] for s, e in fl["gaps"]],
+            # 함수별 공백 (검토 순서대로)과, 줄 단위 공백을 빠짐없이 옮겼는지
+            "gap_groups": [
+                {k: g[k] for k in ("path", "kind", "name", "start_line", "gap_lines", "gap_ranges", "review_priority")}
+                for g in first["gap_groups"]
+            ],
+            "gap_preservation": preservation(first["lines"], first["gap_groups"]),
             # 분기 공백 (판정 미반영): 바뀐 분기 줄의 분기 수와 실행 안 된 분기
             "branches": sum(fl["branches"] for fl in first["lines"]),
             "branch_gaps": [f"{fl['path']}:{a}->{b}" for fl in first["lines"] for a, b in fl["branch_gaps"]],
@@ -166,6 +175,15 @@ def metrics(rows: list[dict]) -> dict:
             "gap_lines": sum(r["gap_lines"] for r in rows),
             "executable_lines": sum(r["executable_lines"] for r in rows),
             "fixture_only_lines": sum(r["fixture_only"] for r in rows),
+        },
+        "gap_groups": {
+            "groups": sum(len(r["gap_groups"]) for r in rows),
+            "by_kind": _count(g["kind"] for r in rows for g in r["gap_groups"]),
+            "low_groups": sum(g["review_priority"] == "LOW" for r in rows for g in r["gap_groups"]),
+            "low_paths": sorted({g["path"] for r in rows for g in r["gap_groups"] if g["review_priority"] == "LOW"}),
+            "missing": sum(r["gap_preservation"]["missing"] for r in rows),
+            "extra": sum(r["gap_preservation"]["extra"] for r in rows),
+            "duplicate": sum(r["gap_preservation"]["duplicate"] for r in rows),
         },
         # 줄 공백과 따로 센다. branch_gap_only = 줄 공백은 없고 분기 공백만 있는 커밋 (줄 단위로는 놓쳤을 커밋)
         "branch_gaps": {
@@ -263,6 +281,8 @@ def to_markdown(ev: dict) -> str:
         f"- 분기 공백 (판정 미반영): 커밋 {m['branch_gaps']['commits_with_branch_gap']}개 "
         f"(그중 줄 공백 없이 분기 공백만 {m['branch_gaps']['commits_branch_gap_only']}개), "
         f"바뀐 분기 줄의 분기 {m['branch_gaps']['branches']}개 중 {m['branch_gaps']['branch_gaps']}개",
+        f"- 함수별 공백 그룹 {m['gap_groups']['groups']}개 ({', '.join(f'{k} {v}' for k, v in m['gap_groups']['by_kind'].items()) or '-'}), "
+        f"LOW {m['gap_groups']['low_groups']}개 · 줄 보존: 누락 {m['gap_groups']['missing']}, 추가 {m['gap_groups']['extra']}, 중복 {m['gap_groups']['duplicate']}",
         f"- Changed-test Retrieval (바뀐 줄을 실행한 테스트 ↔ 같은 커밋에서 바뀐 테스트, 대리 지표, 커밋 {tr['commits']}개): "
         f"precision {tr['precision']}, recall {tr['recall']}",
     ]
@@ -437,6 +457,53 @@ def blame_origins(repo: Path, fix: str, path: str, lines: list[int]) -> list[dic
     return out
 
 
+def _first_hit(groups: list[dict], defects: set[tuple[str, int]]) -> tuple[int, int, int]:
+    """(결함이 든 첫 그룹의 순위, 그 그룹을 끝까지 읽을 때 공백 줄 수, 그 그룹의 첫 결함 줄까지만 읽을 때 공백 줄 수)."""
+    read = 0
+    for rank, g in enumerate(groups, 1):
+        hits = [i for i, n in enumerate(g["gap_line_numbers"], 1) if (g["path"], n) in defects]
+        if hits:
+            return rank, read + g["gap_lines"], read + hits[0]
+        read += g["gap_lines"]
+    raise ValueError("결함이 든 그룹이 없음")
+
+
+def review_cost(groups: list[dict], defects: set[tuple[str, int]]) -> dict | None:
+    """결함 줄이 공백에 있는 커밋에서, 검토 순서대로 볼 때와 소스 순서로 볼 때 첫 결함까지의 비용."""
+    if not any((g["path"], n) in defects for g in groups for n in g["gap_line_numbers"]):
+        return None
+    rank, read, to_line = _first_hit(groups, defects)
+    source_rank, source_read, source_to_line = _first_hit(sorted(groups, key=lambda g: (g["path"], g["gap_line_numbers"][0])), defects)
+    return {
+        "groups": len(groups),
+        "gap_lines": sum(g["gap_lines"] for g in groups),
+        "rank": rank, "lines_read": read, "lines_to_defect": to_line,
+        "source_rank": source_rank, "source_lines_read": source_read, "source_lines_to_defect": source_to_line,
+    }
+
+
+def review_order_metrics(items: list[dict]) -> dict | None:
+    """회귀 지표: 구현이 규칙을 그대로 재현하는지 본다. 규칙을 고른 데이터라 일반화 성능이 아니다."""
+    if not items:
+        return None
+
+    def side(rank: str, read: str, to_defect: str) -> dict:
+        lines = [x[read] for x in items]
+        to_line = [x[to_defect] for x in items]
+        return {
+            "top1": sum(x[rank] == 1 for x in items),
+            "mrr": round(sum(1 / x[rank] for x in items) / len(items), 2),
+            "lines_read_total": sum(lines),
+            "lines_read_median": median(lines),
+            "share_of_gap_lines": _ratio(sum(lines), sum(x["gap_lines"] for x in items)),
+            "lines_to_defect_total": sum(to_line),
+            "lines_to_defect_median": median(to_line),
+        }
+
+    return {"commits": len(items), "by_gap_size": side("rank", "lines_read", "lines_to_defect"),
+            "source_order": side("source_rank", "source_lines_read", "source_lines_to_defect")}
+
+
 def run_szz(cases_path: Path, ruleset: RuleSet) -> dict:
     repo, raw, python = load_yaml(cases_path)
     fixes = [resolve(repo, str(f)) for f in raw.get("fix_commits", [])]
@@ -474,6 +541,7 @@ def run_szz(cases_path: Path, ruleset: RuleSet) -> dict:
             "decision": result["decision"],
             "rules": _rules(result),
             "lines": lines,
+            "review": review_cost(result["gap_groups"], {(o["path"], o["line"]) for o in items}),
         })
     all_lines = [ln for r in rows for ln in r["lines"]]
     counts = _count(ln["status"] for ln in all_lines)
@@ -487,6 +555,7 @@ def run_szz(cases_path: Path, ruleset: RuleSet) -> dict:
         "gap_ratio": _ratio(counts.get("gap", 0), judged),
         # covered인데 결함이었던 줄 중, 그 줄의 분기 일부가 실행되지 않았던 줄 (분기 coverage로 더 잡을 수 있었나)
         "covered_with_branch_gap": sum(ln["status"] == "covered" and ln.get("branch_gap", False) for ln in all_lines),
+        "review_order": review_order_metrics([r["review"] for r in rows if r.get("review")]),
         "rows": rows,
     }
 
@@ -512,6 +581,22 @@ def szz_markdown(ev: dict) -> str:
             f"| `{r['sha']}` | {r['subject']} | {r['status']} | {r.get('decision', '-')} | {len(r['lines'])} | "
             f"{cc.get('gap', 0)} | {cc.get('covered', 0)} | {cc.get('import_only', 0)} | {other} |"
         )
+    if ro := ev.get("review_order"):
+        a, b = ro["by_gap_size"], ro["source_order"]
+        lines += [
+            "",
+            f"## 검토 순서 (결함 줄이 공백에 있는 커밋 {ro['commits']}개, 회귀 지표)",
+            "",
+            "| 순서 | 첫 그룹에 결함 | MRR | 결함 그룹 끝까지 읽는 공백 줄 (합계·중앙값) | 첫 결함 줄까지 읽는 공백 줄 (합계·중앙값) |",
+            "|---|---|---|---|---|",
+            *(
+                f"| {label} | {x['top1']}/{ro['commits']} | {x['mrr']} | {x['lines_read_total']} · {x['lines_read_median']} | "
+                f"{x['lines_to_defect_total']} · {x['lines_to_defect_median']} |"
+                for label, x in (("공백 줄 수", a), ("소스 순서", b))
+            ),
+            "",
+            "규칙을 고른 데이터로 다시 잰 값이다. 구현이 규칙을 재현하는지 보는 지표이고, 일반화 성능이나 결함 예측력을 뜻하지 않는다.",
+        ]
     lines += [
         "",
         "상태 설명: gap = 들어올 때 어떤 테스트도 실행하지 않음, covered = 테스트가 실행함(그런데도 결함이 남음), "

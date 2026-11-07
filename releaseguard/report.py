@@ -120,6 +120,8 @@ def to_markdown(result: dict) -> str:
     else:
         lines.append("검사할 Python 소스 변경이 없습니다.")
 
+    lines += _group_lines(result)
+
     lines += ["", "## 검증 공백 설명 (에이전트, 판정에 반영하지 않음)", ""]
     lines += _explain_lines(result)
 
@@ -133,6 +135,26 @@ def to_markdown(result: dict) -> str:
         lines.append(f"| {path} | {_STATUS[f['status']]} | {f['category']} | {delta} |")
     lines.append("")
     return "\n".join(lines)
+
+
+_GROUP_KIND = {"class_body": "클래스 본문", "module": "모듈 수준", "unmapped": "함수 확인 불가"}
+
+
+def _group_lines(result: dict) -> list[str]:
+    """공백을 함수별로, 검토 순서대로. 1.4 이전 결과에는 gap_groups가 없다."""
+    groups = result.get("gap_groups")
+    if not groups:
+        return []
+    out = ["", "## 검증 공백 — 함수별 검토 순서", "",
+           "| 순서 | 파일 | 위치 | 공백 줄 | 범위 | 검토 순서 |", "|---|---|---|---|---|---|"]
+    for i, g in enumerate(groups, 1):
+        where = f"`{g['name']}`" if g["kind"] in ("function", "class_body") else ""
+        where = " ".join(x for x in (_GROUP_KIND.get(g["kind"]), where) if x)
+        ranges = ", ".join(_range(s, e) for s, e in g["gap_ranges"])
+        out.append(f"| {i} | `{g['path']}` | {where} | {g['gap_lines']} | {ranges} | {g['review_priority']} |")
+    out += ["", "공백 줄이 많은 곳부터 보여줍니다. 결함 위험 순서가 아닙니다. "
+            "LOW는 `rules.yaml`에 선언한 경로를 뒤에 둔다는 뜻이고, 안전하다는 뜻이 아니며 판정에도 영향이 없습니다."]
+    return out
 
 
 def _branch_cell(fl: dict) -> str:

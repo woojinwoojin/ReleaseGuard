@@ -11,6 +11,7 @@ from .compare import shared_test_context_changes, file_change_evidence
 from .decide import (
     FLAKY, INCOMPARABLE, NEW_TEST_FAILING, PRE_EXISTING, REGRESSION, RULES_VERSION, UNKNOWN, decide,
 )
+from .gap_groups import group_gaps
 from .gaps import FileLines, compute
 from .git_ops import Change, collect, list_files, read_file
 from .related_tests import coverage_status, find_related
@@ -188,6 +189,8 @@ def analyze(
     # 4단계 Gaps
     lines = compute(files, change.added_lines, run.coverage) if run.coverage is not None else []
     decision, findings, scope = decide(files, test_run, lines, change.added_lines, ruleset.secrets)
+    # 판정이 끝난 뒤에 묶는다: 검토 순서는 보여주는 방식일 뿐 판정의 입력이 아니다.
+    groups = group_gaps(lines, lambda path: read_file(change.repo, change.head_sha, path), ruleset.low_priority_paths)
 
     by_category: dict[str, int] = {}
     for f in files:
@@ -211,6 +214,7 @@ def analyze(
         "changed_files": files,
         "test_run": test_run,
         "lines": [asdict(fl) for fl in lines],
+        "gap_groups": [asdict(g) for g in groups],
         "estimated_tests": _estimate_tests(change, files, ruleset) if run.status in ("not_run", "timeout") else None,
         "decision": decision,
         "scope": asdict(scope),

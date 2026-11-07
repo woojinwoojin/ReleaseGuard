@@ -26,6 +26,7 @@ class RuleSet:
     version: int
     rules: tuple[Rule, ...]
     secrets: tuple[SecretPattern, ...]
+    low_priority_paths: tuple[str, ...] = ()  # 공백을 보고서 뒤쪽에 둘 경로 (판정과 무관, gap_groups.py)
 
 
 def load_rules(path: Path = DEFAULT_RULES) -> RuleSet:
@@ -34,6 +35,7 @@ def load_rules(path: Path = DEFAULT_RULES) -> RuleSet:
         version=raw["version"],
         rules=tuple(Rule(r["id"], r["category"], tuple(r["patterns"])) for r in raw["rules"]),
         secrets=tuple(SecretPattern(s["id"], s["pattern"]) for s in raw.get("secrets", [])),
+        low_priority_paths=tuple((raw.get("review_priority") or {}).get("low", [])),
     )
 
 
