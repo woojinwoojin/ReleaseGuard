@@ -9,7 +9,7 @@ from conftest import CALC
 from test_agent import GOOD, FakeClient, answer
 
 from releaseguard import eval_agent
-from releaseguard.agent import Budget, BudgetExceeded, Limits, Meter, redact, run_loop
+from releaseguard.agent import Budget, BudgetExceeded, Limits, Meter, build_input, redact, run_loop
 from releaseguard.agent_tools import RepoView
 from releaseguard.classify import SecretPattern, load_rules
 from releaseguard.gaps import FileLines
@@ -177,3 +177,36 @@ def test_reference_valid_is_not_called_verified_and_summary_counts(tmp_path, vie
     s = eval_agent.summarize(eval_agent.load_cases(path), out)
     assert (s["runs"], s["evidence"], s["evidence_invalid"], s["estimated_usd"]) == (1, 1, 0, 0.0001)
     assert "설명이 맞다는 뜻이 아님" in eval_agent.to_markdown(eval_agent.load_cases(path), out, prepared(eval_agent.load_cases(path), view))
+
+
+def test_context_is_appended_only_when_given(view):
+    fl = FileLines("src/calc.py", True, 1, gaps=[(7, 7)], tests=[])
+    plain = build_input(view, fl, 7, 7)
+    assert build_input(view, fl, 7, 7, "") == plain  # 기준선 입력은 그대로
+    assert build_input(view, fl, 7, 7, "추가 사실") == plain + "\n\n추가 사실"
+
+
+def test_input_context_lists_skips_and_tests_naming_the_function(pyrepo):
+    pyrepo.write("tests/test_extra.py", "def test_uses_sign():\n    assert sign(1)\n\n\ndef test_other():\n    assert True\n\n\ndef helper_sign():\n    return sign(1)\n")
+    pyrepo.commit("tests")
+    view = RepoView(pyrepo.path, "HEAD~1", "HEAD")
+    text = eval_agent.input_context(view, [{"nodeid": "tests/test_a.py::test_x", "reason": "데이터 없음"}], "Calc.sign", RULES)
+    assert "건너뛴 테스트 (1개)" in text and "tests/test_a.py::test_x: 데이터 없음" in text
+    assert "tests/test_extra.py::test_uses_sign" in text
+    assert "test_other" not in text and "helper_sign" not in text  # 테스트 함수만, 이름이 나오는 것만
+    assert eval_agent.tests_mentioning(view, "<module>", RULES) == []
+    assert "없음" in eval_agent.input_context(view, [], None, RULES)
+
+
+def test_variant_changes_conditions_and_records_skip_use(tmp_path, view):
+    path = make_cases(tmp_path, input_variant="skip_and_tests", cases=1)
+    raw = eval_agent.load_cases(path)
+    assert eval_agent.conditions(raw, path)["input_variant"] == "skip_and_tests"
+    items = prepared(raw, view)
+    items[0]["context"] = "CONTEXT_MARK"
+    items[0]["skipped"] = [{"nodeid": "tests/test_calc.py::test_x", "reason": "r"}]
+    said = {**GOOD, "trigger": "skip된 테스트가 있어 실행되지 않음"}
+    client = FakeClient([answer(said)])
+    out = eval_agent.run(raw, path, tmp_path / "s.json", RULES, client, items, 1)
+    assert "CONTEXT_MARK" in json.dumps(client.requests[0], ensure_ascii=False, default=str)
+    assert out["runs"][0]["suggested_in_file_with_skips"] is True and out["runs"][0]["mentions_skip"] is True

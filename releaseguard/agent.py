@@ -152,18 +152,19 @@ def log(message: str) -> None:
     print(message, file=sys.stderr)
 
 
-def build_input(view: RepoView, fl: FileLines, start: int, end: int) -> str:
+def build_input(view: RepoView, fl: FileLines, start: int, end: int, context: str = "") -> str:
     try:
         around = view.read_file(fl.path, max(1, start - CONTEXT_LINES), end + CONTEXT_LINES)["content"]
     except ToolError as e:
         around = f"(읽기 실패: {e})"
     diff = view.git_diff(fl.path)
-    return "\n\n".join([
+    parts = [
         f"검증 공백: {fl.path} {start}~{end}줄 (head 기준)",
         f"공백 주변 코드 (줄 번호 포함):\n{around}",
         f"이 파일의 diff:\n{diff['diff'][:6000]}" + ("\n(잘림)" if diff["truncated"] or len(diff["diff"]) > 6000 else ""),
         "같은 파일의 다른 변경 줄을 실행하는 테스트: " + (", ".join(fl.tests[:10]) or "없음"),
-    ])
+    ]
+    return "\n\n".join([*parts, context] if context else parts)
 
 
 def run_loop(client, model: str, view: RepoView, user_input: str, limits: Limits = Limits(), secrets: tuple = ()) -> dict:

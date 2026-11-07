@@ -10,8 +10,10 @@
 설명이 맞는지, 제안 테스트가 공백을 메우는지는 여기서 판단하지 않는다 (docs/eval/agent_eval_protocol.md).
 """
 
+import ast
 import hashlib
 import json
+import re
 import time
 from pathlib import Path
 
@@ -20,8 +22,12 @@ import yaml
 from .agent import SYSTEM_PROMPT, Budget, BudgetExceeded, Limits, Meter, build_input, log, run_loop, validate
 from .agent_tools import TOOLS, RepoView
 from .analyze import analyze
-from .classify import RuleSet
+from .classify import RuleSet, classify
 from .gaps import FileLines
+from .git_ops import list_files, read_file
+
+MAX_CONTEXT_TESTS = 20
+_MENTIONS_SKIP = re.compile(r"skip|건너|스킵", re.IGNORECASE)
 
 
 def _digest(text: str) -> str:
@@ -52,6 +58,7 @@ def conditions(raw: dict, path: Path) -> dict:
         "pricing": raw["pricing"],
         "repeat": raw["repeat"],
         "temperature": "지정 안 함 (모델 기본값)",
+        "input_variant": raw.get("input_variant", "baseline"),
     }
 
 
@@ -74,6 +81,36 @@ def rule_baseline(view: RepoView, fl: FileLines, group: dict | None, start: int,
     }
 
 
+def tests_mentioning(view: RepoView, function: str | None, ruleset: RuleSet) -> list[str]:
+    """head의 테스트 함수 중 이름이나 본문에 공백이 있는 함수 이름이 나오는 것. 실행 여부와 무관한 글자 비교다."""
+    if not function or function.startswith("<"):
+        return []
+    pattern = re.compile(r"\b(" + "|".join(re.escape(x) for x in function.split(".")) + r")\b")
+    found = []
+    for path in list_files(view.repo, view.head_sha):
+        if not path.endswith(".py") or classify(path, ruleset)[0] != "test":
+            continue
+        source = read_file(view.repo, view.head_sha, path)
+        try:
+            tree = ast.parse(source)
+        except (SyntaxError, ValueError):
+            continue
+        for node in ast.walk(tree):
+            if isinstance(node, ast.FunctionDef) and node.name.startswith("test") and pattern.search(ast.get_source_segment(source, node) or ""):
+                found.append(f"{path}::{node.name}")
+    return sorted(found)
+
+
+def input_context(view: RepoView, skipped: list[dict], function: str | None, ruleset: RuleSet) -> str:
+    """실험 2의 추가 입력. 사실만 적는다. 어떻게 쓰라는 지시는 넣지 않는다 (변수를 입력 하나로 두려고)."""
+    lines = [f"- {s['nodeid']}: {s['reason'] or '사유 없음'}" for s in skipped[:MAX_CONTEXT_TESTS]]
+    named = tests_mentioning(view, function, ruleset)[:MAX_CONTEXT_TESTS]
+    return "\n\n".join([
+        f"이번 실행에서 건너뛴 테스트 ({len(skipped)}개):\n" + ("\n".join(lines) or "없음"),
+        f"이 함수 이름({function})이 나오는 기존 테스트 함수:\n" + ("\n".join(f"- {x}" for x in named) or "없음"),
+    ])
+
+
 def prepare(raw: dict, ruleset: RuleSet) -> list[dict]:
     """사례마다 테스트를 돌려 공백이 실제로 있는지 확인한다 (API 없음)."""
     out = []
@@ -93,6 +130,8 @@ def prepare(raw: dict, ruleset: RuleSet) -> list[dict]:
             fl = FileLines(**{**found, "gaps": [tuple(g) for g in found["gaps"]]})
             item["fl"] = fl
             item["baseline"] = rule_baseline(view, fl, _group_of(result, case["path"], case["start"], case["end"]), case["start"], case["end"])
+            if raw.get("input_variant") == "skip_and_tests":
+                item["context"] = input_context(view, item["skipped"], item["baseline"]["function"], ruleset)
         out.append(item)
     return out
 
@@ -100,7 +139,7 @@ def prepare(raw: dict, ruleset: RuleSet) -> list[dict]:
 def check_markdown(raw: dict, prepared: list[dict]) -> str:
     lines = [
         "# Agent Eval 사례 확인 (API 호출 없음)", "",
-        f"- 상태: `{raw['status']}` · 모델 `{raw['model']}` · {len(prepared)}개 × {raw['repeat']}회", "",
+        f"- 상태: `{raw['status']}` · 모델 `{raw['model']}` · 입력 `{raw.get('input_variant', 'baseline')}` · {len(prepared)}개 × {raw['repeat']}회", "",
         "| id | 유형 | 저장소 | 커밋 | 공백 | 함수 | 판정 | skip | 공백 확인 |", "|---|---|---|---|---|---|---|---|---|",
     ]
     for p in prepared:
@@ -149,12 +188,17 @@ def run(raw: dict, cases_path: Path, state_path: Path, ruleset: RuleSet, client,
         case, before, started = p["case"], meter.snapshot(), time.perf_counter()
         row = {"case": case["id"], "repeat": rep, "error": None}
         try:
-            out = run_loop(meter, raw["model"], p["view"], build_input(p["view"], p["fl"], case["start"], case["end"]), limits, ruleset.secrets)
+            out = run_loop(meter, raw["model"], p["view"], build_input(p["view"], p["fl"], case["start"], case["end"], p.get("context", "")), limits, ruleset.secrets)
             meta = out["meta"]
             row["answer"] = validate(out["output"], meta, p["view"], ruleset)
             row["tool_log"] = meta["tool_log"]
             row["response_model"] = meta["response_model"]
             row["redactions"] = meta["redactions"]
+            a = row["answer"]
+            skipped_files = {s["nodeid"].split("::", 1)[0] for s in p.get("skipped", [])}
+            row["suggested_in_file_with_skips"] = a["suggested_test"]["file"] in skipped_files
+            text = " ".join([a["behavior"], a["trigger"], a["suggested_test"]["scenario"], a["suggested_test"]["assertion"]])
+            row["mentions_skip"] = bool(_MENTIONS_SKIP.search(text))
         except BudgetExceeded as e:
             state["stopped"] = str(e)
             log(f"[eval-agent] 중단: {e}")
@@ -192,6 +236,8 @@ def summarize(raw: dict, state: dict) -> dict:
         "tool_calls": len(tools),
         "tool_errors": sum(not t["ok"] for t in tools),
         "redactions": sum(r["redactions"] for r in ok),
+        "suggested_in_file_with_skips": sum(r.get("suggested_in_file_with_skips", False) for r in ok),
+        "mentions_skip": sum(r.get("mentions_skip", False) for r in ok),
         "response_models": sorted({r["response_model"] for r in ok if r.get("response_model")}),
         "seconds": round(sum(r["seconds"] for r in runs), 1),
         "usage": u,
@@ -209,6 +255,7 @@ def to_markdown(raw: dict, state: dict, prepared: list[dict]) -> str:
         f"- 구조화 출력 성공 {s['structured_output_success']}/{s['runs']} · 근거 참조 오류 {s['evidence_invalid']}/{s['evidence']} "
         f"(참조 유효는 인용한 줄이 존재한다는 뜻이지 설명이 맞다는 뜻이 아님)",
         f"- 테스트 파일 경로 오류 {s['test_path_invalid']} · 새 테스트 파일 제안 {s['new_test_file']} · 도구 {s['tool_calls']}회 (오류 {s['tool_errors']}) · 가린 비밀값 {s['redactions']}",
+        f"- skip이 있는 파일에 제안 {s['suggested_in_file_with_skips']} · 응답에 skip 언급 {s['mentions_skip']}",
         f"- 요청 {u['requests']}회 (실패 {u['failed_requests']}, 사용량 미확인 {u['unknown_usage']}) · 토큰 {u['input_tokens']:,} / {u['output_tokens']:,} · "
         f"추정 ${s['estimated_usd']} (캐시 할인 미반영) · {s['seconds']}초",
     ]

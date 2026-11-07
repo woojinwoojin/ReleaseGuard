@@ -1,0 +1,113 @@
+# Agent Eval 실험 2 사례 — 실험 1(agent_cases.yaml)과 같은 사례·조건, 입력만 다르다.
+# 공백 하나가 사례 하나다.
+# status: fixed면 eval-agent가 API를 부르지 않는다. 사용자 확인 후 fixed로 바꾼다.
+# type·fix·note는 평가용이다. 에이전트 입력(build_input)에 들어가지 않는다.
+# 평가 기준: docs/eval/agent_eval_protocol.md
+# 2026-11-07 사용자 승인으로 고정. API 결과를 본 뒤 사례를 교체하거나 빼지 않는다.
+# 순서: 실행 순서다. 사전 점검(--max-runs 2)은 앞의 F3(후속 수정)·N1(정상)이다.
+# gap_closure_class: A = 함수를 직접 호출해 테스트 가능, B = 앱 런타임·스레드가 필요 (결과를 보기 전에 코드 형태로만 나눔).
+# hypothesis_verified: false는 정답이 아니라 미확인 가설이다. 원인은 따로 조사해 기록한다.
+# 공백은 줄 단위 범위(fl.gaps)와 정확히 같아야 한다 (--check로 확인). 파일 전체가 공백이면 한 범위가 되어 고를 수 없다.
+# 그래서 week1 사례는 넣지 않았고(f483ebe app.py가 전체 한 범위), fixture 사례도 없다(fixture에서만 실행된 줄이 있는 2752751에는 G01이 없음).
+status: fixed
+input_variant: skip_and_tests
+model: gpt-5.4-mini-2026-03-17
+# 2026-11-07 https://developers.openai.com/api/docs/pricing 확인. 캐시 할인은 계산에 넣지 않는다 (실제보다 높게 나옴).
+pricing:
+  input_usd_per_m: 0.75
+  output_usd_per_m: 4.50
+limits:
+  max_steps: 4
+  max_tool_calls: 6
+  reasoning_effort: low
+  max_output_tokens: 4000
+# stop_usd는 프로그램이 추정해서 막는 값이다. 청구 상한이 아니다.
+budget:
+  max_requests: 64
+  target_usd: 2
+  stop_usd: 5
+request_timeout_seconds: 120
+repeat: 2
+repos:
+  predict: ../../predict-success
+  week1: ../../2026-10/week1-csv-llm-report
+  week2: ../../2026-10/week2-tool-calling
+  week3: ../../2026-10/week3-fastapi-ui
+cases:
+  - id: F3
+    type: followup_fix
+    repo: week2
+    sha: 5b31f70
+    path: tools.py
+    start: 213
+    end: 213
+    fix: 7f9efeb
+    note: compare_periods. 같은 기간 비교를 막지 않던 문제가 후속 커밋에서 고쳐짐
+    gap_closure_class: A
+  - id: N1
+    type: need_no
+    repo: week2
+    sha: ef7ed86
+    path: tools.py
+    start: 299
+    end: 301
+    note: 정상 변경의 작은 공백 (dimension_breakdown)
+    gap_closure_class: A
+  - id: F1
+    type: followup_fix
+    repo: predict
+    sha: f2d690e
+    path: src/market/run_market.py
+    start: 27
+    end: 30
+    fix: 142912b
+    note: SZZ 결함 줄이 공백 안에 있음 (latest_raw)
+    gap_closure_class: A
+  - id: F2
+    type: followup_fix
+    repo: predict
+    sha: adb2f5b
+    path: src/market/run_market.py
+    start: 238
+    end: 254
+    fix: 142912b
+    note: SZZ 결함 줄이 공백 안에 있음 (guideline_section). 처음 고른 da30a78은 파일 전체가 한 범위라 교체
+    gap_closure_class: A
+  - id: N2
+    type: need_no
+    repo: predict
+    sha: c7733b3
+    path: src/normalization/selection.py
+    start: 16
+    end: 24
+    note: 정상 변경의 새 함수 (load_published_filings)
+    gap_closure_class: A
+  - id: N3
+    type: need_no
+    repo: week3
+    sha: 2e652ab
+    path: app.py
+    start: 171
+    end: 177
+    note: 정상 변경의 UI 표시 코드 (show_answer)
+    gap_closure_class: B
+  - id: B1
+    type: boundary_skip
+    repo: week3
+    sha: 12b9eb3
+    path: app.py
+    start: 181
+    end: 206
+    note: 데이터 파일이 없어 skip된 테스트(test_previous_conversation_can_be_loaded_after_refresh)가 실행했을 후보. 처음 고른 0b30585는 파일 전체가 한 범위라 교체
+    gap_closure_class: B
+    hypothesis: skipped_test_caused_gap
+    hypothesis_verified: false
+  - id: B2
+    type: boundary_call
+    repo: week3
+    sha: 8c05dc5
+    path: api.py
+    start: 349
+    end: 351
+    note: 스레드에서 도는 중첩 함수 (chat_stream.work). 호출 관계가 간접적
+    gap_closure_class: B

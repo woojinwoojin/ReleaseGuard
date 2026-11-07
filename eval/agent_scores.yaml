@@ -1,8 +1,9 @@
-# Agent Eval 사람 채점 — **Claude 초안, 사용자 확인 전**
+# Agent Eval 실험 1 채점 — Claude 초안을 사용자가 2026-11-07 그대로 확정
 # 기준: docs/eval/agent_eval_protocol.md (0·1·2)
 # 항목: grounding, behavior, trigger, feasibility, assertion. 사례별: consistency, added_value
 # 주의: 채점자가 F1·F2의 후속 수정을 채점 전에 봤다 (프로토콜 위반, 보고서 #8 5장).
 scored_by: claude-draft
+confirmed_by: user
 cases:
   F3:
     run1: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
