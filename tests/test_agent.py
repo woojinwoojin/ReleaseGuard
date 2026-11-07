@@ -90,12 +90,12 @@ def test_validate_checks_evidence_and_test_path(pyrepo):
     view, _ = gap_repo(pyrepo)
     meta = {"tool_log": [{"n": 1, "ok": True}]}
     ok = validate(GOOD, meta, view, RULES)
-    assert ok["verified"] is True and ok["new_test_file"] is False
+    assert ok["references_valid"] is True and ok["test_path_valid"] is True and ok["new_test_file"] is False
 
     bad = {**GOOD, "suggested_test": {**GOOD["suggested_test"], "file": "src/calc.py"}, "evidence": ["file:src/calc.py:99", "tool:#2"]}
     out = validate(bad, meta, view, RULES)
-    assert out["verified"] is False
-    assert out["unverified"] == ["file:src/calc.py:99", "tool:#2", "suggested_test.file:src/calc.py (테스트 파일 경로가 아님)"]
+    assert out["references_valid"] is False and out["test_path_valid"] is False
+    assert out["invalid_references"] == ["file:src/calc.py:99", "tool:#2"]
 
     new = {**GOOD, "suggested_test": {**GOOD["suggested_test"], "file": "tests/test_sign.py"}}
     assert validate(new, meta, view, RULES)["new_test_file"] is True
@@ -115,11 +115,11 @@ def test_explain_gaps_end_to_end_with_report(pyrepo):
     pyrepo.commit("gap")
     result = analyze(pyrepo.path, "HEAD~1", "HEAD", RULES, python=PY, explain=explain)
     [item] = result["explanations"]
-    assert (item["path"], item["start"], item["end"], item["verified"]) == ("src/calc.py", 7, 7, True)
+    assert (item["path"], item["start"], item["end"], item["references_valid"]) == ("src/calc.py", 7, 7, True)
     assert result["agent"]["gaps"] == 1 and result["agent"]["llm_calls"] == 2
     assert result["decision"] == "REVIEW REQUIRED"  # 에이전트는 판정을 바꾸지 않는다
     md = to_markdown(result)
-    assert "`tests/test_calc.py` → `test_sign_negative`" in md and "근거 확인됨" in md
+    assert "`tests/test_calc.py` → `test_sign_negative`" in md and "참조 확인됨 (내용이 맞다는 뜻은 아님)" in md
 
 
 def test_explain_gaps_keeps_going_after_one_failure(pyrepo):

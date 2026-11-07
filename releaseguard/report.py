@@ -223,14 +223,15 @@ def _explain_lines(result: dict) -> list[str]:
             out += [head, "", f"실패: `{item['error']}`", ""]
             continue
         t = item["suggested_test"]
-        check = "근거 확인됨" if item["verified"] else "**근거 미확인** (" + ", ".join(item["unverified"]) + ")"
+        check = "참조 확인됨 (내용이 맞다는 뜻은 아님)" if item["references_valid"] else "**참조 오류** (" + (", ".join(item["invalid_references"]) or "근거 없음") + ")"
+        path_note = "" if item["test_path_valid"] else " **(테스트 파일 경로가 아님)**"
         new = " (새 파일)" if item["new_test_file"] else ""
         out += [
             head,
             "",
             f"- 바뀐 동작: {item['behavior']}",
             f"- 실행 조건: {item['trigger']}",
-            f"- 제안 테스트: `{t['file']}`{new} → `{t['name']}`",
+            f"- 제안 테스트: `{t['file']}`{new}{path_note} → `{t['name']}`",
             f"  - 준비: {t['scenario']}",
             f"  - 확인: {t['assertion']}",
             f"- 근거: {', '.join(f'`{e}`' for e in item['evidence']) or '-'} — {check}",

@@ -137,10 +137,11 @@ def _explain_row(result: dict) -> dict:
     return {
         "error": None,
         **{k: result["agent"][k] for k in ("gaps", "llm_calls", "tool_calls", "input_tokens", "output_tokens", "seconds", "errors")},
-        "verified": sum(i["verified"] for i in items),
+        "references_valid": sum(i["references_valid"] for i in items),
+        "test_path_invalid": sum(not i["test_path_valid"] for i in items),
         "new_test_file": sum(i["new_test_file"] for i in items),
         "items": [
-            {k: i[k] for k in ("path", "start", "end", "behavior", "suggested_test", "verified", "unverified")} for i in items
+            {k: i[k] for k in ("path", "start", "end", "behavior", "suggested_test", "references_valid", "invalid_references", "test_path_valid")} for i in items
         ],
     }
 
@@ -214,7 +215,8 @@ def metrics(rows: list[dict]) -> dict:
             "runs": len(runs),
             "errors": len(runs) - len(ok) + sum(x["errors"] for x in ok),
             "gaps_explained": explained,
-            "verified_ratio": _ratio(sum(x["verified"] for x in ok), explained),
+            "references_valid_ratio": _ratio(sum(x["references_valid"] for x in ok), explained),
+            "test_path_invalid": sum(x["test_path_invalid"] for x in ok),
             "new_test_file_ratio": _ratio(sum(x["new_test_file"] for x in ok), explained),
             "avg_tool_calls_per_gap": round(sum(x["tool_calls"] for x in ok) / explained, 1) if explained else None,
             "avg_input_tokens_per_gap": round(sum(x["input_tokens"] for x in ok) / explained) if explained else None,
@@ -301,7 +303,7 @@ def to_markdown(ev: dict) -> str:
     if a := m["agent"]:
         lines.append(
             f"- 공백 설명 에이전트: 실행 {a['runs']}회, 오류 {a['errors']}, 설명한 공백 {a['gaps_explained']}개, "
-            f"근거 확인 {a['verified_ratio']}, 새 테스트 파일 제안 {a['new_test_file_ratio']}, "
+            f"근거 참조 유효 {a['references_valid_ratio']}, 테스트 경로 오류 {a['test_path_invalid']}, 새 테스트 파일 제안 {a['new_test_file_ratio']}, "
             f"공백당 도구 {a['avg_tool_calls_per_gap']}회·입력 {a['avg_input_tokens_per_gap']} 토큰"
         )
     lines += [
@@ -333,7 +335,7 @@ def to_markdown(ev: dict) -> str:
             lines.append("")
             for i in x["items"]:
                 t = i["suggested_test"]
-                ok = "" if i["verified"] else " (근거 미확인)"
+                ok = "" if i["references_valid"] else " (근거 참조 오류)"
                 lines.append(f"- `{i['path']}` {i['start']}-{i['end']}{ok}: {i['behavior']} → `{t['file']}::{t['name']}`")
             lines.append("")
     lines.append("")

@@ -25,6 +25,83 @@ class Limits:
     max_steps: int = 4  # LLM 호출 상한. 마지막 차례는 도구 없이 답하게 한다.
     max_tool_calls: int = 6
     reasoning_effort: str = "low"
+    max_output_tokens: int = 4000  # 요청 하나의 출력 상한 (추론 토큰 포함)
+
+
+@dataclass(frozen=True)
+class Budget:
+    """프로그램이 추정해서 막는 상한이다. 진행 중인 호출까지 막는 청구 상한은 아니다."""
+
+    max_requests: int
+    stop_usd: float
+    input_usd_per_m: float
+    output_usd_per_m: float
+
+    def cost(self, input_tokens: int, output_tokens: int) -> float:
+        return (input_tokens * self.input_usd_per_m + output_tokens * self.output_usd_per_m) / 1_000_000
+
+
+class BudgetExceeded(RuntimeError):
+    """다음 요청을 보내면 상한을 넘는다. 요청은 보내지 않았다."""
+
+
+class Meter:
+    """OpenAI 클라이언트를 감싸 실패한 요청까지 센다. 사용량을 알 수 없는 요청은 0이 아니라 unknown_usage로 남긴다.
+
+    client.responses.create 자리에 그대로 넣을 수 있다. budget이 있으면 보내기 전에 막는다.
+    """
+
+    FIELDS = ("requests", "failed_requests", "unknown_usage", "input_tokens", "output_tokens")
+
+    def __init__(self, client, budget: Budget | None = None, spent: dict | None = None) -> None:
+        self._client = client
+        self._budget = budget
+        self.responses = self
+        self.totals = {k: (spent or {}).get(k, 0) for k in self.FIELDS}
+        self._last_input = 0
+
+    def snapshot(self) -> dict:
+        return dict(self.totals)
+
+    def _check(self, max_output_tokens: int) -> None:
+        b = self._budget
+        if b is None:
+            return
+        if self.totals["requests"] >= b.max_requests:
+            raise BudgetExceeded(f"요청 상한 {b.max_requests}회에 도달했습니다.")
+        spent = b.cost(self.totals["input_tokens"], self.totals["output_tokens"])
+        # 사용량을 모르는 요청이 있으면 비용을 확정할 수 없으므로, 그 요청을 출력 상한까지 쓴 것으로 본다.
+        unknown = self.totals["unknown_usage"] * b.cost(self._last_input, max_output_tokens)
+        following = b.cost(self._last_input, max_output_tokens)
+        if spent + unknown + following >= b.stop_usd:
+            raise BudgetExceeded(f"추정 누적 ${spent + unknown:.4f} + 다음 요청 최대 ${following:.4f}가 중단 기준 ${b.stop_usd}에 닿습니다.")
+
+    def create(self, **kwargs):
+        self._check(kwargs.get("max_output_tokens") or 0)
+        self.totals["requests"] += 1
+        try:
+            response = self._client.responses.create(**kwargs)
+        except Exception:
+            self.totals["failed_requests"] += 1
+            self.totals["unknown_usage"] += 1
+            raise
+        usage = getattr(response, "usage", None)
+        if usage is None:
+            self.totals["unknown_usage"] += 1
+        else:
+            self.totals["input_tokens"] += usage.input_tokens
+            self.totals["output_tokens"] += usage.output_tokens
+            self._last_input = usage.input_tokens
+        return response
+
+
+def redact(text: str, secrets: tuple) -> tuple[str, int]:
+    """모델에 보내기 전에 비밀값 패턴을 가린다. (가린 글, 가린 개수)"""
+    count = 0
+    for s in secrets:
+        text, n = re.subn(s.pattern, f"[REDACTED:{s.id}]", text)
+        count += n
+    return text, count
 
 
 SYSTEM_PROMPT = """당신은 테스트를 설계하는 시니어 개발자입니다.
@@ -89,8 +166,12 @@ def build_input(view: RepoView, fl: FileLines, start: int, end: int) -> str:
     ])
 
 
-def run_loop(client, model: str, view: RepoView, user_input: str, limits: Limits = Limits()) -> dict:
-    """{"output": 구조화된 답, "meta": 실행 기록}. 도구 결과에는 call 번호를 붙여 tool:#n 근거로 쓰게 한다."""
+def run_loop(client, model: str, view: RepoView, user_input: str, limits: Limits = Limits(), secrets: tuple = ()) -> dict:
+    """{"output": 구조화된 답, "meta": 실행 기록}. 도구 결과에는 call 번호를 붙여 tool:#n 근거로 쓰게 한다.
+
+    secrets: 모델에 보내는 입력과 도구 결과에서 가릴 패턴.
+    """
+    user_input, redactions = redact(user_input, secrets)
     history: list = [{"role": "user", "content": user_input}]
     tool_log: list[dict] = []
     input_tokens = output_tokens = 0
@@ -105,6 +186,7 @@ def run_loop(client, model: str, view: RepoView, user_input: str, limits: Limits
             tool_choice="none" if step == limits.max_steps else "auto",
             text={"format": EXPLAIN_FORMAT},
             reasoning={"effort": limits.reasoning_effort},
+            max_output_tokens=limits.max_output_tokens,
         )
         input_tokens += response.usage.input_tokens
         output_tokens += response.usage.output_tokens
@@ -116,6 +198,8 @@ def run_loop(client, model: str, view: RepoView, user_input: str, limits: Limits
                 raise RuntimeError(f"응답이 완료되지 않았습니다: {response.incomplete_details}")
             meta = {
                 "model": model,
+                "response_model": getattr(response, "model", None),
+                "redactions": redactions,
                 "llm_calls": step,
                 "tool_calls": len(tool_log),
                 "input_tokens": input_tokens,
@@ -135,6 +219,8 @@ def run_loop(client, model: str, view: RepoView, user_input: str, limits: Limits
                 tool_log.append({"n": n, "name": call.name, "arguments": call.arguments, "ok": ok})
                 log(f"[tool #{n}] {call.name}({call.arguments}){'' if ok else ' → error'}")
                 output = json.dumps({"call": f"tool:#{n}", "result": json.loads(body)}, ensure_ascii=False)
+                output, hidden = redact(output, secrets)
+                redactions += hidden
             history.append({"type": "function_call_output", "call_id": call.call_id, "output": output})
 
     raise RuntimeError(f"LLM 호출 {limits.max_steps}번 안에 답을 받지 못했습니다.")
@@ -155,17 +241,19 @@ def check_evidence(evidence: str, view: RepoView, ok_calls: set[int]) -> bool:
 
 
 def validate(output: dict, meta: dict, view: RepoView, ruleset: RuleSet) -> dict:
-    """verified = 근거가 있고 모두 확인됨 + 제안 테스트 파일이 테스트 분류 경로."""
+    """형식만 확인한다. references_valid는 인용한 줄·도구 호출이 존재한다는 뜻이지, 설명이 맞다는 뜻이 아니다.
+
+    설명이 인용한 내용과 일치하는지는 코드로 알 수 없어 사람이 채점한다 (docs/eval/agent_eval_protocol.md).
+    """
     ok_calls = {t["n"] for t in meta["tool_log"] if t["ok"]}
-    bad = [e for e in output["evidence"] if not check_evidence(e, view, ok_calls)]
+    invalid = [e for e in output["evidence"] if not check_evidence(e, view, ok_calls)]
     test_file = output["suggested_test"]["file"]
-    if classify(test_file, ruleset)[0] != "test":
-        bad.append(f"suggested_test.file:{test_file} (테스트 파일 경로가 아님)")
     return {
         **output,
         "new_test_file": view.file_line_count(test_file) is None,
-        "verified": bool(output["evidence"]) and not bad,
-        "unverified": bad,
+        "references_valid": bool(output["evidence"]) and not invalid,
+        "invalid_references": invalid,
+        "test_path_valid": classify(test_file, ruleset)[0] == "test",
     }
 
 
@@ -177,20 +265,25 @@ def pick_gaps(lines: list[FileLines], limit: int = MAX_GAPS) -> list[tuple[FileL
 
 def explain_gaps(client, model: str, view: RepoView, lines: list[FileLines], ruleset: RuleSet, limits: Limits = Limits()) -> dict:
     """{"items": 공백별 설명, "meta": 합계}. 공백 하나가 실패해도 나머지는 계속한다."""
-    items, totals = [], {"model": model, "gaps": 0, "llm_calls": 0, "tool_calls": 0, "input_tokens": 0, "output_tokens": 0, "seconds": 0.0, "errors": 0}
+    meter = Meter(client)  # 실패한 공백의 요청·토큰도 합계에 들어가게 미터에서 센다
+    items, totals = [], {"model": model, "gaps": 0, "tool_calls": 0, "seconds": 0.0, "errors": 0}
+    started = time.perf_counter()
     for fl, start, end in pick_gaps(lines):
         totals["gaps"] += 1
         item = {"path": fl.path, "start": start, "end": end}
         try:
-            out = run_loop(client, model, view, build_input(view, fl, start, end), limits)
+            out = run_loop(meter, model, view, build_input(view, fl, start, end), limits, ruleset.secrets)
         except Exception as e:  # API 오류, 응답 형식 오류 등
             totals["errors"] += 1
             items.append({**item, "error": f"{type(e).__name__}: {e}"})
             continue
         meta = out["meta"]
-        for k in ("llm_calls", "tool_calls", "input_tokens", "output_tokens"):
-            totals[k] += meta[k]
-        totals["seconds"] = round(totals["seconds"] + meta["seconds"], 1)
+        totals["tool_calls"] += meta["tool_calls"]
         items.append({**item, **validate(out["output"], meta, view, ruleset), "error": None, "tool_log": meta["tool_log"]})
         log(f"[explain] {fl.path}:{start}-{end} tools={meta['tool_calls']} input={meta['input_tokens']}")
+    used = meter.snapshot()
+    totals.update(
+        llm_calls=used["requests"], failed_requests=used["failed_requests"], unknown_usage=used["unknown_usage"],
+        input_tokens=used["input_tokens"], output_tokens=used["output_tokens"], seconds=round(time.perf_counter() - started, 1),
+    )
     return {"items": items, "meta": totals}

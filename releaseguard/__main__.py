@@ -12,7 +12,7 @@ import sys
 from datetime import date
 from pathlib import Path
 
-from . import evaluate
+from . import eval_agent, evaluate
 from .agent import DEFAULT_MODEL, explain_gaps
 from .analyze import ExplainRunner, analyze
 from .classify import DEFAULT_RULES, RuleSet, load_rules
@@ -30,10 +30,32 @@ def openai_explainer(ruleset: RuleSet) -> ExplainRunner:
     from dotenv import load_dotenv
     from openai import OpenAI
 
-    load_dotenv(ROOT / ".env")
+    load_dotenv(ROOT / ".env", encoding="utf-8-sig")  # 메모장·PowerShell로 저장하면 BOM이 붙어 첫 변수 이름이 깨진다
     client = OpenAI()  # .env의 OPENAI_API_KEY
     model = os.getenv("OPENAI_MODEL", DEFAULT_MODEL)
     return lambda view, lines: explain_gaps(client, model, view, lines, ruleset)
+
+
+def run_agent_eval(args: argparse.Namespace, ruleset: RuleSet) -> int:
+    raw = eval_agent.load_cases(args.cases)
+    prepared = eval_agent.prepare(raw, ruleset)
+    if args.check:
+        text = eval_agent.check_markdown(raw, prepared)
+        args.out.mkdir(parents=True, exist_ok=True)
+        (args.out / "agent_cases_check.md").write_text(text, encoding="utf-8")
+        print(text)
+        return 0 if all(p["ok"] for p in prepared) else 1
+
+    from dotenv import load_dotenv
+    from openai import OpenAI
+
+    load_dotenv(ROOT / ".env", encoding="utf-8-sig")
+    client = OpenAI(timeout=raw["request_timeout_seconds"], max_retries=0)  # 재시도는 요청 수에 안 잡히므로 끈다
+    state_path = args.out / "agent_runs.json"
+    state = eval_agent.run(raw, args.cases, state_path, ruleset, client, prepared, args.max_runs)
+    (args.out / "agent_runs.md").write_text(eval_agent.to_markdown(raw, state, prepared), encoding="utf-8")
+    print(json.dumps(eval_agent.summarize(raw, state), ensure_ascii=False, indent=2))
+    return 0
 
 
 def write(stem: Path, data: dict, markdown: str) -> None:
@@ -74,9 +96,18 @@ def main(argv: list[str] | None = None) -> int:
     z.add_argument("--cases", type=Path, default=DEFAULT_CASES)
     z.add_argument("--rules", type=Path, default=DEFAULT_RULES)
     z.add_argument("--out", type=Path, default=Path("out/eval"))
+
+    a = sub.add_parser("eval-agent", help="고정된 공백 사례로 설명 에이전트를 평가한다 (--check는 API 없음)")
+    a.add_argument("--cases", type=Path, default=ROOT / "eval" / "agent_cases.yaml")
+    a.add_argument("--rules", type=Path, default=DEFAULT_RULES)
+    a.add_argument("--out", type=Path, default=Path("out/eval/v16"))
+    a.add_argument("--check", action="store_true", help="API 없이 사례의 공백이 실제로 있는지만 확인")
+    a.add_argument("--max-runs", type=int, help="이번에 돌릴 실행 수 (사전 점검용). 다음 실행은 이어서 돈다")
     args = parser.parse_args(argv)
 
     ruleset = load_rules(args.rules)
+    if args.command == "eval-agent":
+        return run_agent_eval(args, ruleset)
     today = f"{date.today():%Y%m%d}"
     if args.command == "eval":
         ev = evaluate.evaluate(args.cases, ruleset, openai_explainer(ruleset) if args.agent else None, args.repeat)
