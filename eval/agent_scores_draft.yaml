@@ -1,0 +1,54 @@
+# Agent Eval 사람 채점 — **Claude 초안, 사용자 확인 전**
+# 기준: docs/eval/agent_eval_protocol.md (0·1·2)
+# 항목: grounding, behavior, trigger, feasibility, assertion. 사례별: consistency, added_value
+# 주의: 채점자가 F1·F2의 후속 수정을 채점 전에 봤다 (프로토콜 위반, 보고서 #8 5장).
+scored_by: claude-draft
+cases:
+  F3:
+    run1: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
+    run2: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
+    consistency: 2
+    added_value: 1
+    note: 조건은 코드에 그대로 보임. 추가된 것은 입력값과 기대 dict. 공백 줄은 후속 수정의 결함(같은 기간 비교)과 다른 곳
+  N1:
+    run1: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
+    run2: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
+    consistency: 2
+    added_value: 1
+    note: F3과 같은 형태의 단순 가드
+  F1:
+    run1: {grounding: 2, behavior: 2, trigger: 2, feasibility: 1, assertion: 2}
+    run2: {grounding: 2, behavior: 1, trigger: 2, feasibility: 1, assertion: 1}
+    consistency: 2
+    added_value: 1
+    note: 둘 다 ROOT 교체 방법을 적지 않음. 실행 2는 정렬 마지막을 '가장 최근'이라고 단정, 준비 문장이 모호함
+  F2:
+    run1: {grounding: 2, behavior: 2, trigger: 2, feasibility: 1, assertion: 1}
+    run2: {grounding: 2, behavior: 2, trigger: 2, feasibility: 0, assertion: 1}
+    consistency: 2
+    added_value: 1
+    note: 둘 다 report()로 우회해 준비가 큼 (guideline_section 직접 호출이 쉬움). 실행 2는 빈 DataFrame이 stats.raw_run.iloc[0]에서 실패. 확인은 문자열 포함뿐. 실행 1의 테스트 이름에 있는 점수 불변은 assertion에 없음
+  N2:
+    run1: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
+    run2: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
+    consistency: 2
+    added_value: 1
+    note: 실제 glob 경로에 맞는 입력을 만듦. 실행 2는 같은 접수번호 덮어쓰기까지 짚음. 제안 파일은 두 실행이 다름
+  N3:
+    run1: {grounding: 2, behavior: 2, trigger: 2, feasibility: 1, assertion: 2}
+    run2: {grounding: 2, behavior: 2, trigger: 1, feasibility: 0, assertion: 1}
+    consistency: 2
+    added_value: 0
+    note: 같은 커밋의 test_unverified_evidence_is_marked와 거의 겹침. 진짜 원인(파일 전체 skip)은 말하지 않음. 실행 2의 unverified_evidence 주입은 서버가 덮어씀
+  B1:
+    run1: {grounding: 2, behavior: 2, trigger: 2, feasibility: 1, assertion: 2}
+    run2: {grounding: 2, behavior: 2, trigger: 2, feasibility: 1, assertion: 2}
+    consistency: 2
+    added_value: 2
+    note: 데이터가 있어도 실행되지 않는 202~203줄(새 대화 초기화)을 짚음. 다만 skip 파일에 넣으라고 제안했고 skip은 언급하지 않음
+  B2:
+    run1: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
+    run2: {grounding: 2, behavior: 2, trigger: 2, feasibility: 2, assertion: 2}
+    consistency: 2
+    added_value: 2
+    note: 첫 except를 비켜 가는 ValueError와 패치 지점(run_chat_agent)을 제시. 스레드 경로를 찾아야 나오는 정보

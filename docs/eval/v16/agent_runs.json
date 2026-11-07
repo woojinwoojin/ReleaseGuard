@@ -1,0 +1,952 @@
+{
+  "conditions": {
+    "cases_sha256": "2032b0ff2f239638",
+    "prompt_sha256": "c063286ca718850c",
+    "tools_sha256": "abab0b25fa010398",
+    "model": "gpt-5.4-mini-2026-03-17",
+    "limits": {
+      "max_steps": 4,
+      "max_tool_calls": 6,
+      "reasoning_effort": "low",
+      "max_output_tokens": 4000
+    },
+    "budget": {
+      "max_requests": 64,
+      "target_usd": 2,
+      "stop_usd": 5
+    },
+    "pricing": {
+      "input_usd_per_m": 0.75,
+      "output_usd_per_m": 4.5
+    },
+    "repeat": 2,
+    "temperature": "지정 안 함 (모델 기본값)"
+  },
+  "usage": {
+    "requests": 47,
+    "failed_requests": 0,
+    "unknown_usage": 0,
+    "input_tokens": 252733,
+    "output_tokens": 10857
+  },
+  "runs": [
+    {
+      "case": "F3",
+      "repeat": 1,
+      "error": null,
+      "answer": {
+        "behavior": "`compare_periods`에서 `category` 인자가 들어왔을 때, 데이터에 존재하지 않는 카테고리면 이후 기간 비교를 하지 않고 즉시 오류 dict를 반환합니다. 즉, 잘못된 카테고리 입력을 초기에 걸러내는 동작이 추가됐습니다.",
+        "trigger": "`category`가 `None`이 아니고, `df['category']`의 유효값 목록에 그 값이 없을 때 실행됩니다.",
+        "suggested_test": {
+          "file": "tests/test_tools.py",
+          "name": "test_compare_periods_unknown_category_returns_error",
+          "scenario": "카테고리 컬럼이 있는 DataFrame(예: category가 'A', 'B'만 있는 데이터)에 대해 `compare_periods(df, '2024-01', '2024-01', '2024-02', '2024-02', category='C')`를 호출한다.",
+          "assertion": "반환값이 `{'error': '없는 카테고리: C', 'available': ['A', 'B']}` 형태인지 확인한다."
+        },
+        "evidence": [
+          "file:tools.py:211-214"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 1,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 3043,
+        "output_tokens": 474
+      },
+      "seconds": 6.9
+    },
+    {
+      "case": "N1",
+      "repeat": 1,
+      "error": null,
+      "answer": {
+        "behavior": "`dimension_breakdown()`에서 `category`가 주어졌을 때, 그 카테고리가 실제 데이터에 존재하는지 먼저 검증하고 없으면 차원 집계를 하지 않고 `check_category()`의 에러를 그대로 반환합니다. 즉, 잘못된 카테고리 입력에 대해 `dimension`별 결과 대신 친절한 오류/대안 목록을 돌려주는 동작이 추가되었습니다.",
+        "trigger": "`dimension_breakdown(df, dimension, category=...)` 호출 시 `category` 인자가 `None`이 아니고, `df['category']`에 그 값이 없을 때 실행됩니다.",
+        "suggested_test": {
+          "file": "tests/test_tools.py",
+          "name": "test_dimension_breakdown_unknown_category",
+          "scenario": "기본 df에서 존재하지 않는 카테고리 `Z`로 `dimension_breakdown(df, 'region', category='Z')`를 호출한다.",
+          "assertion": "`result['error'] == '없는 카테고리: Z'` 이고 `result['available'] == ['A', 'B']` 이며, `result`에 `rows`가 없다."
+        },
+        "evidence": [
+          "file:tools.py:299-301",
+          "file:tools.py:52-62",
+          "file:tests/test_tools.py:189-199"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "search_code",
+          "arguments": "{\"text\":\"test_dimension_breakdown\", \"path_prefix\":\"tests/test_tools.py\"}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_tools.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "search_code",
+          "arguments": "{\"text\":\"def check_category\",\"path_prefix\":\"tools.py\"}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tools.py\",\"start_line\":1,\"end_line\":120}",
+          "ok": true
+        }
+      ],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 3,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 17686,
+        "output_tokens": 591
+      },
+      "seconds": 11.1
+    },
+    {
+      "case": "F1",
+      "repeat": 1,
+      "error": null,
+      "answer": {
+        "behavior": "`latest_raw(source)`는 `ROOT/source` 아래에서 `metadata.json`이 있는 실행 디렉터리만 골라 정렬한 뒤, 가장 마지막(가장 최신으로 간주되는) 디렉터리를 반환합니다. 해당 조건을 만족하는 실행본이 하나도 없으면 `FileNotFoundError`를 발생시킵니다.",
+        "trigger": "`ROOT/<source>` 아래에 `metadata.json`이 있는 하위 디렉터리가 존재할 때는 그중 마지막 경로를 반환하고, 하나도 없을 때는 예외를 던집니다.",
+        "suggested_test": {
+          "file": "tests/test_market.py",
+          "name": "test_latest_raw_returns_latest_run_or_raises_when_missing",
+          "scenario": "임시 `ROOT/<source>` 디렉터리에 `run_a/metadata.json`, `run_b/metadata.json`를 만들고(정렬상 `run_b`가 마지막), 같은 경로에서 `metadata.json`이 없는 디렉터리는 제외되도록 한 뒤 `latest_raw(source)`를 호출한다. 별도 케이스로 빈 `ROOT/<source>` 디렉터리도 준비해 호출한다.",
+          "assertion": "`latest_raw(source)`가 `Path(ROOT / source / 'run_b')`를 반환하고, 실행본이 없을 때는 `with pytest.raises(FileNotFoundError): latest_raw(source)`가 성립한다."
+        },
+        "evidence": [
+          "file:src/market/run_market.py:26-30"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 1,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 3112,
+        "output_tokens": 414
+      },
+      "seconds": 4.4
+    },
+    {
+      "case": "F2",
+      "repeat": 1,
+      "error": null,
+      "answer": {
+        "behavior": "`guidelines`가 전달된 경우 보고서 본문에 작성지침 확인 섹션을 추가하고, 그 안에 질문별 판정 표와 사실 표, 그리고 근거 수준/공지 현재본 사용 금지에 대한 주석을 출력합니다. 이 변경은 점수 계산 로직이 아니라 문서화 출력만 바꿉니다.",
+        "trigger": "`report(..., guidelines=...)`로 호출되어 작성지침 데이터가 함께 들어올 때 실행됩니다. 특히 `build_guidelines()`를 통과한 사실·판정 데이터가 있을 때 238~254줄의 문구와 표가 렌더링됩니다.",
+        "suggested_test": {
+          "file": "tests/test_market.py",
+          "name": "test_report_includes_guideline_section_and_does_not_change_score_output",
+          "scenario": "최소한의 stats/summary/links/meta/table 더미와, `guideline_tables(tmp_path)`로 만든 facts/judgments를 `run_market.report(..., guidelines=(facts, judgments))`에 넣어 보고서를 생성한다.",
+          "assertion": "`report(...)` 결과 문자열에 `\"## 1-1. 작성지침 확인 — 가격·보고 범위·연속성 (D20)\"`, `\"| ID | 질문 | 적용 연도 | 상태 | 확인한 것 | 남은 불확실성 | 결과 | 근거 |\"`, `\"- 근거 수준: 명시적 확인(해당 연도 문서에 적혀 있음) / 간접 근거(다른 연도 문서·게시판 현재본·구조에서 추론) / 미확인(문서 미확보 또는 찾지 못함).\"`이 포함되고, `guidelines=None`일 때는 이 섹션이 포함되지 않는다."
+        },
+        "evidence": [
+          "file:src/market/run_market.py:238-254",
+          "tool:#6"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "search_code",
+          "arguments": "{\"text\":\"guideline_section\", \"path_prefix\":\"tests\"}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "search_code",
+          "arguments": "{\"text\":\"작성지침 확인 — 가격·보고 범위·연속성 (D20)\", \"path_prefix\":\"tests\"}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_market.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "search_code",
+          "arguments": "{\"text\":\"report(\", \"path_prefix\":\"tests/test_market.py\"}",
+          "ok": true
+        },
+        {
+          "n": 5,
+          "name": "search_code",
+          "arguments": "{\"text\":\"작성지침 확인 — 가격·보고 범위·연속성\", \"path_prefix\":\"src\"}",
+          "ok": true
+        },
+        {
+          "n": 6,
+          "name": "search_code",
+          "arguments": "{\"text\":\"guidelines\", \"path_prefix\":\"src/market/run_market.py\"}",
+          "ok": true
+        }
+      ],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 4,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 31327,
+        "output_tokens": 884
+      },
+      "seconds": 16.2
+    },
+    {
+      "case": "N2",
+      "repeat": 1,
+      "error": null,
+      "answer": {
+        "behavior": "`raw_root` 아래의 공시검색 응답 파일들을 훑어, `list` 안의 항목 중 사업보고서로 파싱되는 것만 모아 `rcept_no` 키로 저장하는 동작을 추가합니다. 이때 각 항목의 원본 필드와 `parse_annual_report_name()`에서 뽑은 사업연도/정정정보를 합쳐 보관합니다.",
+        "trigger": "`raw_root`에 `*/api/list/A001/*/*/*/response.json` 경로의 JSON이 있고, 그 안의 `list` 항목 중 `report_nm`이 사업보고서 형식으로 파싱되는 공시가 있을 때 실행됩니다.",
+        "suggested_test": {
+          "file": "tests/test_dart_collector.py",
+          "name": "test_load_published_filings_collects_only_annual_reports_from_response_json",
+          "scenario": "임시 디렉터리에 `01009789/api/list/A001/x/y/z/response.json`를 만들고, `list`에 `사업보고서 (2025.12)` 1건과 `반기보고서 (2025.06)` 1건을 함께 넣는다.",
+          "assertion": "`load_published_filings(tmp_path)` 결과에 대해서 `set(published) == {\"20260318000694\"}` 이고, `published[\"20260318000694\"][\"bsns_year\"] == 2025` 및 `published[\"20260318000694\"][\"correction\"] is None` 이다."
+        },
+        "evidence": [
+          "file:src/normalization/selection.py:16-24",
+          "file:src/normalization/selection.py:17-23",
+          "file:tests/test_dart_collector.py:76-89"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "search_code",
+          "arguments": "{\"text\":\"load_published_filings\", \"path_prefix\":\"tests\"}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "search_code",
+          "arguments": "{\"text\":\"parse_annual_report_name\", \"path_prefix\":\"tests\"}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "list_files",
+          "arguments": "{\"path_prefix\":\"tests\"}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_dart_collector.py\",\"start_line\":1,\"end_line\":130}",
+          "ok": true
+        },
+        {
+          "n": 5,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_dart_facts.py\",\"start_line\":1,\"end_line\":220}",
+          "ok": true
+        },
+        {
+          "n": 6,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_dart_facts.py\",\"start_line\":200,\"end_line\":220}",
+          "ok": true
+        }
+      ],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 4,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 23614,
+        "output_tokens": 1151
+      },
+      "seconds": 11.5
+    },
+    {
+      "case": "N3",
+      "repeat": 1,
+      "error": null,
+      "answer": {
+        "behavior": "`show_answer()`가 답변의 근거 목록을 그릴 때, `unverified_evidence`에 포함된 항목만 ⚠️로 표시하고, 검증되지 않은 근거가 있으면 경고 문구를 `notes`에 추가해 함께 보여줍니다. 또한 `notes`는 일반 참고는 ℹ️로, 경고성 문구는 그대로 표시하도록 바뀝니다.",
+        "trigger": "답변 객체에 `findings[*].evidence`가 있고, 그중 일부 문자열이 `answer['unverified_evidence']`에 포함되어 있거나 `unverified_evidence`가 비어 있지 않을 때 실행됩니다. 이때 `answer['notes']`가 비어 있지 않으면 기존 참고와 추가 경고가 함께 렌더링됩니다.",
+        "suggested_test": {
+          "file": "tests/test_app.py",
+          "name": "test_unverified_evidence_adds_warning_note",
+          "scenario": "`FINAL`을 기반으로 `findings[0].evidence`에 검증되지 않은 문자열 하나를 넣고, `notes`는 기존 참고 1개를 유지한 뒤 채팅을 전송한다.",
+          "assertion": "`at.caption`에서 `\"⚠️ 총매출 99,999,999달러\"`가 보이고, `\"⚠️ 표시한 근거의 숫자는 분석 도구 결과에서 찾지 못했습니다.\"`가 추가되며, 기존 note는 `\"ℹ️\"` 접두사로 렌더링된다."
+        },
+        "evidence": [
+          "file:app.py:167-177",
+          "file:tests/test_app.py:132-142"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "list_files",
+          "arguments": "{\"path_prefix\":null}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "search_code",
+          "arguments": "{\"text\":\"show_answer(\", \"path_prefix\":null}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "search_code",
+          "arguments": "{\"text\":\"unverified_evidence\", \"path_prefix\":null}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_app.py\",\"start_line\":1,\"end_line\":220}",
+          "ok": true
+        }
+      ],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 3,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 8967,
+        "output_tokens": 869
+      },
+      "seconds": 10.0
+    },
+    {
+      "case": "B1",
+      "repeat": 1,
+      "error": null,
+      "answer": {
+        "behavior": "사이드바의 대화 선택 UI가 버튼에서 선택 상자로 바뀌어, 이전 대화를 고르면 해당 대화의 turn 목록을 다시 불러오고, ‘새 대화’를 고르면 현재 conversation_id와 turn 목록을 초기화합니다. 또한 기존 대화 목록 라벨에 updated_at을 로컬 시간 문자열로 표시합니다.",
+        "trigger": "show_chat()가 렌더링될 때마다 pick_conversation(dataset)이 실행되고, 사용자가 사이드바 selectbox에서 현재 선택값과 다른 항목(특히 기존 대화 또는 새 대화)을 선택할 때 동작합니다.",
+        "suggested_test": {
+          "file": "tests/test_app.py",
+          "name": "test_selecting_new_conversation_clears_current_turns",
+          "scenario": "먼저 질문을 한 번 보내 conversation_id와 turns가 채워진 상태를 만든 뒤, 사이드바의 ‘대화’ selectbox에서 value가 'new'인 항목을 선택한다.",
+          "assertion": "assert at.session_state.conversation_id is None and at.session_state.turns == []"
+        },
+        "evidence": [
+          "file:app.py:181-206",
+          "file:tests/test_app.py:62-81"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "list_files",
+          "arguments": "{\"path_prefix\":null}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "search_code",
+          "arguments": "{\"text\":\"pick_conversation(\",\"path_prefix\":null}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "search_code",
+          "arguments": "{\"text\":\"local_time(\",\"path_prefix\":null}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_app.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        },
+        {
+          "n": 5,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/fakes.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        }
+      ],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 3,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 9941,
+        "output_tokens": 781
+      },
+      "seconds": 8.5
+    },
+    {
+      "case": "B2",
+      "repeat": 1,
+      "error": null,
+      "answer": {
+        "behavior": "`/chat/stream`의 워커 스레드에서 OpenAI/RuntimeError가 아닌 예상 밖 예외가 나면, 내부 에러를 로그로 남기고 클라이언트에는 일반적인 서버 오류 SSE(`error`)를 보내도록 처리합니다. 이 경로는 LLM 실패와 별개로, 스트리밍 중 비정상 예외가 났을 때도 응답을 종료하는 안전장치입니다.",
+        "trigger": "`prepare_chat()`는 통과했지만, 백그라운드 스레드의 `work()` 안에서 `run_chat_agent()` 또는 그 이후 저장/후처리 단계가 `Exception` 계열로 실패할 때 실행됩니다.",
+        "suggested_test": {
+          "file": "tests/test_api.py",
+          "name": "test_chat_stream_unexpected_exception_is_generic_error_event",
+          "scenario": "`api.run_chat_agent`를 `ValueError('boom')`를 던지도록 monkeypatch 한 뒤, 정상 dataset에 대해 `POST /chat/stream`을 호출한다.",
+          "assertion": "`read_sse(http, {...})`의 이벤트 이름이 `['error']`이고, 마지막 이벤트의 `detail`이 `'서버 오류로 답변을 만들지 못했습니다.'`이며, `db.connect(tmp_path / 'app.db').execute('SELECT COUNT(*) FROM conversations').fetchone()[0] == 0`"
+        },
+        "evidence": [
+          "file:api.py:349-351",
+          "file:api.py:355-363",
+          "file:tests/test_api.py:249-257"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "search_code",
+          "arguments": "{\"text\":\"chat_stream_llm_failure_is_error_event\",\"path_prefix\":\"tests/test_api.py\"}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_api.py\",\"start_line\":1,\"end_line\":400}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_api.py\",\"start_line\":200,\"end_line\":320}",
+          "ok": true
+        }
+      ],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 3,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 16009,
+        "output_tokens": 604
+      },
+      "seconds": 8.0
+    },
+    {
+      "case": "F3",
+      "repeat": 2,
+      "error": null,
+      "answer": {
+        "behavior": "`compare_periods(..., category=...)`에서 전달한 카테고리가 데이터에 없으면, 이후 기간 비교 로직을 타지 않고 `check_category`의 오류 dict를 그대로 반환하도록 바뀌었습니다. 즉, 잘못된 카테고리 입력을 조용히 처리하지 않고 가능한 카테고리 목록이 포함된 에러를 돌려줍니다.",
+        "trigger": "`category` 인자가 주어졌고, 그 값이 `df['category']`의 기존 값들에 없을 때 실행됩니다.",
+        "suggested_test": {
+          "file": "tests/test_tools.py",
+          "name": "test_compare_periods_unknown_category",
+          "scenario": "`df`에서 존재하지 않는 카테고리 `Z`를 넣어 `compare_periods(df, '2024-01', '2024-01', '2024-02', '2024-02', category='Z')`를 호출한다.",
+          "assertion": "`result['available'] == ['A', 'B']` 이고 `result['error'] == '없는 카테고리: Z'` 인지 확인한다."
+        },
+        "evidence": [
+          "file:tools.py:211-215",
+          "file:tests/test_tools.py:96-121"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_tools.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "search_code",
+          "arguments": "{\"text\":\"compare_periods\", \"path_prefix\":\"tests/test_tools.py\"}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tools.py\",\"start_line\":206,\"end_line\":216}",
+          "ok": true
+        }
+      ],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 3,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 15900,
+        "output_tokens": 553
+      },
+      "seconds": 7.8
+    },
+    {
+      "case": "N1",
+      "repeat": 2,
+      "error": null,
+      "answer": {
+        "behavior": "`dimension_breakdown()`에서 `category`가 주어지면, 먼저 그 카테고리가 실제 데이터에 존재하는지 검사하고, 존재할 때만 해당 카테고리로 데이터를 제한합니다. 즉, 잘못된 카테고리 입력은 차원 집계로 들어가기 전에 에러 응답으로 반환됩니다.",
+        "trigger": "`dimension_breakdown(df, dimension, category=...)` 호출 시 `category` 인자가 전달되었고, 그 값이 `df['category']`에 없는 경우에 이 분기가 실행됩니다.",
+        "suggested_test": {
+          "file": "tests/test_tools.py",
+          "name": "test_dimension_breakdown_invalid_category",
+          "scenario": "`df`에 존재하지 않는 `category='Z'`와 `dimension='region'`으로 `dimension_breakdown(df, \"region\", category=\"Z\")`를 호출한다.",
+          "assertion": "`result['error'] == '없는 카테고리: Z'` 이고 `result['available'] == ['A', 'B']` 이다."
+        },
+        "evidence": [
+          "file:tools.py:288-301",
+          "file:tools.py:52-62",
+          "file:tests/test_tools.py:189-199"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "search_code",
+          "arguments": "{\"text\":\"def test_dimension_breakdown\", \"path_prefix\":\"tests/test_tools.py\"}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_tools.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "search_code",
+          "arguments": "{\"text\":\"def check_category\",\"path_prefix\":\"tools.py\"}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tools.py\",\"start_line\":1,\"end_line\":120}",
+          "ok": true
+        },
+        {
+          "n": 5,
+          "name": "search_code",
+          "arguments": "{\"text\":\"dimension_breakdown(\", \"path_prefix\":\"tests/test_tools.py\"}",
+          "ok": true
+        }
+      ],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 4,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 26124,
+        "output_tokens": 647
+      },
+      "seconds": 9.6
+    },
+    {
+      "case": "F1",
+      "repeat": 2,
+      "error": null,
+      "answer": {
+        "behavior": "`latest_raw()`는 지정한 수집 원본 디렉터리에서 `metadata.json`이 있는 하위 실행 폴더만 골라 정렬한 뒤, 가장 최근 실행본을 반환합니다. 실행본이 하나도 없으면 `FileNotFoundError`를 발생시켜 이후 처리로 진행하지 않습니다.",
+        "trigger": "`main()`이 `config[\"base_statistic\"][\"raw_source\"]`에 해당하는 원본 디렉터리를 읽을 때, 그 아래에 `metadata.json`이 있는 실행 폴더가 0개이거나 여러 개일 때 실행됩니다. 특히 최근 실행본이 아닌 오래된 실행본이 더 많아도 정렬 후 마지막 항목을 선택하는지 확인이 필요합니다.",
+        "suggested_test": {
+          "file": "tests/test_market.py",
+          "name": "test_latest_raw_returns_most_recent_run_and_errors_when_missing",
+          "scenario": "임시 `ROOT/<source>` 아래에 `old/metadata.json`, `new/metadata.json` 두 실행 폴더를 만들고, 둘의 이름 순서를 바꿔도 마지막으로 정렬되는 폴더가 선택되도록 한다. 이어서 빈 `<source>` 디렉터리도 만들어 실행본이 없을 때의 동작을 확인한다.",
+          "assertion": "`run_market.latest_raw(source)`가 `Path(...)/'new'`를 반환하고, 실행본이 없는 경우 `FileNotFoundError`를 발생시킨다."
+        },
+        "evidence": [
+          "file:src/market/run_market.py:26-30",
+          "file:src/market/run_market.py:189"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "search_code",
+          "arguments": "{\"text\":\"latest_raw(\", \"path_prefix\":\"tests\"}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_market.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "read_file",
+          "arguments": "{\"path\":\"src/market/run_market.py\",\"start_line\":1,\"end_line\":60}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "search_code",
+          "arguments": "{\"text\":\"latest_raw(\", \"path_prefix\":\"src\"}",
+          "ok": true
+        },
+        {
+          "n": 5,
+          "name": "read_file",
+          "arguments": "{\"path\":\"src/market/run_market.py\",\"start_line\":180,\"end_line\":205}",
+          "ok": true
+        }
+      ],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 4,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 23047,
+        "output_tokens": 680
+      },
+      "seconds": 9.9
+    },
+    {
+      "case": "F2",
+      "repeat": 2,
+      "error": null,
+      "answer": {
+        "behavior": "`guideline_section`이 작성지침(D20) 섹션을 보고서에 추가합니다. 제목, 설명 문구, 판정 표, 사실 표, 그리고 근거 수준/게시판 공지 해석 안내 문장을 순서대로 출력합니다.",
+        "trigger": "`report(..., guidelines=(facts, judgments))`가 호출되어 작성지침 데이터가 함께 전달될 때 실행됩니다. 이때 D20 섹션이 보고서 본문에 삽입됩니다.",
+        "suggested_test": {
+          "file": "tests/test_market.py",
+          "name": "test_report_includes_guideline_section_with_facts_and_judgments",
+          "scenario": "`guideline_tables(tmp_path)`로 만든 사실·판정 데이터를 `run_guidelines`로 준비한 뒤, `run_market.report(as_of='2026-10-20', config=CONFIG, stats=빈 DataFrame, summary=빈 DataFrame, links=빈 DataFrame, meta={}, table={}, guidelines=(facts, judgments))`를 호출해 문자열 보고서를 생성한다.",
+          "assertion": "생성된 report 문자열에 `\"## 1-1. 작성지침 확인 — 가격·보고 범위·연속성 (D20)\"`, `\"| J1 | Q1 가격 기준 |\"`, `\"| S1 |\"`, 그리고 `\"- 게시판 공지는 같은 주소에서 본문이 갱신된다\"`가 모두 포함되어야 한다."
+        },
+        "evidence": [
+          "file:src/market/run_market.py:237-254",
+          "tool:#2",
+          "tool:#3"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_market.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "search_code",
+          "arguments": "{\"text\":\"guideline_section(\", \"path_prefix\":\"src/market\"}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "search_code",
+          "arguments": "{\"text\":\"작성지침 확인 — 가격·보고 범위·연속성\", \"path_prefix\":\".\"}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "search_code",
+          "arguments": "{\"text\":\"report(\", \"path_prefix\":\"tests/test_market.py\"}",
+          "ok": true
+        },
+        {
+          "n": 5,
+          "name": "search_code",
+          "arguments": "{\"text\":\"guidelines=\", \"path_prefix\":\"src/market/run_market.py\"}",
+          "ok": true
+        }
+      ],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 3,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 21838,
+        "output_tokens": 661
+      },
+      "seconds": 8.7
+    },
+    {
+      "case": "N2",
+      "repeat": 2,
+      "error": null,
+      "answer": {
+        "behavior": "`load_published_filings`는 저장된 공시검색 응답들에서 사업보고서만 골라 `rcept_no` 기준으로 모으고, `parse_annual_report_name`이 해석한 사업연도·정정정보까지 합쳐서 반환합니다. 즉, 공시 원문 저장 여부와 무관하게 공개된 사업보고서 목록을 재구성하는 동작입니다.",
+        "trigger": "`raw_root` 아래에 `*/api/list/A001/*/*/*/response.json` 형태의 응답 파일이 있고, 각 파일의 `list` 항목에 `report_nm`이 사업보고서 형식으로 들어 있을 때 실행됩니다. 비사업보고서 항목은 무시되고, 같은 `rcept_no`는 나중에 읽힌 값으로 덮어써집니다.",
+        "suggested_test": {
+          "file": "tests/test_dart_facts.py",
+          "name": "test_load_published_filings_collects_only_annual_reports_from_response_json",
+          "scenario": "`tmp_path` 아래에 `01009789/api/list/A001/x/y/z/response.json` 파일을 만들고, `list`에 `사업보고서 (2025.12)`와 `반기보고서 (2025.06)`를 함께 넣는다. 추가로 다른 경로의 `response.json` 하나에 같은 `rcept_no`의 `사업보고서`를 넣어 덮어쓰기 동작도 만든다.",
+          "assertion": "`load_published_filings(tmp_path)`가 사업보고서 항목만 `rcept_no` 키로 포함하고, 각 값에 `rcept_no`, `corp_code`, `rcept_dt`, `report_nm`, `bsns_year`, `correction`가 들어 있으며, 비사업보고서 항목은 결과에 없고 중복 `rcept_no`는 마지막 파일의 값으로 남는다."
+        },
+        "evidence": [
+          "file:src/normalization/selection.py:14-24",
+          "file:tests/test_dart_facts.py:8-12",
+          "file:tests/test_dart_facts.py:160-171"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "search_code",
+          "arguments": "{\"text\":\"load_published_filings\", \"path_prefix\":\"tests\"}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_dart_facts.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "search_code",
+          "arguments": "{\"text\":\"parse_annual_report_name\", \"path_prefix\":\"tests\"}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_dart_facts.py\",\"start_line\":200,\"end_line\":240}",
+          "ok": true
+        },
+        {
+          "n": 5,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_dart_collector.py\",\"start_line\":1,\"end_line\":140}",
+          "ok": true
+        }
+      ],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 4,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 25957,
+        "output_tokens": 813
+      },
+      "seconds": 10.9
+    },
+    {
+      "case": "N3",
+      "repeat": 2,
+      "error": null,
+      "answer": {
+        "behavior": "`show_answer()`가 `unverified_evidence`에 포함된 근거는 ⚠️로 표시하고, 그런 근거가 하나라도 있으면 하단 참고(notes) 영역에 추가 경고 문구를 덧붙입니다. 또한 notes 전체를 한 번에 렌더링하면서 일반 메모는 ℹ️, 경고 메모는 ⚠️ 형식으로 구분해 보여줍니다.",
+        "trigger": "답변 객체에 `unverified_evidence`가 비어 있지 않고, 각 finding의 `evidence` 또는 `notes`가 존재해 `show_answer()`가 캡션을 그릴 때 실행됩니다.",
+        "suggested_test": {
+          "file": "tests/test_app.py",
+          "name": "test_unverified_evidence_adds_warning_note",
+          "scenario": "`FINAL`을 기반으로 `unverified_evidence`를 `['총매출 99,999,999달러']`로 넣고, `notes`는 `['기간은 전체로 해석']`만 둔 답변을 FakeClient가 반환하게 한 뒤 대화 질문을 보낸다.",
+          "assertion": "`at.caption`에 `⚠️ 표시한 근거의 숫자는 분석 도구 결과에서 찾지 못했습니다. LLM이 직접 계산했거나 잘못 옮겼을 수 있습니다.`가 포함되고, 기존 note는 `ℹ️ 기간은 전체로 해석` 형태로 함께 렌더링된다."
+        },
+        "evidence": [
+          "file:app.py:171-177",
+          "file:tests/test_app.py:132-142"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "search_code",
+          "arguments": "{\"text\":\"show_answer(\", \"path_prefix\":null}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "list_files",
+          "arguments": "{\"path_prefix\":\"tests\"}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "search_code",
+          "arguments": "{\"text\":\"st.caption(\", \"path_prefix\":\"tests\"}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_app.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        }
+      ],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 3,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 7654,
+        "output_tokens": 740
+      },
+      "seconds": 8.9
+    },
+    {
+      "case": "B1",
+      "repeat": 2,
+      "error": null,
+      "answer": {
+        "behavior": "사이드바의 대화 선택 상자가 이전 대화 목록을 보여주고, 선택한 대화에 따라 `st.session_state.conversation_id`와 `st.session_state.turns`를 갱신합니다. 또한 ‘＋ 새 대화’를 고르면 현재 대화를 해제하고 대화 기록을 비우도록 바뀌었습니다.",
+        "trigger": "`show_chat()`가 실행될 때 항상 `pick_conversation(dataset)`가 호출되며, `api().list_conversations(dataset_id)`로 가져온 대화 목록이 있을 때 사용자가 사이드바 selectbox에서 기존 대화 또는 `NEW_CONVERSATION`을 선택하면 실행됩니다.",
+        "suggested_test": {
+          "file": "tests/test_app.py",
+          "name": "test_pick_conversation_loads_selected_history_and_resets_on_new_conversation",
+          "scenario": "`api().list_conversations()`가 두 개의 대화를 반환하고, `st.sidebar.selectbox`가 첫 번째 호출에서는 기존 conversation_id를, 두 번째 호출에서는 `NEW_CONVERSATION`을 선택하도록 모의합니다. 초기 `st.session_state.conversation_id`와 `turns`를 비워 둡니다.",
+          "assertion": "`pick_conversation(dataset)` 호출 후 기존 대화 선택 시 `st.session_state.conversation_id == <선택한 conversation_id>`이고 `st.session_state.turns == api().conversation(<선택한 conversation_id>)[\"turns\"]`이며, `NEW_CONVERSATION` 선택 시 `st.session_state.conversation_id is None`이고 `st.session_state.turns == []`이어야 합니다."
+        },
+        "evidence": [
+          "file:app.py:181-206",
+          "file:app.py:209-212",
+          "file:app.py:186-206",
+          "file:app.py:33-34"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 1,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 2199,
+        "output_tokens": 467
+      },
+      "seconds": 3.9
+    },
+    {
+      "case": "B2",
+      "repeat": 2,
+      "error": null,
+      "answer": {
+        "behavior": "`/chat/stream` 처리 중 `openai.OpenAIError`/`RuntimeError`가 아닌 예외가 나도 스트리밍을 끊지 않고 `error` SSE 이벤트로 마무리합니다. 이때 사용자에게는 내부 예외 메시지 대신 고정된 일반 오류 문구를 내려보냅니다.",
+        "trigger": "스트리밍 워커 스레드에서 `run_chat_agent()` 또는 그 이후 저장 단계가 예상하지 못한 예외를 던질 때 실행됩니다. 즉, LLM 실패가 아니라 코드/런타임의 비정상 예외가 발생한 경우입니다.",
+        "suggested_test": {
+          "file": "tests/test_api.py",
+          "name": "test_chat_stream_unexpected_exception_is_generic_error_event",
+          "scenario": "`api.run_chat_agent`를 `ValueError('boom')`를 던지도록 monkeypatch한 뒤, `/chat/stream`에 유효한 `dataset_id`와 `question`으로 요청한다.",
+          "assertion": "`read_sse(...)`의 이벤트 순서가 `['error']`이고, 마지막 이벤트의 `detail`이 `'서버 오류로 답변을 만들지 못했습니다.'`와 같아야 한다."
+        },
+        "evidence": [
+          "file:api.py:349-351",
+          "file:tests/test_api.py:249-257"
+        ],
+        "new_test_file": false,
+        "references_valid": true,
+        "invalid_references": [],
+        "test_path_valid": true
+      },
+      "tool_log": [
+        {
+          "n": 1,
+          "name": "search_code",
+          "arguments": "{\"text\":\"test_chat_stream_llm_failure_is_error_event\",\"path_prefix\":\"tests\"}",
+          "ok": true
+        },
+        {
+          "n": 2,
+          "name": "search_code",
+          "arguments": "{\"text\":\"chat_stream\",\"path_prefix\":\"tests/test_api.py\"}",
+          "ok": true
+        },
+        {
+          "n": 3,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_api.py\",\"start_line\":1,\"end_line\":260}",
+          "ok": true
+        },
+        {
+          "n": 4,
+          "name": "read_file",
+          "arguments": "{\"path\":\"tests/test_api.py\",\"start_line\":200,\"end_line\":260}",
+          "ok": true
+        }
+      ],
+      "response_model": "gpt-5.4-mini-2026-03-17",
+      "redactions": 0,
+      "usage": {
+        "requests": 3,
+        "failed_requests": 0,
+        "unknown_usage": 0,
+        "input_tokens": 16315,
+        "output_tokens": 528
+      },
+      "seconds": 7.5
+    }
+  ],
+  "stopped": null
+}

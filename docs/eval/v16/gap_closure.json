@@ -1,0 +1,79 @@
+{
+  "gap_closure": [
+    {
+      "id": "F3",
+      "commit": "5b31f70",
+      "target": "tools.py:213-213",
+      "runnable": true,
+      "gap_lines": 1,
+      "gap_lines_executed": 1,
+      "missing": [],
+      "behavior_checked": true,
+      "human_changes": "없음 (기존 df fixture가 제안의 A·B 데이터와 같아 그대로 씀)",
+      "output": null
+    },
+    {
+      "id": "N2",
+      "commit": "c7733b3",
+      "target": "src/normalization/selection.py:16-24",
+      "runnable": true,
+      "gap_lines": 8,
+      "gap_lines_executed": 8,
+      "missing": [],
+      "behavior_checked": true,
+      "human_changes": "import 1줄, 제안에 없던 응답 항목의 필수 필드(corp_code·rcept_dt·rcept_no) 채움",
+      "output": null
+    },
+    {
+      "id": "F1",
+      "commit": "f2d690e",
+      "target": "src/market/run_market.py:27-30",
+      "runnable": true,
+      "gap_lines": 4,
+      "gap_lines_executed": 4,
+      "missing": [],
+      "behavior_checked": true,
+      "human_changes": "ROOT를 monkeypatch로 바꾸는 코드 (제안은 '임시 ROOT'라고만 적음)",
+      "output": null
+    },
+    {
+      "id": "B2",
+      "commit": "8c05dc5",
+      "target": "api.py:349-351",
+      "runnable": true,
+      "gap_lines": 3,
+      "gap_lines_executed": 3,
+      "missing": [],
+      "behavior_checked": true,
+      "human_changes": "use_fake_llm([]) 1줄 (제안에 없던 get_client 대체), boom 함수, db를 api.db로",
+      "output": null
+    }
+  ],
+  "b1_hypothesis": {
+    "without_data": {
+      "summary": "5 skipped in 3.26s",
+      "executed_in_181_206": []
+    },
+    "with_data": {
+      "summary": "5 passed in 9.47s",
+      "executed_in_181_206": [
+        181,
+        183,
+        186,
+        188,
+        189,
+        190,
+        191,
+        192,
+        194,
+        195,
+        196,
+        199,
+        200,
+        201,
+        205,
+        206
+      ]
+    }
+  }
+}
