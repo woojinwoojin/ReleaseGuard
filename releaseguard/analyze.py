@@ -15,6 +15,7 @@ from .gap_groups import group_gaps
 from .gaps import FileLines, compute
 from .git_ops import Change, collect, list_files, read_file
 from .related_tests import coverage_status, find_related
+from .suggestion_checks import check_suggestion
 from .runner import (
     COVERAGE_VERSION, DEFAULT_TIMEOUT, PYTEST_COV_VERSION, RunResult, TestCase, check_python, find_python, host_secret_names, python_version, run_tests,
     snapshot_warnings,
@@ -167,6 +168,7 @@ def analyze(
         # 건너뛴 테스트와 사유. 스냅샷에 없는 파일(gitignore된 데이터 등) 때문에 skip되면 그 테스트가 실행했을 줄은
         # G01 공백으로만 보인다. 판정에는 아직 넣지 않는다 (새 테스트가 전부 skip돼도 SAFE가 나올 수 있음 — 한계).
         "skipped": [{"nodeid": t.nodeid, "reason": t.message} for t in run.tests if t.outcome == "skipped"],
+        "tests_by_file": _tests_by_file(run.tests),
         "snapshot_warnings": snapshot_warnings(change.repo, change.head_sha) if ran else [],
         # 무엇을 어떻게 돌렸는지: 보고서만 보고 같은 실행을 재현할 수 있게
         "record": {
@@ -231,4 +233,24 @@ def analyze(
             result["explanations"], result["agent"] = out["items"], out["meta"]
         except Exception as e:
             result["agent_error"] = f"{type(e).__name__}: {e}"
+        else:
+            # 7단계 제안 확인: 판정이 끝난 뒤 결정적 규칙으로만. 판정·findings는 바꾸지 않는다.
+            skipped = test_run["skipped"] if run.status in ("passed", "failed") else None
+            check_proposals(result["explanations"], skipped, set(list_files(change.repo, change.head_sha)),
+                            lambda path: read_file(change.repo, change.head_sha, path), test_run["tests_by_file"])
     return result
+
+
+def check_proposals(items: list[dict], skipped: list[dict] | None, snapshot_files: set[str], read_head, tests_by_file: dict[str, int]) -> None:
+    """설명마다 proposal_checks를 붙인다. 에이전트의 원래 제안(suggested_test)은 그대로 둔다."""
+    for item in items:
+        if not item.get("error"):
+            item["proposal_checks"] = check_suggestion(item["suggested_test"], skipped, snapshot_files, read_head, tests_by_file)
+
+
+def _tests_by_file(tests: list[TestCase]) -> dict[str, int]:
+    """이번 실행에서 파일별로 결과가 나온 테스트 수 (skip 포함). 제안 확인에서 '몇 개 중 몇 개 skip'을 보여 주는 데만 쓴다."""
+    out: dict[str, int] = {}
+    for t in tests:
+        out[_test_file(t.nodeid)] = out.get(_test_file(t.nodeid), 0) + 1
+    return dict(sorted(out.items()))

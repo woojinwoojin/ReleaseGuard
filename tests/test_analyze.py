@@ -168,3 +168,23 @@ def test_unchanged_test_file_content(pyrepo):
     result = run(pyrepo)
     assert result["decision"] == "SAFE" and result["lines"] == []
     assert result["test_run"]["counts"]["passed"] == 3
+
+
+def test_proposal_checks_follow_decision_without_changing_it(pyrepo):
+    """제안 확인은 판정이 끝난 뒤에만 붙고, 판정·findings·scope는 에이전트 유무와 같다."""
+    pyrepo.write("src/calc.py", CALC.replace("return -1", "return -2"))
+    pyrepo.commit("gap")
+
+    def explain(view, lines):
+        item = {"path": "src/calc.py", "start": 7, "end": 7, "behavior": "-", "trigger": "-", "evidence": [], "error": None,
+                "suggested_test": {"file": "tests/test_calc.py", "name": "test_sign_positive", "scenario": "-", "assertion": "-"}}
+        return {"items": [item, {"path": "src/calc.py", "start": 7, "end": 7, "error": "boom"}], "meta": {}}
+
+    plain, checked = run(pyrepo), run(pyrepo, explain=explain)
+    for key in ("decision", "findings", "scope", "lines"):
+        assert plain[key] == checked[key]
+    first, failed = checked["explanations"]
+    assert first["proposal_checks"]["status"] == "WARN"
+    assert [w["code"] for w in first["proposal_checks"]["warnings"]] == ["S03"]
+    assert first["suggested_test"]["name"] == "test_sign_positive"  # 원래 제안은 그대로
+    assert "proposal_checks" not in failed

@@ -210,3 +210,8 @@ def test_variant_changes_conditions_and_records_skip_use(tmp_path, view):
     out = eval_agent.run(raw, path, tmp_path / "s.json", RULES, client, items, 1)
     assert "CONTEXT_MARK" in json.dumps(client.requests[0], ensure_ascii=False, default=str)
     assert out["runs"][0]["suggested_in_file_with_skips"] is True and out["runs"][0]["mentions_skip"] is True
+    assert [w["code"] for w in out["runs"][0]["proposal_checks"]["warnings"]][:1] == ["S01"]
+    # 저장된 응답에 다시 돌려도 같은 결과 (API 없음)
+    rows = eval_agent.recheck(out, items)
+    assert rows[0]["proposal_checks"] == out["runs"][0]["proposal_checks"]
+    assert "S01 1개 (기존 자동 지표 `suggested_in_file_with_skips`와 일치 1/1)" in eval_agent.recheck_markdown("t", rows)

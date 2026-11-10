@@ -25,6 +25,7 @@ from .analyze import analyze
 from .classify import RuleSet, classify
 from .gaps import FileLines
 from .git_ops import list_files, read_file
+from .suggestion_checks import check_suggestion
 
 MAX_CONTEXT_TESTS = 20
 _MENTIONS_SKIP = re.compile(r"skip|건너|스킵", re.IGNORECASE)
@@ -123,7 +124,7 @@ def prepare(raw: dict, ruleset: RuleSet) -> list[dict]:
         ok = found is not None and span in [list(g) for g in found["gaps"]]
         item = {
             "case": case, "view": view, "ok": ok, "fl": None, "baseline": None,
-            "decision": result["decision"], "skipped": result["test_run"]["skipped"],
+            "decision": result["decision"], "skipped": result["test_run"]["skipped"], "tests_by_file": result["test_run"]["tests_by_file"],
             "gaps_in_file": [list(g) for g in found["gaps"]] if found else [],
         }
         if ok:
@@ -199,6 +200,7 @@ def run(raw: dict, cases_path: Path, state_path: Path, ruleset: RuleSet, client,
             row["suggested_in_file_with_skips"] = a["suggested_test"]["file"] in skipped_files
             text = " ".join([a["behavior"], a["trigger"], a["suggested_test"]["scenario"], a["suggested_test"]["assertion"]])
             row["mentions_skip"] = bool(_MENTIONS_SKIP.search(text))
+            row["proposal_checks"] = proposal_checks(p, a["suggested_test"])
         except BudgetExceeded as e:
             state["stopped"] = str(e)
             log(f"[eval-agent] 중단: {e}")
@@ -282,5 +284,59 @@ def to_markdown(raw: dict, state: dict, prepared: list[dict]) -> str:
                 f"- 근거: {', '.join(f'`{e}`' for e in a['evidence']) or '-'}" + (f" — 참조 오류 {a['invalid_references']}" if a["invalid_references"] else ""),
                 f"- 도구 {len(r['tool_log'])}회, 요청 {r['usage']['requests']}회, 토큰 {r['usage']['input_tokens']:,} / {r['usage']['output_tokens']:,}, {r['seconds']}초",
             ]
+    lines.append("")
+    return "\n".join(lines)
+
+
+def proposal_checks(p: dict, suggested_test: dict) -> dict:
+    """사례 준비 결과(skip 목록·head 스냅샷)로 제안 하나를 확인한다. API 없음. skip 목록이 없으면 그 검사는 UNKNOWN."""
+    view = p["view"]
+    files = set(list_files(view.repo, view.head_sha))
+    return check_suggestion(suggested_test, p.get("skipped"), files, lambda path: read_file(view.repo, view.head_sha, path), p.get("tests_by_file"))
+
+
+def recheck(state: dict, prepared: list[dict]) -> list[dict]:
+    """이미 저장된 응답에 제안 확인만 다시 돌린다 (API 없음). 에이전트 응답은 바꾸지 않는다."""
+    by_id = {p["case"]["id"]: p for p in prepared}
+    rows = []
+    for r in state["runs"]:
+        if r["error"]:
+            continue
+        t = r["answer"]["suggested_test"]
+        checks = proposal_checks(by_id[r["case"]], t)
+        rows.append({
+            "case": r["case"], "repeat": r["repeat"], "file": t["file"], "name": t["name"],
+            "suggested_in_file_with_skips": r.get("suggested_in_file_with_skips"),
+            "proposal_checks": checks,
+        })
+    return rows
+
+
+def recheck_markdown(title: str, rows: list[dict]) -> str:
+    def codes(row: dict) -> str:
+        ws = row["proposal_checks"]["warnings"]
+        return ", ".join(f"{w['code']}" + ("(후보)" if w["level"] == "candidate" else "") for w in ws) or "-"
+
+    n = len(rows)
+    s01 = sum(any(w["code"] == "S01" for w in r["proposal_checks"]["warnings"]) for r in rows)
+    known = [r for r in rows if r["suggested_in_file_with_skips"] is not None]  # 실험 1은 이 지표가 생기기 전에 돌렸다
+    agree = sum(any(w["code"] == "S01" for w in r["proposal_checks"]["warnings"]) == r["suggested_in_file_with_skips"] for r in known)
+    s03 = sum(any(w["code"] == "S03" and w["level"] == "warning" for w in r["proposal_checks"]["warnings"]) for r in rows)
+    status = {k: sum(r["proposal_checks"]["status"] == k for r in rows) for k in ("PASS", "WARN", "UNKNOWN")}
+    lines = [
+        f"# 제안 확인 재실행 — {title}", "",
+        "저장된 에이전트 응답에 Test Suggestion Validator만 다시 돌린 결과 (API 호출 0회). 규칙을 이 사례들을 보고 만들었으므로 회귀 확인이지 일반화 평가가 아니다.", "",
+        f"- 응답 {n}개 · PASS {status['PASS']} · WARN {status['WARN']} · UNKNOWN {status['UNKNOWN']}",
+        f"- S01 {s01}개 (기존 자동 지표 `suggested_in_file_with_skips`와 일치 "
+        + (f"{agree}/{len(known)}" if known else "— 이 실행에는 그 지표가 없음") + f") · S03 확정 {s03}개", "",
+        "| 사례 | 실행 | 제안 | 상태 | 경고 | 파일의 skip | skip 원인 |", "|---|---|---|---|---|---|---|",
+    ]
+    for r in rows:
+        c = r["proposal_checks"]
+        s01 = next((w["evidence"] for w in c["warnings"] if w["code"] == "S01"), None)
+        skips = f"{s01['skipped_count']}/{s01['collected_count'] or '?'}" if s01 else "-"
+        lines.append(
+            f"| {r['case']} | {r['repeat']} | `{r['file']}` → `{r['name']}` | {c['status']} | {codes(r)} | {skips} | {c['skip_cause_status'] or '-'} |"
+        )
     lines.append("")
     return "\n".join(lines)

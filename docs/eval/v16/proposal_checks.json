@@ -1,0 +1,568 @@
+[
+  {
+    "case": "F3",
+    "repeat": 1,
+    "file": "tests/test_tools.py",
+    "name": "test_compare_periods_unknown_category_returns_error",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "PASS",
+      "warnings": [],
+      "skip_cause_status": null,
+      "unchecked": []
+    }
+  },
+  {
+    "case": "N1",
+    "repeat": 1,
+    "file": "tests/test_tools.py",
+    "name": "test_dimension_breakdown_unknown_category",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "PASS",
+      "warnings": [],
+      "skip_cause_status": null,
+      "unchecked": []
+    }
+  },
+  {
+    "case": "F1",
+    "repeat": 1,
+    "file": "tests/test_market.py",
+    "name": "test_latest_raw_returns_latest_run_or_raises_when_missing",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "PASS",
+      "warnings": [],
+      "skip_cause_status": null,
+      "unchecked": []
+    }
+  },
+  {
+    "case": "F2",
+    "repeat": 1,
+    "file": "tests/test_market.py",
+    "name": "test_report_includes_guideline_section_and_does_not_change_score_output",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "WARN",
+      "warnings": [
+        {
+          "code": "S01",
+          "rule": "SKIPPED_TARGET_FILE",
+          "level": "warning",
+          "message": "제안한 테스트 파일에서 기존 테스트 20개 중 1개가 이번 실행에서 건너뛰어졌습니다. 새 테스트가 실행될지 확인하세요.",
+          "evidence": {
+            "file": "tests/test_market.py",
+            "skipped_count": 1,
+            "collected_count": 20,
+            "all_skipped": false,
+            "reasons": [
+              "보존 원본 없음 (data/raw는 git 제외)"
+            ],
+            "skips": [
+              {
+                "nodeid": "tests/test_market.py::test_manual_guideline_records_match_preserved_raw",
+                "reason": "보존 원본 없음 (data/raw는 git 제외)",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/raw"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "skip_cause_status": "CAUSE_CORRELATED",
+      "unchecked": []
+    }
+  },
+  {
+    "case": "N2",
+    "repeat": 1,
+    "file": "tests/test_dart_collector.py",
+    "name": "test_load_published_filings_collects_only_annual_reports_from_response_json",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "PASS",
+      "warnings": [],
+      "skip_cause_status": null,
+      "unchecked": []
+    }
+  },
+  {
+    "case": "N3",
+    "repeat": 1,
+    "file": "tests/test_app.py",
+    "name": "test_unverified_evidence_adds_warning_note",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "WARN",
+      "warnings": [
+        {
+          "code": "S01",
+          "rule": "SKIPPED_TARGET_FILE",
+          "level": "warning",
+          "message": "제안한 테스트 파일에서 기존 테스트 7개 중 7개가 이번 실행에서 건너뛰어졌습니다. 새 테스트가 실행될지 확인하세요.",
+          "evidence": {
+            "file": "tests/test_app.py",
+            "skipped_count": 7,
+            "collected_count": 7,
+            "all_skipped": true,
+            "reasons": [
+              "기본 데이터(data/) 없음"
+            ],
+            "skips": [
+              {
+                "nodeid": "tests/test_app.py::test_example_dataset_shows_kpis",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_chat_shows_answer_and_tools",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_previous_conversation_can_be_loaded_after_refresh",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_tilde_ranges_are_not_strikethrough",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_api_down_shows_error",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_llm_failure_during_stream_shows_error",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_unverified_evidence_is_marked",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "skip_cause_status": "CAUSE_CORRELATED",
+      "unchecked": []
+    }
+  },
+  {
+    "case": "B1",
+    "repeat": 1,
+    "file": "tests/test_app.py",
+    "name": "test_selecting_new_conversation_clears_current_turns",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "WARN",
+      "warnings": [
+        {
+          "code": "S01",
+          "rule": "SKIPPED_TARGET_FILE",
+          "level": "warning",
+          "message": "제안한 테스트 파일에서 기존 테스트 5개 중 5개가 이번 실행에서 건너뛰어졌습니다. 새 테스트가 실행될지 확인하세요.",
+          "evidence": {
+            "file": "tests/test_app.py",
+            "skipped_count": 5,
+            "collected_count": 5,
+            "all_skipped": true,
+            "reasons": [
+              "기본 데이터(data/) 없음"
+            ],
+            "skips": [
+              {
+                "nodeid": "tests/test_app.py::test_example_dataset_shows_kpis",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_chat_shows_answer_and_tools",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_previous_conversation_can_be_loaded_after_refresh",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_tilde_ranges_are_not_strikethrough",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_api_down_shows_error",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "skip_cause_status": "CAUSE_CORRELATED",
+      "unchecked": []
+    }
+  },
+  {
+    "case": "B2",
+    "repeat": 1,
+    "file": "tests/test_api.py",
+    "name": "test_chat_stream_unexpected_exception_is_generic_error_event",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "PASS",
+      "warnings": [],
+      "skip_cause_status": null,
+      "unchecked": []
+    }
+  },
+  {
+    "case": "F3",
+    "repeat": 2,
+    "file": "tests/test_tools.py",
+    "name": "test_compare_periods_unknown_category",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "PASS",
+      "warnings": [],
+      "skip_cause_status": null,
+      "unchecked": []
+    }
+  },
+  {
+    "case": "N1",
+    "repeat": 2,
+    "file": "tests/test_tools.py",
+    "name": "test_dimension_breakdown_invalid_category",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "PASS",
+      "warnings": [],
+      "skip_cause_status": null,
+      "unchecked": []
+    }
+  },
+  {
+    "case": "F1",
+    "repeat": 2,
+    "file": "tests/test_market.py",
+    "name": "test_latest_raw_returns_most_recent_run_and_errors_when_missing",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "PASS",
+      "warnings": [],
+      "skip_cause_status": null,
+      "unchecked": []
+    }
+  },
+  {
+    "case": "F2",
+    "repeat": 2,
+    "file": "tests/test_market.py",
+    "name": "test_report_includes_guideline_section_with_facts_and_judgments",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "WARN",
+      "warnings": [
+        {
+          "code": "S01",
+          "rule": "SKIPPED_TARGET_FILE",
+          "level": "warning",
+          "message": "제안한 테스트 파일에서 기존 테스트 20개 중 1개가 이번 실행에서 건너뛰어졌습니다. 새 테스트가 실행될지 확인하세요.",
+          "evidence": {
+            "file": "tests/test_market.py",
+            "skipped_count": 1,
+            "collected_count": 20,
+            "all_skipped": false,
+            "reasons": [
+              "보존 원본 없음 (data/raw는 git 제외)"
+            ],
+            "skips": [
+              {
+                "nodeid": "tests/test_market.py::test_manual_guideline_records_match_preserved_raw",
+                "reason": "보존 원본 없음 (data/raw는 git 제외)",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/raw"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "skip_cause_status": "CAUSE_CORRELATED",
+      "unchecked": []
+    }
+  },
+  {
+    "case": "N2",
+    "repeat": 2,
+    "file": "tests/test_dart_facts.py",
+    "name": "test_load_published_filings_collects_only_annual_reports_from_response_json",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "PASS",
+      "warnings": [],
+      "skip_cause_status": null,
+      "unchecked": []
+    }
+  },
+  {
+    "case": "N3",
+    "repeat": 2,
+    "file": "tests/test_app.py",
+    "name": "test_unverified_evidence_adds_warning_note",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "WARN",
+      "warnings": [
+        {
+          "code": "S01",
+          "rule": "SKIPPED_TARGET_FILE",
+          "level": "warning",
+          "message": "제안한 테스트 파일에서 기존 테스트 7개 중 7개가 이번 실행에서 건너뛰어졌습니다. 새 테스트가 실행될지 확인하세요.",
+          "evidence": {
+            "file": "tests/test_app.py",
+            "skipped_count": 7,
+            "collected_count": 7,
+            "all_skipped": true,
+            "reasons": [
+              "기본 데이터(data/) 없음"
+            ],
+            "skips": [
+              {
+                "nodeid": "tests/test_app.py::test_example_dataset_shows_kpis",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_chat_shows_answer_and_tools",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_previous_conversation_can_be_loaded_after_refresh",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_tilde_ranges_are_not_strikethrough",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_api_down_shows_error",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_llm_failure_during_stream_shows_error",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_unverified_evidence_is_marked",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "skip_cause_status": "CAUSE_CORRELATED",
+      "unchecked": []
+    }
+  },
+  {
+    "case": "B1",
+    "repeat": 2,
+    "file": "tests/test_app.py",
+    "name": "test_pick_conversation_loads_selected_history_and_resets_on_new_conversation",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "WARN",
+      "warnings": [
+        {
+          "code": "S01",
+          "rule": "SKIPPED_TARGET_FILE",
+          "level": "warning",
+          "message": "제안한 테스트 파일에서 기존 테스트 5개 중 5개가 이번 실행에서 건너뛰어졌습니다. 새 테스트가 실행될지 확인하세요.",
+          "evidence": {
+            "file": "tests/test_app.py",
+            "skipped_count": 5,
+            "collected_count": 5,
+            "all_skipped": true,
+            "reasons": [
+              "기본 데이터(data/) 없음"
+            ],
+            "skips": [
+              {
+                "nodeid": "tests/test_app.py::test_example_dataset_shows_kpis",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_chat_shows_answer_and_tools",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_previous_conversation_can_be_loaded_after_refresh",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_tilde_ranges_are_not_strikethrough",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              },
+              {
+                "nodeid": "tests/test_app.py::test_api_down_shows_error",
+                "reason": "기본 데이터(data/) 없음",
+                "reason_status": "REASON_REPORTED",
+                "cause_status": "CAUSE_CORRELATED",
+                "missing_paths": [
+                  "data/"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "skip_cause_status": "CAUSE_CORRELATED",
+      "unchecked": []
+    }
+  },
+  {
+    "case": "B2",
+    "repeat": 2,
+    "file": "tests/test_api.py",
+    "name": "test_chat_stream_unexpected_exception_is_generic_error_event",
+    "suggested_in_file_with_skips": null,
+    "proposal_checks": {
+      "version": "1",
+      "status": "PASS",
+      "warnings": [],
+      "skip_cause_status": null,
+      "unchecked": []
+    }
+  }
+]

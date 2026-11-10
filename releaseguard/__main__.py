@@ -39,6 +39,14 @@ def openai_explainer(ruleset: RuleSet) -> ExplainRunner:
 def run_agent_eval(args: argparse.Namespace, ruleset: RuleSet) -> int:
     raw = eval_agent.load_cases(args.cases)
     prepared = eval_agent.prepare(raw, ruleset)
+    if args.recheck:
+        state = json.loads((args.out / "agent_runs.json").read_text(encoding="utf-8"))
+        rows = eval_agent.recheck(state, prepared)
+        (args.out / "proposal_checks.json").write_text(json.dumps(rows, ensure_ascii=False, indent=2), encoding="utf-8")
+        text = eval_agent.recheck_markdown(f"{args.cases.name} · {args.out.as_posix()}", rows)
+        (args.out / "proposal_checks.md").write_text(text, encoding="utf-8")
+        print(text)
+        return 0
     if args.check:
         text = eval_agent.check_markdown(raw, prepared)
         args.out.mkdir(parents=True, exist_ok=True)
@@ -102,6 +110,7 @@ def main(argv: list[str] | None = None) -> int:
     a.add_argument("--rules", type=Path, default=DEFAULT_RULES)
     a.add_argument("--out", type=Path, default=Path("out/eval/v16"))
     a.add_argument("--check", action="store_true", help="API 없이 사례의 공백이 실제로 있는지만 확인")
+    a.add_argument("--recheck", action="store_true", help="저장된 응답(--out의 agent_runs.json)에 제안 확인만 다시 돌림 (API 없음)")
     a.add_argument("--max-runs", type=int, help="이번에 돌릴 실행 수 (사전 점검용). 다음 실행은 이어서 돈다")
     args = parser.parse_args(argv)
 

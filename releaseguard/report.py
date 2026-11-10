@@ -210,6 +210,25 @@ def _evidence_note(f: dict) -> str:
     return " <br>같은 실패로 확인 못 함: " + "; ".join(why)
 
 
+_CHECK_STATUS = {"PASS": "경고 없음 (정적 검사 기준, 테스트가 유효하다는 뜻은 아님)", "WARN": "경고 있음", "UNKNOWN": "일부 검사 못 함"}
+_LEVEL = {"warning": "경고", "check": "확인 필요", "candidate": "후보"}
+
+
+def _proposal_lines(checks: dict | None) -> list[str]:
+    if not checks:
+        return []
+    out = [f"- 제안 확인 (결정적 규칙, 판정 미반영): **{checks['status']}** — {_CHECK_STATUS[checks['status']]}"]
+    for w in checks["warnings"]:
+        out.append(f"  - {w['code']} {_LEVEL[w['level']]}: {w['message']}")
+        if w["code"] == "S01":
+            out.append(f"    - 사유: {'; '.join(r.splitlines()[0] for r in w['evidence']['reasons'])} · 원인 상태 `{checks['skip_cause_status']}`")
+            missing = sorted({m for s in w["evidence"]["skips"] for m in s["missing_paths"]})
+            if missing:
+                out.append(f"    - 사유에 나온 경로가 스냅샷에 없음: {', '.join(f'`{m}`' for m in missing)} (관련 증거이지 원인 확정은 아님)")
+    out += [f"  - 검사 못 함: {u}" for u in checks["unchecked"]]
+    return out
+
+
 def _explain_lines(result: dict) -> list[str]:
     if result["agent_error"]:
         return [f"에이전트 실행 실패 (`{result['agent_error']}`)."]
@@ -235,6 +254,7 @@ def _explain_lines(result: dict) -> list[str]:
             f"  - 준비: {t['scenario']}",
             f"  - 확인: {t['assertion']}",
             f"- 근거: {', '.join(f'`{e}`' for e in item['evidence']) or '-'} — {check}",
+            *_proposal_lines(item.get("proposal_checks")),
             "",
         ]
     a = result["agent"]
