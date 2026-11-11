@@ -1,0 +1,4319 @@
+{
+ "commits_in_order": [
+  "99309f2",
+  "82e4305",
+  "568ea41",
+  "b67e806",
+  "3db2f31",
+  "9e9c12b",
+  "da30a78",
+  "f2d690e",
+  "adb2f5b"
+ ],
+ "candidates": [
+  {
+   "commit": "99309f2",
+   "path": "src/normalization/build_facts.py",
+   "line": 20,
+   "fix": "c7733b3",
+   "text": "candidates = [",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "99309f2",
+   "path": "src/normalization/build_facts.py",
+   "line": 25,
+   "fix": "c7733b3",
+   "text": "return max(candidates, key=lambda f: (f[\"rcept_dt\"], f[\"rcept_no\"]))[\"rcept_no\"] if candidates else None",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "82e4305",
+   "path": "src/normalization/account_map.py",
+   "line": 69,
+   "fix": "c7733b3",
+   "text": "return {**base, \"status\": \"mapped\", \"value\": str(total), \"evidence\": ev,",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "82e4305",
+   "path": "src/normalization/account_map.py",
+   "line": 75,
+   "fix": "c7733b3",
+   "text": "return {**base, \"status\": status, \"value\": row[\"value\"], \"evidence\": ev, \"note\": \"; \".join(notes)}",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "82e4305",
+   "path": "src/normalization/account_map.py",
+   "line": 81,
+   "fix": "c2fe0d1",
+   "text": "return {**base, \"status\": \"review_needed\", \"value\": None, \"evidence\": ev, \"note\": \"; \".join([\"해당 계정 행 없음 — 원문 확인\"] + not",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "568ea41",
+   "path": "src/normalization/manual.py",
+   "line": 54,
+   "fix": "c7733b3",
+   "text": "if result[\"status\"] == \"mapped\" and Decimal(result[\"value\"]) != manual_value:",
+   "definition": "apply_confirmations",
+   "allowed_ops": [
+    [
+     "core/ReplaceAndWithOr",
+     5,
+     "boolean"
+    ],
+    [
+     "core/ReplaceComparisonOperator_Eq_NotEq",
+     9,
+     "comparison"
+    ],
+    [
+     "core/ReplaceComparisonOperator_NotEq_Eq",
+     1,
+     "comparison"
+    ]
+   ]
+  },
+  {
+   "commit": "568ea41",
+   "path": "src/normalization/manual.py",
+   "line": 55,
+   "fix": "c7733b3",
+   "text": "return {**result, \"status\": \"review_needed\", \"value\": None, \"extraction_method\": \"\",",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "568ea41",
+   "path": "src/normalization/manual.py",
+   "line": 57,
+   "fix": "c7733b3",
+   "text": "return {**result, \"status\": \"mapped\", \"value\": str(manual_value), \"extraction_method\": \"manual\",",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "b67e806",
+   "path": "src/normalization/bs_sections.py",
+   "line": 51,
+   "fix": "c7733b3",
+   "text": "confirmed = regular == total or (hfs != 0 and regular + hfs == total)",
+   "definition": "annotate_sections",
+   "allowed_ops": [
+    [
+     "core/NumberReplacer",
+     8,
+     "constant"
+    ],
+    [
+     "core/NumberReplacer",
+     9,
+     "constant"
+    ],
+    [
+     "core/ReplaceAndWithOr",
+     0,
+     "boolean"
+    ],
+    [
+     "core/ReplaceComparisonOperator_Eq_NotEq",
+     2,
+     "comparison"
+    ],
+    [
+     "core/ReplaceComparisonOperator_Eq_NotEq",
+     3,
+     "comparison"
+    ],
+    [
+     "core/ReplaceComparisonOperator_NotEq_Eq",
+     1,
+     "comparison"
+    ],
+    [
+     "core/ReplaceOrWithAnd",
+     2,
+     "boolean"
+    ]
+   ]
+  },
+  {
+   "commit": "b67e806",
+   "path": "src/normalization/bs_sections.py",
+   "line": 77,
+   "fix": "c7733b3",
+   "text": "hfs = sum((_value(r) for r in hfs_rows), Decimal(0))",
+   "definition": "held_for_sale_adjustment",
+   "allowed_ops": [
+    [
+     "core/NumberReplacer",
+     10,
+     "constant"
+    ],
+    [
+     "core/NumberReplacer",
+     11,
+     "constant"
+    ]
+   ]
+  },
+  {
+   "commit": "b67e806",
+   "path": "src/normalization/bs_sections.py",
+   "line": 78,
+   "fix": "c7733b3",
+   "text": "out = {\"reported\": None if current is None else current[\"value\"], \"held_for_sale\": str(hfs) if hfs_rows else None,",
+   "definition": "held_for_sale_adjustment",
+   "allowed_ops": [
+    [
+     "core/ReplaceComparisonOperator_Is_IsNot",
+     0,
+     "comparison"
+    ]
+   ]
+  },
+  {
+   "commit": "b67e806",
+   "path": "src/normalization/bs_sections.py",
+   "line": 82,
+   "fix": "c7733b3",
+   "text": "if not hfs_rows or hfs == 0:",
+   "definition": "held_for_sale_adjustment",
+   "allowed_ops": [
+    [
+     "core/NumberReplacer",
+     12,
+     "constant"
+    ],
+    [
+     "core/NumberReplacer",
+     13,
+     "constant"
+    ],
+    [
+     "core/ReplaceComparisonOperator_Eq_NotEq",
+     13,
+     "comparison"
+    ],
+    [
+     "core/ReplaceOrWithAnd",
+     5,
+     "boolean"
+    ]
+   ]
+  },
+  {
+   "commit": "b67e806",
+   "path": "src/normalization/bs_sections.py",
+   "line": 83,
+   "fix": "c7733b3",
+   "text": "return out",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "b67e806",
+   "path": "src/normalization/manual.py",
+   "line": 59,
+   "fix": "c7733b3",
+   "text": "scope_ok = not result.get(\"basis\") or entry.get(\"scope_check\") == \"확인\"",
+   "definition": "apply_confirmations",
+   "allowed_ops": [
+    [
+     "core/ReplaceComparisonOperator_Eq_NotEq",
+     10,
+     "comparison"
+    ],
+    [
+     "core/ReplaceOrWithAnd",
+     0,
+     "boolean"
+    ]
+   ]
+  },
+  {
+   "commit": "b67e806",
+   "path": "src/normalization/manual.py",
+   "line": 60,
+   "fix": "c7733b3",
+   "text": "if not scope_ok:",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "b67e806",
+   "path": "src/normalization/manual.py",
+   "line": 61,
+   "fix": "c7733b3",
+   "text": "return {**result, \"status\": \"candidate\", \"value\": str(manual_value), \"extraction_method\": \"manual\",",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "3db2f31",
+   "path": "src/metrics/engine.py",
+   "line": 56,
+   "fix": "c7733b3",
+   "text": "if i.calc_status == \"reference\":",
+   "definition": "combine",
+   "allowed_ops": [
+    [
+     "core/ReplaceComparisonOperator_Eq_NotEq",
+     0,
+     "comparison"
+    ]
+   ]
+  },
+  {
+   "commit": "3db2f31",
+   "path": "src/metrics/engine.py",
+   "line": 125,
+   "fix": "c7733b3",
+   "text": "r.calc_status = \"not_computed\"",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "3db2f31",
+   "path": "src/metrics/engine.py",
+   "line": 126,
+   "fix": "c7733b3",
+   "text": "r.hold_reasons.append(\"유동부채 0 — 무한대 처리 금지, 점수 단계에서 상한 적용\")",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "3db2f31",
+   "path": "src/metrics/engine.py",
+   "line": 131,
+   "fix": "c7733b3",
+   "text": "out.append(r)",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "9e9c12b",
+   "path": "src/normalization/manual.py",
+   "line": 59,
+   "fix": "c7733b3",
+   "text": "replaces = (entry.get(\"api_relation\") == \"replaces_incomplete_api\" and result[\"canonical_account\"] in COMPONENT_ACCOUNTS",
+   "definition": "apply_confirmations",
+   "allowed_ops": [
+    [
+     "core/ReplaceAndWithOr",
+     6,
+     "boolean"
+    ],
+    [
+     "core/ReplaceComparisonOperator_Eq_NotEq",
+     10,
+     "comparison"
+    ]
+   ]
+  },
+  {
+   "commit": "9e9c12b",
+   "path": "src/normalization/manual.py",
+   "line": 61,
+   "fix": "c7733b3",
+   "text": "if not replaces:",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "9e9c12b",
+   "path": "src/normalization/manual.py",
+   "line": 64,
+   "fix": "c7733b3",
+   "text": "return {**result, \"status\": \"mapped\", \"value\": str(manual_value), \"extraction_method\": \"manual\",",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "9e9c12b",
+   "path": "src/normalization/manual.py",
+   "line": 71,
+   "fix": "c7733b3",
+   "text": "return {**result, \"status\": \"candidate\", \"value\": str(manual_value), \"extraction_method\": \"manual\",",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "da30a78",
+   "path": "src/metrics/working_capital.py",
+   "line": 48,
+   "fix": "c2fe0d1",
+   "text": "wc = Decimal(wc_row[\"value\"])",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "da30a78",
+   "path": "src/metrics/working_capital.py",
+   "line": 51,
+   "fix": "c2fe0d1",
+   "text": "out = {\"sign_status\": UNCHECKED, \"identity_target\": \"\", \"identity_rows\": \"\", \"sign_evidence\": \"\"}",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "da30a78",
+   "path": "src/metrics/working_capital.py",
+   "line": 54,
+   "fix": "c2fe0d1",
+   "text": "generated = Decimal(ni[\"value\"]) + Decimal(adj[\"value\"]) + wc",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "da30a78",
+   "path": "src/metrics/working_capital.py",
+   "line": 55,
+   "fix": "c2fe0d1",
+   "text": "used = [ni, adj, wc_row]",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "da30a78",
+   "path": "src/metrics/working_capital.py",
+   "line": 58,
+   "fix": "c2fe0d1",
+   "text": "if generated == Decimal(cgo[\"value\"]):",
+   "definition": "sign_check",
+   "allowed_ops": [
+    [
+     "core/ReplaceComparisonOperator_Eq_NotEq",
+     5,
+     "comparison"
+    ]
+   ]
+  },
+  {
+   "commit": "da30a78",
+   "path": "src/metrics/working_capital.py",
+   "line": 59,
+   "fix": "c2fe0d1",
+   "text": "return {\"sign_status\": CHECKED, \"identity_target\": \"영업에서 창출된 현금\", \"identity_rows\": \" + \".join(map(_where, used)) + \" = \"",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "da30a78",
+   "path": "src/metrics/working_capital.py",
+   "line": 61,
+   "fix": "c2fe0d1",
+   "text": "return {**out, \"identity_target\": \"영업에서 창출된 현금\", \"sign_evidence\": f\"합 {generated:,} ≠ 영업에서 창출된 현금 {Decimal(cgo['value'])",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "da30a78",
+   "path": "src/metrics/working_capital.py",
+   "line": 65,
+   "fix": "c2fe0d1",
+   "text": "outs = [r for r in (_row(cf, i) for i in OUTFLOW_IDS) if r is not None]",
+   "definition": "sign_check",
+   "allowed_ops": [
+    [
+     "core/ReplaceComparisonOperator_IsNot_Is",
+     2,
+     "comparison"
+    ]
+   ]
+  },
+  {
+   "commit": "da30a78",
+   "path": "src/metrics/working_capital.py",
+   "line": 66,
+   "fix": "c2fe0d1",
+   "text": "ins = [r for r in (_row(cf, i) for i in INFLOW_IDS) if r is not None]",
+   "definition": "sign_check",
+   "allowed_ops": [
+    [
+     "core/ReplaceComparisonOperator_IsNot_Is",
+     3,
+     "comparison"
+    ]
+   ]
+  },
+  {
+   "commit": "da30a78",
+   "path": "src/metrics/working_capital.py",
+   "line": 67,
+   "fix": "c2fe0d1",
+   "text": "sum_out, sum_in = sum(Decimal(r[\"value\"]) for r in outs), sum(Decimal(r[\"value\"]) for r in ins)",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "da30a78",
+   "path": "src/metrics/working_capital.py",
+   "line": 69,
+   "fix": "c2fe0d1",
+   "text": "for label, total in ((\"지급 양수 표기\", generated - sum_out + sum_in), (\"부호 포함 표기\", generated + sum_out + sum_in)):",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "da30a78",
+   "path": "src/metrics/working_capital.py",
+   "line": 70,
+   "fix": "c2fe0d1",
+   "text": "if total == Decimal(ocf[\"value\"]):",
+   "definition": "sign_check",
+   "allowed_ops": [
+    [
+     "core/ReplaceComparisonOperator_Eq_NotEq",
+     6,
+     "comparison"
+    ]
+   ]
+  },
+  {
+   "commit": "da30a78",
+   "path": "src/metrics/working_capital.py",
+   "line": 71,
+   "fix": "c2fe0d1",
+   "text": "return {\"sign_status\": CHECKED, \"identity_target\": f\"영업현금흐름 (영업에서 창출된 현금 행 없음 — 이자·배당·법인세 행 경유, {label})\",",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "da30a78",
+   "path": "src/metrics/working_capital.py",
+   "line": 98,
+   "fix": "c2fe0d1",
+   "text": "check = sign_check(cf, row)",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "f2d690e",
+   "path": "src/market/run_market.py",
+   "line": 61,
+   "fix": "142912b",
+   "text": "check = \"\" if g is None or off is None else (\"일치\" if pct1(g) == off else f\"불일치 (계산 {pct1(g)}%)\")",
+   "definition": "build_stats",
+   "allowed_ops": [
+    [
+     "core/ReplaceComparisonOperator_Eq_NotEq",
+     0,
+     "comparison"
+    ],
+    [
+     "core/ReplaceComparisonOperator_Is_IsNot",
+     4,
+     "comparison"
+    ],
+    [
+     "core/ReplaceComparisonOperator_Is_IsNot",
+     5,
+     "comparison"
+    ],
+    [
+     "core/ReplaceOrWithAnd",
+     6,
+     "boolean"
+    ]
+   ]
+  },
+  {
+   "commit": "adb2f5b",
+   "path": "src/market/run_market.py",
+   "line": 187,
+   "fix": "142912b",
+   "text": "fact_ids = set(facts.fact_id)",
+   "definition": null,
+   "allowed_ops": []
+  },
+  {
+   "commit": "adb2f5b",
+   "path": "src/market/run_market.py",
+   "line": 192,
+   "fix": "142912b",
+   "text": "if missing := [e for e in j.evidence.split(\";\") if e not in fact_ids]:",
+   "definition": null,
+   "allowed_ops": []
+  }
+ ],
+ "controls": {
+  "99309f2": {
+   "src/normalization/__init__.py": [],
+   "src/normalization/build_facts.py": [],
+   "src/normalization/dart_facts.py": [
+    {
+     "line": 38,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       0,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       0,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 56,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       2,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       3,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 59,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_LtE_Lt",
+       0,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Lt_LtE",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 73,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       10,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       11,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       12,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       13,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       14,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       15,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       16,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       17,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       18,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       19,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       20,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       21,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 78,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       22,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       23,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 79,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       24,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       25,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 113,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       0,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       1,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       2,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 119,
+     "families": [
+      "boolean"
+     ],
+     "ops": [
+      [
+       "core/ReplaceOrWithAnd",
+       1,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 120,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       26,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       27,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 121,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       1,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 123,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       2,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 127,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       3,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 133,
+     "families": [
+      "boolean"
+     ],
+     "ops": [
+      [
+       "core/ReplaceOrWithAnd",
+       2,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 139,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       3,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 176,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       28,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       29,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       30,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       31,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 177,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       32,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       33,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       34,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       35,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       36,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       37,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       38,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       39,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Gt_GtE",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 181,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       4,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       0,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       3,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 187,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       40,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       41,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Gt_GtE",
+       1,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 188,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       42,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       43,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Gt_GtE",
+       2,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 196,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       44,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       45,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       5,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 197,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       46,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       47,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Gt_GtE",
+       3,
+       "comparison"
+      ]
+     ]
+    }
+   ]
+  },
+  "82e4305": {
+   "src/normalization/account_map.py": [
+    {
+     "line": 18,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       0,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       0,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 23,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/ReplaceFalseWithTrue",
+       0,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 24,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       0,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       1,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 25,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/ReplaceFalseWithTrue",
+       1,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 27,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 29,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       1,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       1,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 40,
+     "families": [
+      "boolean"
+     ],
+     "ops": [
+      [
+       "core/ReplaceOrWithAnd",
+       1,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 65,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       2,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 72,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       0,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       1,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       2,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 73,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       2,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       3,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       4,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       5,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 76,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       6,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       7,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Gt_GtE",
+       0,
+       "comparison"
+      ]
+     ]
+    }
+   ],
+   "src/normalization/build_account_check.py": [],
+   "src/normalization/dart_facts.py": [
+    {
+     "line": 68,
+     "families": [
+      "boolean",
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       10,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       11,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       12,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       13,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       14,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       15,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       16,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       17,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       18,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       19,
+       "constant"
+      ],
+      [
+       "core/ReplaceAndWithOr",
+       0,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 153,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       4,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       5,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       3,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 212,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       58,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       59,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       60,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       61,
+       "constant"
+      ]
+     ]
+    }
+   ]
+  },
+  "568ea41": {
+   "src/normalization/account_map.py": [
+    {
+     "line": 60,
+     "families": [
+      "boolean"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       2,
+       "boolean"
+      ]
+     ]
+    }
+   ],
+   "src/normalization/build_account_check.py": [],
+   "src/normalization/dart_facts.py": [
+    {
+     "line": 57,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       4,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       5,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 62,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Lt_LtE",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 67,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Gt_GtE",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 73,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 74,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/ReplaceFalseWithTrue",
+       0,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 77,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       6,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       7,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       8,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       9,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 80,
+     "families": [
+      "boolean",
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       10,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       11,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_LtE_Lt",
+       0,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_LtE_Lt",
+       1,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       1,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 172,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       4,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       5,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       4,
+       "boolean"
+      ]
+     ]
+    }
+   ],
+   "src/normalization/manual.py": [
+    {
+     "line": 19,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/ReplaceFalseWithTrue",
+       0,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 25,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 27,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       0,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 40,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       1,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       1,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       2,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 41,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       2,
+       "boolean"
+      ],
+      [
+       "core/ReplaceAndWithOr",
+       3,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       3,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       4,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 42,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       4,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       5,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 44,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       6,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 45,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       7,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 47,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       8,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 48,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       0,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       1,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 49,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       2,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       3,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Gt_GtE",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 52,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       4,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       5,
+       "constant"
+      ]
+     ]
+    }
+   ]
+  },
+  "b67e806": {
+   "src/normalization/account_map.py": [
+    {
+     "line": 28,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 30,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/ReplaceFalseWithTrue",
+       2,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 31,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       1,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       1,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 32,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/ReplaceFalseWithTrue",
+       3,
+       "constant"
+      ]
+     ]
+    }
+   ],
+   "src/normalization/bs_sections.py": [
+    {
+     "line": 23,
+     "families": [
+      "boolean"
+     ],
+     "ops": [
+      [
+       "core/ReplaceOrWithAnd",
+       0,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 27,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       0,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       1,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 35,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/ReplaceFalseWithTrue",
+       0,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 36,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       1,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 41,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       0,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       1,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 44,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       2,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       3,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 48,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       4,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       5,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 49,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       6,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       7,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 57,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       1,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       2,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 67,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       4,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 69,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       5,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 71,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       6,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 72,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       2,
+       "boolean"
+      ],
+      [
+       "core/ReplaceAndWithOr",
+       3,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       7,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       8,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       9,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 74,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       4,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       10,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       3,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 75,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       5,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       11,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       4,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 76,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       6,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       12,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 80,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       2,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 84,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       14,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       15,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Lt_LtE",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 86,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       7,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       14,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 89,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       15,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 90,
+     "families": [
+      "boolean"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       8,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 91,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       9,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_IsNot_Is",
+       0,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_IsNot_Is",
+       1,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 92,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       10,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       16,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 93,
+     "families": [
+      "boolean"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       11,
+       "boolean"
+      ]
+     ]
+    }
+   ],
+   "src/normalization/build_account_check.py": [],
+   "src/normalization/dart_facts.py": [
+    {
+     "line": 206,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       1,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       5,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 211,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       2,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       6,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 212,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/ReplaceFalseWithTrue",
+       2,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 241,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       6,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 248,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       42,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       43,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 253,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       8,
+       "comparison"
+      ]
+     ]
+    }
+   ],
+   "src/normalization/manual.py": []
+  },
+  "3db2f31": {
+   "src/metrics/__init__.py": [],
+   "src/metrics/engine.py": [
+    {
+     "line": 57,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       6,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       7,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 58,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       1,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 59,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       8,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       9,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 60,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 70,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       10,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       11,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 77,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       12,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       13,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       14,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       15,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       16,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       17,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 79,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       1,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 81,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       18,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       19,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_LtE_Lt",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 102,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       26,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       27,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       28,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       29,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 104,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       3,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 105,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       30,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       31,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       2,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 121,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       32,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       33,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       34,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       35,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 123,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       4,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 124,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       36,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       37,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       3,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 129,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       4,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 151,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       44,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       45,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       46,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       47,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 153,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       6,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 154,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       48,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       49,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_LtE_Lt",
+       2,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 158,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       50,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       51,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       52,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       53,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       54,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       55,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 163,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       56,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       57,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       58,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       59,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       60,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       61,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       62,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       63,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 165,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       7,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 166,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       64,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       65,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       66,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       67,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_LtE_Lt",
+       3,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 170,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       68,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       69,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       70,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       71,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       72,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       73,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 172,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       74,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       75,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       76,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       77,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       78,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       79,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 173,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       80,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       81,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Lt_LtE",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 182,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       82,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       83,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       84,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       85,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 184,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       8,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 185,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       86,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       87,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_LtE_Lt",
+       4,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 233,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       104,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       105,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Lt_LtE",
+       1,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 234,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       106,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       107,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       6,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 235,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       108,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       109,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       110,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       111,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 236,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       112,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       113,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 251,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       0,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       7,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       11,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 252,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       12,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       0,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 258,
+     "families": [
+      "boolean",
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       114,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       115,
+       "constant"
+      ],
+      [
+       "core/ReplaceAndWithOr",
+       1,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       8,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_LtE_Lt",
+       7,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 262,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       9,
+       "comparison"
+      ]
+     ]
+    }
+   ],
+   "src/metrics/run_2025.py": [],
+   "src/normalization/account_map.py": [
+    {
+     "line": 31,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       1,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       1,
+       "comparison"
+      ]
+     ]
+    }
+   ],
+   "src/normalization/bs_sections.py": [
+    {
+     "line": 36,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/ReplaceFalseWithTrue",
+       0,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 58,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       1,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       2,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 87,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       7,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       14,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 91,
+     "families": [
+      "boolean"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       8,
+       "boolean"
+      ]
+     ]
+    }
+   ],
+   "src/normalization/build_account_check.py": [],
+   "src/normalization/dart_facts.py": []
+  },
+  "9e9c12b": {
+   "src/metrics/engine.py": [],
+   "src/normalization/filing_sections.py": [],
+   "src/normalization/manual.py": [
+    {
+     "line": 67,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       2,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 70,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       8,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       3,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 72,
+     "families": [
+      "boolean"
+     ],
+     "ops": [
+      [
+       "core/ReplaceOrWithAnd",
+       0,
+       "boolean"
+      ]
+     ]
+    }
+   ]
+  },
+  "da30a78": {
+   "src/metrics/engine.py": [],
+   "src/metrics/run_2025.py": [],
+   "src/metrics/run_trend.py": [
+    {
+     "line": 60,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       0,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       1,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       2,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       3,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       4,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       5,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       6,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       7,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 71,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       12,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       13,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 72,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       14,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       15,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       16,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       17,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 94,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/ReplaceFalseWithTrue",
+       0,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 96,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       22,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       23,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 99,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       24,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       25,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 111,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       26,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       27,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       6,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 112,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       7,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 113,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Lt_LtE",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 119,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       28,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       29,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       30,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       31,
+       "constant"
+      ]
+     ]
+    }
+   ],
+   "src/metrics/working_capital.py": [
+    {
+     "line": 38,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       0,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       1,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       2,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       3,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       3,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 49,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_IsNot_Is",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 50,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       4,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       5,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       6,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       7,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       4,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 57,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_IsNot_Is",
+       1,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 63,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       2,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 82,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/ReplaceFalseWithTrue",
+       0,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 99,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       9,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 100,
+     "families": [
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       12,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       13,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       14,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       15,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Gt_GtE",
+       1,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Lt_LtE",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 108,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_GtE_Gt",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 110,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/ReplaceTrueWithFalse",
+       1,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 111,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Eq_NotEq",
+       10,
+       "comparison"
+      ]
+     ]
+    }
+   ],
+   "src/normalization/baseline.py": [
+    {
+     "line": 73,
+     "families": [
+      "boolean"
+     ],
+     "ops": [
+      [
+       "core/ReplaceOrWithAnd",
+       1,
+       "boolean"
+      ]
+     ]
+    }
+   ],
+   "src/report/__init__.py": [],
+   "src/report/evidence_report.py": []
+  },
+  "f2d690e": {
+   "src/collectors/stats.py": [
+    {
+     "line": 30,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       2,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       3,
+       "constant"
+      ]
+     ]
+    }
+   ],
+   "src/market/__init__.py": [],
+   "src/market/index_table.py": [
+    {
+     "line": 22,
+     "families": [
+      "boolean"
+     ],
+     "ops": [
+      [
+       "core/ReplaceOrWithAnd",
+       0,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 31,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       0,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       1,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 34,
+     "families": [
+      "boolean",
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       2,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       3,
+       "constant"
+      ],
+      [
+       "core/ReplaceAndWithOr",
+       0,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Gt_GtE",
+       0,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 35,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       4,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       5,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 40,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       6,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       7,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 42,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       8,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       9,
+       "constant"
+      ]
+     ]
+    }
+   ],
+   "src/market/run_market.py": [
+    {
+     "line": 34,
+     "families": [
+      "boolean",
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       2,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       3,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       0,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       1,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_LtE_Lt",
+       0,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       0,
+       "boolean"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       1,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 36,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       4,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       5,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 40,
+     "families": [
+      "boolean",
+      "comparison",
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       6,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       7,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       8,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       9,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       10,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       11,
+       "constant"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       2,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       3,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_LtE_Lt",
+       1,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_LtE_Lt",
+       2,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_LtE_Lt",
+       3,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       2,
+       "boolean"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       3,
+       "boolean"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       4,
+       "boolean"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       5,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 42,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       12,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       13,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       14,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       15,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 46,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       16,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       17,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 59,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       18,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       19,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 63,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_Is_IsNot",
+       6,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 64,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       20,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       21,
+       "constant"
+      ]
+     ]
+    },
+    {
+     "line": 73,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       0,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_LtE_Lt",
+       4,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_LtE_Lt",
+       5,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 89,
+     "families": [
+      "boolean"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       1,
+       "boolean"
+      ]
+     ]
+    }
+   ],
+   "src/pipeline/run_pilot_2025.py": [],
+   "src/report/evidence_report.py": []
+  },
+  "adb2f5b": {
+   "src/collectors/stats.py": [],
+   "src/market/run_market.py": [
+    {
+     "line": 175,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceAndWithOr",
+       5,
+       "boolean"
+      ],
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       1,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 178,
+     "families": [
+      "boolean",
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       2,
+       "comparison"
+      ],
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       3,
+       "comparison"
+      ],
+      [
+       "core/ReplaceOrWithAnd",
+       10,
+       "boolean"
+      ]
+     ]
+    },
+    {
+     "line": 185,
+     "families": [
+      "comparison"
+     ],
+     "ops": [
+      [
+       "core/ReplaceComparisonOperator_NotEq_Eq",
+       4,
+       "comparison"
+      ]
+     ]
+    },
+    {
+     "line": 189,
+     "families": [
+      "constant"
+     ],
+     "ops": [
+      [
+       "core/NumberReplacer",
+       44,
+       "constant"
+      ],
+      [
+       "core/NumberReplacer",
+       45,
+       "constant"
+      ]
+     ]
+    }
+   ],
+   "src/pipeline/run_pilot_2025.py": []
+  }
+ }
+}

@@ -1,0 +1,95 @@
+# 자동 생성 — spikes/stage2_1/select_cases.py
+note: Stage 2.1 평가 B 사례. select_cases.py가 선정 규칙으로 만들었고, mutant 실행 전에 커밋해 고정한다. 실행 후 바꾸지 않는다.
+rules:
+  max_defect_lines: 6
+  mutants_per_line: 2
+  design: docs/design_stage2_1.md 5.3
+defect_lines_found: 3
+cases:
+- id: D1
+  group: szz
+  commit: 568ea41
+  path: src/normalization/manual.py
+  line: 54
+  definition: apply_confirmations
+  fix: c7733b3
+  text: 'if result["status"] == "mapped" and Decimal(result["value"]) != manual_value:'
+  mutants:
+  - operator: core/ReplaceAndWithOr
+    occurrence: 5
+    family: boolean
+  - operator: core/ReplaceComparisonOperator_Eq_NotEq
+    occurrence: 9
+    family: comparison
+- id: C1
+  group: control
+  pair_of: D1
+  commit: 568ea41
+  path: src/normalization/manual.py
+  line: 42
+  family_matched: boolean
+  mutants:
+  - operator: core/ReplaceAndWithOr
+    occurrence: 4
+    family: boolean
+  - operator: core/ReplaceComparisonOperator_Eq_NotEq
+    occurrence: 5
+    family: comparison
+- id: D2
+  group: szz
+  commit: b67e806
+  path: src/normalization/bs_sections.py
+  line: 51
+  definition: annotate_sections
+  fix: c7733b3
+  text: confirmed = regular == total or (hfs != 0 and regular + hfs == total)
+  mutants:
+  - operator: core/NumberReplacer
+    occurrence: 8
+    family: constant
+  - operator: core/NumberReplacer
+    occurrence: 9
+    family: constant
+- id: C2
+  group: control
+  pair_of: D2
+  commit: b67e806
+  path: src/normalization/bs_sections.py
+  line: 84
+  family_matched: constant
+  mutants:
+  - operator: core/NumberReplacer
+    occurrence: 14
+    family: constant
+  - operator: core/NumberReplacer
+    occurrence: 15
+    family: constant
+- id: D3
+  group: szz
+  commit: b67e806
+  path: src/normalization/bs_sections.py
+  line: 77
+  definition: held_for_sale_adjustment
+  fix: c7733b3
+  text: hfs = sum((_value(r) for r in hfs_rows), Decimal(0))
+  mutants:
+  - operator: core/NumberReplacer
+    occurrence: 10
+    family: constant
+  - operator: core/NumberReplacer
+    occurrence: 11
+    family: constant
+- id: C3
+  group: control
+  pair_of: D3
+  commit: b67e806
+  path: src/normalization/bs_sections.py
+  line: 49
+  family_matched: constant
+  mutants:
+  - operator: core/NumberReplacer
+    occurrence: 6
+    family: constant
+  - operator: core/NumberReplacer
+    occurrence: 7
+    family: constant

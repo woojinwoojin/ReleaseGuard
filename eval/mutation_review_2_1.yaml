@@ -1,0 +1,122 @@
+# Stage 2.1 평가 A — Stage 2.0 SURVIVED 13개 전수 분류 (docs/design_stage2_1.md 3·4장)
+# 이미 결과를 본 집합이므로 사전 등록 평가가 아니다 (탐색).
+# 분류: ACTIONABLE_GAP / MEANINGFUL_UNVERIFIED / LOW_VALUE / EQUIVALENT_SUPPORTED / UNRESOLVED
+# 증거 상태: confirmed(테스트로 입증) / plausible(근거 있으나 미입증) / unresolved
+# 이 파일은 테스트 추가 실험 전의 분류다. 테스트 결과는 docs/eval/v21/test_additions.json에 따로 기록하고, 여기서 바꾸지 않는다.
+# spec: 기대 동작의 근거. reviewed: 분류에 읽은 자료.
+classified_by: claude-draft   # 사용자 확인 전
+mutants:
+  - no: 2
+    where: fc58c0e src/collectors/dart.py:56 is_valid_zip
+    change: "bool(z.namelist()) and z.testzip() is None → or"
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: 파일 이름이 있으면 손상된 ZIP(testzip이 오류 파일명을 돌려줌)도 유효로 본다. 빈 ZIP도 유효로 본다.
+    spec: docstring "실제로 열리고 손상이 없는지 확인한다"
+    reviewed: [dart.py is_valid_zip]
+  - no: 5
+    where: fc58c0e src/collectors/dart.py:74 DartClient.get
+    change: "timeout=30 → 31"
+    class: LOW_VALUE
+    evidence: plausible
+    behavior: HTTP 시간 상한이 1초 바뀐다.
+    spec: 시간 상한 값에 대한 문서·계약 없음
+    reviewed: [dart.py get]
+  - no: 7
+    where: fc58c0e src/collectors/dart.py:109 _json_bytes
+    change: "indent=2 → 3"
+    class: LOW_VALUE
+    evidence: plausible
+    behavior: metadata.json의 들여쓰기만 바뀐다. 내용(JSON 값)은 같다.
+    spec: >-
+      저장 형식(바이트)을 계약으로 정한 문서·테스트 없음. 원본 해시(sha256)는 API 응답 바이트(r.content)에 대해 계산하고
+      metadata.json에는 계산하지 않는다 (dart.py 125·156·164줄). 바이트 형식이 계약이 되면 다시 분류한다.
+    reviewed: [dart.py _json_bytes 사용처 3곳, docs·README에서 indent·바이트 계약 검색]
+  - no: 8
+    where: fc58c0e src/collectors/dart.py:114 list_annual_reports
+    change: "bgn_de = min(years) + 1 → + 2"
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: 공시검색 시작일이 1년 늦어져 첫 연도 사업보고서(다음 해 접수)를 찾지 못한다.
+    spec: 주석 "2022 사업보고서는 2023년에 접수된다"
+    reviewed: [dart.py list_annual_reports]
+  - no: 13
+    where: 99309f2 src/normalization/dart_facts.py:59 (기간 매치 필터)
+    change: "s <= e < one_year_later → s < e < ..."
+    class: UNRESOLVED
+    evidence: unresolved
+    behavior: 시작일 = 종료일(하루 기간)인 매치를 버린다.
+    spec: 하루 기간을 받아야 하는지 docstring·문서에 없다 (docstring은 여러 열 날짜가 이어 붙은 매치를 거르는 목적만 말함)
+    reviewed: [dart_facts.py 해당 함수 docstring]
+  - no: 23
+    where: 82e4305 src/normalization/account_map.py:40 evidence
+    change: "rule.get('account_id') or f'name:…' → and"
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: 증거 기록의 규칙 이름이 계정 ID 규칙이면 'name:None', 이름 규칙이면 빈 값이 된다.
+    spec: 증거 연결이 이 프로젝트의 핵심 산출물 (증거 행마다 어떤 규칙으로 매칭됐는지 남김). 다만 이 필드를 읽는 코드·테스트는 확인 안 함 — 명세 근거가 다른 사례보다 약하다
+    reviewed: [account_map.py evidence]
+  - no: 26
+    where: 568ea41 src/normalization/dart_facts.py:57 period_days
+    change: "(end - start).days + 1 → + 2"
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: 기간 일수가 하루 늘어 53주(371일) 경계와 연간 판정(364~371일)이 하루 어긋난다.
+    spec: 시작·종료일을 모두 포함한 일수 (MAX_REGULAR_DAYS = 371 '53주 보고기간까지는 정상 연간 범위')
+    reviewed: [dart_facts.py period_days, MAX_REGULAR_DAYS, is_unusually_long, is_annual_period]
+  - no: 27
+    where: 568ea41 src/normalization/dart_facts.py:62 is_reversed_period
+    change: "end < start → end <= start"
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: 시작일 = 종료일인 기간도 날짜 오류로 버린다.
+    spec: docstring "종료일이 시작일보다 빠르면 날짜 오류. 이것만 버린다"
+    reviewed: [dart_facts.py is_reversed_period]
+  - no: 28
+    where: 568ea41 src/normalization/dart_facts.py:67 is_unusually_long
+    change: "period_days > MAX_REGULAR_DAYS → >="
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: 정확히 371일(53주) 기간을 '긴 기간'으로 표시한다.
+    spec: docstring "53주를 넘는 기간"
+    reviewed: [dart_facts.py is_unusually_long, MAX_REGULAR_DAYS]
+  - no: 31
+    where: 568ea41 src/normalization/dart_facts.py:77 is_annual_period
+    change: "s.replace(year=s.year + 1) → + 2"
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: 12개월 기간은 364~371일 조건으로 여전히 연간이지만, 24개월 기간을 연간으로 본다.
+    spec: docstring "실제 회계기간(12개월 또는 52·53주)"
+    reviewed: [dart_facts.py is_annual_period]
+  - no: 37
+    where: b67e806 src/normalization/bs_sections.py:23 is_held_for_sale
+    change: "id in HFS_IDS or name.startswith('매각예정') → and"
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: 표준 ID만 있거나 이름만 '매각예정'인 행을 매각예정으로 보지 않는다.
+    spec: held_for_sale_adjustment도 이름 기준 행(매각예정자산 등)을 매각예정으로 본다 — ID와 이름 중 하나면 충분하다는 설계
+    reviewed: [bs_sections.py is_held_for_sale, held_for_sale_adjustment]
+  - no: 38
+    where: b67e806 src/normalization/bs_sections.py:27 _value
+    change: "unparsed → Decimal(0) → Decimal(1)"
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: 값을 읽지 못한 행을 1로 더한다.
+    spec: >-
+      원래 동작(읽지 못한 행을 0으로 더함) 자체가 후속 수정 c7733b3에서 결함으로 고쳐졌다 ("unparsed section lines are no longer read as zero").
+      이 mutant를 잡는 테스트는 결함 동작을 정답으로 고정하게 된다 — 오라클 위험 사례 (Stage 1.6 F1과 같은 구조)
+    szz_link: c7733b3 (같은 결함 영역, SZZ 결함 줄 bs_sections.py:51·77과 같은 함수군)
+    reviewed: [bs_sections.py _value, c7733b3 diff]
+  - no: 39
+    where: b67e806 src/normalization/bs_sections.py:35 annotate_sections
+    change: "setdefault('bs_section_confirmed', False) → True"
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: 소계 구간에 들지 않은 행(다른 재무제표 행, 구간 밖 행)이 기본으로 '구간 확인됨'이 된다.
+    spec: 모듈 docstring "항목 합이 소계와 원 단위까지 같을 때만 '확인'으로 표시한다", 프로젝트 원칙 '미확인 값은 승격하지 않는다'
+    reviewed: [bs_sections.py 모듈 docstring, bs_section_confirmed 사용처 6곳]
+
+# 테스트 추가 대상 (설계 6장 규칙: MEANINGFUL_UNVERIFIED를 mutant 번호 순으로 커밋마다 1개, 최대 5개)
+# fc58c0e #2 · 99309f2 (#13은 UNRESOLVED라 해당 없음) · 82e4305 #23 · 568ea41 #26 · b67e806 #37 → 4개
+# 평가 B의 결함 줄 SURVIVED 1개를 더한다 (있으면). 합이 4개 이상이므로 UNRESOLVED로 채우지 않는다.
+test_targets_from_a: [2, 23, 26, 37]

@@ -1,0 +1,97 @@
+# Stage 2.1 평가 B — SZZ covered 결함 줄 수기 확인 (docs/design_stage2_1.md 5.2)
+# mutant를 만들기 전에 기록했다. 확인한 사람: Claude (초안, 사용자 확인 전)
+# 대상: out/eval/v14/20261107_szz.json의 covered 41줄 중 허용 연산자가 있는 13줄 (docs/eval/v21/szz_candidates.json)
+# 확인 순서는 선정 규칙(5.3)이 방문하는 순서다. 규칙상 방문하지 않은 줄은 확인하지 않았다 (visited: false).
+# 결과: confirmed_defect / not_defect / unclear. confirmed_defect만 선정에 쓴다.
+# 기준: 수정이 그 줄의 동작을 바꿨고(리팩터·재배치·포맷이 아님), 그 변경이 수정 커밋 메시지의 결함과 연결된다.
+classified_by: claude-draft
+lines:
+  - commit: 568ea41
+    path: src/normalization/manual.py
+    line: 54
+    fix: c7733b3
+    result: confirmed_defect
+    reason: >-
+      조건이 status == "mapped"에서 mapped·candidate 둘 다로 바뀌고, API 비교가 금액·구성·범위 확인 뒤로 옮겨졌다.
+      메시지 "Manual totals now pass amount, component, and scope checks before any API comparison or replacement"와 직접 연결.
+  - commit: b67e806
+    path: src/normalization/bs_sections.py
+    line: 51
+    fix: c7733b3
+    result: confirmed_defect
+    reason: >-
+      confirmed 조건에 'not unparsed and'가 추가됐다 (값 없음·변환 실패 행이 있으면 산술 확인 불가).
+      메시지 "unparsed section lines are no longer read as zero"와 연결.
+  - commit: 3db2f31
+    path: src/metrics/engine.py
+    line: 56
+    fix: c7733b3
+    result: not_defect
+    reason: >-
+      수정은 이 줄 앞에 'if i.period_problem():'을 끼워 넣었고 이 줄은 if → elif로 바뀌었을 뿐 조건이 같다.
+      결함(기간 미확인 값으로 계산)은 Input.calc_status·period_problem 쪽이다. SZZ가 재배치된 줄을 잡은 것.
+  - commit: 9e9c12b
+    path: src/normalization/manual.py
+    line: 59
+    fix: c7733b3
+    visited: false
+    reason: 선정 규칙상 건너뜀 — apply_confirmations 함수가 568ea41에서 이미 선정됨
+  - commit: da30a78
+    path: src/metrics/working_capital.py
+    line: 58
+    fix: c2fe0d1
+    result: not_defect
+    reason: >-
+      'generated == cgo' 비교는 새 result() 안의 'ok = total == target'으로 옮겨졌을 뿐 동작이 같다 (구조 변경).
+  - commit: da30a78
+    path: src/metrics/working_capital.py
+    line: 65
+    fix: c2fe0d1
+    result: not_defect
+    reason: >-
+      수정 후에도 OUTFLOW_IDS에서 행을 그대로 모은다. 결함은 상수(OUTFLOW_IDS에 비영업 코드 포함)와 원문 확인 경로 부재였고,
+      상수 줄은 import_only라 후보 풀에 없다.
+  - commit: da30a78
+    path: src/metrics/working_capital.py
+    line: 66
+    fix: c2fe0d1
+    result: not_defect
+    reason: 65줄과 같음 (INFLOW_IDS).
+  - commit: da30a78
+    path: src/metrics/working_capital.py
+    line: 70
+    fix: c2fe0d1
+    result: not_defect
+    reason: 두 부호 표기를 시도하고 영업현금흐름과 비교하는 동작이 수정 후에도 같다 (result() 경유).
+  - commit: f2d690e
+    path: src/market/run_market.py
+    line: 61
+    fix: 142912b
+    result: unclear
+    reason: >-
+      값이 없을 때 빈 문자열이던 yoy_check를 '대조 불가 — …'로 바꿨다. 표시가 명확해졌지만,
+      수정 커밋 메시지(연속성 전달·비중 해석·음수 분모·원본 해시)에 이 변경과 연결되는 결함이 적혀 있지 않다.
+  - commit: b67e806
+    path: src/normalization/bs_sections.py
+    line: 77
+    fix: c7733b3
+    result: confirmed_defect
+    reason: >-
+      줄 내용(hfs = sum(...))은 같지만 금액 결측·변환 실패 검사 뒤로 옮겨져 실행 조건이 바뀌었다 (결측을 0으로 합산하지 않음).
+      메시지 "Missing held-for-sale amounts ... are no longer read as zero"와 연결. 재배치로 동작이 바뀐 경우라 note로 남긴다.
+    note: 줄 텍스트 변경 없이 실행 조건만 바뀐 경우
+  - commit: b67e806
+    path: src/normalization/bs_sections.py
+    line: 78
+    visited: false
+    reason: 선정 규칙상 건너뜀 — held_for_sale_adjustment 함수가 이미 선정됨
+  - commit: b67e806
+    path: src/normalization/bs_sections.py
+    line: 82
+    visited: false
+    reason: 선정 규칙상 건너뜀 — held_for_sale_adjustment 함수가 이미 선정됨
+  - commit: b67e806
+    path: src/normalization/manual.py
+    line: 59
+    visited: false
+    reason: 선정 규칙상 건너뜀 — apply_confirmations 함수가 이미 선정됨
