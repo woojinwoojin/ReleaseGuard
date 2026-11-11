@@ -9,10 +9,11 @@ SAFE는 "코드가 맞다"가 아니라 "ReleaseGuard가 검증할 수 있는 �
 import re
 from dataclasses import dataclass, field
 
+from .changed_tests import HELD, evidence_lines
 from .classify import SecretPattern
 from .gaps import FileLines
 
-RULES_VERSION = "3.1"  # 3.1 (2026-11-04): 실패 비교에 테스트 정의·공유 맥락·실패 지문 조건 (compare.py)
+RULES_VERSION = "3.2"  # 3.1 (2026-11-04): 실패 비교 조건 (compare.py) · 3.2 (2026-11-11): T03·N07 (changed_tests.py)
 SAFE, REVIEW, BLOCK, NOTE = "SAFE", "REVIEW REQUIRED", "BLOCK", "NOTE"
 SEVERITY = {NOTE: -1, SAFE: 0, REVIEW: 1, BLOCK: 2}
 
@@ -32,7 +33,7 @@ FLAKY = "FLAKY"  # head에서 다시 돌리니 통과
 NOT_CONFIRMED_PRE_EXISTING = (REGRESSION, NEW_TEST_FAILING, INCOMPARABLE, UNKNOWN)
 
 # 판정 근거를 보고서에서 두 묶음으로 나눈다: 검증이 성립하지 않은 것 / 검증해서 찾은 것
-NOT_VERIFIED_RULES = ("B04", "E01", "E02", "E03")
+NOT_VERIFIED_RULES = ("B04", "E01", "E02", "E03", "T03")
 
 
 @dataclass
@@ -112,11 +113,13 @@ def decide(
     lines: list[FileLines],
     added_lines: dict[str, list[tuple[int, str]]],
     secrets: tuple[SecretPattern, ...],
+    test_checks: dict | None = None,
 ) -> tuple[str, list[Finding], Scope]:
     """files: {"path", "status", "category"} 목록. run: analyze가 만든 test_run 요약.
 
     run["failures"][i]["comparison"]: 위의 비교 상태 중 하나
     run["snapshot_warnings"]: 스냅샷이 저장소와 다를 수 있는 이유
+    test_checks: changed_tests.check_test_changes의 결과 (바뀐 테스트가 실제로 실행됐는지). None이면 T03·N07을 보지 않는다.
     """
     findings: list[Finding] = []
     scope = compute_scope(files, run["status"], bool(run["coverage"]))
@@ -148,9 +151,21 @@ def decide(
         findings.append(Finding("E02", REVIEW, "ReleaseGuard가 검증하지 못하는 변경이 있습니다 (검증 범위 밖).", outside))
     if warnings := run.get("snapshot_warnings"):
         findings.append(Finding("E03", REVIEW, "테스트를 돌린 스냅샷이 저장소의 실제 파일과 다를 수 있습니다.", warnings))
+    if test_checks and test_checks["reasons"]:
+        findings.append(Finding("T03", REVIEW, "바뀐 테스트가 이번 실행에서 실행되지 않았습니다 (결과 없음·전부 skip·테스트 삭제).", evidence_lines(test_checks)))
 
     if paths := by("source", deleted=True):
-        findings.append(Finding("N06", NOTE, "소스가 삭제되었습니다. 남은 코드가 참조하면 테스트 실패(B03·B04)로 드러납니다.", paths))
+        findings.append(Finding(
+            "N06", NOTE,
+            "소스가 삭제되었습니다. 남은 코드가 테스트 실행 중에 참조하면 B03·B04로 드러나지만, "
+            "테스트가 지나가지 않는 경로의 참조는 확인하지 않습니다 (삭제 영향 미검증).", paths,
+        ))
+    if test_checks and test_checks["status"] == HELD:
+        findings.append(Finding(
+            "N07", NOTE,
+            f"pytest 수집 설정을 지원하지 않아 바뀐 테스트 실행 확인 일부를 하지 않았습니다 ({', '.join(test_checks['held_checks'])}). "
+            "이 검사가 없으므로 SAFE여도 바뀐 테스트가 실행됐다는 뜻이 아닙니다.", test_checks["unsupported_config"],
+        ))
 
     decision = max((f.decision for f in findings), key=SEVERITY.get, default=SAFE)
     return (SAFE if decision == NOTE else decision), findings, scope

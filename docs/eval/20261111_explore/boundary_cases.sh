@@ -16,15 +16,15 @@ touch pkg/__init__.py
 printf 'from pkg.core import add\n\ndef test_add():\n    assert add(1, 2) == 3\n' > tests/test_core.py
 git add -A; git commit -qm base
 
-# C1 COLLECTION_EMPTY: 테스트 파일 추가, test_ 함수 없음 (수집 0개)
+# C1: 테스트 파일 추가, test_ 함수 없음 (v3.2에서는 X11 — 테스트 함수가 없으므로 T03 아님, SAFE)
 git checkout -qb c1; printf 'def helper_check():\n    assert True\n' > tests/test_new.py; git add -A; git commit -qm c1; git checkout -q main
-# C2 CHANGED_TESTS_ALL_SKIPPED: 추가한 테스트가 전부 skip
+# C2 (v3.2 T03 CHANGED_TESTS_ALL_SKIPPED): 추가한 테스트가 전부 skip
 git checkout -qb c2
 printf 'import pytest\nfrom pkg.core import add\n\n@pytest.mark.skip(reason="data/ 없음")\ndef test_add_big():\n    assert add(10, 20) == 30\n' > tests/test_skip.py
 git add -A; git commit -qm c2; git checkout -q main
 # C3 소스 삭제 (참조 없음, 남은 테스트 통과)
 git checkout -qb c3; git rm -q pkg/legacy.py; git commit -qm c3; git checkout -q main
-# C4 TEST_SUITE_REMOVED: 유일한 테스트 파일 삭제 → no_tests
+# C4 (v3.2 T03 TEST_SUITE_REMOVED): 유일한 테스트 파일 삭제 → no_tests
 git checkout -qb c4; git rm -q tests/test_core.py; git commit -qm c4; git checkout -q main
 
 cd "$RG"

@@ -228,3 +228,118 @@ seeds:
       - path: src/scoring/score.py
         find: '    """고정 구간 선형 보간. 경계점 사이는 직선, 양 끝 밖은 끝점 점수로 고정 (README 7.1 B)."""'
         replace: '    """고정 구간 선형 보간 (README 7.1 B)."""'
+  # Stage 1.7 (판정 규칙 v3.2): 바뀐 테스트가 실행되지 않음 (T03). expect_t03은 원인 코드가 정확히 이것이어야 함 (빈 목록 = T03 없음)
+  - id: T01
+    description: __init__이 있는 Test 클래스에 테스트 추가 (pytest가 결과를 내지 않음)
+    expected: REVIEW REQUIRED
+    expect_rules: [T03]
+    expect_t03: [NO_TEST_RESULTS]
+    expect_scope: COMPLETE
+    edits:
+      - path: tests/test_seed_cls.py
+        create: |
+          from src.scoring.score import interpolate
+
+
+          class TestInterpolateSeed:
+              def __init__(self):
+                  self.points = [(0, 0), (10, 100)]
+
+              def test_middle(self):
+                  assert interpolate(5, self.points) == 50
+  - id: T02
+    description: 추가한 테스트 2개가 모두 skip
+    expected: REVIEW REQUIRED
+    expect_rules: [T03]
+    expect_t03: [CHANGED_TESTS_ALL_SKIPPED]
+    expect_scope: COMPLETE
+    edits:
+      - path: tests/test_seed_skip.py
+        create: |
+          import pytest
+
+          pytestmark = pytest.mark.skipif(True, reason="seed: 데이터 없음")
+
+
+          def test_a():
+              assert True
+
+
+          def test_b():
+              assert True
+  - id: T03
+    description: 모듈 수준 importorskip 파일에 테스트 추가 (함수별 결과 없음)
+    expected: REVIEW REQUIRED
+    expect_rules: [T03]
+    expect_t03: [MODULE_SKIPPED]
+    expect_scope: COMPLETE
+    edits:
+      - path: tests/test_seed_mod.py
+        create: |
+          import pytest
+
+          mod = pytest.importorskip("no_such_module_seed")
+
+
+          def test_a():
+              assert mod
+  - id: T04
+    description: 테스트 파일 9개 전부 삭제 (no_tests)
+    expected: REVIEW REQUIRED
+    expect_rules: [T03]
+    expect_t03: [TEST_SUITE_REMOVED]
+    expect_scope: COMPLETE
+    edits:
+      - {path: tests/test_account_map.py, delete: true}
+      - {path: tests/test_bs_sections.py, delete: true}
+      - {path: tests/test_dart_collector.py, delete: true}
+      - {path: tests/test_dart_facts.py, delete: true}
+      - {path: tests/test_manual.py, delete: true}
+      - {path: tests/test_market.py, delete: true}
+      - {path: tests/test_metrics.py, delete: true}
+      - {path: tests/test_scoring.py, delete: true}
+      - {path: tests/test_trend.py, delete: true}
+  # 반례: T03이 나오면 안 됨
+  - id: K01
+    description: 실행되는 테스트 파일에 헬퍼 함수만 추가
+    expected: SAFE
+    expect_rules: []
+    expect_t03: []
+    edits:
+      - path: tests/test_scoring.py
+        find: |
+          # ---------------------------------------------------------------- 규칙 파일
+        replace: |
+          def _seed_helper():
+              return 1
+
+
+          # ---------------------------------------------------------------- 규칙 파일
+  - id: K02
+    description: parametrize 값 하나만 skip인 새 테스트
+    expected: SAFE
+    expect_rules: []
+    expect_t03: []
+    edits:
+      - path: tests/test_seed_param.py
+        create: |
+          import pytest
+
+          from src.scoring.score import interpolate
+
+
+          @pytest.mark.parametrize("x", [0, 99])
+          def test_edges(x):
+              if x == 99:
+                  pytest.skip("seed: 한 값만 skip")
+              assert interpolate(x, [(0, 0), (10, 100)]) == 0
+  - id: K03
+    description: 테스트 함수가 없는 test_*.py 헬퍼 파일 추가
+    expected: SAFE
+    expect_rules: []
+    expect_t03: []
+    edits:
+      - path: tests/test_seed_helpers.py
+        create: |
+          def make_points():
+              return [(0, 0), (10, 100)]

@@ -99,6 +99,9 @@ def evaluate(cases_path: Path, ruleset: RuleSet, explain: ExplainRunner | None =
             "deterministic": len({_signature(r) for r in results}) == 1 if times > 1 else None,
             "rules": _rules(first),
             "notes": [f["rule_id"] for f in first["findings"] if f["decision"] == NOTE],
+            # 바뀐 테스트 실행 확인 (v3.2 T03): 원인 코드와 검사 상태 (performed·held·not_applicable·not_evaluated)
+            "t03": _t03_codes(first),
+            "t03_status": (first.get("test_change_checks") or {}).get("status"),
             "test_status": first["test_run"]["status"],
             "test_counts": first["test_run"]["counts"],
             "test_seconds": first["test_run"]["seconds"],
@@ -363,6 +366,10 @@ def _git(clone: Path, *args: str) -> str:
     return run_git(clone, "-c", "user.name=releaseguard", "-c", "user.email=releaseguard@localhost", *args)
 
 
+def _t03_codes(result: dict) -> list[str]:
+    return sorted({r["code"] for r in (result.get("test_change_checks") or {}).get("reasons", [])})
+
+
 def run_seeds(seeds_path: Path, ruleset: RuleSet) -> dict:
     """대상 저장소를 임시 폴더에 clone해서 사례마다 변경을 심고 분석한다. 원래 저장소는 건드리지 않는다."""
     repo, raw, python = load_yaml(seeds_path)
@@ -381,10 +388,12 @@ def run_seeds(seeds_path: Path, ruleset: RuleSet) -> dict:
             rules = _rules(result)
             expect_rules = seed.get("expect_rules", [])
             scope = result["scope"]["status"]
+            t03 = _t03_codes(result)
             ok = (
                 result["decision"] == seed["expected"]
                 and set(expect_rules) <= set(rules)
                 and seed.get("expect_scope", scope) == scope
+                and ("expect_t03" not in seed or sorted(seed["expect_t03"]) == t03)
             )
             rows.append({
                 "id": seed["id"],
@@ -395,6 +404,8 @@ def run_seeds(seeds_path: Path, ruleset: RuleSet) -> dict:
                 "expect_scope": seed.get("expect_scope"),
                 "scope": scope,
                 "rules": rules,
+                "expect_t03": seed.get("expect_t03"),
+                "t03": t03,
                 "gaps": [f"{fl['path']}:{s}" + (f"-{e}" if e != s else "") for fl in result["lines"] for s, e in fl["gaps"]],
                 "failures": [f"{f['nodeid']} ({f['comparison']})" for f in result["test_run"]["failures"]],
                 "test_status": result["test_run"]["status"],
@@ -409,15 +420,15 @@ def seeds_markdown(ev: dict) -> str:
         "",
         f"- 저장소: `{ev['repo']}` (임시 clone에서 실행) · base `{ev['base'][:7]}`",
         "",
-        "| id | 심은 변경 | 기대 | 결과 | 기대 범위 | 범위 | 기대 규칙 | 발동 규칙 | 근거 | 통과 |",
-        "|---|---|---|---|---|---|---|---|---|---|",
+        "| id | 심은 변경 | 기대 | 결과 | 기대 범위 | 범위 | 기대 규칙 | 발동 규칙 | T03 원인 | 근거 | 통과 |",
+        "|---|---|---|---|---|---|---|---|---|---|---|",
     ]
     for r in ev["rows"]:
         evidence = "<br>".join(r["failures"] + r["gaps"]) or "-"
         lines.append(
             f"| {r['id']} | {r['description']} | {r['expected']} | {r['decision']} | {r['expect_scope'] or '-'} | {r['scope']} | "
             f"{', '.join(r['expect_rules']) or '-'} | "
-            f"{', '.join(r['rules']) or '-'} | {evidence} | {'✓' if r['pass'] else '✗'} |"
+            f"{', '.join(r['rules']) or '-'} | {'/'.join(r['t03']) or '-'} | {evidence} | {'✓' if r['pass'] else '✗'} |"
         )
     lines.append("")
     return "\n".join(lines)

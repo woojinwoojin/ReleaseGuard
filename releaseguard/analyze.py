@@ -6,6 +6,7 @@ from pathlib import Path
 
 from . import __version__
 from .agent_tools import RepoView
+from .changed_tests import check_test_changes
 from .classify import RuleSet, classify
 from .compare import shared_test_context_changes, file_change_evidence
 from .decide import (
@@ -17,8 +18,8 @@ from .git_ops import Change, collect, list_files, read_file
 from .related_tests import coverage_status, find_related
 from .suggestion_checks import check_suggestion
 from .runner import (
-    COVERAGE_VERSION, DEFAULT_TIMEOUT, PYTEST_COV_VERSION, RunResult, TestCase, check_python, find_python, host_secret_names, python_version, run_tests,
-    snapshot_warnings,
+    COVERAGE_VERSION, DEFAULT_TIMEOUT, PYTEST_COV_VERSION, RunResult, TestCase, check_coverage_tools, check_python, find_python, host_secret_names,
+    python_version, run_tests, snapshot_warnings,
 )
 
 # (RepoView, 공백이 있는 파일들) → {"items": 공백별 설명, "meta": 합계}
@@ -143,12 +144,18 @@ def analyze(
         files.append({**asdict(f), "category": category, "evidence": f"rule:{rule_id}" if rule_id else None})
 
     # 3단계 Run: 문서만 바뀌었으면 돌리지 않는다.
-    py = None
+    # 첫 실행은 항상 전체 실행이다 (node id 지정 없음). T03은 이 전제에서만 "결과가 없다"를 판단한다.
+    py, tools_check = None, None
     if all(f["category"] == "docs" for f in files):
         run = RunResult("skipped", "문서만 바뀜")
     else:
         py = find_python(change.repo, python)
         problem = "대상 저장소에 .venv가 없음 (--python으로 지정)" if py is None else check_python(py)
+        if not problem:
+            # coverage·pytest-cov가 요구 버전이고 .rg/tools에서 import되는지. 아니면 잘못된 coverage를 쓰지 않는다 (E01).
+            tools_check = check_coverage_tools(py)
+            if not tools_check["ok"]:
+                problem = f"coverage 도구 확인 실패 (재설치 후에도 버전·위치가 맞지 않음): {tools_check['loaded']}"
         run = RunResult("not_run", problem) if problem else run_tests(change.repo, change.head_sha, py, timeout=timeout)
 
     # 실패한 테스트는 head에서 한 번, base에서 한 번 더 돌려 비교 상태를 정한다.
@@ -169,6 +176,8 @@ def analyze(
         # G01 공백으로만 보인다. 판정에는 아직 넣지 않는다 (새 테스트가 전부 skip돼도 SAFE가 나올 수 있음 — 한계).
         "skipped": [{"nodeid": t.nodeid, "reason": t.message} for t in run.tests if t.outcome == "skipped"],
         "tests_by_file": _tests_by_file(run.tests),
+        # 함수 단위 id → 원본 node id (parametrize 값 포함). coverage context 기준. Stage 2에서 테스트를 골라 다시 돌릴 때 쓴다
+        "nodeid_map": _nodeid_map(run.coverage),
         "snapshot_warnings": snapshot_warnings(change.repo, change.head_sha) if ran else [],
         # 무엇을 어떻게 돌렸는지: 보고서만 보고 같은 실행을 재현할 수 있게
         "record": {
@@ -179,6 +188,8 @@ def analyze(
             "python_version": python_version(py) if ran and py else None,
             "coverage_version": COVERAGE_VERSION,
             "pytest_cov_version": PYTEST_COV_VERSION,
+            # 실제로 import된 버전과 .rg/tools 안인지 (요구 버전 문자열만이 아니라)
+            "coverage_runtime": tools_check,
             "branch": True,  # 1.5부터 분기도 잰다
             "timeout": timeout,
             "attempts": run.attempts,
@@ -190,7 +201,12 @@ def analyze(
 
     # 4단계 Gaps
     lines = compute(files, change.added_lines, run.coverage) if run.coverage is not None else []
-    decision, findings, scope = decide(files, test_run, lines, change.added_lines, ruleset.secrets)
+    head_files = set(list_files(change.repo, change.head_sha)) if ran else set()
+    test_checks = check_test_changes(
+        files, change.added_lines, run.status, [asdict(t) for t in run.tests], True,
+        head_files, lambda path: read_file(change.repo, change.head_sha, path),
+    )
+    decision, findings, scope = decide(files, test_run, lines, change.added_lines, ruleset.secrets, test_checks)
     # 판정이 끝난 뒤에 묶는다: 검토 순서는 보여주는 방식일 뿐 판정의 입력이 아니다.
     groups = group_gaps(lines, lambda path: read_file(change.repo, change.head_sha, path), ruleset.low_priority_paths)
 
@@ -220,6 +236,7 @@ def analyze(
         "estimated_tests": _estimate_tests(change, files, ruleset) if run.status in ("not_run", "timeout") else None,
         "decision": decision,
         "scope": asdict(scope),
+        "test_change_checks": test_checks,
         "findings": [asdict(f) for f in findings],
         "explanations": None,
         "agent": None,
@@ -236,7 +253,7 @@ def analyze(
         else:
             # 7단계 제안 확인: 판정이 끝난 뒤 결정적 규칙으로만. 판정·findings는 바꾸지 않는다.
             skipped = test_run["skipped"] if run.status in ("passed", "failed") else None
-            check_proposals(result["explanations"], skipped, set(list_files(change.repo, change.head_sha)),
+            check_proposals(result["explanations"], skipped, head_files,
                             lambda path: read_file(change.repo, change.head_sha, path), test_run["tests_by_file"])
     return result
 
@@ -254,3 +271,13 @@ def _tests_by_file(tests: list[TestCase]) -> dict[str, int]:
     for t in tests:
         out[_test_file(t.nodeid)] = out.get(_test_file(t.nodeid), 0) + 1
     return dict(sorted(out.items()))
+
+
+def _nodeid_map(coverage: dict | None) -> dict[str, list[str]]:
+    if not coverage:
+        return {}
+    out: dict[str, set[str]] = {}
+    for fc in coverage.values():
+        for func, raws in fc.nodeids.items():
+            out.setdefault(func, set()).update(raws)
+    return {k: sorted(v) for k, v in sorted(out.items())}

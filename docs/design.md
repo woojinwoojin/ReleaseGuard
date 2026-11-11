@@ -24,7 +24,7 @@ python -m releaseguard szz   [--cases eval/cases.yaml]                          
 | 2. Classify | 파일 분류, 비밀값 패턴 | 규칙 (`configs/rules.yaml`) | `classify.py` |
 | 3. Run | head를 임시 폴더에 풀고 pytest + coverage 실행, 테스트별로 실행한 줄 기록. 실패한 테스트는 base에서 다시 실행 | 실행 (결정적) | `runner.py` |
 | 4. Gaps | 바뀐 실행 가능 줄 중 어떤 테스트도 실행하지 않은 줄 = 검증 공백 | 결정적 | `gaps.py` |
-| 5. Decide | 판정 규칙 v3 + 검증 범위 | 규칙 | `decide.py` |
+| 5. Decide | 판정 규칙 v3.2 + 검증 범위 | 규칙 | `decide.py`, `changed_tests.py` |
 | 6. Explain | 공백마다 "바뀐 동작 + 필요한 테스트" | 에이전트 (좁은 질문, 판정에 안 들어감) | `agent.py`, `agent_tools.py` |
 | 7. Report | JSON + Markdown | 템플릿 | `report.py` |
 
@@ -87,7 +87,7 @@ python -m releaseguard szz   [--cases eval/cases.yaml]                          
 - LOW: `configs/rules.yaml`의 `review_priority.low`에 선언한 경로만. 폴더 이름으로 추측하지 않는다. "안전하다"가 아니라 "뒤에 보여준다"는 뜻이고, 실험 코드를 서비스가 호출한다면 목록에서 뺀다.
 - 넣지 않은 것: AST 위험도, 커밋 전체 등급, 작은 공백 자동 하향 (근거: [보고서 #7](eval/20261107_eval_report_7.md)).
 
-## 판정 규칙 v3 (2026-11-04)
+## 판정 규칙 v3 (2026-11-04) · v3.2 (2026-11-11)
 
 **SAFE는 "코드가 맞다"가 아니라 "정의된 검증 절차에서 검토 사유를 찾지 못했다"는 뜻.** 검증하지 못한 변경이 있으면 SAFE를 내지 않는다 (외부 설계 리뷰 반영, 방식 A).
 
@@ -105,7 +105,9 @@ python -m releaseguard szz   [--cases eval/cases.yaml]                          
 | E01 | REVIEW REQUIRED | 테스트 미실행·시간 초과·coverage 없음 | 검증 불성립 |
 | E02 | REVIEW REQUIRED | 검증 범위 밖 변경: 설정·데이터·분류 규칙에 없는 파일·Python이 아닌 소스 | 검증 불성립 |
 | E03 | REVIEW REQUIRED | 스냅샷이 저장소와 다를 수 있음 (서브모듈·export-ignore·LFS) | 검증 불성립 |
-| N06 | NOTE | 소스 삭제 (참조가 남으면 B03·B04로 드러남) | 참고 |
+| T03 | REVIEW REQUIRED | 바뀐 테스트가 이번 실행에서 실행되지 않음: NO_TEST_RESULTS · CHANGED_TESTS_ALL_SKIPPED · MODULE_SKIPPED · TEST_SUITE_REMOVED (v3.2, [design_stage1_7.md](design_stage1_7.md)) | 검증 불성립 |
+| N06 | NOTE | 소스 삭제. 테스트 실행 중 참조는 B03·B04로 드러나지만, 테스트가 지나가지 않는 경로의 참조는 확인하지 않음 (삭제 영향 미검증) | 참고 |
+| N07 | NOTE | pytest 수집 설정(python_files·addopts -k 등)을 지원하지 않아 T03 일부 검사를 보류함 (v3.2) | 참고 |
 
 보고서는 "검증이 성립하지 않은 것"과 "검증해서 찾은 것"을 나눠 보여준다.
 
@@ -119,6 +121,9 @@ python -m releaseguard szz   [--cases eval/cases.yaml]                          
 | PARTIAL | 일부 변경을 검증하지 못함 |
 | UNSUPPORTED | 문서를 뺀 모든 변경을 검증하지 못함 (테스트 실행이 근거를 못 만들면 소스·테스트도 검증 못 한 것으로 봄) |
 
+`scope`는 바뀐 파일의 종류 기준이다. 바뀐 테스트가 실제로 실행됐는지는 T03이 따로 보므로 `COMPLETE`와 T03이 함께 나올 수 있다.
+
+v3.1 → v3.2 변경 (2026-11-11): T03·N07 추가, N06 메시지에 삭제 영향 미검증 명시, coverage 도구의 실제 버전·위치 확인(불일치 시 not_run → E01), 원본 node id(`nodeid_map`). 설계: [design_stage1_7.md](design_stage1_7.md).
 v3 → v3.1 변경 (2026-11-04): 같은 실패 조건(위 3단계 상세), skip 목록, 호스트 자격 증명 변수 이름.
 v2 → v3 변경: N03·N05(설정·데이터 NOTE) → E02, base 비교 상태 6개로 분리(T02 추가, UNKNOWN·INCOMPARABLE은 낮추지 않음), E03 추가, `scope` 추가.
 v1에서 없어진 것: R01·R02(이름·import 추측), R03·R05(설정·데이터), R06(소스 삭제 → NOTE), R07(에이전트 HIGH), B02(테스트 삭제 → G01·B03으로 드러남).

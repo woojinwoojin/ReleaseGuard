@@ -173,4 +173,6 @@ def test_skipped_tests_are_listed(pyrepo):
     pyrepo.commit("skipped test")
     result = run(pyrepo)
     assert result["test_run"]["skipped"] == [{"nodeid": "tests/test_s.py::test_ui", "reason": "데이터 파일 없음"}]
-    assert result["decision"] == "SAFE"  # skip은 아직 판정에 넣지 않는다 (한계로 문서화)
+    # v3.1까지는 SAFE였다 (한계). v3.2: 추가한 테스트가 전부 skip이면 T03 (CHANGED_TESTS_ALL_SKIPPED)
+    assert result["decision"] == "REVIEW REQUIRED"
+    assert [r["code"] for r in result["test_change_checks"]["reasons"]] == ["CHANGED_TESTS_ALL_SKIPPED"]

@@ -54,6 +54,7 @@ def to_markdown(result: dict) -> str:
         f"- 변경: 파일 {s['files']}개, +{s['added']} / -{s['deleted']} ("
         + ", ".join(f"{k} {v}" for k, v in s["by_category"].items()) + ")",
         f"- 검증 범위: **{scope['status']}** — {_SCOPE[scope['status']]}",
+        "  (검증 범위는 바뀐 파일의 종류 기준입니다. 바뀐 테스트가 실제로 실행됐는지는 T03이 따로 봅니다 — COMPLETE와 T03이 함께 나올 수 있음)",
         "",
         "> SAFE는 코드가 맞다는 보증이 아니라, ReleaseGuard의 검증 절차(테스트 실행·바뀐 줄 coverage·규칙)에서 "
         "검토 사유를 찾지 못했다는 뜻입니다.",
@@ -94,6 +95,8 @@ def to_markdown(result: dict) -> str:
         lines += ["", f"건너뛴 테스트 {len(run['skipped'])}개 (판정에 반영하지 않음 — 이 테스트가 실행했을 줄은 검증 공백으로 보임):", "",
                   "| 테스트 | 사유 |", "|---|---|"]
         lines += [f"| `{s['nodeid']}` | {(s['reason'] or '-').replace('|', '/').splitlines()[0]} |" for s in run["skipped"]]
+
+    lines += _test_change_lines(result.get("test_change_checks"))
 
     lines += ["", "## 바뀐 줄의 검증 상태", ""]
     if result["lines"]:
@@ -137,6 +140,31 @@ def to_markdown(result: dict) -> str:
     return "\n".join(lines)
 
 
+_T03_STATUS = {
+    "performed": "확인함",
+    "held": "**일부 보류** — pytest 수집 설정을 지원하지 않아 결과 없음·전부 skip·모듈 skip 검사를 하지 않음",
+    "not_applicable": "해당 없음 (바뀐 수집 대상 테스트 파일·삭제된 테스트 파일 없음)",
+    "not_evaluated": "확인 안 함 (테스트 실행이 근거를 만들지 못했거나 실행하지 않음)",
+}
+
+
+def _test_change_lines(checks: dict | None) -> list[str]:
+    """바뀐 테스트 실행 확인 (T03). 수행하지 않은 검사도 남긴다."""
+    if not checks:
+        return []
+    out = ["", "### 바뀐 테스트 실행 확인 (T03)", "", f"- 상태: {_T03_STATUS[checks['status']]}"]
+    if checks["changed_test_files"]:
+        out.append("- 바뀐 수집 대상 테스트 파일: " + ", ".join(f"`{p}`" for p in checks["changed_test_files"]))
+    if checks["testpaths"]:
+        out.append("- testpaths: " + ", ".join(f"`{p}`" for p in checks["testpaths"]))
+    if checks["held_checks"]:
+        out.append("- 하지 않은 검사: " + ", ".join(checks["held_checks"]) + " (설정: " + ", ".join(f"`{u}`" for u in checks["unsupported_config"]) + ")")
+    for u in checks["unmatched_changed_tests"]:
+        out.append(f"- 결과가 없는 바뀐 테스트 (`{u['path']}`): " + ", ".join(f"`{t}`" for t in u["tests"]))
+    out.append("- \"결과 없음\"은 이번 실행의 JUnit에 결과가 없다는 관찰입니다. pytest가 왜 수집·실행하지 않았는지는 확정하지 않습니다.")
+    return out
+
+
 _GROUP_KIND = {"class_body": "클래스 본문", "module": "모듈 수준", "unmapped": "함수 확인 불가"}
 
 
@@ -177,6 +205,11 @@ def _record_lines(run: dict) -> list[str]:
         f"- 명령: `{' '.join(r['command'])}`",
         "- 실행 위치: `git archive`로 푼 임시 폴더 (대상 작업 폴더는 건드리지 않음, 샌드박스는 아님)",
     ]
+    if rt := r.get("coverage_runtime"):
+        loaded = ", ".join(
+            f"{k} {v['version']}{'' if v['in_tools'] else ' (.rg/tools 밖)'}" for k, v in rt["loaded"].items() if isinstance(v, dict)
+        ) or rt["loaded"].get("error", "?")
+        out.append(f"- coverage 도구 실제 로드: {loaded}{' · 재설치함' if rt['reinstalled'] else ''} → {'정상' if rt['ok'] else '불일치'}")
     for x in r["reruns"]:
         out.append(f"- {x['purpose']}: `{x['sha'][:7]}` → {x['status']} ({x['seconds']}초)")
     if run.get("snapshot_warnings"):

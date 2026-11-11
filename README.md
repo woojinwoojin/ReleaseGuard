@@ -4,7 +4,7 @@
 
 코드가 맞는지는 판단하지 않는다. **무엇이 검증됐고 무엇이 검증되지 않았는지**를 근거와 함께 보여준다. 판정은 규칙으로만 하고, LLM은 공백을 설명할 때만 쓴다(선택).
 
-**상태 (2026-11-11)**: Stage 1 기술 MVP 완료 ([종료 심사 #11](docs/eval/20261111_eval_report_11.md)) · 버전 0.2.0 · 판정 규칙 v3.1 · 테스트 149개 통과
+**상태 (2026-11-11)**: Stage 1 기술 MVP 완료 ([종료 심사 #11](docs/eval/20261111_eval_report_11.md)) · Stage 1.7 완료 ([#12](docs/eval/20261111_eval_report_12.md)) · 버전 0.2.0 · 판정 규칙 v3.2 · 테스트 194개 통과
 
 **1차 결과물은 검증 공백 보고서다.** SAFE / REVIEW REQUIRED / BLOCK은 검증 부족을 놓치지 않도록 만든 보수적 게이트이고, 코드 변경 커밋에서 검토가 필요한 것과 아닌 것을 잘 구분한다는 근거는 아직 없다 (아래 과잉 경고).
 
@@ -15,7 +15,7 @@
 | [docs/usage.md](docs/usage.md) | **사용법** — 설치, `analyze`, 보고서 읽는 법, 평가 명령 |
 | [docs/eval/reports_summary.md](docs/eval/reports_summary.md) | **평가 보고서 #1~#11 정리** |
 | [docs/status_roadmap.md](docs/status_roadmap.md) | 현재 상태, 한계, 로드맵 |
-| [docs/design_stage1_7.md](docs/design_stage1_7.md) | Stage 1.7 설계안 (T03, 사용자 확인 전) |
+| [docs/design_stage1_7.md](docs/design_stage1_7.md) | Stage 1.7 설계 (T03·N07, 외부 리뷰 반영 확정) |
 | [docs/problem.md](docs/problem.md) · [docs/design.md](docs/design.md) · [docs/proposal.md](docs/proposal.md) | 문제 정의 · 설계 · 제안서 |
 | [docs/samples/report_142912b.md](docs/samples/report_142912b.md) | 보고서 샘플 |
 
@@ -38,7 +38,7 @@ python -m venv .venv
 | 판정 | 언제 |
 |---|---|
 | **BLOCK** | 비밀값(B01), 원래부터 실패했다고 확인되지 않은 테스트 실패(B03), 수집 오류(B04) |
-| **REVIEW REQUIRED** | 검증 공백(G01), 원래 깨진 테스트(T01), 불안정한 테스트(T02), 의존성 변경(R04), 테스트를 못 돌림(E01), 검증 범위 밖 변경(E02), 스냅샷 예외(E03) |
+| **REVIEW REQUIRED** | 검증 공백(G01), 원래 깨진 테스트(T01), 불안정한 테스트(T02), 의존성 변경(R04), 테스트를 못 돌림(E01), 검증 범위 밖 변경(E02), 스냅샷 예외(E03), 바뀐 테스트가 실행되지 않음(T03) |
 | **SAFE** | ReleaseGuard의 검증 절차에서 검토 사유를 찾지 못함 — **코드가 맞다는 보증이 아님** |
 
 판정과 따로 검증 범위(COMPLETE / PARTIAL / UNSUPPORTED)를 기록한다. 분기 공백, 공백 그룹 순서, skip 목록, 테스트 제안 검사(S01~S03)는 참고로만 표시하고 판정에는 넣지 않는다.
@@ -61,7 +61,7 @@ python -m venv .venv
 
 - "실행됐다"가 "확인됐다"는 뜻은 아니다. assert가 얼마나 강하게 확인하는지는 보지 않는다.
 - 과잉 경고가 많다 (G01은 공백 크기와 관계없이 REVIEW).
-- 테스트만 바뀐 경우 일부가 SAFE로 나온다: 새 테스트 수집 0개, 전부 skip, 테스트 전부 삭제 (Stage 1.7에서 보완).
+- 바뀐 테스트가 실행되지 않은 경우(결과 0개·전부 skip·모듈 skip·테스트 전부 삭제)는 T03으로 REVIEW를 낸다. 원래 skip이던 테스트도 구분하지 않고, 실제 데이터에서 SAFE를 고친 사례는 아직 없다.
 - Docker·CI·설정·데이터 변경은 검증하지 않고 E02로 표시만 한다.
 - Python + pytest만 지원한다.
 - **대상 저장소의 테스트 코드를 그대로 실행한다 (샌드박스 없음).** 신뢰하는 저장소에만 쓴다.
@@ -70,7 +70,7 @@ python -m venv .venv
 
 ## 다음 단계
 
-1. **1.7 Reliability Gate**: T03(바뀐 테스트가 실행되지 않음), coverage 실제 버전 확인, 원본 node id 보존
+1. ~~1.7 Reliability Gate~~ **완료**: T03·N07, coverage 실제 버전·위치 확인, 원본 node id 보존
 2. **2.0 Mutation spike**: 도구 호환성·비용 확인
 3. **2.1 Value Eval**: coverage 대비 추가 가치 측정
 4. **2.2 조건부 통합**: 2.1에서 효과가 확인될 때만

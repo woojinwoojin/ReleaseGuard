@@ -1,6 +1,6 @@
 # ReleaseGuard 사용법
 
-기준: 2026-11-11 · 버전 0.2.0 · 판정 규칙 v3.1
+기준: 2026-11-11 · 버전 0.2.0 · 판정 규칙 v3.2
 
 ReleaseGuard는 `base...head` 변경에서 **어떤 테스트도 실행하지 않은 바뀐 줄(검증 공백)**을 찾는다. 대상 커밋의 테스트를 실제로 돌린 뒤 SAFE / REVIEW REQUIRED / BLOCK으로 판정한다. 판정은 규칙으로만 하고, LLM은 공백을 설명할 때만 쓴다(선택).
 
@@ -24,7 +24,7 @@ python -m venv .venv
 | 언어·테스트 | Python + pytest |
 | 실행 환경 | 대상 저장소의 `.venv`. 다른 Python을 쓰려면 `--python`으로 지정 |
 | Python 버전 | 대상 `.venv`가 **3.13**이어야 한다 (`.rg/tools`에 설치하는 coverage·pytest-cov 버전에 맞춤) |
-| coverage | 따로 설치하지 않아도 된다. 처음 실행할 때 `.rg/tools`에 설치되고, 대상 `.venv`는 건드리지 않는다 |
+| coverage | 따로 설치하지 않아도 된다. 처음 실행할 때 `.rg/tools`에 설치되고, 대상 `.venv`는 건드리지 않는다. 실행 전에 실제로 import되는 버전과 위치를 확인하고, 맞지 않으면 한 번 다시 설치한다. 그래도 맞지 않으면 테스트를 돌리지 않는다 (E01) |
 
 ### 공백 설명 에이전트 (선택)
 
@@ -58,7 +58,7 @@ python -m venv .venv
 2. **Classify**: 파일을 source·test·config·docs·data·deps 등으로 나누고 비밀값을 검사한다.
 3. **Run**: head 커밋을 `git archive`로 임시 폴더에 꺼내 pytest + coverage를 돌린다. 사용자 작업 폴더는 건드리지 않는다. 테스트가 실패하면 head에서 한 번 더 돌리고, base에서도 돌려 실패 원인을 비교한다.
 4. **Gaps**: 바뀐 실행 가능 줄 중 어떤 테스트도 실행하지 않은 줄을 찾는다.
-5. **Decide**: 판정 규칙 v3.1로 판정한다 (결정적).
+5. **Decide**: 판정 규칙 v3.2로 판정한다 (결정적). 바뀐 테스트가 실제로 실행됐는지(T03)도 여기서 본다.
 6. **Explain** (선택): 공백마다 에이전트가 바뀐 동작과 추가할 테스트를 제안한다. 제안은 결정적 규칙(S01~S03)으로 한 번 더 검사한다. 판정에는 들어가지 않는다.
 7. **Report**: JSON과 Markdown을 저장한다.
 
@@ -90,6 +90,7 @@ REVIEW REQUIRED  (테스트: passed, 공백 12줄)
 | | E01 | 테스트를 돌리지 못했다 |
 | | E02 | 검증 범위 밖의 변경이 있다 (설정·데이터·Docker·CI·Python이 아닌 소스) |
 | | E03 | 스냅샷 예외가 있다 (export-ignore·서브모듈·LFS) |
+| | T03 | 바뀐 테스트가 이번 실행에서 실행되지 않았다 (아래 표) |
 | **SAFE** | — | ReleaseGuard의 검증 절차에서 검토 사유를 찾지 못했다. **코드가 맞다는 보증이 아니다** |
 
 ### 검증 범위 (`scope`)
@@ -101,6 +102,20 @@ REVIEW REQUIRED  (테스트: passed, 공백 12줄)
 | COMPLETE | 바뀐 파일이 모두 Python 소스·테스트다. 모든 경로가 검증됐다는 뜻은 아니다 (경로는 G01이 본다) |
 | PARTIAL | 일부가 설정·데이터·비Python 파일이다 |
 | UNSUPPORTED | 전부 그런 파일이다 |
+
+### 바뀐 테스트 실행 확인 (T03, v3.2)
+
+바뀐 `test_*.py`·`*_test.py` 파일(`testpaths`가 있으면 그 아래)에서 테스트가 실제로 실행됐는지 본다. `conftest.py`나 헬퍼 파일은 대상이 아니다.
+
+| 원인 코드 | 뜻 |
+|---|---|
+| NO_TEST_RESULTS | 테스트 함수가 정의된 바뀐 파일에서 이번 실행의 결과가 0개 (예: `__init__`이 있는 `Test*` 클래스). 결과가 없다는 관찰이지, 수집되지 않은 이유를 확정하지는 않는다 |
+| CHANGED_TESTS_ALL_SKIPPED | 추가·수정한 테스트 함수의 결과(parametrize 값마다)가 전부 skip. 이전에도 skip이었는지는 확인하지 않는다 |
+| MODULE_SKIPPED | 바뀐 테스트가 있는 파일이 모듈 수준에서 skip됨 (`importorskip` 등) |
+| TEST_SUITE_REMOVED | 테스트 파일이 삭제되어 테스트가 하나도 실행되지 않음 |
+
+- `scope`는 파일 종류 기준이라 `COMPLETE`와 T03이 함께 나올 수 있다.
+- pytest 설정에 `python_files`·`python_classes`·`python_functions`·`norecursedirs`, `addopts`의 `-k`·`-m`·`--ignore`·`--deselect`, `conftest.py`의 수집 hook이 있으면 앞의 세 검사는 하지 않고 **N07**로 알린다. 이때 SAFE는 바뀐 테스트가 실행됐다는 뜻이 아니다.
 
 ### 줄 상태
 
@@ -217,6 +232,7 @@ PRE_EXISTING으로 인정하려면 네 조건을 모두 만족해야 한다 (v3.
 |---|---|
 | `git_ops.py` | diff·merge-base·스냅샷 |
 | `classify.py` | 파일 분류·비밀값 |
+| `changed_tests.py` | 바뀐 테스트 실행 확인 (T03·N07), pytest 수집 설정 읽기 |
 | `runner.py` | 스냅샷 실행, coverage, 재실행 |
 | `compare.py` | 실패 비교 상태 (v3.1) |
 | `gaps.py`, `gap_groups.py` | 줄 상태·분기 공백, 함수별 그룹·순서 |

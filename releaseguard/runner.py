@@ -18,6 +18,7 @@ import tarfile
 import tempfile
 import time
 import xml.etree.ElementTree as ET
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 
@@ -76,6 +77,7 @@ class FileCoverage:
     run_lines: set[int] = field(default_factory=set)  # 테스트 본문(run 단계)에서 실행된 줄. tests에만 있으면 fixture에서만 실행
     executed_branches: dict[int, list[int]] = field(default_factory=dict)  # 출발 줄 → 실행된 도착 줄 (음수 = 함수에서 나감)
     missing_branches: dict[int, list[int]] = field(default_factory=dict)  # 출발 줄 → 실행되지 않은 도착 줄
+    nodeids: dict[str, set[str]] = field(default_factory=dict)  # 함수 단위 id → 원본 node id (parametrize 값 포함)
 
 
 @dataclass
@@ -106,6 +108,65 @@ def ensure_coverage() -> Path:
             check=True,
         )
     return TOOLS_DIR
+
+
+_PROBE = (
+    "import json, coverage, pytest_cov; "
+    "print(json.dumps({'coverage': [coverage.__version__, coverage.__file__], 'pytest_cov': [pytest_cov.__version__, pytest_cov.__file__]}))"
+)
+
+
+def _probe_tools(python: Path, tools: Path) -> dict:
+    """대상 Python + .rg/tools 환경에서 실제로 import되는 coverage·pytest-cov의 버전과 위치."""
+    proc = subprocess.run([str(python), "-c", _PROBE], env=_env(tools), capture_output=True, text=True, encoding="utf-8", errors="replace")
+    if proc.returncode != 0:
+        return {"error": _tail(proc.stdout + proc.stderr, 3)}
+    try:
+        data = json.loads(proc.stdout.strip().splitlines()[-1])
+    except (ValueError, IndexError):
+        return {"error": f"출력을 읽지 못함: {proc.stdout.strip()[:200]}"}
+    root = tools.resolve()
+    out = {}
+    for pkg, (version, file) in data.items():
+        try:
+            inside = Path(file).resolve().is_relative_to(root)
+        except (OSError, ValueError):
+            inside = False
+        out[pkg] = {"version": version, "in_tools": inside}
+    return out
+
+
+def _tools_ok(probe: dict) -> bool:
+    want = {"coverage": COVERAGE_VERSION, "pytest_cov": PYTEST_COV_VERSION}
+    return "error" not in probe and all(probe.get(k, {}).get("version") == v and probe[k]["in_tools"] for k, v in want.items())
+
+
+def check_coverage_tools(python: Path, tools: Path | None = None, reinstall: Callable[[], None] | None = None) -> dict:
+    """coverage·pytest-cov가 요구 버전이고 .rg/tools에서 import되는지 확인한다. 아니면 한 번 다시 설치하고 다시 본다.
+
+    ok가 False면 그 실행의 coverage를 근거로 쓰지 않는다 (호출한 쪽에서 not_run → E01).
+    """
+    tools = tools or ensure_coverage()
+    probe = _probe_tools(python, tools)
+    reinstalled = False
+    if not _tools_ok(probe):
+        (reinstall or _force_reinstall)()
+        reinstalled = True
+        probe = _probe_tools(python, tools)
+    return {
+        "required": {"coverage": COVERAGE_VERSION, "pytest_cov": PYTEST_COV_VERSION},
+        "loaded": probe,
+        "reinstalled": reinstalled,
+        "ok": _tools_ok(probe),
+    }
+
+
+def _force_reinstall() -> None:
+    subprocess.run(
+        [sys.executable, "-m", "pip", "install", "--quiet", "--no-deps", "--upgrade", "--force-reinstall", "--target", str(TOOLS_DIR),
+         f"coverage=={COVERAGE_VERSION}", f"pytest-cov=={PYTEST_COV_VERSION}"],
+        check=False,
+    )
 
 
 def find_python(repo: Path, explicit: Path | None = None) -> Path | None:
@@ -217,16 +278,20 @@ def parse_coverage(path: Path) -> dict[str, FileCoverage]:
     data = json.loads(path.read_text(encoding="utf-8"))
     out = {}
     for name, f in data["files"].items():
-        tests, run_lines = {}, set()
+        tests, run_lines, nodeids = {}, set(), {}
         for line, ctxs in f.get("contexts", {}).items():
             parsed = [parse_context(c) for c in ctxs if c]  # 빈 context = 테스트 밖(수집·import)에서 실행
+            for c in ctxs:
+                if c:
+                    raw = c.rpartition("|")[0] or c
+                    nodeids.setdefault(parse_context(c)[0], set()).add(raw)
             if parsed:
                 tests[int(line)] = sorted({n for n, _ in parsed})
                 if any(ph == "run" for _, ph in parsed):
                     run_lines.add(int(line))
         out[name.replace("\\", "/")] = FileCoverage(
             set(f["executed_lines"]), set(f["missing_lines"]), tests, run_lines,
-            _arcs(f.get("executed_branches", [])), _arcs(f.get("missing_branches", [])),
+            _arcs(f.get("executed_branches", [])), _arcs(f.get("missing_branches", [])), nodeids,
         )
     return out
 
