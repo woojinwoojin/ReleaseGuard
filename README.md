@@ -1,34 +1,68 @@
 # ReleaseGuard
 
-머지하기 전에, 바뀐 코드 중 **어떤 테스트도 실행하지 않는 곳(검증 공백)**을 찾고, 테스트를 **실제로 돌려서** SAFE / REVIEW REQUIRED / BLOCK으로 알려주는 로컬 CLI.
+머지하기 전에 바뀐 코드 중 **어떤 테스트도 실행하지 않는 곳(검증 공백)**을 찾고, 테스트를 **실제로 돌린 뒤** SAFE / REVIEW REQUIRED / BLOCK으로 알려주는 로컬 CLI.
 
-- **현재 상태와 로드맵: [docs/status_roadmap.md](docs/status_roadmap.md)**
-- 문제 정의: [docs/problem.md](docs/problem.md) · 설계: [docs/design.md](docs/design.md) · 제안서: [docs/proposal.md](docs/proposal.md)
-- 평가 보고서: [#1](docs/eval/20261103_eval_report.md), [#2](docs/eval/20261103_eval_report_2.md) (v1), [#3](docs/eval/20261103_eval_report_3.md) (v2), [#4](docs/eval/20261104_eval_report_4.md), [#5](docs/eval/20261104_eval_report_5.md) (v3·v3.1), [#6](docs/eval/20261104_eval_report_6.md) (분기 coverage), [#7](docs/eval/20261107_eval_report_7.md) (함수별 공백 그룹), [#8](docs/eval/20261107_eval_report_8.md), [#9](docs/eval/20261107_eval_report_9.md) (공백 설명 에이전트), [#10](docs/eval/20261110_eval_report_10.md) (제안 확인)
-- 보고서 샘플: [docs/samples/report_142912b.md](docs/samples/report_142912b.md)
+코드가 맞는지는 판단하지 않는다. **무엇이 검증됐고 무엇이 검증되지 않았는지**를 근거와 함께 보여준다. 판정은 규칙으로만 하고, LLM은 공백을 설명할 때만 쓴다(선택).
 
-## 실행
+**상태 (2026-11-11)**: Stage 1 완료 · 버전 0.2.0 · 판정 규칙 v3.1 · 테스트 149개 통과
+
+## 문서
+
+| 문서 | 내용 |
+|---|---|
+| [docs/usage.md](docs/usage.md) | **사용법** — 설치, `analyze`, 보고서 읽는 법, 평가 명령 |
+| [docs/eval/reports_summary.md](docs/eval/reports_summary.md) | **평가 보고서 #1~#10 정리** |
+| [docs/status_roadmap.md](docs/status_roadmap.md) | 현재 상태, 한계, 로드맵 |
+| [docs/problem.md](docs/problem.md) · [docs/design.md](docs/design.md) · [docs/proposal.md](docs/proposal.md) | 문제 정의 · 설계 · 제안서 |
+| [docs/samples/report_142912b.md](docs/samples/report_142912b.md) | 보고서 샘플 |
+
+## 빠른 시작
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\python -m pip install -r requirements.txt
 
-# 분석 (대상 저장소의 .venv로 테스트를 돌린다. coverage는 처음 실행 때 .rg/tools에 설치된다)
+# 규칙만 (API 호출 없음). 대상 저장소의 .venv(Python 3.13)로 테스트를 돌린다
 .\.venv\Scripts\python -m releaseguard analyze --repo ..\predict-success --base HEAD~1 --head HEAD --no-agent
-
-# 평가
-.\.venv\Scripts\python -m releaseguard eval --repeat 2          # 커밋 전체 + 결정성
-.\.venv\Scripts\python -m releaseguard seeds                    # 결함을 심은 사례 (임시 clone)
-.\.venv\Scripts\python -m releaseguard szz                      # 결함 줄이 들어올 때 공백이었나
 
 .\.venv\Scripts\python -m pytest
 ```
 
-결과는 `out/`에 JSON(판정과 근거)과 Markdown(보고서)으로 저장된다.
-공백 설명 에이전트(`--no-agent`를 빼면 실행)는 `.env`의 `OPENAI_API_KEY`가 필요하다 (`.env.example` 참고).
+결과는 `out/<날짜>_<SHA>.{json,md}`에 저장된다. 공백 설명 에이전트를 쓰려면 `--no-agent`를 빼고 `.env`에 `OPENAI_API_KEY`를 넣는다 (`.env.example` 참고).
 
-에이전트의 테스트 제안은 판정이 끝난 뒤 결정적 규칙으로 한 번 더 확인한다 (`releaseguard/suggestion_checks.py`, LLM 호출 없음, 판정 미반영):
-S01 제안 파일에 이번 실행에서 skip된 테스트가 있음 · S02 그 skip의 원인을 스냅샷에서 확인 못 함 · S03 같은 범위에 같은 이름의 테스트가 있음 (AST).
-`PASS`는 이 검사들에서 경고가 없다는 뜻이지 제안한 테스트가 유효하다는 뜻이 아니다. 저장된 응답에 다시 돌리기: `eval-agent --out <폴더> --recheck`.
+## 판정
 
-**주의**: 대상 저장소의 테스트 코드를 그대로 실행한다. 신뢰하는 저장소에만 쓴다.
+| 판정 | 언제 |
+|---|---|
+| **BLOCK** | 비밀값(B01), 원래부터 실패했다고 확인되지 않은 테스트 실패(B03), 수집 오류(B04) |
+| **REVIEW REQUIRED** | 검증 공백(G01), 원래 깨진 테스트(T01), 불안정한 테스트(T02), 의존성 변경(R04), 테스트를 못 돌림(E01), 검증 범위 밖 변경(E02), 스냅샷 예외(E03) |
+| **SAFE** | ReleaseGuard의 검증 절차에서 검토 사유를 찾지 못함 — **코드가 맞다는 보증이 아님** |
+
+판정과 따로 검증 범위(COMPLETE / PARTIAL / UNSUPPORTED)를 기록한다. 분기 공백, 공백 그룹 순서, skip 목록, 테스트 제안 검사(S01~S03)는 참고로만 표시하고 판정에는 넣지 않는다.
+
+## 지금까지 확인된 것
+
+| 지표 | 값 |
+|---|---|
+| 결함을 심은 사례 | Predict_Success 19/19, 4주차 6/6 |
+| 반복 실행 결정성 | 판정 15/15, 공백 순서 39/39 |
+| 과소 / 과잉 경고 (라벨 39개) | 0/20 / **11/19** |
+| SZZ: 나중에 고쳐진 결함 줄이 들어올 때 공백이었던 비율 | 59% (41%는 실행됐는데도 결함) |
+| 공백 설명 에이전트 | 설명 31/32, 실행 가능성 22/32, Gap Closure 4/4, 16회 추정 $0.24 |
+
+- 깨끗한 checkout에서만 실패하는 진짜 결함을 사람보다 먼저 찾았다 (week3 `93abf12`, 4주차 `e3867fd`에서 사람이 고침).
+- 처음 설계(v1, 에이전트가 위험을 추론)는 결함을 0/6 짚었다. 그래서 테스트를 실행해 검증 공백을 찾는 v2로 다시 설계했다. 과정은 [보고서 정리](docs/eval/reports_summary.md)에 있다.
+
+## 한계
+
+- "실행됐다"가 "확인됐다"는 뜻은 아니다. assert가 얼마나 강하게 확인하는지는 보지 않는다.
+- 과잉 경고가 많다 (G01은 공백 크기와 관계없이 REVIEW).
+- Docker·CI·설정·데이터 변경은 검증하지 않고 E02로 표시만 한다.
+- Python + pytest만 지원한다.
+- **대상 저장소의 테스트 코드를 그대로 실행한다 (샌드박스 없음).** 신뢰하는 저장소에만 쓴다.
+
+전체 목록: [status_roadmap.md 7장](docs/status_roadmap.md#7-알려진-한계)
+
+## 다음 단계
+
+Stage 2 확인 강도(바뀐 줄 mutation testing, 처음엔 신호로만 표시) → 2b 배포 산출물 검증(`docker build`·워크플로 검사) → RAG·Memory·GitHub 연동. 각 단계는 앞 단계의 평가에서 근거가 확인될 때만 시작한다. 자세한 내용: [status_roadmap.md 8장](docs/status_roadmap.md#8-로드맵)
