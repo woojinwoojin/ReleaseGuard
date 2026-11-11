@@ -1,4 +1,4 @@
-# ReleaseGuard 평가 보고서 정리 (#1~#12)
+# ReleaseGuard 평가 보고서 정리 (#1~#13)
 
 기준: 2026-11-11 · 기간 2026-11-03 ~ 11-11 · 원문은 각 보고서 링크
 
@@ -18,6 +18,7 @@
 | [10](20261110_eval_report_10.md) | 11-10 | 테스트 제안 검사 S01~S03 | skip 파일 제안 8/8, 이름 충돌 2/2 잡음. 판정 변화 0/58 | Stage 1 마무리 |
 | [11](20261111_eval_report_11.md) | 11-11 | Stage 1 종료 심사, SAFE 경계 사례, 코드 변경 경고율 | 기술 MVP 종료; 코드 변경 `need:no` 11/12 경고, 1.7 T03 후보 발견 | 1.7 신뢰성 보완 → 2.0 Mutation spike |
 | [12](20261111_eval_report_12.md) | 11-11 | 1.7 Reliability Gate (v3.2): T03·N07, coverage 버전·위치, node id | 심은 사례 26/26·6/6, 58커밋 판정 변화 0, T03 추가 7 (모두 data/ 없음 skip, 이미 REVIEW·BLOCK), 과잉 11/12 그대로 | Stage 2.0 Mutation spike |
+| [13](20261111_eval_report_13.md) | 11-11 | 2.0 Mutation spike (Cosmic Ray, Predict 5커밋·40개) | 지정 줄 40/40, 저장소 보존, 관련만 = 전체 40/40, KILLED 27·SURVIVED 13 | Go → 2.1 Value Eval |
 
 ## 시험장
 
@@ -163,6 +164,7 @@
 | #10 | `docs/eval/v16/proposal_checks.md`, `v16b/proposal_checks.md`, `out/eval/v17/` |
 | #11 | `out/eval/v17/` 재집계·임시 저장소 재현, 스크립트 `docs/eval/20261111_explore/` |
 | #12 | `out/eval/v18/`, 비교 `docs/eval/20261111_explore/compare_v17_v18.py` |
+| #13 | `docs/eval/v20_spike/`, 코드 `spikes/stage2_0/` |
 
 
 ## 7. Stage 1 종료 심사 (#11)
@@ -175,3 +177,11 @@
 - T03(바뀐 테스트가 실행되지 않음)과 N07(수집 설정 미지원으로 보류)을 추가했다.
 - 심은 사례와 통합 테스트로 잘못된 SAFE가 REVIEW로 바뀌는 것을 확인했다. 실제 58커밋에서는 판정 변화가 0이다.
 - T03은 이미 REVIEW·BLOCK인 7개 커밋에만 붙었고, 원인은 모두 `data/`가 없어 생긴 skip이다. 과잉 경고 11/12는 그대로다.
+
+## 9. Stage 2.0 Mutation spike (#13)
+
+[보고서 #13](20261111_eval_report_13.md): Cosmic Ray를 어댑터로 붙일 수 있는지만 확인했다 (mutmut은 Windows에서 실행 거부).
+- Predict 5커밋의 covered 바뀐 줄에 mutant 40개를 만들었다. 40개 모두 지정한 줄만 바뀌었고, 저장소도 그대로였다.
+- 관련 테스트만 돌린 결과가 전체 실행과 40/40 같았다.
+- KILLED 27(assertion 26), SURVIVED 13.
+- **Go**. 다만 SURVIVED가 실제 테스트 부족인지는 2.1에서 본다.

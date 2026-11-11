@@ -1,0 +1,2549 @@
+{
+  "spike": "stage2_0",
+  "repo": "C:\\Project_Folder\\predict-success",
+  "max": 40,
+  "per_commit": 8,
+  "setup": {
+    "cosmic_ray": "cosmic-ray, version 8.9.0",
+    "python": "C:\\Project_Folder\\predict-success\\.venv\\Scripts\\python.exe"
+  },
+  "operators": {
+    "comparison_pairs": [
+      "Eq_NotEq",
+      "GtE_Gt",
+      "Gt_GtE",
+      "In_NotIn",
+      "IsNot_Is",
+      "Is_IsNot",
+      "LtE_Lt",
+      "Lt_LtE",
+      "NotEq_Eq",
+      "NotIn_In"
+    ],
+    "other": [
+      "core/NumberReplacer",
+      "core/ReplaceAndWithOr",
+      "core/ReplaceFalseWithTrue",
+      "core/ReplaceOrWithAnd",
+      "core/ReplaceTrueWithFalse",
+      "core/ReplaceUnaryOperator_Not_Delete"
+    ]
+  },
+  "repo_preserved": true,
+  "repo_state_before": {
+    "head": "895dbe41832d5d60079fe38872689646918782af",
+    "status": ""
+  },
+  "repo_state_after": {
+    "head": "895dbe41832d5d60079fe38872689646918782af",
+    "status": ""
+  },
+  "seconds": 175.0,
+  "commits": [
+    {
+      "sha": "fc58c0e",
+      "subject": "Collect pilot filings and financial API responses as immutable raw data",
+      "baseline_full": "passed",
+      "files": {
+        "src/collectors/dart.py": [
+          35,
+          39,
+          44,
+          45,
+          46,
+          47,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58,
+          63,
+          65,
+          66,
+          67,
+          70,
+          73,
+          74,
+          75,
+          76,
+          78,
+          80,
+          81,
+          89,
+          92,
+          99,
+          100,
+          101,
+          102,
+          103,
+          104,
+          105,
+          109,
+          114,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          125,
+          126,
+          127,
+          131,
+          133,
+          135,
+          136,
+          137,
+          138,
+          139,
+          140,
+          141,
+          142,
+          147,
+          148,
+          149,
+          150,
+          151,
+          154,
+          155,
+          156,
+          157,
+          158,
+          161,
+          162,
+          163,
+          164,
+          165,
+          166,
+          167,
+          168,
+          169,
+          170,
+          173,
+          178,
+          179,
+          180,
+          181,
+          183,
+          184,
+          185,
+          186,
+          187,
+          188,
+          189,
+          190,
+          191,
+          192,
+          196
+        ]
+      },
+      "cosmic_ray_total": {
+        "src/collectors/dart.py": 326
+      }
+    },
+    {
+      "sha": "99309f2",
+      "subject": "Flatten financial API responses into a per-source observation table",
+      "baseline_full": "passed",
+      "files": {
+        "src/normalization/build_facts.py": [
+          20,
+          21,
+          22,
+          23,
+          25
+        ],
+        "src/normalization/dart_facts.py": [
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          48,
+          54,
+          55,
+          56,
+          59,
+          67,
+          68,
+          69,
+          70,
+          71,
+          72,
+          73,
+          74,
+          75,
+          78,
+          79,
+          104,
+          105,
+          106,
+          107,
+          108,
+          109,
+          110,
+          111,
+          112,
+          113,
+          115,
+          116,
+          117,
+          118,
+          119,
+          120,
+          121,
+          122,
+          123,
+          124,
+          126,
+          127,
+          128,
+          129,
+          130,
+          131,
+          132,
+          133,
+          134,
+          135,
+          136,
+          137,
+          138,
+          139,
+          140,
+          141,
+          142,
+          143,
+          145,
+          164,
+          165,
+          173,
+          174,
+          175,
+          176,
+          177,
+          179,
+          180,
+          181,
+          182,
+          183,
+          184,
+          186,
+          187,
+          188,
+          189,
+          194,
+          195,
+          196,
+          197
+        ]
+      },
+      "cosmic_ray_total": {
+        "src/normalization/build_facts.py": 243,
+        "src/normalization/dart_facts.py": 370
+      }
+    },
+    {
+      "sha": "82e4305",
+      "subject": "Map required accounts to internal accounts and build the checklist",
+      "baseline_full": "passed",
+      "files": {
+        "src/normalization/account_map.py": [
+          18,
+          22,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          29,
+          34,
+          38,
+          39,
+          40,
+          41,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          55,
+          56,
+          58,
+          59,
+          60,
+          61,
+          62,
+          63,
+          64,
+          65,
+          68,
+          69,
+          70,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80,
+          81,
+          85
+        ],
+        "src/normalization/dart_facts.py": [
+          66,
+          67,
+          68,
+          153,
+          199,
+          212
+        ]
+      },
+      "cosmic_ray_total": {
+        "src/normalization/account_map.py": 337,
+        "src/normalization/dart_facts.py": 442
+      }
+    },
+    {
+      "sha": "568ea41",
+      "subject": "Reconcile required-account mismatches and add manual note confirmations",
+      "baseline_full": "passed",
+      "files": {
+        "src/normalization/account_map.py": [
+          50,
+          59,
+          60,
+          61,
+          62,
+          63
+        ],
+        "src/normalization/dart_facts.py": [
+          57,
+          62,
+          67,
+          73,
+          74,
+          77,
+          80,
+          85,
+          86,
+          99,
+          103,
+          159,
+          172
+        ],
+        "src/normalization/manual.py": [
+          17,
+          19,
+          20,
+          21,
+          23,
+          24,
+          25,
+          26,
+          27,
+          28,
+          34,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          52,
+          53,
+          54,
+          55,
+          56,
+          57,
+          58
+        ]
+      },
+      "cosmic_ray_total": {
+        "src/normalization/account_map.py": 383,
+        "src/normalization/dart_facts.py": 434,
+        "src/normalization/manual.py": 202
+      }
+    },
+    {
+      "sha": "b67e806",
+      "subject": "Confirm balance-sheet sections by arithmetic and adjust held-for-sale items",
+      "baseline_full": "passed",
+      "files": {
+        "src/normalization/account_map.py": [
+          27,
+          28,
+          29,
+          30,
+          31,
+          32,
+          93,
+          94
+        ],
+        "src/normalization/bs_sections.py": [
+          23,
+          27,
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39,
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47,
+          48,
+          49,
+          50,
+          51,
+          52,
+          53,
+          54,
+          56,
+          57,
+          67,
+          68,
+          69,
+          71,
+          72,
+          73,
+          74,
+          75,
+          76,
+          77,
+          78,
+          79,
+          80,
+          82,
+          83,
+          84,
+          85,
+          86,
+          87,
+          88,
+          89,
+          90,
+          91,
+          92,
+          93,
+          94,
+          95,
+          96
+        ],
+        "src/normalization/dart_facts.py": [
+          206,
+          211,
+          212,
+          213,
+          214,
+          215,
+          224,
+          225,
+          226,
+          227,
+          228,
+          229,
+          230,
+          240,
+          241,
+          243,
+          248,
+          253,
+          262,
+          263
+        ],
+        "src/normalization/manual.py": [
+          59,
+          60,
+          61,
+          62
+        ]
+      },
+      "cosmic_ray_total": {
+        "src/normalization/account_map.py": 427,
+        "src/normalization/bs_sections.py": 339
+      }
+    }
+  ],
+  "mutants": [
+    {
+      "commit": "fc58c0e",
+      "file": "src/collectors/dart.py",
+      "line": 53,
+      "operator": "core/ReplaceFalseWithTrue",
+      "occurrence": 0,
+      "start_line": 53,
+      "end_line": 53,
+      "definition": "is_valid_zip",
+      "selected_tests": [
+        "tests/test_dart_collector.py::test_error_response_is_not_saved_as_filing",
+        "tests/test_dart_collector.py::test_failed_attempt_does_not_block_a_later_download",
+        "tests/test_dart_collector.py::test_zip_validation_rejects_error_responses"
+      ],
+      "source_before": "return False",
+      "changed_lines": [
+        53
+      ],
+      "on_target_line": true,
+      "source_after": "return True",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.66,
+        "tests": 3,
+        "failed": [
+          "tests\\test_dart_collector.py::test_error_response_is_not_saved_as_filing",
+          "tests\\test_dart_collector.py::test_failed_attempt_does_not_block_a_later_download",
+          "tests\\test_dart_collector.py::test_zip_validation_rejects_error_responses"
+        ],
+        "messages": [
+          "zipfile.BadZipFile: File is not a zip file",
+          "zipfile.BadZipFile: File is not a zip file",
+          "assert not True\n +  where True = is_valid_zip(b'<?xml version=\"1.0\"?><result><status>014</status><message>\\xed\\x8c\\x8c\\xec\\x9d\\xbc\\xec\\x9d\\xb4 \\xec\\xa1\\xb4\\xec\\"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.85,
+        "tests": null,
+        "failed": [
+          "tests\\test_dart_collector.py::test_zip_validation_rejects_error_responses",
+          "tests\\test_dart_collector.py::test_error_response_is_not_saved_as_filing",
+          "tests\\test_dart_collector.py::test_failed_attempt_does_not_block_a_later_download"
+        ],
+        "messages": [
+          "assert not True\n +  where True = is_valid_zip(b'<?xml version=\"1.0\"?><result><status>014</status><message>\\xed\\x8c\\x8c\\xec\\x9d\\xbc\\xec\\x9d\\xb4 \\xec\\xa1\\xb4\\xec\\",
+          "zipfile.BadZipFile: File is not a zip file",
+          "zipfile.BadZipFile: File is not a zip file"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "fc58c0e",
+      "file": "src/collectors/dart.py",
+      "line": 56,
+      "operator": "core/ReplaceAndWithOr",
+      "occurrence": 0,
+      "start_line": 56,
+      "end_line": 56,
+      "definition": "is_valid_zip",
+      "selected_tests": [
+        "tests/test_dart_collector.py::test_failed_attempt_does_not_block_a_later_download",
+        "tests/test_dart_collector.py::test_filing_is_stored_with_published_and_collected_dates",
+        "tests/test_dart_collector.py::test_response_is_linked_to_stored_filing_or_marked_missing",
+        "tests/test_dart_collector.py::test_stored_filing_is_never_downloaded_or_overwritten_again",
+        "tests/test_dart_collector.py::test_zip_validation_rejects_error_responses"
+      ],
+      "source_before": "return bool(z.namelist()) and z.testzip() is None",
+      "changed_lines": [
+        56
+      ],
+      "on_target_line": true,
+      "source_after": "return bool(z.namelist()) or z.testzip() is None",
+      "selected": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 0.59,
+        "tests": 5,
+        "failed": [],
+        "messages": []
+      },
+      "full": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 0.6,
+        "tests": null,
+        "failed": [],
+        "messages": []
+      },
+      "result": "SURVIVED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "fc58c0e",
+      "file": "src/collectors/dart.py",
+      "line": 58,
+      "operator": "core/ReplaceFalseWithTrue",
+      "occurrence": 1,
+      "start_line": 58,
+      "end_line": 58,
+      "definition": "is_valid_zip",
+      "selected_tests": [
+        "tests/test_dart_collector.py::test_zip_validation_rejects_error_responses"
+      ],
+      "source_before": "return False",
+      "changed_lines": [
+        58
+      ],
+      "on_target_line": true,
+      "source_after": "return True",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.56,
+        "tests": 1,
+        "failed": [
+          "tests\\test_dart_collector.py::test_zip_validation_rejects_error_responses"
+        ],
+        "messages": [
+          "AssertionError: assert not True\n +  where True = is_valid_zip(b'PK\\x03\\x04\\x14\\x00\\x00\\x00\\x00\\x00\\xf3{k]\\x86!\\x06\\x1c\\x1b\\x00\\x00\\x00\\x1b\\x00\\x00\\x00\\x12\\x00\\x"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.64,
+        "tests": null,
+        "failed": [
+          "tests\\test_dart_collector.py::test_zip_validation_rejects_error_responses"
+        ],
+        "messages": [
+          "AssertionError: assert not True\n +  where True = is_valid_zip(b'PK\\x03\\x04\\x14\\x00\\x00\\x00\\x00\\x00\\xf3{k]\\x86!\\x06\\x1c\\x1b\\x00\\x00\\x00\\x1b\\x00\\x00\\x00\\x12\\x00\\x"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "fc58c0e",
+      "file": "src/collectors/dart.py",
+      "line": 66,
+      "operator": "core/ReplaceOrWithAnd",
+      "occurrence": 1,
+      "start_line": 66,
+      "end_line": 66,
+      "definition": "__init__",
+      "selected_tests": [
+        "tests/test_dart_collector.py::test_error_response_is_not_saved_as_filing",
+        "tests/test_dart_collector.py::test_failed_attempt_does_not_block_a_later_download",
+        "tests/test_dart_collector.py::test_filing_is_stored_with_published_and_collected_dates",
+        "tests/test_dart_collector.py::test_key_is_redacted_from_http_errors",
+        "tests/test_dart_collector.py::test_key_is_redacted_from_request_errors",
+        "tests/test_dart_collector.py::test_list_follows_pages",
+        "tests/test_dart_collector.py::test_lists_original_and_all_corrections_for_target_years_only",
+        "tests/test_dart_collector.py::test_no_data_response_is_recorded",
+        "tests/test_dart_collector.py::test_requery_goes_to_new_run_and_keeps_old_response",
+        "tests/test_dart_collector.py::test_response_is_linked_to_stored_filing_or_marked_missing",
+        "tests/test_dart_collector.py::test_stored_filing_is_never_downloaded_or_overwritten_again"
+      ],
+      "source_before": "self.session = session or requests.Session()",
+      "changed_lines": [
+        66
+      ],
+      "on_target_line": true,
+      "source_after": "self.session = session and requests.Session()",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 4.76,
+        "tests": 11,
+        "failed": [
+          "tests\\test_dart_collector.py::test_error_response_is_not_saved_as_filing",
+          "tests\\test_dart_collector.py::test_failed_attempt_does_not_block_a_later_download",
+          "tests\\test_dart_collector.py::test_filing_is_stored_with_published_and_collected_dates",
+          "tests\\test_dart_collector.py::test_key_is_redacted_from_http_errors",
+          "tests\\test_dart_collector.py::test_key_is_redacted_from_request_errors",
+          "tests\\test_dart_collector.py::test_list_follows_pages",
+          "tests\\test_dart_collector.py::test_lists_original_and_all_corrections_for_target_years_only",
+          "tests\\test_dart_collector.py::test_no_data_response_is_recorded",
+          "tests\\test_dart_collector.py::test_requery_goes_to_new_run_and_keeps_old_response",
+          "tests\\test_dart_collector.py::test_response_is_linked_to_stored_filing_or_marked_missing"
+        ],
+        "messages": [
+          "assert b'<?xml versi...age></result>' == b'{\"status\":\"...eb\\x8b\\xa4.\"}'\n  \n  At index 0 diff: b'<' != b'{'\n  Use -v to get more diff",
+          "AssertionError: assert 'invalid_zip' == 'stored'\n  \n  - stored\n  + invalid_zip",
+          "AssertionError: assert 'invalid_zip' == 'stored'\n  \n  - stored\n  + invalid_zip"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 5.03,
+        "tests": null,
+        "failed": [
+          "tests\\test_dart_collector.py::test_filing_is_stored_with_published_and_collected_dates",
+          "tests\\test_dart_collector.py::test_error_response_is_not_saved_as_filing",
+          "tests\\test_dart_collector.py::test_failed_attempt_does_not_block_a_later_download",
+          "tests\\test_dart_collector.py::test_stored_filing_is_never_downloaded_or_overwritten_again",
+          "tests\\test_dart_collector.py::test_no_data_response_is_recorded",
+          "tests\\test_dart_collector.py::test_requery_goes_to_new_run_and_keeps_old_response",
+          "tests\\test_dart_collector.py::test_response_is_linked_to_stored_filing_or_marked_missing",
+          "tests\\test_dart_collector.py::test_lists_original_and_all_corrections_for_target_years_only",
+          "tests\\test_dart_collector.py::test_list_follows_pages",
+          "tests\\test_dart_collector.py::test_key_is_redacted_from_request_errors"
+        ],
+        "messages": [
+          "AssertionError: assert 'invalid_zip' == 'stored'\n  \n  - stored\n  + invalid_zip",
+          "assert b'<?xml versi...age></result>' == b'{\"status\":\"...eb\\x8b\\xa4.\"}'\n  \n  At index 0 diff: b'<' != b'{'\n  Use -v to get more diff",
+          "AssertionError: assert 'invalid_zip' == 'stored'\n  \n  - stored\n  + invalid_zip"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "fc58c0e",
+      "file": "src/collectors/dart.py",
+      "line": 74,
+      "operator": "core/NumberReplacer",
+      "occurrence": 2,
+      "start_line": 74,
+      "end_line": 74,
+      "definition": "get",
+      "selected_tests": [
+        "tests/test_dart_collector.py::test_error_response_is_not_saved_as_filing",
+        "tests/test_dart_collector.py::test_failed_attempt_does_not_block_a_later_download",
+        "tests/test_dart_collector.py::test_filing_is_stored_with_published_and_collected_dates",
+        "tests/test_dart_collector.py::test_key_is_redacted_from_http_errors",
+        "tests/test_dart_collector.py::test_key_is_redacted_from_request_errors",
+        "tests/test_dart_collector.py::test_list_follows_pages",
+        "tests/test_dart_collector.py::test_lists_original_and_all_corrections_for_target_years_only",
+        "tests/test_dart_collector.py::test_no_data_response_is_recorded",
+        "tests/test_dart_collector.py::test_requery_goes_to_new_run_and_keeps_old_response",
+        "tests/test_dart_collector.py::test_response_is_linked_to_stored_filing_or_marked_missing",
+        "tests/test_dart_collector.py::test_stored_filing_is_never_downloaded_or_overwritten_again"
+      ],
+      "source_before": "r = self.session.get(f\"{BASE_URL}/{endpoint}\", params={**params, \"crtfc_key\": self._key}, timeout=30)",
+      "changed_lines": [
+        74
+      ],
+      "on_target_line": true,
+      "source_after": "r = self.session.get(f\"{BASE_URL}/{endpoint}\", params={**params, \"crtfc_key\": self._key}, timeout= 31)",
+      "selected": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 0.9,
+        "tests": 11,
+        "failed": [],
+        "messages": []
+      },
+      "full": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 0.91,
+        "tests": null,
+        "failed": [],
+        "messages": []
+      },
+      "result": "SURVIVED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "fc58c0e",
+      "file": "src/collectors/dart.py",
+      "line": 102,
+      "operator": "core/ReplaceTrueWithFalse",
+      "occurrence": 0,
+      "start_line": 102,
+      "end_line": 102,
+      "definition": "write_new",
+      "selected_tests": [
+        "tests/test_dart_collector.py::test_error_response_is_not_saved_as_filing",
+        "tests/test_dart_collector.py::test_failed_attempt_does_not_block_a_later_download",
+        "tests/test_dart_collector.py::test_filing_is_stored_with_published_and_collected_dates",
+        "tests/test_dart_collector.py::test_list_follows_pages",
+        "tests/test_dart_collector.py::test_lists_original_and_all_corrections_for_target_years_only",
+        "tests/test_dart_collector.py::test_no_data_response_is_recorded",
+        "tests/test_dart_collector.py::test_requery_goes_to_new_run_and_keeps_old_response",
+        "tests/test_dart_collector.py::test_response_is_linked_to_stored_filing_or_marked_missing",
+        "tests/test_dart_collector.py::test_stored_filing_is_never_downloaded_or_overwritten_again"
+      ],
+      "source_before": "directory.mkdir(parents=True, exist_ok=True)",
+      "changed_lines": [
+        102
+      ],
+      "on_target_line": true,
+      "source_after": "directory.mkdir(parents=False, exist_ok=True)",
+      "selected": {
+        "status": "KILLED",
+        "kind": "exception",
+        "seconds": 1.69,
+        "tests": 9,
+        "failed": [
+          "tests\\test_dart_collector.py::test_error_response_is_not_saved_as_filing",
+          "tests\\test_dart_collector.py::test_failed_attempt_does_not_block_a_later_download",
+          "tests\\test_dart_collector.py::test_filing_is_stored_with_published_and_collected_dates",
+          "tests\\test_dart_collector.py::test_list_follows_pages",
+          "tests\\test_dart_collector.py::test_lists_original_and_all_corrections_for_target_years_only",
+          "tests\\test_dart_collector.py::test_no_data_response_is_recorded",
+          "tests\\test_dart_collector.py::test_requery_goes_to_new_run_and_keeps_old_response",
+          "tests\\test_dart_collector.py::test_response_is_linked_to_stored_filing_or_marked_missing",
+          "tests\\test_dart_collector.py::test_stored_filing_is_never_downloaded_or_overwritten_again"
+        ],
+        "messages": [
+          "FileNotFoundError: [WinError 3] 지정된 경로를 찾을 수 없습니다: '<tmp>\\\\pytest-of-<user>\\\\pytest-1411\\\\test_error_response_is_not_sav0\\\\01009",
+          "FileNotFoundError: [WinError 3] 지정된 경로를 찾을 수 없습니다: '<tmp>\\\\pytest-of-<user>\\\\pytest-1411\\\\test_failed_attempt_does_not_b0\\\\01009",
+          "FileNotFoundError: [WinError 3] 지정된 경로를 찾을 수 없습니다: '<tmp>\\\\pytest-of-<user>\\\\pytest-1411\\\\test_filing_is_stored_with_pub0\\\\01009"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "exception",
+        "seconds": 1.06,
+        "tests": null,
+        "failed": [
+          "tests\\test_dart_collector.py::test_filing_is_stored_with_published_and_collected_dates",
+          "tests\\test_dart_collector.py::test_error_response_is_not_saved_as_filing",
+          "tests\\test_dart_collector.py::test_failed_attempt_does_not_block_a_later_download",
+          "tests\\test_dart_collector.py::test_stored_filing_is_never_downloaded_or_overwritten_again",
+          "tests\\test_dart_collector.py::test_no_data_response_is_recorded",
+          "tests\\test_dart_collector.py::test_requery_goes_to_new_run_and_keeps_old_response",
+          "tests\\test_dart_collector.py::test_response_is_linked_to_stored_filing_or_marked_missing",
+          "tests\\test_dart_collector.py::test_lists_original_and_all_corrections_for_target_years_only",
+          "tests\\test_dart_collector.py::test_list_follows_pages"
+        ],
+        "messages": [
+          "FileNotFoundError: [WinError 3] 지정된 경로를 찾을 수 없습니다: '<tmp>\\\\pytest-of-<user>\\\\pytest-1412\\\\test_filing_is_stored_with_pub0\\\\01009",
+          "FileNotFoundError: [WinError 3] 지정된 경로를 찾을 수 없습니다: '<tmp>\\\\pytest-of-<user>\\\\pytest-1412\\\\test_error_response_is_not_sav0\\\\01009",
+          "FileNotFoundError: [WinError 3] 지정된 경로를 찾을 수 없습니다: '<tmp>\\\\pytest-of-<user>\\\\pytest-1412\\\\test_failed_attempt_does_not_b0\\\\01009"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "fc58c0e",
+      "file": "src/collectors/dart.py",
+      "line": 109,
+      "operator": "core/NumberReplacer",
+      "occurrence": 4,
+      "start_line": 109,
+      "end_line": 109,
+      "definition": "_json_bytes",
+      "selected_tests": [
+        "tests/test_dart_collector.py::test_error_response_is_not_saved_as_filing",
+        "tests/test_dart_collector.py::test_failed_attempt_does_not_block_a_later_download",
+        "tests/test_dart_collector.py::test_filing_is_stored_with_published_and_collected_dates",
+        "tests/test_dart_collector.py::test_list_follows_pages",
+        "tests/test_dart_collector.py::test_lists_original_and_all_corrections_for_target_years_only",
+        "tests/test_dart_collector.py::test_no_data_response_is_recorded",
+        "tests/test_dart_collector.py::test_requery_goes_to_new_run_and_keeps_old_response",
+        "tests/test_dart_collector.py::test_response_is_linked_to_stored_filing_or_marked_missing",
+        "tests/test_dart_collector.py::test_stored_filing_is_never_downloaded_or_overwritten_again"
+      ],
+      "source_before": "return json.dumps(obj, ensure_ascii=False, indent=2).encode(\"utf-8\")",
+      "changed_lines": [
+        109
+      ],
+      "on_target_line": true,
+      "source_after": "return json.dumps(obj, ensure_ascii=False, indent= 3).encode(\"utf-8\")",
+      "selected": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 0.71,
+        "tests": 9,
+        "failed": [],
+        "messages": []
+      },
+      "full": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 0.72,
+        "tests": null,
+        "failed": [],
+        "messages": []
+      },
+      "result": "SURVIVED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "fc58c0e",
+      "file": "src/collectors/dart.py",
+      "line": 114,
+      "operator": "core/NumberReplacer",
+      "occurrence": 6,
+      "start_line": 114,
+      "end_line": 114,
+      "definition": "list_annual_reports",
+      "selected_tests": [
+        "tests/test_dart_collector.py::test_list_follows_pages",
+        "tests/test_dart_collector.py::test_lists_original_and_all_corrections_for_target_years_only"
+      ],
+      "source_before": "bgn_de = f\"{min(years) + 1}0101\"  # 2022 사업보고서는 2023년에 접수된다",
+      "changed_lines": [
+        114
+      ],
+      "on_target_line": true,
+      "source_after": "bgn_de = f\"{min(years) + 2}0101\"  # 2022 사업보고서는 2023년에 접수된다",
+      "selected": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 0.58,
+        "tests": 2,
+        "failed": [],
+        "messages": []
+      },
+      "full": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 0.71,
+        "tests": null,
+        "failed": [],
+        "messages": []
+      },
+      "result": "SURVIVED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "99309f2",
+      "file": "src/normalization/build_facts.py",
+      "line": 22,
+      "operator": "core/ReplaceAndWithOr",
+      "occurrence": 0,
+      "start_line": 22,
+      "end_line": 22,
+      "definition": "latest_valid_filing",
+      "selected_tests": [
+        "tests/test_dart_facts.py::test_latest_valid_filing_respects_as_of_and_skips_attachment_corrections"
+      ],
+      "source_before": "if f[\"link\"] == \"stored\" and f.get(\"corp_code\") == corp_code and f.get(\"bsns_year\") == bsns_year",
+      "changed_lines": [
+        22
+      ],
+      "on_target_line": true,
+      "source_after": "if f[\"link\"] == \"stored\" or f.get(\"corp_code\") == corp_code and f.get(\"bsns_year\") == bsns_year",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.47,
+        "tests": 1,
+        "failed": [
+          "tests\\test_dart_facts.py::test_latest_valid_filing_respects_as_of_and_skips_attachment_corrections"
+        ],
+        "messages": [
+          "AssertionError: assert 'd' == 'c'\n  \n  - c\n  + d"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 2.19,
+        "tests": null,
+        "failed": [
+          "tests\\test_dart_facts.py::test_latest_valid_filing_respects_as_of_and_skips_attachment_corrections"
+        ],
+        "messages": [
+          "AssertionError: assert 'd' == 'c'\n  \n  - c\n  + d"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "99309f2",
+      "file": "src/normalization/build_facts.py",
+      "line": 23,
+      "operator": "core/ReplaceAndWithOr",
+      "occurrence": 2,
+      "start_line": 23,
+      "end_line": 23,
+      "definition": "latest_valid_filing",
+      "selected_tests": [
+        "tests/test_dart_facts.py::test_latest_valid_filing_respects_as_of_and_skips_attachment_corrections"
+      ],
+      "source_before": "and f[\"rcept_dt\"] <= as_of and f.get(\"correction\") not in NON_BODY_CORRECTIONS",
+      "changed_lines": [
+        23
+      ],
+      "on_target_line": true,
+      "source_after": "or f[\"rcept_dt\"] <= as_of and f.get(\"correction\") not in NON_BODY_CORRECTIONS",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.97,
+        "tests": 1,
+        "failed": [
+          "tests\\test_dart_facts.py::test_latest_valid_filing_respects_as_of_and_skips_attachment_corrections"
+        ],
+        "messages": [
+          "AssertionError: assert 'd' == 'c'\n  \n  - c\n  + d"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.32,
+        "tests": null,
+        "failed": [
+          "tests\\test_dart_facts.py::test_latest_valid_filing_respects_as_of_and_skips_attachment_corrections"
+        ],
+        "messages": [
+          "AssertionError: assert 'd' == 'c'\n  \n  - c\n  + d"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "99309f2",
+      "file": "src/normalization/dart_facts.py",
+      "line": 38,
+      "operator": "core/ReplaceComparisonOperator_Is_IsNot",
+      "occurrence": 0,
+      "start_line": 38,
+      "end_line": 38,
+      "definition": "parse_amount",
+      "selected_tests": [
+        "tests/test_dart_facts.py::test_balance_sheet_values_are_instants",
+        "tests/test_dart_facts.py::test_different_values_are_flagged_with_kind_not_called_restatement",
+        "tests/test_dart_facts.py::test_equity_statement_period_type_is_left_for_review",
+        "tests/test_dart_facts.py::test_missing_filing_link_is_recorded",
+        "tests/test_dart_facts.py::test_prior_year_column_maps_to_prior_period_not_report_year",
+        "tests/test_dart_facts.py::test_same_account_id_in_different_rows_is_not_merged",
+        "tests/test_dart_facts.py::test_same_values_across_reports_are_not_flagged",
+        "tests/test_dart_facts.py::test_unknown_period_is_marked_not_guessed",
+        "tests/test_dart_facts.py::test_zero_empty_and_unparseable_are_different"
+      ],
+      "source_before": "if raw is None or str(raw).strip() in (\"\", \"-\"):",
+      "changed_lines": [
+        38
+      ],
+      "on_target_line": true,
+      "source_after": "if raw is not None or str(raw).strip() in (\"\", \"-\"):",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.99,
+        "tests": 9,
+        "failed": [
+          "tests\\test_dart_facts.py::test_different_values_are_flagged_with_kind_not_called_restatement",
+          "tests\\test_dart_facts.py::test_same_values_across_reports_are_not_flagged",
+          "tests\\test_dart_facts.py::test_zero_empty_and_unparseable_are_different"
+        ],
+        "messages": [
+          "ValueError: not enough values to unpack (expected 1, got 0)",
+          "assert 0 >= 1",
+          "AssertionError: assert (None, 'empty_in_source') == (0, 'parsed')\n  \n  At index 0 diff: None != 0\n  Use -v to get more diff"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.28,
+        "tests": null,
+        "failed": [
+          "tests\\test_dart_facts.py::test_zero_empty_and_unparseable_are_different",
+          "tests\\test_dart_facts.py::test_same_values_across_reports_are_not_flagged",
+          "tests\\test_dart_facts.py::test_different_values_are_flagged_with_kind_not_called_restatement"
+        ],
+        "messages": [
+          "AssertionError: assert (None, 'empty_in_source') == (0, 'parsed')\n  \n  At index 0 diff: None != 0\n  Use -v to get more diff",
+          "assert 0 >= 1",
+          "ValueError: not enough values to unpack (expected 1, got 0)"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "99309f2",
+      "file": "src/normalization/dart_facts.py",
+      "line": 56,
+      "operator": "core/NumberReplacer",
+      "occurrence": 2,
+      "start_line": 56,
+      "end_line": 56,
+      "definition": "is_plausible_fiscal_period",
+      "selected_tests": [
+        "tests/test_dart_facts.py::test_fiscal_periods_are_read_from_filing_text",
+        "tests/test_dart_facts.py::test_side_by_side_columns_do_not_create_two_year_periods"
+      ],
+      "source_before": "one_year_later = s.replace(year=s.year + 1)",
+      "changed_lines": [
+        56
+      ],
+      "on_target_line": true,
+      "source_after": "one_year_later = s.replace(year=s.year + 2)",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.99,
+        "tests": 2,
+        "failed": [
+          "tests\\test_dart_facts.py::test_fiscal_periods_are_read_from_filing_text",
+          "tests\\test_dart_facts.py::test_side_by_side_columns_do_not_create_two_year_periods"
+        ],
+        "messages": [
+          "AssertionError: assert {12: ('2025-0...1'), 11: None} == {12: ('2025-0...'2024-12-31')}\n  \n  Omitting 1 identical items, use -vv to show\n  Differing items:\n  {1",
+          "AssertionError: assert not True\n +  where True = is_plausible_fiscal_period('2024-01-01', '2025-12-31')"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.28,
+        "tests": null,
+        "failed": [
+          "tests\\test_dart_facts.py::test_side_by_side_columns_do_not_create_two_year_periods",
+          "tests\\test_dart_facts.py::test_fiscal_periods_are_read_from_filing_text"
+        ],
+        "messages": [
+          "AssertionError: assert not True\n +  where True = is_plausible_fiscal_period('2024-01-01', '2025-12-31')",
+          "AssertionError: assert {12: ('2025-0...1'), 11: None} == {12: ('2025-0...'2024-12-31')}\n  \n  Omitting 1 identical items, use -vv to show\n  Differing items:\n  {1"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "99309f2",
+      "file": "src/normalization/dart_facts.py",
+      "line": 59,
+      "operator": "core/ReplaceComparisonOperator_LtE_Lt",
+      "occurrence": 0,
+      "start_line": 59,
+      "end_line": 59,
+      "definition": "is_plausible_fiscal_period",
+      "selected_tests": [
+        "tests/test_dart_facts.py::test_fiscal_periods_are_read_from_filing_text",
+        "tests/test_dart_facts.py::test_side_by_side_columns_do_not_create_two_year_periods"
+      ],
+      "source_before": "return s <= e < one_year_later",
+      "changed_lines": [
+        59
+      ],
+      "on_target_line": true,
+      "source_after": "return s < e < one_year_later",
+      "selected": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 1.01,
+        "tests": 2,
+        "failed": [],
+        "messages": []
+      },
+      "full": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 1.24,
+        "tests": null,
+        "failed": [],
+        "messages": []
+      },
+      "result": "SURVIVED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "99309f2",
+      "file": "src/normalization/dart_facts.py",
+      "line": 73,
+      "operator": "core/NumberReplacer",
+      "occurrence": 10,
+      "start_line": 73,
+      "end_line": 73,
+      "definition": "fiscal_periods_from_filing",
+      "selected_tests": [
+        "tests/test_dart_facts.py::test_fiscal_periods_are_read_from_filing_text"
+      ],
+      "source_before": "period = (_iso(m[2], m[3], m[4]), _iso(m[5], m[6], m[7]))",
+      "changed_lines": [
+        73
+      ],
+      "on_target_line": true,
+      "source_after": "period = (_iso(m[ 3], m[3], m[4]), _iso(m[5], m[6], m[7]))",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.03,
+        "tests": 1,
+        "failed": [
+          "tests\\test_dart_facts.py::test_fiscal_periods_are_read_from_filing_text"
+        ],
+        "messages": [
+          "AssertionError: assert {} == {12: ('2025-0...'2024-12-31')}\n  \n  Right contains 2 more items:\n  {11: ('2024-01-01', '2024-12-31'), 12: ('2025-01-01', '2025-12-3"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.28,
+        "tests": null,
+        "failed": [
+          "tests\\test_dart_facts.py::test_fiscal_periods_are_read_from_filing_text"
+        ],
+        "messages": [
+          "AssertionError: assert {} == {12: ('2025-0...'2024-12-31')}\n  \n  Right contains 2 more items:\n  {11: ('2024-01-01', '2024-12-31'), 12: ('2025-01-01', '2025-12-3"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "99309f2",
+      "file": "src/normalization/dart_facts.py",
+      "line": 78,
+      "operator": "core/NumberReplacer",
+      "occurrence": 22,
+      "start_line": 78,
+      "end_line": 78,
+      "definition": "fiscal_periods_from_filing",
+      "selected_tests": [
+        "tests/test_dart_facts.py::test_fiscal_periods_are_read_from_filing_text"
+      ],
+      "source_before": "found.setdefault(int(m[1]), set()).add(period)",
+      "changed_lines": [
+        78
+      ],
+      "on_target_line": true,
+      "source_after": "found.setdefault(int(m[ 2]), set()).add(period)",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.01,
+        "tests": 1,
+        "failed": [
+          "tests\\test_dart_facts.py::test_fiscal_periods_are_read_from_filing_text"
+        ],
+        "messages": [
+          "AssertionError: assert {2025: ('2025...'2024-12-31')} == {12: ('2025-0...'2024-12-31')}\n  \n  Left contains 2 more items:\n  {2024: ('2024-01-01', '2024-12-31'), "
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.3,
+        "tests": null,
+        "failed": [
+          "tests\\test_dart_facts.py::test_fiscal_periods_are_read_from_filing_text"
+        ],
+        "messages": [
+          "AssertionError: assert {2025: ('2025...'2024-12-31')} == {12: ('2025-0...'2024-12-31')}\n  \n  Left contains 2 more items:\n  {2024: ('2024-01-01', '2024-12-31'), "
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "99309f2",
+      "file": "src/normalization/dart_facts.py",
+      "line": 79,
+      "operator": "core/NumberReplacer",
+      "occurrence": 24,
+      "start_line": 79,
+      "end_line": 79,
+      "definition": "fiscal_periods_from_filing",
+      "selected_tests": [
+        "tests/test_dart_facts.py::test_fiscal_periods_are_read_from_filing_text"
+      ],
+      "source_before": "return {term: (next(iter(periods)) if len(periods) == 1 else None) for term, periods in found.items()}",
+      "changed_lines": [
+        79
+      ],
+      "on_target_line": true,
+      "source_after": "return {term: (next(iter(periods)) if len(periods) == 2 else None) for term, periods in found.items()}",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.06,
+        "tests": 1,
+        "failed": [
+          "tests\\test_dart_facts.py::test_fiscal_periods_are_read_from_filing_text"
+        ],
+        "messages": [
+          "AssertionError: assert {12: None, 11: None} == {12: ('2025-0...'2024-12-31')}\n  \n  Differing items:\n  {11: None} != {11: ('2024-01-01', '2024-12-31')}\n  {12: No"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.24,
+        "tests": null,
+        "failed": [
+          "tests\\test_dart_facts.py::test_fiscal_periods_are_read_from_filing_text"
+        ],
+        "messages": [
+          "AssertionError: assert {12: None, 11: None} == {12: ('2025-0...'2024-12-31')}\n  \n  Differing items:\n  {11: None} != {11: ('2024-01-01', '2024-12-31')}\n  {12: No"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "82e4305",
+      "file": "src/normalization/account_map.py",
+      "line": 18,
+      "operator": "core/ReplaceComparisonOperator_NotEq_Eq",
+      "occurrence": 0,
+      "start_line": 18,
+      "end_line": 18,
+      "definition": "is_nonstandard",
+      "selected_tests": [
+        "tests/test_account_map.py::test_current_liabilities_total_is_never_short_term_debt",
+        "tests/test_account_map.py::test_finance_costs_are_never_used_as_interest_expense",
+        "tests/test_account_map.py::test_name_rule_does_not_apply_to_rows_with_a_different_standard_code",
+        "tests/test_account_map.py::test_nonstandard_row_keeps_raw_id_and_maps_only_on_exact_name",
+        "tests/test_account_map.py::test_short_term_debt_is_not_summed_when_an_ambiguous_item_exists",
+        "tests/test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+      ],
+      "source_before": "return account_id in (config[\"nonstandard_account_id\"], \"\", None) or account_id != account_id  # NaN",
+      "changed_lines": [
+        18
+      ],
+      "on_target_line": true,
+      "source_after": "return account_id in (config[\"nonstandard_account_id\"], \"\", None) or account_id == account_id  # NaN",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.47,
+        "tests": 6,
+        "failed": [
+          "tests\\test_account_map.py::test_name_rule_does_not_apply_to_rows_with_a_different_standard_code",
+          "tests\\test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+        ],
+        "messages": [
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped",
+          "AssertionError: assert ('mapped', '230') == ('mapped', '130')\n  \n  At index 1 diff: '230' != '130'\n  Use -v to get more diff"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.42,
+        "tests": null,
+        "failed": [
+          "tests\\test_account_map.py::test_name_rule_does_not_apply_to_rows_with_a_different_standard_code",
+          "tests\\test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+        ],
+        "messages": [
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped",
+          "AssertionError: assert ('mapped', '230') == ('mapped', '130')\n  \n  At index 1 diff: '230' != '130'\n  Use -v to get more diff"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "82e4305",
+      "file": "src/normalization/account_map.py",
+      "line": 23,
+      "operator": "core/ReplaceFalseWithTrue",
+      "occurrence": 0,
+      "start_line": 23,
+      "end_line": 23,
+      "definition": "rule_matches",
+      "selected_tests": [
+        "tests/test_account_map.py::test_cash_flow_interest_adjustment_is_only_a_candidate",
+        "tests/test_account_map.py::test_finance_costs_are_never_used_as_interest_expense",
+        "tests/test_account_map.py::test_profit_loss_in_cash_flow_statement_is_not_net_income"
+      ],
+      "source_before": "return False",
+      "changed_lines": [
+        23
+      ],
+      "on_target_line": true,
+      "source_after": "return True",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.44,
+        "tests": 3,
+        "failed": [
+          "tests\\test_account_map.py::test_profit_loss_in_cash_flow_statement_is_not_net_income"
+        ],
+        "messages": [
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.42,
+        "tests": null,
+        "failed": [
+          "tests\\test_account_map.py::test_profit_loss_in_cash_flow_statement_is_not_net_income"
+        ],
+        "messages": [
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "82e4305",
+      "file": "src/normalization/account_map.py",
+      "line": 24,
+      "operator": "core/ReplaceAndWithOr",
+      "occurrence": 0,
+      "start_line": 24,
+      "end_line": 24,
+      "definition": "rule_matches",
+      "selected_tests": [
+        "tests/test_account_map.py::test_cash_flow_interest_adjustment_is_only_a_candidate",
+        "tests/test_account_map.py::test_current_liabilities_total_is_never_short_term_debt",
+        "tests/test_account_map.py::test_detail_rows_do_not_match_total_rules",
+        "tests/test_account_map.py::test_empty_source_value_is_reported_as_empty_not_zero",
+        "tests/test_account_map.py::test_finance_costs_are_never_used_as_interest_expense",
+        "tests/test_account_map.py::test_multiple_candidates_are_not_auto_selected",
+        "tests/test_account_map.py::test_name_rule_does_not_apply_to_rows_with_a_different_standard_code",
+        "tests/test_account_map.py::test_nonstandard_row_keeps_raw_id_and_maps_only_on_exact_name",
+        "tests/test_account_map.py::test_profit_loss_in_cash_flow_statement_is_not_net_income",
+        "tests/test_account_map.py::test_short_term_debt_is_not_summed_when_an_ambiguous_item_exists",
+        "tests/test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+      ],
+      "source_before": "if \"account_detail\" in rule and row[\"account_detail\"] != rule[\"account_detail\"]:",
+      "changed_lines": [
+        24
+      ],
+      "on_target_line": true,
+      "source_after": "if \"account_detail\" in rule or row[\"account_detail\"] != rule[\"account_detail\"]:",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.49,
+        "tests": 11,
+        "failed": [
+          "tests\\test_account_map.py::test_cash_flow_interest_adjustment_is_only_a_candidate",
+          "tests\\test_account_map.py::test_current_liabilities_total_is_never_short_term_debt",
+          "tests\\test_account_map.py::test_empty_source_value_is_reported_as_empty_not_zero",
+          "tests\\test_account_map.py::test_finance_costs_are_never_used_as_interest_expense",
+          "tests\\test_account_map.py::test_nonstandard_row_keeps_raw_id_and_maps_only_on_exact_name",
+          "tests\\test_account_map.py::test_profit_loss_in_cash_flow_statement_is_not_net_income",
+          "tests\\test_account_map.py::test_short_term_debt_is_not_summed_when_an_ambiguous_item_exists",
+          "tests\\test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+        ],
+        "messages": [
+          "KeyError: 'account_detail'",
+          "KeyError: 'account_detail'",
+          "AssertionError: assert 'review_needed' == 'empty_value'\n  \n  - empty_value\n  + review_needed"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.34,
+        "tests": null,
+        "failed": [
+          "tests\\test_account_map.py::test_finance_costs_are_never_used_as_interest_expense",
+          "tests\\test_account_map.py::test_cash_flow_interest_adjustment_is_only_a_candidate",
+          "tests\\test_account_map.py::test_current_liabilities_total_is_never_short_term_debt",
+          "tests\\test_account_map.py::test_profit_loss_in_cash_flow_statement_is_not_net_income",
+          "tests\\test_account_map.py::test_nonstandard_row_keeps_raw_id_and_maps_only_on_exact_name",
+          "tests\\test_account_map.py::test_empty_source_value_is_reported_as_empty_not_zero",
+          "tests\\test_account_map.py::test_short_term_debt_sums_explicit_current_components",
+          "tests\\test_account_map.py::test_short_term_debt_is_not_summed_when_an_ambiguous_item_exists"
+        ],
+        "messages": [
+          "KeyError: 'account_detail'",
+          "KeyError: 'account_detail'",
+          "KeyError: 'account_detail'"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "82e4305",
+      "file": "src/normalization/account_map.py",
+      "line": 25,
+      "operator": "core/ReplaceFalseWithTrue",
+      "occurrence": 1,
+      "start_line": 25,
+      "end_line": 25,
+      "definition": "rule_matches",
+      "selected_tests": [
+        "tests/test_account_map.py::test_detail_rows_do_not_match_total_rules"
+      ],
+      "source_before": "return False",
+      "changed_lines": [
+        25
+      ],
+      "on_target_line": true,
+      "source_after": "return True",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.46,
+        "tests": 1,
+        "failed": [
+          "tests\\test_account_map.py::test_detail_rows_do_not_match_total_rules"
+        ],
+        "messages": [
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.29,
+        "tests": null,
+        "failed": [
+          "tests\\test_account_map.py::test_detail_rows_do_not_match_total_rules"
+        ],
+        "messages": [
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "82e4305",
+      "file": "src/normalization/account_map.py",
+      "line": 27,
+      "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+      "occurrence": 0,
+      "start_line": 27,
+      "end_line": 27,
+      "definition": "rule_matches",
+      "selected_tests": [
+        "tests/test_account_map.py::test_cash_flow_interest_adjustment_is_only_a_candidate",
+        "tests/test_account_map.py::test_current_liabilities_total_is_never_short_term_debt",
+        "tests/test_account_map.py::test_empty_source_value_is_reported_as_empty_not_zero",
+        "tests/test_account_map.py::test_finance_costs_are_never_used_as_interest_expense",
+        "tests/test_account_map.py::test_multiple_candidates_are_not_auto_selected",
+        "tests/test_account_map.py::test_name_rule_does_not_apply_to_rows_with_a_different_standard_code",
+        "tests/test_account_map.py::test_nonstandard_row_keeps_raw_id_and_maps_only_on_exact_name",
+        "tests/test_account_map.py::test_profit_loss_in_cash_flow_statement_is_not_net_income",
+        "tests/test_account_map.py::test_short_term_debt_is_not_summed_when_an_ambiguous_item_exists",
+        "tests/test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+      ],
+      "source_before": "return row[\"account_id\"] == rule[\"account_id\"]",
+      "changed_lines": [
+        27
+      ],
+      "on_target_line": true,
+      "source_after": "return row[\"account_id\"] != rule[\"account_id\"]",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.47,
+        "tests": 10,
+        "failed": [
+          "tests\\test_account_map.py::test_current_liabilities_total_is_never_short_term_debt",
+          "tests\\test_account_map.py::test_empty_source_value_is_reported_as_empty_not_zero",
+          "tests\\test_account_map.py::test_finance_costs_are_never_used_as_interest_expense",
+          "tests\\test_account_map.py::test_name_rule_does_not_apply_to_rows_with_a_different_standard_code",
+          "tests\\test_account_map.py::test_nonstandard_row_keeps_raw_id_and_maps_only_on_exact_name",
+          "tests\\test_account_map.py::test_profit_loss_in_cash_flow_statement_is_not_net_income",
+          "tests\\test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+        ],
+        "messages": [
+          "AssertionError: assert '구성 항목 없음' in '확인 필요 후보: 유동부채; 정책 미정 항목(합계 제외): 유동부채 9000'",
+          "AssertionError: assert 'review_needed' == 'empty_value'\n  \n  - empty_value\n  + review_needed",
+          "AssertionError: assert '대체 금지' in '해당 계정 행 없음 — 원문 확인'"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.26,
+        "tests": null,
+        "failed": [
+          "tests\\test_account_map.py::test_finance_costs_are_never_used_as_interest_expense",
+          "tests\\test_account_map.py::test_current_liabilities_total_is_never_short_term_debt",
+          "tests\\test_account_map.py::test_profit_loss_in_cash_flow_statement_is_not_net_income",
+          "tests\\test_account_map.py::test_nonstandard_row_keeps_raw_id_and_maps_only_on_exact_name",
+          "tests\\test_account_map.py::test_name_rule_does_not_apply_to_rows_with_a_different_standard_code",
+          "tests\\test_account_map.py::test_empty_source_value_is_reported_as_empty_not_zero",
+          "tests\\test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+        ],
+        "messages": [
+          "AssertionError: assert '대체 금지' in '해당 계정 행 없음 — 원문 확인'",
+          "AssertionError: assert '구성 항목 없음' in '확인 필요 후보: 유동부채; 정책 미정 항목(합계 제외): 유동부채 9000'",
+          "AssertionError: assert ('review_needed', None) == ('mapped', '60')\n  \n  At index 0 diff: 'review_needed' != 'mapped'\n  Use -v to get more diff"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "82e4305",
+      "file": "src/normalization/account_map.py",
+      "line": 29,
+      "operator": "core/ReplaceAndWithOr",
+      "occurrence": 1,
+      "start_line": 29,
+      "end_line": 29,
+      "definition": "rule_matches",
+      "selected_tests": [
+        "tests/test_account_map.py::test_current_liabilities_total_is_never_short_term_debt",
+        "tests/test_account_map.py::test_finance_costs_are_never_used_as_interest_expense",
+        "tests/test_account_map.py::test_name_rule_does_not_apply_to_rows_with_a_different_standard_code",
+        "tests/test_account_map.py::test_nonstandard_row_keeps_raw_id_and_maps_only_on_exact_name",
+        "tests/test_account_map.py::test_short_term_debt_is_not_summed_when_an_ambiguous_item_exists",
+        "tests/test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+      ],
+      "source_before": "return is_nonstandard(row[\"account_id\"], config) and str(row[\"account_nm\"]).strip() == rule[\"nonstandard_name\"]",
+      "changed_lines": [
+        29
+      ],
+      "on_target_line": true,
+      "source_after": "return is_nonstandard(row[\"account_id\"], config) or str(row[\"account_nm\"]).strip() == rule[\"nonstandard_name\"]",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.46,
+        "tests": 6,
+        "failed": [
+          "tests\\test_account_map.py::test_name_rule_does_not_apply_to_rows_with_a_different_standard_code",
+          "tests\\test_account_map.py::test_nonstandard_row_keeps_raw_id_and_maps_only_on_exact_name",
+          "tests\\test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+        ],
+        "messages": [
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped",
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped",
+          "AssertionError: assert ('review_needed', None) == ('mapped', '130')\n  \n  At index 0 diff: 'review_needed' != 'mapped'\n  Use -v to get more diff"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.26,
+        "tests": null,
+        "failed": [
+          "tests\\test_account_map.py::test_nonstandard_row_keeps_raw_id_and_maps_only_on_exact_name",
+          "tests\\test_account_map.py::test_name_rule_does_not_apply_to_rows_with_a_different_standard_code",
+          "tests\\test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+        ],
+        "messages": [
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped",
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped",
+          "AssertionError: assert ('review_needed', None) == ('mapped', '130')\n  \n  At index 0 diff: 'review_needed' != 'mapped'\n  Use -v to get more diff"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "82e4305",
+      "file": "src/normalization/account_map.py",
+      "line": 40,
+      "operator": "core/ReplaceOrWithAnd",
+      "occurrence": 1,
+      "start_line": 40,
+      "end_line": 40,
+      "definition": "evidence",
+      "selected_tests": [
+        "tests/test_account_map.py::test_cash_flow_interest_adjustment_is_only_a_candidate",
+        "tests/test_account_map.py::test_empty_source_value_is_reported_as_empty_not_zero",
+        "tests/test_account_map.py::test_finance_costs_are_never_used_as_interest_expense",
+        "tests/test_account_map.py::test_multiple_candidates_are_not_auto_selected",
+        "tests/test_account_map.py::test_nonstandard_row_keeps_raw_id_and_maps_only_on_exact_name",
+        "tests/test_account_map.py::test_profit_loss_in_cash_flow_statement_is_not_net_income",
+        "tests/test_account_map.py::test_short_term_debt_is_not_summed_when_an_ambiguous_item_exists",
+        "tests/test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+      ],
+      "source_before": "\"rule\": rule.get(\"account_id\") or f\"name:{rule.get('nonstandard_name')}\", \"why\": rule.get(\"why\", \"\")}",
+      "changed_lines": [
+        40
+      ],
+      "on_target_line": true,
+      "source_after": "\"rule\": rule.get(\"account_id\") and f\"name:{rule.get('nonstandard_name')}\", \"why\": rule.get(\"why\", \"\")}",
+      "selected": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 0.74,
+        "tests": 8,
+        "failed": [],
+        "messages": []
+      },
+      "full": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 2.09,
+        "tests": null,
+        "failed": [],
+        "messages": []
+      },
+      "result": "SURVIVED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "82e4305",
+      "file": "src/normalization/account_map.py",
+      "line": 65,
+      "operator": "core/ReplaceComparisonOperator_NotEq_Eq",
+      "occurrence": 2,
+      "start_line": 65,
+      "end_line": 65,
+      "definition": "map_account",
+      "selected_tests": [
+        "tests/test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+      ],
+      "source_before": "if any(r[\"value_status\"] != \"parsed\" for r, _ in found):",
+      "changed_lines": [
+        65
+      ],
+      "on_target_line": true,
+      "source_after": "if any(r[\"value_status\"] == \"parsed\" for r, _ in found):",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.03,
+        "tests": 1,
+        "failed": [
+          "tests\\test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+        ],
+        "messages": [
+          "AssertionError: assert ('review_needed', None) == ('mapped', '130')\n  \n  At index 0 diff: 'review_needed' != 'mapped'\n  Use -v to get more diff"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 3.69,
+        "tests": null,
+        "failed": [
+          "tests\\test_account_map.py::test_short_term_debt_sums_explicit_current_components"
+        ],
+        "messages": [
+          "AssertionError: assert ('review_needed', None) == ('mapped', '130')\n  \n  At index 0 diff: 'review_needed' != 'mapped'\n  Use -v to get more diff"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "568ea41",
+      "file": "src/normalization/account_map.py",
+      "line": 60,
+      "operator": "core/ReplaceAndWithOr",
+      "occurrence": 2,
+      "start_line": 60,
+      "end_line": 60,
+      "definition": "map_account",
+      "selected_tests": [
+        "tests/test_account_map.py::test_bond_code_without_current_split_is_a_review_candidate",
+        "tests/test_account_map.py::test_current_liabilities_total_is_never_short_term_debt",
+        "tests/test_account_map.py::test_map_report_covers_every_required_account",
+        "tests/test_account_map.py::test_short_term_debt_includes_current_lease_liabilities",
+        "tests/test_account_map.py::test_short_term_debt_is_not_summed_when_an_ambiguous_item_exists",
+        "tests/test_account_map.py::test_total_and_its_components_together_are_not_double_counted"
+      ],
+      "source_before": "overlapping = [(total, parts) for total, parts in spec.get(\"overlaps\", []) if total in ids and ids & set(parts)]",
+      "changed_lines": [
+        60
+      ],
+      "on_target_line": true,
+      "source_after": "overlapping = [(total, parts) for total, parts in spec.get(\"overlaps\", []) if total in ids or ids & set(parts)]",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.56,
+        "tests": 6,
+        "failed": [
+          "tests\\test_account_map.py::test_short_term_debt_includes_current_lease_liabilities"
+        ],
+        "messages": [
+          "AssertionError: assert ('review_needed', None) == ('mapped', '137')\n  \n  At index 0 diff: 'review_needed' != 'mapped'\n  Use -v to get more diff"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.52,
+        "tests": null,
+        "failed": [
+          "tests\\test_account_map.py::test_short_term_debt_includes_current_lease_liabilities"
+        ],
+        "messages": [
+          "AssertionError: assert ('review_needed', None) == ('mapped', '137')\n  \n  At index 0 diff: 'review_needed' != 'mapped'\n  Use -v to get more diff"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "568ea41",
+      "file": "src/normalization/dart_facts.py",
+      "line": 57,
+      "operator": "core/NumberReplacer",
+      "occurrence": 4,
+      "start_line": 57,
+      "end_line": 57,
+      "definition": "period_days",
+      "selected_tests": [
+        "tests/test_account_map.py::test_annual_flag_uses_report_type_and_actual_period",
+        "tests/test_account_map.py::test_only_reversed_dates_are_errors",
+        "tests/test_dart_facts.py::test_balance_sheet_values_are_instants",
+        "tests/test_dart_facts.py::test_different_values_are_flagged_with_kind_not_called_restatement",
+        "tests/test_dart_facts.py::test_long_period_is_preserved_and_marked_for_review",
+        "tests/test_dart_facts.py::test_prior_year_column_maps_to_prior_period_not_report_year",
+        "tests/test_dart_facts.py::test_same_account_id_in_different_rows_is_not_merged",
+        "tests/test_dart_facts.py::test_same_values_across_reports_are_not_flagged",
+        "tests/test_dart_facts.py::test_unknown_period_is_marked_not_guessed"
+      ],
+      "source_before": "return (date.fromisoformat(end) - date.fromisoformat(start)).days + 1",
+      "changed_lines": [
+        57
+      ],
+      "on_target_line": true,
+      "source_after": "return (date.fromisoformat(end) - date.fromisoformat(start)).days + 2",
+      "selected": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 1.03,
+        "tests": 9,
+        "failed": [],
+        "messages": []
+      },
+      "full": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 1.24,
+        "tests": null,
+        "failed": [],
+        "messages": []
+      },
+      "result": "SURVIVED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "568ea41",
+      "file": "src/normalization/dart_facts.py",
+      "line": 62,
+      "operator": "core/ReplaceComparisonOperator_Lt_LtE",
+      "occurrence": 0,
+      "start_line": 62,
+      "end_line": 62,
+      "definition": "is_reversed_period",
+      "selected_tests": [
+        "tests/test_account_map.py::test_only_reversed_dates_are_errors",
+        "tests/test_dart_facts.py::test_fiscal_periods_are_read_from_filing_text",
+        "tests/test_dart_facts.py::test_reversed_dates_are_dropped_but_long_periods_are_kept"
+      ],
+      "source_before": "return date.fromisoformat(end) < date.fromisoformat(start)",
+      "changed_lines": [
+        62
+      ],
+      "on_target_line": true,
+      "source_after": "return date.fromisoformat(end) <= date.fromisoformat(start)",
+      "selected": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 1.06,
+        "tests": 3,
+        "failed": [],
+        "messages": []
+      },
+      "full": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 1.28,
+        "tests": null,
+        "failed": [],
+        "messages": []
+      },
+      "result": "SURVIVED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "568ea41",
+      "file": "src/normalization/dart_facts.py",
+      "line": 67,
+      "operator": "core/ReplaceComparisonOperator_Gt_GtE",
+      "occurrence": 0,
+      "start_line": 67,
+      "end_line": 67,
+      "definition": "is_unusually_long",
+      "selected_tests": [
+        "tests/test_account_map.py::test_only_reversed_dates_are_errors",
+        "tests/test_dart_facts.py::test_balance_sheet_values_are_instants",
+        "tests/test_dart_facts.py::test_different_values_are_flagged_with_kind_not_called_restatement",
+        "tests/test_dart_facts.py::test_long_period_is_preserved_and_marked_for_review",
+        "tests/test_dart_facts.py::test_prior_year_column_maps_to_prior_period_not_report_year",
+        "tests/test_dart_facts.py::test_same_account_id_in_different_rows_is_not_merged",
+        "tests/test_dart_facts.py::test_same_values_across_reports_are_not_flagged",
+        "tests/test_dart_facts.py::test_unknown_period_is_marked_not_guessed"
+      ],
+      "source_before": "return period_days(start, end) > MAX_REGULAR_DAYS",
+      "changed_lines": [
+        67
+      ],
+      "on_target_line": true,
+      "source_after": "return period_days(start, end) >= MAX_REGULAR_DAYS",
+      "selected": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 0.9,
+        "tests": 8,
+        "failed": [],
+        "messages": []
+      },
+      "full": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 2.11,
+        "tests": null,
+        "failed": [],
+        "messages": []
+      },
+      "result": "SURVIVED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "568ea41",
+      "file": "src/normalization/dart_facts.py",
+      "line": 73,
+      "operator": "core/ReplaceComparisonOperator_NotEq_Eq",
+      "occurrence": 0,
+      "start_line": 73,
+      "end_line": 73,
+      "definition": "is_annual_period",
+      "selected_tests": [
+        "tests/test_account_map.py::test_annual_flag_uses_report_type_and_actual_period",
+        "tests/test_dart_facts.py::test_balance_sheet_values_are_instants",
+        "tests/test_dart_facts.py::test_different_values_are_flagged_with_kind_not_called_restatement",
+        "tests/test_dart_facts.py::test_long_period_is_preserved_and_marked_for_review",
+        "tests/test_dart_facts.py::test_prior_year_column_maps_to_prior_period_not_report_year",
+        "tests/test_dart_facts.py::test_same_account_id_in_different_rows_is_not_merged",
+        "tests/test_dart_facts.py::test_same_values_across_reports_are_not_flagged",
+        "tests/test_dart_facts.py::test_unknown_period_is_marked_not_guessed"
+      ],
+      "source_before": "if reprt_code != ANNUAL_REPORT_CODE:",
+      "changed_lines": [
+        73
+      ],
+      "on_target_line": true,
+      "source_after": "if reprt_code == ANNUAL_REPORT_CODE:",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 3.66,
+        "tests": 8,
+        "failed": [
+          "tests\\test_account_map.py::test_annual_flag_uses_report_type_and_actual_period"
+        ],
+        "messages": [
+          "AssertionError: assert False\n +  where False = is_annual_period('2024-01-01', '2024-12-31', '11011')"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.78,
+        "tests": null,
+        "failed": [
+          "tests\\test_account_map.py::test_annual_flag_uses_report_type_and_actual_period"
+        ],
+        "messages": [
+          "AssertionError: assert False\n +  where False = is_annual_period('2024-01-01', '2024-12-31', '11011')"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "568ea41",
+      "file": "src/normalization/dart_facts.py",
+      "line": 74,
+      "operator": "core/ReplaceFalseWithTrue",
+      "occurrence": 0,
+      "start_line": 74,
+      "end_line": 74,
+      "definition": "is_annual_period",
+      "selected_tests": [
+        "tests/test_account_map.py::test_annual_flag_uses_report_type_and_actual_period"
+      ],
+      "source_before": "return False",
+      "changed_lines": [
+        74
+      ],
+      "on_target_line": true,
+      "source_after": "return True",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.49,
+        "tests": 1,
+        "failed": [
+          "tests\\test_account_map.py::test_annual_flag_uses_report_type_and_actual_period"
+        ],
+        "messages": [
+          "AssertionError: assert not True\n +  where True = is_annual_period('2024-01-01', '2024-12-31', '11012')"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.62,
+        "tests": null,
+        "failed": [
+          "tests\\test_account_map.py::test_annual_flag_uses_report_type_and_actual_period"
+        ],
+        "messages": [
+          "AssertionError: assert not True\n +  where True = is_annual_period('2024-01-01', '2024-12-31', '11012')"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "568ea41",
+      "file": "src/normalization/dart_facts.py",
+      "line": 77,
+      "operator": "core/NumberReplacer",
+      "occurrence": 6,
+      "start_line": 77,
+      "end_line": 77,
+      "definition": "is_annual_period",
+      "selected_tests": [
+        "tests/test_account_map.py::test_annual_flag_uses_report_type_and_actual_period",
+        "tests/test_dart_facts.py::test_balance_sheet_values_are_instants",
+        "tests/test_dart_facts.py::test_different_values_are_flagged_with_kind_not_called_restatement",
+        "tests/test_dart_facts.py::test_long_period_is_preserved_and_marked_for_review",
+        "tests/test_dart_facts.py::test_prior_year_column_maps_to_prior_period_not_report_year",
+        "tests/test_dart_facts.py::test_same_account_id_in_different_rows_is_not_merged",
+        "tests/test_dart_facts.py::test_same_values_across_reports_are_not_flagged",
+        "tests/test_dart_facts.py::test_unknown_period_is_marked_not_guessed"
+      ],
+      "source_before": "twelve_months = e == s.replace(year=s.year + 1) - timedelta(days=1)",
+      "changed_lines": [
+        77
+      ],
+      "on_target_line": true,
+      "source_after": "twelve_months = e == s.replace(year=s.year + 2) - timedelta(days=1)",
+      "selected": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 0.97,
+        "tests": 8,
+        "failed": [],
+        "messages": []
+      },
+      "full": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 1.35,
+        "tests": null,
+        "failed": [],
+        "messages": []
+      },
+      "result": "SURVIVED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "568ea41",
+      "file": "src/normalization/dart_facts.py",
+      "line": 80,
+      "operator": "core/NumberReplacer",
+      "occurrence": 10,
+      "start_line": 80,
+      "end_line": 80,
+      "definition": "is_annual_period",
+      "selected_tests": [
+        "tests/test_account_map.py::test_annual_flag_uses_report_type_and_actual_period",
+        "tests/test_dart_facts.py::test_balance_sheet_values_are_instants",
+        "tests/test_dart_facts.py::test_different_values_are_flagged_with_kind_not_called_restatement",
+        "tests/test_dart_facts.py::test_long_period_is_preserved_and_marked_for_review",
+        "tests/test_dart_facts.py::test_prior_year_column_maps_to_prior_period_not_report_year",
+        "tests/test_dart_facts.py::test_same_account_id_in_different_rows_is_not_merged",
+        "tests/test_dart_facts.py::test_same_values_across_reports_are_not_flagged",
+        "tests/test_dart_facts.py::test_unknown_period_is_marked_not_guessed"
+      ],
+      "source_before": "return twelve_months or 364 <= period_days(start, end) <= MAX_REGULAR_DAYS",
+      "changed_lines": [
+        80
+      ],
+      "on_target_line": true,
+      "source_after": "return twelve_months or 365 <= period_days(start, end) <= MAX_REGULAR_DAYS",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.98,
+        "tests": 8,
+        "failed": [
+          "tests\\test_account_map.py::test_annual_flag_uses_report_type_and_actual_period"
+        ],
+        "messages": [
+          "AssertionError: assert False\n +  where False = is_annual_period('2024-01-01', '2024-12-29', '11011')"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.37,
+        "tests": null,
+        "failed": [
+          "tests\\test_account_map.py::test_annual_flag_uses_report_type_and_actual_period"
+        ],
+        "messages": [
+          "AssertionError: assert False\n +  where False = is_annual_period('2024-01-01', '2024-12-29', '11011')"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "b67e806",
+      "file": "src/normalization/account_map.py",
+      "line": 28,
+      "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+      "occurrence": 0,
+      "start_line": 28,
+      "end_line": 28,
+      "definition": "rule_matches",
+      "selected_tests": [
+        "tests/test_account_map.py::test_bond_code_without_current_split_is_a_review_candidate",
+        "tests/test_account_map.py::test_current_liabilities_total_is_never_short_term_debt",
+        "tests/test_account_map.py::test_short_term_debt_includes_current_lease_liabilities",
+        "tests/test_account_map.py::test_short_term_debt_is_not_summed_when_an_ambiguous_item_exists",
+        "tests/test_account_map.py::test_total_and_its_components_together_are_not_double_counted",
+        "tests/test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not",
+        "tests/test_bs_sections.py::test_bond_with_unconfirmed_section_is_a_review_candidate"
+      ],
+      "source_before": "if rule[\"section\"] == \"unconfirmed\":",
+      "changed_lines": [
+        28
+      ],
+      "on_target_line": true,
+      "source_after": "if rule[\"section\"] != \"unconfirmed\":",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.52,
+        "tests": 7,
+        "failed": [
+          "tests\\test_account_map.py::test_bond_code_without_current_split_is_a_review_candidate",
+          "tests\\test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not",
+          "tests\\test_bs_sections.py::test_bond_with_unconfirmed_section_is_a_review_candidate"
+        ],
+        "messages": [
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped",
+          "AssertionError: assert ('mapped', '60') == ('mapped', '100')\n  \n  At index 1 diff: '60' != '100'\n  Use -v to get more diff",
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.55,
+        "tests": null,
+        "failed": [
+          "tests\\test_account_map.py::test_bond_code_without_current_split_is_a_review_candidate",
+          "tests\\test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not",
+          "tests\\test_bs_sections.py::test_bond_with_unconfirmed_section_is_a_review_candidate"
+        ],
+        "messages": [
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped",
+          "AssertionError: assert ('mapped', '60') == ('mapped', '100')\n  \n  At index 1 diff: '60' != '100'\n  Use -v to get more diff",
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "b67e806",
+      "file": "src/normalization/account_map.py",
+      "line": 30,
+      "operator": "core/ReplaceFalseWithTrue",
+      "occurrence": 2,
+      "start_line": 30,
+      "end_line": 30,
+      "definition": "rule_matches",
+      "selected_tests": [
+        "tests/test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not",
+        "tests/test_bs_sections.py::test_bond_with_unconfirmed_section_is_a_review_candidate"
+      ],
+      "source_before": "return False",
+      "changed_lines": [
+        30
+      ],
+      "on_target_line": true,
+      "source_after": "return True",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.42,
+        "tests": 2,
+        "failed": [
+          "tests\\test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not"
+        ],
+        "messages": [
+          "AssertionError: assert ('review_needed', None) == ('mapped', '100')\n  \n  At index 0 diff: 'review_needed' != 'mapped'\n  Use -v to get more diff"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.39,
+        "tests": null,
+        "failed": [
+          "tests\\test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not"
+        ],
+        "messages": [
+          "AssertionError: assert ('review_needed', None) == ('mapped', '100')\n  \n  At index 0 diff: 'review_needed' != 'mapped'\n  Use -v to get more diff"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "b67e806",
+      "file": "src/normalization/account_map.py",
+      "line": 31,
+      "operator": "core/ReplaceAndWithOr",
+      "occurrence": 1,
+      "start_line": 31,
+      "end_line": 31,
+      "definition": "rule_matches",
+      "selected_tests": [
+        "tests/test_account_map.py::test_bond_code_without_current_split_is_a_review_candidate",
+        "tests/test_account_map.py::test_current_liabilities_total_is_never_short_term_debt",
+        "tests/test_account_map.py::test_short_term_debt_includes_current_lease_liabilities",
+        "tests/test_account_map.py::test_short_term_debt_is_not_summed_when_an_ambiguous_item_exists",
+        "tests/test_account_map.py::test_total_and_its_components_together_are_not_double_counted",
+        "tests/test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not",
+        "tests/test_bs_sections.py::test_bond_with_unconfirmed_section_is_a_review_candidate"
+      ],
+      "source_before": "elif not (row.get(\"bs_section\") == rule[\"section\"] and row.get(\"bs_section_confirmed\")):",
+      "changed_lines": [
+        31
+      ],
+      "on_target_line": true,
+      "source_after": "elif not (row.get(\"bs_section\") == rule[\"section\"] or row.get(\"bs_section_confirmed\")):",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.52,
+        "tests": 7,
+        "failed": [
+          "tests\\test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not"
+        ],
+        "messages": [
+          "AssertionError: assert ('mapped', '400') == ('mapped', '100')\n  \n  At index 1 diff: '400' != '100'\n  Use -v to get more diff"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.38,
+        "tests": null,
+        "failed": [
+          "tests\\test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not"
+        ],
+        "messages": [
+          "AssertionError: assert ('mapped', '400') == ('mapped', '100')\n  \n  At index 1 diff: '400' != '100'\n  Use -v to get more diff"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "b67e806",
+      "file": "src/normalization/account_map.py",
+      "line": 32,
+      "operator": "core/ReplaceFalseWithTrue",
+      "occurrence": 3,
+      "start_line": 32,
+      "end_line": 32,
+      "definition": "rule_matches",
+      "selected_tests": [
+        "tests/test_account_map.py::test_bond_code_without_current_split_is_a_review_candidate",
+        "tests/test_account_map.py::test_current_liabilities_total_is_never_short_term_debt",
+        "tests/test_account_map.py::test_short_term_debt_includes_current_lease_liabilities",
+        "tests/test_account_map.py::test_short_term_debt_is_not_summed_when_an_ambiguous_item_exists",
+        "tests/test_account_map.py::test_total_and_its_components_together_are_not_double_counted",
+        "tests/test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not",
+        "tests/test_bs_sections.py::test_bond_with_unconfirmed_section_is_a_review_candidate"
+      ],
+      "source_before": "return False",
+      "changed_lines": [
+        32
+      ],
+      "on_target_line": true,
+      "source_after": "return True",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.47,
+        "tests": 7,
+        "failed": [
+          "tests\\test_account_map.py::test_current_liabilities_total_is_never_short_term_debt",
+          "tests\\test_account_map.py::test_short_term_debt_includes_current_lease_liabilities",
+          "tests\\test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not"
+        ],
+        "messages": [
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped",
+          "AssertionError: assert ('mapped', '1633') == ('mapped', '137')\n  \n  At index 1 diff: '1633' != '137'\n  Use -v to get more diff",
+          "AssertionError: assert ('mapped', '23300') == ('mapped', '100')\n  \n  At index 1 diff: '23300' != '100'\n  Use -v to get more diff"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.33,
+        "tests": null,
+        "failed": [
+          "tests\\test_account_map.py::test_current_liabilities_total_is_never_short_term_debt",
+          "tests\\test_account_map.py::test_short_term_debt_includes_current_lease_liabilities",
+          "tests\\test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not"
+        ],
+        "messages": [
+          "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped",
+          "AssertionError: assert ('mapped', '1633') == ('mapped', '137')\n  \n  At index 1 diff: '1633' != '137'\n  Use -v to get more diff",
+          "AssertionError: assert ('mapped', '23300') == ('mapped', '100')\n  \n  At index 1 diff: '23300' != '100'\n  Use -v to get more diff"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "b67e806",
+      "file": "src/normalization/bs_sections.py",
+      "line": 23,
+      "operator": "core/ReplaceOrWithAnd",
+      "occurrence": 0,
+      "start_line": 23,
+      "end_line": 23,
+      "definition": "is_held_for_sale",
+      "selected_tests": [
+        "tests/test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not",
+        "tests/test_bs_sections.py::test_bond_with_unconfirmed_section_is_a_review_candidate",
+        "tests/test_bs_sections.py::test_comparison_key_separates_current_and_noncurrent_bonds",
+        "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again",
+        "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence",
+        "tests/test_bs_sections.py::test_negative_held_for_sale_balance_is_not_adjusted",
+        "tests/test_bs_sections.py::test_no_held_for_sale_means_reported_equals_adjusted",
+        "tests/test_bs_sections.py::test_section_is_confirmed_only_when_items_sum_to_subtotal"
+      ],
+      "source_before": "return row[\"account_id\"] in HFS_ASSET_IDS | HFS_LIABILITY_IDS or str(row[\"account_nm\"]).strip().startswith(\"매각예정\")",
+      "changed_lines": [
+        23
+      ],
+      "on_target_line": true,
+      "source_after": "return row[\"account_id\"] in HFS_ASSET_IDS | HFS_LIABILITY_IDS and str(row[\"account_nm\"]).strip().startswith(\"매각예정\")",
+      "selected": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 0.47,
+        "tests": 8,
+        "failed": [],
+        "messages": []
+      },
+      "full": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 2.21,
+        "tests": null,
+        "failed": [],
+        "messages": []
+      },
+      "result": "SURVIVED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "b67e806",
+      "file": "src/normalization/bs_sections.py",
+      "line": 27,
+      "operator": "core/NumberReplacer",
+      "occurrence": 0,
+      "start_line": 27,
+      "end_line": 27,
+      "definition": "_value",
+      "selected_tests": [
+        "tests/test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not",
+        "tests/test_bs_sections.py::test_bond_with_unconfirmed_section_is_a_review_candidate",
+        "tests/test_bs_sections.py::test_comparison_key_separates_current_and_noncurrent_bonds",
+        "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again",
+        "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence",
+        "tests/test_bs_sections.py::test_negative_held_for_sale_balance_is_not_adjusted",
+        "tests/test_bs_sections.py::test_no_held_for_sale_means_reported_equals_adjusted",
+        "tests/test_bs_sections.py::test_section_is_confirmed_only_when_items_sum_to_subtotal"
+      ],
+      "source_before": "return Decimal(row[\"value\"]) if row[\"value_status\"] == \"parsed\" else Decimal(0)",
+      "changed_lines": [
+        27
+      ],
+      "on_target_line": true,
+      "source_after": "return Decimal(row[\"value\"]) if row[\"value_status\"] == \"parsed\" else Decimal( 1)",
+      "selected": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 1.07,
+        "tests": 8,
+        "failed": [],
+        "messages": []
+      },
+      "full": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 1.55,
+        "tests": null,
+        "failed": [],
+        "messages": []
+      },
+      "result": "SURVIVED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "b67e806",
+      "file": "src/normalization/bs_sections.py",
+      "line": 35,
+      "operator": "core/ReplaceFalseWithTrue",
+      "occurrence": 0,
+      "start_line": 35,
+      "end_line": 35,
+      "definition": "annotate_sections",
+      "selected_tests": [
+        "tests/test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not",
+        "tests/test_bs_sections.py::test_bond_with_unconfirmed_section_is_a_review_candidate",
+        "tests/test_bs_sections.py::test_comparison_key_separates_current_and_noncurrent_bonds",
+        "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again",
+        "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence",
+        "tests/test_bs_sections.py::test_negative_held_for_sale_balance_is_not_adjusted",
+        "tests/test_bs_sections.py::test_no_held_for_sale_means_reported_equals_adjusted",
+        "tests/test_bs_sections.py::test_section_is_confirmed_only_when_items_sum_to_subtotal"
+      ],
+      "source_before": "r.setdefault(\"bs_section_confirmed\", False)",
+      "changed_lines": [
+        35
+      ],
+      "on_target_line": true,
+      "source_after": "r.setdefault(\"bs_section_confirmed\", True)",
+      "selected": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 0.38,
+        "tests": 8,
+        "failed": [],
+        "messages": []
+      },
+      "full": {
+        "status": "SURVIVED",
+        "kind": null,
+        "seconds": 1.28,
+        "tests": null,
+        "failed": [],
+        "messages": []
+      },
+      "result": "SURVIVED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    },
+    {
+      "commit": "b67e806",
+      "file": "src/normalization/bs_sections.py",
+      "line": 36,
+      "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+      "occurrence": 1,
+      "start_line": 36,
+      "end_line": 36,
+      "definition": "annotate_sections",
+      "selected_tests": [
+        "tests/test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not",
+        "tests/test_bs_sections.py::test_bond_with_unconfirmed_section_is_a_review_candidate",
+        "tests/test_bs_sections.py::test_comparison_key_separates_current_and_noncurrent_bonds",
+        "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again",
+        "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence",
+        "tests/test_bs_sections.py::test_negative_held_for_sale_balance_is_not_adjusted",
+        "tests/test_bs_sections.py::test_no_held_for_sale_means_reported_equals_adjusted",
+        "tests/test_bs_sections.py::test_section_is_confirmed_only_when_items_sum_to_subtotal"
+      ],
+      "source_before": "if r[\"sj_div\"] == \"BS\":",
+      "changed_lines": [
+        36
+      ],
+      "on_target_line": true,
+      "source_after": "if r[\"sj_div\"] != \"BS\":",
+      "selected": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 0.47,
+        "tests": 8,
+        "failed": [
+          "tests\\test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not",
+          "tests\\test_bs_sections.py::test_comparison_key_separates_current_and_noncurrent_bonds",
+          "tests\\test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again",
+          "tests\\test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence",
+          "tests\\test_bs_sections.py::test_section_is_confirmed_only_when_items_sum_to_subtotal"
+        ],
+        "messages": [
+          "AssertionError: assert ('review_needed', None) == ('mapped', '100')\n  \n  At index 0 diff: 'review_needed' != 'mapped'\n  Use -v to get more diff",
+          "StopIteration",
+          "AssertionError: assert ('확인 필요', '120', None) == ('포함', '120', '120')\n  \n  At index 0 diff: '확인 필요' != '포함'\n  Use -v to get more diff"
+        ]
+      },
+      "full": {
+        "status": "KILLED",
+        "kind": "assertion",
+        "seconds": 1.39,
+        "tests": null,
+        "failed": [
+          "tests\\test_bs_sections.py::test_section_is_confirmed_only_when_items_sum_to_subtotal",
+          "tests\\test_bs_sections.py::test_comparison_key_separates_current_and_noncurrent_bonds",
+          "tests\\test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not",
+          "tests\\test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again",
+          "tests\\test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence"
+        ],
+        "messages": [
+          "StopIteration",
+          "StopIteration",
+          "AssertionError: assert ('review_needed', None) == ('mapped', '100')\n  \n  At index 0 diff: 'review_needed' != 'mapped'\n  Use -v to get more diff"
+        ]
+      },
+      "result": "KILLED",
+      "selected_agrees_with_full": true,
+      "restored": true
+    }
+  ]
+}

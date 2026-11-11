@@ -1,6 +1,6 @@
 # ReleaseGuard — 현재 상태와 로드맵
 
-기준일: 2026-11-11 · 버전 0.2.0 · 판정 규칙 v3.2 · 테스트 194개 통과 · **Stage 1 기술 MVP 완료, Stage 1.7 완료** ([보고서 #12](eval/20261111_eval_report_12.md))
+기준일: 2026-11-11 · 버전 0.2.0 · 판정 규칙 v3.2 · 테스트 194개 통과 · **Stage 1 기술 MVP 완료, Stage 1.7 완료** ([보고서 #12](eval/20261111_eval_report_12.md)) · **Stage 2.0 spike 완료 → Go** ([#13](eval/20261111_eval_report_13.md))
 
 Stage 1 종료 심사: [Eval 보고서 #11](eval/20261111_eval_report_11.md). **제품 수준의 판정 구분력·실제 사용자 효용은 아직 미검증**.
 
@@ -109,6 +109,7 @@ base...head
 | 11-10 | Test Suggestion Validator, #10 | skip·이름 충돌을 결정적으로 표시 |
 | 11-11 | Stage 1 마무리 | 문서 정리 (README·usage·보고서 정리). 블로그는 건너뜀 |
 | 11-11 | Stage 1 종료 재평가, #11 | 코드 변경 `need: no`의 11/12 경고; test-only·삭제 경계 사례 확인. Stage 1.7 신뢰성 보완 필요 |
+| 11-11 | **2.0 Mutation spike**, #13 | Cosmic Ray 8.9.0 (mutmut은 Windows 거부). Predict 5커밋·mutant 40: 지정 줄 40/40, 저장소 보존, 관련 테스트만 = 전체 40/40, KILLED 27·SURVIVED 13, mutant당 0.72초(관련)·1.33초(전체). Go, 가치는 2.1 |
 | 11-11 | **1.7 Reliability Gate (v3.2)**, #12 | T03·N07, coverage 실제 버전·위치, `nodeid_map`. 심은 사례 26/26·6/6, 58커밋 판정 변화 0 (T03 추가 7, 모두 이미 REVIEW·BLOCK), 과잉 11/12 그대로 |
 
 자세한 근거: [eval/reports_summary.md](eval/reports_summary.md), [problem.md](problem.md)의 "v1에서 바뀐 점".
