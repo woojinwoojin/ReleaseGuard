@@ -91,7 +91,7 @@ for sha, group in by_commit.items():
 for m in review["mutants"]:
     sha, loc = m["where"].split()[:2]
     path, line = loc.rsplit(":", 1)
-    out["coverage_a"].append({"no": m["no"], "commit": sha, "path": path, "line": int(line), **coverage_status(sha, path, int(line))})
+    out["coverage_a"].append({"no": m["mutant"], "commit": sha, "path": path, "line": int(line), **coverage_status(sha, path, int(line))})
 
 out["repo_preserved"] = before == {"head": run_git(repo, "rev-parse", "HEAD").strip(), "status": run_git(repo, "status", "--porcelain")}
 out["seconds"] = round(time.perf_counter() - started, 1)

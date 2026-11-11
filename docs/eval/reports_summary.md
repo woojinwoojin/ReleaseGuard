@@ -1,4 +1,4 @@
-# ReleaseGuard 평가 보고서 정리 (#1~#13)
+# ReleaseGuard 평가 보고서 정리 (#1~#14)
 
 기준: 2026-11-11 · 기간 2026-11-03 ~ 11-11 · 원문은 각 보고서 링크
 
@@ -19,6 +19,7 @@
 | [11](20261111_eval_report_11.md) | 11-11 | Stage 1 종료 심사, SAFE 경계 사례, 코드 변경 경고율 | 기술 MVP 종료; 코드 변경 `need:no` 11/12 경고, 1.7 T03 후보 발견 | 1.7 신뢰성 보완 → 2.0 Mutation spike |
 | [12](20261111_eval_report_12.md) | 11-11 | 1.7 Reliability Gate (v3.2): T03·N07, coverage 버전·위치, node id | 심은 사례 26/26·6/6, 58커밋 판정 변화 0, T03 추가 7 (모두 data/ 없음 skip, 이미 REVIEW·BLOCK), 과잉 11/12 그대로 | Stage 2.0 Mutation spike |
 | [13](20261111_eval_report_13.md) | 11-11 | 2.0 Mutation spike (Cosmic Ray, Predict 5커밋·40개) | 지정 줄 40/40, 저장소 보존, 관련만 = 전체 40/40, KILLED 27·SURVIVED 13 | Go → 2.1 Value Eval |
+| [14](20261111_eval_report_14.md) | 11-11 | 2.1 Mutation Value Eval (SURVIVED 13개 분류 + SZZ 결함 줄 vs 대조군 + 테스트 추가) | ACTIONABLE 4건(coverage가 못 본 줄), SZZ vs 대조군 차이 없음 | 사전 기준상 GO → 2.2는 보고서만 |
 
 ## 시험장
 
@@ -165,6 +166,7 @@
 | #11 | `out/eval/v17/` 재집계·임시 저장소 재현, 스크립트 `docs/eval/20261111_explore/` |
 | #12 | `out/eval/v18/`, 비교 `docs/eval/20261111_explore/compare_v17_v18.py` |
 | #13 | `docs/eval/v20_spike/`, 코드 `spikes/stage2_0/` |
+| #14 | `docs/eval/v21/`, 코드 `spikes/stage2_1/`, 사례·분류 `eval/*_2_1.yaml` |
 
 
 ## 7. Stage 1 종료 심사 (#11)
@@ -185,3 +187,11 @@
 - 관련 테스트만 돌린 결과가 전체 실행과 40/40 같았다.
 - KILLED 27(assertion 26), SURVIVED 13.
 - **Go**. 다만 SURVIVED가 실제 테스트 부족인지는 2.1에서 본다.
+
+## 10. Stage 2.1 Mutation Value Eval (#14)
+
+[보고서 #14](20261111_eval_report_14.md): 사전에 고정한 기준으로 평가했다.
+- **평가 A** (2.0 SURVIVED 13개, 탐색): 의미 있는 변형 10개. 규칙으로 고른 4개에 테스트를 추가했고, 4개 모두 원본 통과·mutant 실패로 **ACTIONABLE_GAP**이 됐다. 4개 줄은 모두 coverage가 '검증됨'으로 보던 줄이다.
+- **평가 B** (SZZ 결함 줄 3 vs 대조군 3, 확인): SURVIVED 비율이 같았다 (2/6 vs 2/6). mutation은 "빠진 조건"형 결함에 닿지 못한다.
+- **오라클 위험**: #38은 원래 동작이 결함이었다. 이 mutant를 잡는 테스트는 결함을 정답으로 고정한다.
+- 결론: 사전 기준상 GO. 다만 "테스트 보강 후보를 찾는다"까지만 지지되고, "결함 위치를 알려준다"는 지지되지 않는다. 분류는 Claude 초안이다.

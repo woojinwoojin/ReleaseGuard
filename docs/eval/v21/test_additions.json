@@ -1,0 +1,206 @@
+{
+ "repo_preserved": true,
+ "results": [
+  {
+   "id": "T1",
+   "source": "2.0 #2",
+   "commit": "fc58c0e",
+   "path": "src/collectors/dart.py",
+   "line": 56,
+   "operator": "core/ReplaceAndWithOr",
+   "occurrence": 0,
+   "test_file": "tests/test_rg21_t1_zip.py",
+   "outcome": "DETECTED",
+   "original_new_test": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 0.64,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null
+   },
+   "mutant_new_test": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.6,
+    "failed": [
+     "tests/test_rg21_t1_zip.py::test_corrupted_zip_member_is_not_valid",
+     "tests/test_rg21_t1_zip.py::test_empty_zip_is_not_valid"
+    ],
+    "kinds": {
+     "tests/test_rg21_t1_zip.py::test_corrupted_zip_member_is_not_valid": "assertion",
+     "tests/test_rg21_t1_zip.py::test_empty_zip_is_not_valid": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert not True\n +  where True = is_valid_zip(b'PK\\x03\\x04\\x14\\x00\\x00\\x00\\x00\\x00\\x0b\\x80k]\\x86!\\x06\\x1c\\x1b\\x00\\x00\\x00\\x1b\\x00\\x00\\x00\\x12\\x0",
+     "AssertionError: assert not True\n +  where True = is_valid_zip(b'PK\\x05\\x06\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00\\x00')\n +    where"
+    ],
+    "tail": null
+   },
+   "original_full": "SURVIVED",
+   "mutant_full": "KILLED",
+   "source_before": "return bool(z.namelist()) and z.testzip() is None",
+   "source_after": "return bool(z.namelist()) or z.testzip() is None"
+  },
+  {
+   "id": "T2",
+   "source": "2.0 #23",
+   "commit": "82e4305",
+   "path": "src/normalization/account_map.py",
+   "line": 40,
+   "operator": "core/ReplaceOrWithAnd",
+   "occurrence": 1,
+   "test_file": "tests/test_rg21_t2_evidence.py",
+   "outcome": "DETECTED",
+   "original_new_test": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 0.44,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null
+   },
+   "mutant_new_test": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.45,
+    "failed": [
+     "tests/test_rg21_t2_evidence.py::test_evidence_names_the_rule_that_matched"
+    ],
+    "kinds": {
+     "tests/test_rg21_t2_evidence.py::test_evidence_names_the_rule_that_matched": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ['name:None', None] == ['ifrs-full_I... 'name:단기차입금']\n  \n  At index 0 diff: 'name:None' != 'ifrs-full_Inventories'\n  Use -v to get more d"
+    ],
+    "tail": null
+   },
+   "original_full": "SURVIVED",
+   "mutant_full": "KILLED",
+   "source_before": "\"rule\": rule.get(\"account_id\") or f\"name:{rule.get('nonstandard_name')}\", \"why\": rule.get(\"why\", \"\")}",
+   "source_after": "\"rule\": rule.get(\"account_id\") and f\"name:{rule.get('nonstandard_name')}\", \"why\": rule.get(\"why\", \"\")}"
+  },
+  {
+   "id": "T3",
+   "source": "2.0 #26",
+   "commit": "568ea41",
+   "path": "src/normalization/dart_facts.py",
+   "line": 57,
+   "operator": "core/NumberReplacer",
+   "occurrence": 4,
+   "test_file": "tests/test_rg21_t3_period.py",
+   "outcome": "DETECTED",
+   "original_new_test": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 0.53,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null
+   },
+   "mutant_new_test": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.4,
+    "failed": [
+     "tests/test_rg21_t3_period.py::test_53_week_period_is_regular_and_annual",
+     "tests/test_rg21_t3_period.py::test_calendar_year_has_365_days"
+    ],
+    "kinds": {
+     "tests/test_rg21_t3_period.py::test_53_week_period_is_regular_and_annual": "assertion",
+     "tests/test_rg21_t3_period.py::test_calendar_year_has_365_days": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 372 == 371\n +  where 372 = period_days('2025-01-01', '2026-01-06')",
+     "AssertionError: assert 366 == 365\n +  where 366 = period_days('2025-01-01', '2025-12-31')"
+    ],
+    "tail": null
+   },
+   "original_full": "SURVIVED",
+   "mutant_full": "KILLED",
+   "source_before": "return (date.fromisoformat(end) - date.fromisoformat(start)).days + 1",
+   "source_after": "return (date.fromisoformat(end) - date.fromisoformat(start)).days + 2"
+  },
+  {
+   "id": "T4",
+   "source": "2.0 #37",
+   "commit": "b67e806",
+   "path": "src/normalization/bs_sections.py",
+   "line": 23,
+   "operator": "core/ReplaceOrWithAnd",
+   "occurrence": 0,
+   "test_file": "tests/test_rg21_t4_hfs.py",
+   "outcome": "DETECTED",
+   "original_new_test": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 1.43,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null
+   },
+   "mutant_new_test": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.46,
+    "failed": [
+     "tests/test_rg21_t4_hfs.py::test_held_for_sale_by_standard_id_or_by_name"
+    ],
+    "kinds": {
+     "tests/test_rg21_t4_hfs.py::test_held_for_sale_by_standard_id_or_by_name": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert False\n +  where False = is_held_for_sale({'row_id': 's#1#당기', 'snapshot_id': 's', 'source_column': '당기', 'sj_div': 'BS', ...})"
+    ],
+    "tail": null
+   },
+   "original_full": "SURVIVED",
+   "mutant_full": "KILLED",
+   "source_before": "return row[\"account_id\"] in HFS_ASSET_IDS | HFS_LIABILITY_IDS or str(row[\"account_nm\"]).strip().startswith(\"매각예정\")",
+   "source_after": "return row[\"account_id\"] in HFS_ASSET_IDS | HFS_LIABILITY_IDS and str(row[\"account_nm\"]).strip().startswith(\"매각예정\")"
+  },
+  {
+   "id": "T5",
+   "source": "B D2[0]",
+   "commit": "b67e806",
+   "path": "src/normalization/bs_sections.py",
+   "line": 51,
+   "operator": "core/NumberReplacer",
+   "occurrence": 8,
+   "test_file": "tests/test_rg21_t5_section.py",
+   "outcome": "DETECTED",
+   "original_new_test": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 0.63,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null
+   },
+   "mutant_new_test": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.53,
+    "failed": [
+     "tests/test_rg21_t5_section.py::test_section_confirmed_when_held_for_sale_of_one_won_closes_the_sum"
+    ],
+    "kinds": {
+     "tests/test_rg21_t5_section.py::test_section_confirmed_when_held_for_sale_of_one_won_closes_the_sum": "assertion"
+    },
+    "messages": [
+     "assert False is True"
+    ],
+    "tail": null
+   },
+   "original_full": "SURVIVED",
+   "mutant_full": "KILLED",
+   "source_before": "confirmed = regular == total or (hfs != 0 and regular + hfs == total)",
+   "source_after": "confirmed = regular == total or (hfs != 1 and regular + hfs == total)"
+  }
+ ]
+}

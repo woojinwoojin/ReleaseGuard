@@ -1,0 +1,812 @@
+{
+ "cases": [
+  {
+   "id": "D1",
+   "group": "szz",
+   "commit": "568ea41",
+   "path": "src/normalization/manual.py",
+   "line": 54,
+   "pair_of": null,
+   "baseline_full": "passed",
+   "selected_tests": [
+    "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit",
+    "tests/test_manual.py::test_manual_value_that_disagrees_with_api_value_is_flagged"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "branch_gap": false
+   },
+   "mutants": [
+    {
+     "operator": "core/ReplaceAndWithOr",
+     "occurrence": 5,
+     "family": "boolean",
+     "changed_lines": [
+      54
+     ],
+     "on_target_line": true,
+     "source_before": "if result[\"status\"] == \"mapped\" and Decimal(result[\"value\"]) != manual_value:",
+     "source_after": "if result[\"status\"] == \"mapped\" or Decimal(result[\"value\"]) != manual_value:",
+     "selected": {
+      "status": "KILLED",
+      "kind": "exception",
+      "seconds": 0.91,
+      "failed": [
+       "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit"
+      ],
+      "kinds": {
+       "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit": "exception"
+      },
+      "messages": [
+       "TypeError: conversion from NoneType to Decimal is not supported"
+      ],
+      "tail": null
+     },
+     "full": {
+      "status": "KILLED",
+      "kind": "exception",
+      "seconds": 1.4,
+      "failed": [
+       "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit"
+      ],
+      "kinds": {
+       "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit": "exception"
+      },
+      "messages": [
+       "TypeError: conversion from NoneType to Decimal is not supported"
+      ],
+      "tail": null
+     },
+     "result": "KILLED",
+     "agreement": {
+      "status_same": true,
+      "kind_same": true,
+      "failed_ids_same": true,
+      "full_failures_outside_selection": [],
+      "exact": true
+     }
+    },
+    {
+     "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+     "occurrence": 9,
+     "family": "comparison",
+     "changed_lines": [
+      54
+     ],
+     "on_target_line": true,
+     "source_before": "if result[\"status\"] == \"mapped\" and Decimal(result[\"value\"]) != manual_value:",
+     "source_after": "if result[\"status\"] != \"mapped\" and Decimal(result[\"value\"]) != manual_value:",
+     "selected": {
+      "status": "KILLED",
+      "kind": "assertion",
+      "seconds": 0.95,
+      "failed": [
+       "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit",
+       "tests/test_manual.py::test_manual_value_that_disagrees_with_api_value_is_flagged"
+      ],
+      "kinds": {
+       "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit": "exception",
+       "tests/test_manual.py::test_manual_value_that_disagrees_with_api_value_is_flagged": "assertion"
+      },
+      "messages": [
+       "TypeError: conversion from NoneType to Decimal is not supported",
+       "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped"
+      ],
+      "tail": null
+     },
+     "full": {
+      "status": "KILLED",
+      "kind": "assertion",
+      "seconds": 1.47,
+      "failed": [
+       "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit",
+       "tests/test_manual.py::test_manual_value_that_disagrees_with_api_value_is_flagged"
+      ],
+      "kinds": {
+       "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit": "exception",
+       "tests/test_manual.py::test_manual_value_that_disagrees_with_api_value_is_flagged": "assertion"
+      },
+      "messages": [
+       "TypeError: conversion from NoneType to Decimal is not supported",
+       "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped"
+      ],
+      "tail": null
+     },
+     "result": "KILLED",
+     "agreement": {
+      "status_same": true,
+      "kind_same": true,
+      "failed_ids_same": true,
+      "full_failures_outside_selection": [],
+      "exact": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "C1",
+   "group": "control",
+   "commit": "568ea41",
+   "path": "src/normalization/manual.py",
+   "line": 42,
+   "pair_of": "D1",
+   "baseline_full": "passed",
+   "selected_tests": [
+    "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit",
+    "tests/test_manual.py::test_manual_value_that_disagrees_with_api_value_is_flagged",
+    "tests/test_manual.py::test_unconfirmed_or_other_period_entries_are_ignored",
+    "tests/test_manual.py::test_value_from_another_report_version_is_not_used"
+   ],
+   "coverage": {
+    "line_status": "not_executable",
+    "branch_gap": false
+   },
+   "mutants": [
+    {
+     "operator": "core/ReplaceAndWithOr",
+     "occurrence": 4,
+     "family": "boolean",
+     "changed_lines": [
+      42
+     ],
+     "on_target_line": true,
+     "source_before": "and e[\"status\"] == \"confirmed\"]",
+     "source_after": "or e[\"status\"] == \"confirmed\"]",
+     "selected": {
+      "status": "KILLED",
+      "kind": "assertion",
+      "seconds": 0.93,
+      "failed": [
+       "tests/test_manual.py::test_unconfirmed_or_other_period_entries_are_ignored"
+      ],
+      "kinds": {
+       "tests/test_manual.py::test_unconfirmed_or_other_period_entries_are_ignored": "assertion"
+      },
+      "messages": [
+       "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped"
+      ],
+      "tail": null
+     },
+     "full": {
+      "status": "KILLED",
+      "kind": "assertion",
+      "seconds": 1.41,
+      "failed": [
+       "tests/test_manual.py::test_unconfirmed_or_other_period_entries_are_ignored"
+      ],
+      "kinds": {
+       "tests/test_manual.py::test_unconfirmed_or_other_period_entries_are_ignored": "assertion"
+      },
+      "messages": [
+       "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped"
+      ],
+      "tail": null
+     },
+     "result": "KILLED",
+     "agreement": {
+      "status_same": true,
+      "kind_same": true,
+      "failed_ids_same": true,
+      "full_failures_outside_selection": [],
+      "exact": true
+     }
+    },
+    {
+     "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+     "occurrence": 5,
+     "family": "comparison",
+     "changed_lines": [
+      42
+     ],
+     "on_target_line": true,
+     "source_before": "and e[\"status\"] == \"confirmed\"]",
+     "source_after": "and e[\"status\"] != \"confirmed\"]",
+     "selected": {
+      "status": "KILLED",
+      "kind": "assertion",
+      "seconds": 0.93,
+      "failed": [
+       "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit",
+       "tests/test_manual.py::test_manual_value_that_disagrees_with_api_value_is_flagged",
+       "tests/test_manual.py::test_unconfirmed_or_other_period_entries_are_ignored",
+       "tests/test_manual.py::test_value_from_another_report_version_is_not_used"
+      ],
+      "kinds": {
+       "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit": "assertion",
+       "tests/test_manual.py::test_manual_value_that_disagrees_with_api_value_is_flagged": "assertion",
+       "tests/test_manual.py::test_unconfirmed_or_other_period_entries_are_ignored": "assertion",
+       "tests/test_manual.py::test_value_from_another_report_version_is_not_used": "assertion"
+      },
+      "messages": [
+       "AssertionError: assert 'review_needed' == 'mapped'\n  \n  - mapped\n  + review_needed",
+       "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped",
+       "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped"
+      ],
+      "tail": null
+     },
+     "full": {
+      "status": "KILLED",
+      "kind": "assertion",
+      "seconds": 1.46,
+      "failed": [
+       "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit",
+       "tests/test_manual.py::test_manual_value_that_disagrees_with_api_value_is_flagged",
+       "tests/test_manual.py::test_unconfirmed_or_other_period_entries_are_ignored",
+       "tests/test_manual.py::test_value_from_another_report_version_is_not_used"
+      ],
+      "kinds": {
+       "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit": "assertion",
+       "tests/test_manual.py::test_value_from_another_report_version_is_not_used": "assertion",
+       "tests/test_manual.py::test_unconfirmed_or_other_period_entries_are_ignored": "assertion",
+       "tests/test_manual.py::test_manual_value_that_disagrees_with_api_value_is_flagged": "assertion"
+      },
+      "messages": [
+       "AssertionError: assert 'review_needed' == 'mapped'\n  \n  - mapped\n  + review_needed",
+       "AssertionError: assert '다른 보고서 버전' in '본문에 없음'",
+       "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped"
+      ],
+      "tail": null
+     },
+     "result": "KILLED",
+     "agreement": {
+      "status_same": true,
+      "kind_same": true,
+      "failed_ids_same": true,
+      "full_failures_outside_selection": [],
+      "exact": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "D2",
+   "group": "szz",
+   "commit": "b67e806",
+   "path": "src/normalization/bs_sections.py",
+   "line": 51,
+   "pair_of": null,
+   "baseline_full": "passed",
+   "selected_tests": [
+    "tests/test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not",
+    "tests/test_bs_sections.py::test_bond_with_unconfirmed_section_is_a_review_candidate",
+    "tests/test_bs_sections.py::test_comparison_key_separates_current_and_noncurrent_bonds",
+    "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again",
+    "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence",
+    "tests/test_bs_sections.py::test_negative_held_for_sale_balance_is_not_adjusted",
+    "tests/test_bs_sections.py::test_no_held_for_sale_means_reported_equals_adjusted",
+    "tests/test_bs_sections.py::test_section_is_confirmed_only_when_items_sum_to_subtotal"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "branch_gap": false
+   },
+   "mutants": [
+    {
+     "operator": "core/NumberReplacer",
+     "occurrence": 8,
+     "family": "constant",
+     "changed_lines": [
+      51
+     ],
+     "on_target_line": true,
+     "source_before": "confirmed = regular == total or (hfs != 0 and regular + hfs == total)",
+     "source_after": "confirmed = regular == total or (hfs != 1 and regular + hfs == total)",
+     "selected": {
+      "status": "SURVIVED",
+      "kind": null,
+      "seconds": 0.49,
+      "failed": [],
+      "kinds": {},
+      "messages": [],
+      "tail": null
+     },
+     "full": {
+      "status": "SURVIVED",
+      "kind": null,
+      "seconds": 2.45,
+      "failed": [],
+      "kinds": {},
+      "messages": [],
+      "tail": null
+     },
+     "result": "SURVIVED",
+     "agreement": {
+      "status_same": true,
+      "kind_same": true,
+      "failed_ids_same": true,
+      "full_failures_outside_selection": [],
+      "exact": true
+     }
+    },
+    {
+     "operator": "core/NumberReplacer",
+     "occurrence": 9,
+     "family": "constant",
+     "changed_lines": [
+      51
+     ],
+     "on_target_line": true,
+     "source_before": "confirmed = regular == total or (hfs != 0 and regular + hfs == total)",
+     "source_after": "confirmed = regular == total or (hfs != -1 and regular + hfs == total)",
+     "selected": {
+      "status": "SURVIVED",
+      "kind": null,
+      "seconds": 0.59,
+      "failed": [],
+      "kinds": {},
+      "messages": [],
+      "tail": null
+     },
+     "full": {
+      "status": "SURVIVED",
+      "kind": null,
+      "seconds": 1.3,
+      "failed": [],
+      "kinds": {},
+      "messages": [],
+      "tail": null
+     },
+     "result": "SURVIVED",
+     "agreement": {
+      "status_same": true,
+      "kind_same": true,
+      "failed_ids_same": true,
+      "full_failures_outside_selection": [],
+      "exact": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "C2",
+   "group": "control",
+   "commit": "b67e806",
+   "path": "src/normalization/bs_sections.py",
+   "line": 84,
+   "pair_of": "D2",
+   "baseline_full": "passed",
+   "selected_tests": [
+    "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again",
+    "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence",
+    "tests/test_bs_sections.py::test_negative_held_for_sale_balance_is_not_adjusted"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "branch_gap": false
+   },
+   "mutants": [
+    {
+     "operator": "core/NumberReplacer",
+     "occurrence": 14,
+     "family": "constant",
+     "changed_lines": [
+      84
+     ],
+     "on_target_line": true,
+     "source_before": "if hfs < 0:  # 자산·부채 잔액이 음수인 것은 원문 표기 자체를 확인해야 한다 (코스맥스 2025: 주석은 '매각예정자산 없음')",
+     "source_after": "if hfs < 1:  # 자산·부채 잔액이 음수인 것은 원문 표기 자체를 확인해야 한다 (코스맥스 2025: 주석은 '매각예정자산 없음')",
+     "selected": {
+      "status": "SURVIVED",
+      "kind": null,
+      "seconds": 0.45,
+      "failed": [],
+      "kinds": {},
+      "messages": [],
+      "tail": null
+     },
+     "full": {
+      "status": "SURVIVED",
+      "kind": null,
+      "seconds": 1.37,
+      "failed": [],
+      "kinds": {},
+      "messages": [],
+      "tail": null
+     },
+     "result": "SURVIVED",
+     "agreement": {
+      "status_same": true,
+      "kind_same": true,
+      "failed_ids_same": true,
+      "full_failures_outside_selection": [],
+      "exact": true
+     }
+    },
+    {
+     "operator": "core/NumberReplacer",
+     "occurrence": 15,
+     "family": "constant",
+     "changed_lines": [
+      84
+     ],
+     "on_target_line": true,
+     "source_before": "if hfs < 0:  # 자산·부채 잔액이 음수인 것은 원문 표기 자체를 확인해야 한다 (코스맥스 2025: 주석은 '매각예정자산 없음')",
+     "source_after": "if hfs < -1:  # 자산·부채 잔액이 음수인 것은 원문 표기 자체를 확인해야 한다 (코스맥스 2025: 주석은 '매각예정자산 없음')",
+     "selected": {
+      "status": "SURVIVED",
+      "kind": null,
+      "seconds": 0.53,
+      "failed": [],
+      "kinds": {},
+      "messages": [],
+      "tail": null
+     },
+     "full": {
+      "status": "SURVIVED",
+      "kind": null,
+      "seconds": 1.56,
+      "failed": [],
+      "kinds": {},
+      "messages": [],
+      "tail": null
+     },
+     "result": "SURVIVED",
+     "agreement": {
+      "status_same": true,
+      "kind_same": true,
+      "failed_ids_same": true,
+      "full_failures_outside_selection": [],
+      "exact": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "D3",
+   "group": "szz",
+   "commit": "b67e806",
+   "path": "src/normalization/bs_sections.py",
+   "line": 77,
+   "pair_of": null,
+   "baseline_full": "passed",
+   "selected_tests": [
+    "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again",
+    "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence",
+    "tests/test_bs_sections.py::test_negative_held_for_sale_balance_is_not_adjusted",
+    "tests/test_bs_sections.py::test_no_held_for_sale_means_reported_equals_adjusted"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "branch_gap": false
+   },
+   "mutants": [
+    {
+     "operator": "core/NumberReplacer",
+     "occurrence": 10,
+     "family": "constant",
+     "changed_lines": [
+      77
+     ],
+     "on_target_line": true,
+     "source_before": "hfs = sum((_value(r) for r in hfs_rows), Decimal(0))",
+     "source_after": "hfs = sum((_value(r) for r in hfs_rows), Decimal( 1))",
+     "selected": {
+      "status": "KILLED",
+      "kind": "assertion",
+      "seconds": 0.45,
+      "failed": [
+       "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence"
+      ],
+      "kinds": {
+       "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence": "assertion"
+      },
+      "messages": [
+       "AssertionError: assert ('확인 필요', '100', None) == ('미포함', '100', '120')\n  \n  At index 0 diff: '확인 필요' != '미포함'\n  Use -v to get more diff"
+      ],
+      "tail": null
+     },
+     "full": {
+      "status": "KILLED",
+      "kind": "assertion",
+      "seconds": 1.32,
+      "failed": [
+       "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence"
+      ],
+      "kinds": {
+       "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence": "assertion"
+      },
+      "messages": [
+       "AssertionError: assert ('확인 필요', '100', None) == ('미포함', '100', '120')\n  \n  At index 0 diff: '확인 필요' != '미포함'\n  Use -v to get more diff"
+      ],
+      "tail": null
+     },
+     "result": "KILLED",
+     "agreement": {
+      "status_same": true,
+      "kind_same": true,
+      "failed_ids_same": true,
+      "full_failures_outside_selection": [],
+      "exact": true
+     }
+    },
+    {
+     "operator": "core/NumberReplacer",
+     "occurrence": 11,
+     "family": "constant",
+     "changed_lines": [
+      77
+     ],
+     "on_target_line": true,
+     "source_before": "hfs = sum((_value(r) for r in hfs_rows), Decimal(0))",
+     "source_after": "hfs = sum((_value(r) for r in hfs_rows), Decimal( -1))",
+     "selected": {
+      "status": "KILLED",
+      "kind": "assertion",
+      "seconds": 0.43,
+      "failed": [
+       "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence"
+      ],
+      "kinds": {
+       "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence": "assertion"
+      },
+      "messages": [
+       "AssertionError: assert ('확인 필요', '100', None) == ('미포함', '100', '120')\n  \n  At index 0 diff: '확인 필요' != '미포함'\n  Use -v to get more diff"
+      ],
+      "tail": null
+     },
+     "full": {
+      "status": "KILLED",
+      "kind": "assertion",
+      "seconds": 1.33,
+      "failed": [
+       "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence"
+      ],
+      "kinds": {
+       "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence": "assertion"
+      },
+      "messages": [
+       "AssertionError: assert ('확인 필요', '100', None) == ('미포함', '100', '120')\n  \n  At index 0 diff: '확인 필요' != '미포함'\n  Use -v to get more diff"
+      ],
+      "tail": null
+     },
+     "result": "KILLED",
+     "agreement": {
+      "status_same": true,
+      "kind_same": true,
+      "failed_ids_same": true,
+      "full_failures_outside_selection": [],
+      "exact": true
+     }
+    }
+   ]
+  },
+  {
+   "id": "C3",
+   "group": "control",
+   "commit": "b67e806",
+   "path": "src/normalization/bs_sections.py",
+   "line": 49,
+   "pair_of": "D3",
+   "baseline_full": "passed",
+   "selected_tests": [
+    "tests/test_bs_sections.py::test_bond_in_confirmed_current_section_counts_and_noncurrent_does_not",
+    "tests/test_bs_sections.py::test_bond_with_unconfirmed_section_is_a_review_candidate",
+    "tests/test_bs_sections.py::test_comparison_key_separates_current_and_noncurrent_bonds",
+    "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again",
+    "tests/test_bs_sections.py::test_held_for_sale_outside_current_subtotal_is_added_with_evidence",
+    "tests/test_bs_sections.py::test_negative_held_for_sale_balance_is_not_adjusted",
+    "tests/test_bs_sections.py::test_no_held_for_sale_means_reported_equals_adjusted",
+    "tests/test_bs_sections.py::test_section_is_confirmed_only_when_items_sum_to_subtotal"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "branch_gap": false
+   },
+   "mutants": [
+    {
+     "operator": "core/NumberReplacer",
+     "occurrence": 6,
+     "family": "constant",
+     "changed_lines": [
+      49
+     ],
+     "on_target_line": true,
+     "source_before": "hfs = sum((_value(r) for r in members if is_held_for_sale(r)), Decimal(0))",
+     "source_after": "hfs = sum((_value(r) for r in members if is_held_for_sale(r)), Decimal( 1))",
+     "selected": {
+      "status": "KILLED",
+      "kind": "assertion",
+      "seconds": 0.46,
+      "failed": [
+       "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again"
+      ],
+      "kinds": {
+       "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again": "assertion"
+      },
+      "messages": [
+       "AssertionError: assert ('확인 필요', '120', None) == ('포함', '120', '120')\n  \n  At index 0 diff: '확인 필요' != '포함'\n  Use -v to get more diff"
+      ],
+      "tail": null
+     },
+     "full": {
+      "status": "KILLED",
+      "kind": "assertion",
+      "seconds": 1.32,
+      "failed": [
+       "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again"
+      ],
+      "kinds": {
+       "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again": "assertion"
+      },
+      "messages": [
+       "AssertionError: assert ('확인 필요', '120', None) == ('포함', '120', '120')\n  \n  At index 0 diff: '확인 필요' != '포함'\n  Use -v to get more diff"
+      ],
+      "tail": null
+     },
+     "result": "KILLED",
+     "agreement": {
+      "status_same": true,
+      "kind_same": true,
+      "failed_ids_same": true,
+      "full_failures_outside_selection": [],
+      "exact": true
+     }
+    },
+    {
+     "operator": "core/NumberReplacer",
+     "occurrence": 7,
+     "family": "constant",
+     "changed_lines": [
+      49
+     ],
+     "on_target_line": true,
+     "source_before": "hfs = sum((_value(r) for r in members if is_held_for_sale(r)), Decimal(0))",
+     "source_after": "hfs = sum((_value(r) for r in members if is_held_for_sale(r)), Decimal( -1))",
+     "selected": {
+      "status": "KILLED",
+      "kind": "assertion",
+      "seconds": 0.45,
+      "failed": [
+       "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again",
+       "tests/test_bs_sections.py::test_section_is_confirmed_only_when_items_sum_to_subtotal"
+      ],
+      "kinds": {
+       "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again": "assertion",
+       "tests/test_bs_sections.py::test_section_is_confirmed_only_when_items_sum_to_subtotal": "assertion"
+      },
+      "messages": [
+       "AssertionError: assert ('확인 필요', '120', None) == ('포함', '120', '120')\n  \n  At index 0 diff: '확인 필요' != '포함'\n  Use -v to get more diff",
+       "assert True is False"
+      ],
+      "tail": null
+     },
+     "full": {
+      "status": "KILLED",
+      "kind": "assertion",
+      "seconds": 1.54,
+      "failed": [
+       "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again",
+       "tests/test_bs_sections.py::test_section_is_confirmed_only_when_items_sum_to_subtotal"
+      ],
+      "kinds": {
+       "tests/test_bs_sections.py::test_section_is_confirmed_only_when_items_sum_to_subtotal": "assertion",
+       "tests/test_bs_sections.py::test_held_for_sale_inside_current_subtotal_is_not_added_again": "assertion"
+      },
+      "messages": [
+       "assert True is False",
+       "AssertionError: assert ('확인 필요', '120', None) == ('포함', '120', '120')\n  \n  At index 0 diff: '확인 필요' != '포함'\n  Use -v to get more diff"
+      ],
+      "tail": null
+     },
+     "result": "KILLED",
+     "agreement": {
+      "status_same": true,
+      "kind_same": true,
+      "failed_ids_same": true,
+      "full_failures_outside_selection": [],
+      "exact": true
+     }
+    }
+   ]
+  }
+ ],
+ "coverage_a": [
+  {
+   "no": 2,
+   "commit": "fc58c0e",
+   "path": "src/collectors/dart.py",
+   "line": 56,
+   "line_status": "covered",
+   "branch_gap": false
+  },
+  {
+   "no": 5,
+   "commit": "fc58c0e",
+   "path": "src/collectors/dart.py",
+   "line": 74,
+   "line_status": "covered",
+   "branch_gap": false
+  },
+  {
+   "no": 7,
+   "commit": "fc58c0e",
+   "path": "src/collectors/dart.py",
+   "line": 109,
+   "line_status": "covered",
+   "branch_gap": false
+  },
+  {
+   "no": 8,
+   "commit": "fc58c0e",
+   "path": "src/collectors/dart.py",
+   "line": 114,
+   "line_status": "covered",
+   "branch_gap": false
+  },
+  {
+   "no": 13,
+   "commit": "99309f2",
+   "path": "src/normalization/dart_facts.py",
+   "line": 59,
+   "line_status": "covered",
+   "branch_gap": false
+  },
+  {
+   "no": 23,
+   "commit": "82e4305",
+   "path": "src/normalization/account_map.py",
+   "line": 40,
+   "line_status": "not_executable",
+   "branch_gap": false
+  },
+  {
+   "no": 26,
+   "commit": "568ea41",
+   "path": "src/normalization/dart_facts.py",
+   "line": 57,
+   "line_status": "covered",
+   "branch_gap": false
+  },
+  {
+   "no": 27,
+   "commit": "568ea41",
+   "path": "src/normalization/dart_facts.py",
+   "line": 62,
+   "line_status": "covered",
+   "branch_gap": false
+  },
+  {
+   "no": 28,
+   "commit": "568ea41",
+   "path": "src/normalization/dart_facts.py",
+   "line": 67,
+   "line_status": "covered",
+   "branch_gap": false
+  },
+  {
+   "no": 31,
+   "commit": "568ea41",
+   "path": "src/normalization/dart_facts.py",
+   "line": 77,
+   "line_status": "covered",
+   "branch_gap": false
+  },
+  {
+   "no": 37,
+   "commit": "b67e806",
+   "path": "src/normalization/bs_sections.py",
+   "line": 23,
+   "line_status": "covered",
+   "branch_gap": false
+  },
+  {
+   "no": 38,
+   "commit": "b67e806",
+   "path": "src/normalization/bs_sections.py",
+   "line": 27,
+   "line_status": "covered",
+   "branch_gap": false
+  },
+  {
+   "no": 39,
+   "commit": "b67e806",
+   "path": "src/normalization/bs_sections.py",
+   "line": 35,
+   "line_status": "covered",
+   "branch_gap": false
+  }
+ ],
+ "repo_preserved": true,
+ "seconds": 62.2,
+ "cosmic_ray": "cosmic-ray, version 8.9.0"
+}

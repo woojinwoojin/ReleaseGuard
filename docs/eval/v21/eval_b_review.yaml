@@ -1,0 +1,29 @@
+# Stage 2.1 평가 B의 SURVIVED 4개 분류 — 실행 결과를 본 뒤 작성 (Claude 초안, 사용자 확인 전)
+# 원자료: docs/eval/v21/mutation_result_b.json
+classified_by: claude-draft
+survivors:
+  - case: D2
+    mutant: "NumberReplacer #8 — hfs != 0 → hfs != 1 (b67e806 bs_sections.py:51)"
+    class: LOW_VALUE
+    evidence: confirmed   # T5 테스트가 1원 경계에서 차이를 확인함
+    reason: >-
+      hfs == 0이면 두 번째 조건(regular + hfs == total)은 첫 조건(regular == total)과 같아 'hfs != 0'은 사실상 중복이다.
+      mutant는 매각예정 금액이 정확히 1원일 때만 달라진다. 테스트(T5)로 감지는 되지만 요구사항상 의미 있는 변화가 아니다.
+      이 줄의 실제 결함(읽지 못한 행 검사 누락, c7733b3에서 'not unparsed and' 추가)은 빠진 조건이라 기존 토큰을 바꾸는 mutation으로는 겨냥할 수 없다.
+  - case: D2
+    mutant: "NumberReplacer #9 — hfs != 0 → hfs != -1"
+    class: LOW_VALUE
+    evidence: plausible
+    reason: 위와 같은 이유. 매각예정 금액이 정확히 -1원일 때만 달라진다.
+  - case: C2
+    mutant: "NumberReplacer #14 — hfs < 0 → hfs < 1 (b67e806 bs_sections.py:84)"
+    class: EQUIVALENT_SUPPORTED
+    evidence: plausible
+    reason: >-
+      바로 앞 82줄에서 hfs == 0이면 반환하므로 84줄에서는 hfs != 0이다. 금액은 원 단위 정수(API 값)라 0 < hfs < 1인 값이 없다.
+      이 입력 영역에서 'hfs < 1'과 'hfs < 0'은 같다. (소수 금액이 들어오면 다르다 — 입력 영역 가정에 기대는 근거)
+  - case: C2
+    mutant: "NumberReplacer #15 — hfs < 0 → hfs < -1"
+    class: LOW_VALUE
+    evidence: plausible
+    reason: 매각예정 잔액이 정확히 -1원일 때만 달라진다.

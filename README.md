@@ -13,10 +13,11 @@
 | 문서 | 내용 |
 |---|---|
 | [docs/usage.md](docs/usage.md) | **사용법** — 설치, `analyze`, 보고서 읽는 법, 평가 명령 |
-| [docs/eval/reports_summary.md](docs/eval/reports_summary.md) | **평가 보고서 #1~#13 정리** |
+| [docs/eval/reports_summary.md](docs/eval/reports_summary.md) | **평가 보고서 #1~#14 정리** |
 | [docs/status_roadmap.md](docs/status_roadmap.md) | 현재 상태, 한계, 로드맵 |
 | [docs/design_stage1_7.md](docs/design_stage1_7.md) | Stage 1.7 설계 (T03·N07, 외부 리뷰 반영 확정) |
 | [docs/design_stage2_0.md](docs/design_stage2_0.md) | Stage 2.0 Mutation spike 설계 (확정, 결과 [#13](docs/eval/20261111_eval_report_13.md): Go) |
+| [docs/design_stage2_1.md](docs/design_stage2_1.md) | Stage 2.1 Mutation Value Eval 설계 (실행 전 고정, 결과 [#14](docs/eval/20261111_eval_report_14.md): 조건부 GO) |
 | [docs/problem.md](docs/problem.md) · [docs/design.md](docs/design.md) · [docs/proposal.md](docs/proposal.md) | 문제 정의 · 설계 · 제안서 |
 | [docs/samples/report_142912b.md](docs/samples/report_142912b.md) | 보고서 샘플 |
 
@@ -73,7 +74,7 @@ python -m venv .venv
 
 1. ~~1.7 Reliability Gate~~ **완료**: T03·N07, coverage 실제 버전·위치 확인, 원본 node id 보존
 2. ~~2.0 Mutation spike~~ **완료 (Go)**: Cosmic Ray 어댑터, 지정 줄 40/40, 관련 테스트만 = 전체 40/40 ([#13](docs/eval/20261111_eval_report_13.md))
-3. **2.1 Value Eval**: coverage 대비 추가 가치 측정
+3. ~~2.1 Value Eval~~ **완료 (조건부 GO)**: coverage가 '검증됨'으로 본 줄에서 테스트 보강 후보 4건 확인, 결함 위치 예측은 지지 안 됨 ([#14](docs/eval/20261111_eval_report_14.md))
 4. **2.2 조건부 통합**: 2.1에서 효과가 확인될 때만
 5. **2b 배포 산출물 검증**: 컨테이너 시작 확인, CI 필수 단계 정책
 
