@@ -1,0 +1,66 @@
+# Stage 2.1 결과에 대한 외부 독립 리뷰 반영 (2026-11-11, 결과 커밋 3a2dbea 뒤)
+# 실행 전에 고정한 파일(eval/szz_defect_check_2_1.yaml, eval/mutation_review_2_1.yaml, eval/mutation_cases_2_1.yaml)은 바꾸지 않고,
+# 정정은 이 파일에 모은다. 보고서 #14 본문은 이 정정에 맞춰 고쳤다 (원문은 3a2dbea).
+# 아래 확인은 Claude가 Predict_Success 실제 이력으로 했다 (리뷰어는 ZIP만 봐서 확인하지 못한 부분). 사용자 확인 전.
+
+coverage_wording:
+  before: "ACTIONABLE 4개 줄 모두 ReleaseGuard가 covered(검증됨)로 본 줄"
+  after: "4개 모두 기존 줄·분기 공백으로 표시되지 않은 줄. 그중 명시적으로 covered인 줄은 3개(#2·#26·#37), #23은 여러 줄 표현식의 중간 줄이라 not_executable"
+  reason: mutation_result_b.json coverage_a 기록 (#23 line_status = not_executable)
+
+actionable_23:
+  before: ACTIONABLE_GAP (confirmed)
+  after: ACTIONABLE_GAP (provisional) — GO 판단에서 제외
+  check: >-
+    Predict_Success 전체 이력에서 evidence()의 "rule" 필드를 읽는 코드·테스트·문서가 없다
+    (git grep: HEAD에는 account_map.py:47 생성 줄뿐, git log -S'"rule"'은 82e4305 하나).
+    D6은 매핑 규칙이 두 종류라는 것만 말하고 evidence["rule"]의 출력 형식은 정하지 않는다. 독립 명세 없음 확인.
+    문서를 지금 보강해도 이전 실험을 독립적으로 검증해 주지 않는다.
+
+t5_reclassification:
+  mutant: "B D2 #8 — bs_sections.py:51 hfs != 0 → hfs != 1"
+  before: LOW_VALUE ("1원 경계에서만 다름")
+  after: ACTIONABLE_GAP (confirmed), review_priority LOW
+  reason: >-
+    모듈 docstring "항목 합이 소계와 원 단위까지 같을 때만 '확인'으로 표시한다" — 1원도 계약 안이다.
+    '의미 있는 동작 차이인가'와 '실무 우선순위가 높은가'를 섞어서 판단했었다. 둘을 나눈다.
+  note: 이 줄은 SZZ 결함 줄이지만, 찾은 테스트 부족은 그 결함(읽지 못한 행 검사 누락)과 관계없다.
+  consistency:
+    - mutant: "B D2 #9 — hfs != 0 → hfs != -1"
+      before: LOW_VALUE
+      after: MEANINGFUL_UNVERIFIED (테스트 시도 안 함)
+    - mutant: "B C2 #15 — hfs < 0 → hfs < -1 (bs_sections.py:84)"
+      before: LOW_VALUE
+      after: MEANINGFUL_UNVERIFIED (테스트 시도 안 함) — 잔액 -1원도 '음수면 원문 확인' 대상이다
+    - mutant: "B C2 #14 — hfs < 0 → hfs < 1"
+      unchanged: EQUIVALENT_SUPPORTED (82줄에서 hfs == 0은 반환, 금액은 원 단위 정수)
+
+szz_defect_types:
+  # DIRECT_DEFECT_LINE: 그 줄의 표현식·조건 자체가 잘못됨 / CONTROL_FLOW_AFFECTED: 줄은 맞지만 실행 전제 조건이 잘못됨
+  - line: 568ea41 src/normalization/manual.py:54
+    type: DIRECT_DEFECT_LINE
+    why: 조건이 mapped만 비교 → mapped·candidate 비교로 바뀜 (그리고 확인 검사 뒤로 이동)
+  - line: b67e806 src/normalization/bs_sections.py:51
+    type: DIRECT_DEFECT_LINE
+    why: 같은 줄의 표현식에 'not unparsed and'가 빠져 있었음 (빠진 조건이지만 그 줄의 식 자체의 결함)
+  - line: b67e806 src/normalization/bs_sections.py:77
+    type: CONTROL_FLOW_AFFECTED
+    why: 줄 내용은 그대로이고, 결측·변환 실패 검사 뒤에서만 실행되도록 흐름이 바뀜
+  independence: 세 줄 모두 같은 수정 커밋 c7733b3에서 나왔다 — 독립된 결함 사례 3개가 아니다
+  precision_wording:
+    before: "SZZ 정밀도 3/9"
+    after: "선정 규칙으로 방문한 9줄 중 결함 관련으로 판단한 줄 3개 (일반적인 SZZ 정밀도가 아님)"
+
+mutation_reach_wording:
+  before: "mutation은 원리상 빠진 조건형 결함을 겨냥할 수 없다"
+  after: "이번에 고른 연산자 집합(기존 토큰 바꾸기)으로는 빠진 조건·실행 조건형 결함을 직접 겨냥하기 어렵다. mutation 일반의 한계로 말하지 않는다"
+
+metric_names:
+  - before: "Actionable Survivor Rate 4/17"
+    after: "검토한 SURVIVED 17개 중 현재까지 확인된 ACTIONABLE: confirmed 4 (+ provisional 1). 테스트를 시도하지 않은 후보가 있어 일반 성공률이 아님"
+  - before: "Meaningful Mutation Rate 10/52"
+    after: "전체 mutant 52개 중 의미 있는 것으로 분류된 SURVIVED: 13 (A 10, B 3). KILLED 35개의 의미는 평가하지 않음"
+
+adapter:
+  - 전부 skip이면 NO_EXECUTED_TEST (rc 0이어도 SURVIVED가 아님). 평가 B 재실행: 12개 결과 동일, 선택 실행 skip 0
+  - Cosmic Ray 경로는 RG_COSMIC_RAY 환경 변수 → spike venv Scripts/ → bin/ 순으로 찾고, 버전 상수를 둔다

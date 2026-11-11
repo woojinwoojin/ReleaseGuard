@@ -1,11 +1,13 @@
 # Stage 2.1 평가 B의 SURVIVED 4개 분류 — 실행 결과를 본 뒤 작성 (Claude 초안, 사용자 확인 전)
 # 원자료: docs/eval/v21/mutation_result_b.json
+# 정정(외부 리뷰): 아래 class는 원 분류다. 정정 결과는 revised에 적는다 (근거: docs/eval/v21/review_corrections.yaml)
 classified_by: claude-draft
 survivors:
   - case: D2
     mutant: "NumberReplacer #8 — hfs != 0 → hfs != 1 (b67e806 bs_sections.py:51)"
     class: LOW_VALUE
     evidence: confirmed   # T5 테스트가 1원 경계에서 차이를 확인함
+    revised: ACTIONABLE_GAP (confirmed, review_priority LOW) — '원 단위까지 같을 때만 확인' 계약 안의 변화
     reason: >-
       hfs == 0이면 두 번째 조건(regular + hfs == total)은 첫 조건(regular == total)과 같아 'hfs != 0'은 사실상 중복이다.
       mutant는 매각예정 금액이 정확히 1원일 때만 달라진다. 테스트(T5)로 감지는 되지만 요구사항상 의미 있는 변화가 아니다.
@@ -15,6 +17,7 @@ survivors:
     class: LOW_VALUE
     evidence: plausible
     reason: 위와 같은 이유. 매각예정 금액이 정확히 -1원일 때만 달라진다.
+    revised: MEANINGFUL_UNVERIFIED (테스트 시도 안 함)
   - case: C2
     mutant: "NumberReplacer #14 — hfs < 0 → hfs < 1 (b67e806 bs_sections.py:84)"
     class: EQUIVALENT_SUPPORTED
@@ -27,3 +30,4 @@ survivors:
     class: LOW_VALUE
     evidence: plausible
     reason: 매각예정 잔액이 정확히 -1원일 때만 달라진다.
+    revised: MEANINGFUL_UNVERIFIED (테스트 시도 안 함) — 잔액 -1원도 '음수면 원문 확인' 대상

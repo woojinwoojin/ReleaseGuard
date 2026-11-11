@@ -1,6 +1,6 @@
 # ReleaseGuard — 현재 상태와 로드맵
 
-기준일: 2026-11-11 · 버전 0.2.0 · 판정 규칙 v3.2 · 테스트 194개 통과 · **Stage 1 기술 MVP 완료, Stage 1.7 완료** ([보고서 #12](eval/20261111_eval_report_12.md)) · **Stage 2.0 spike 완료 → Go** ([#13](eval/20261111_eval_report_13.md)) · **Stage 2.1 Value Eval → GO (조건부)** ([#14](eval/20261111_eval_report_14.md))
+기준일: 2026-11-11 · 버전 0.2.0 · 판정 규칙 v3.2 · 테스트 194개 통과 · **Stage 1 기술 MVP 완료, Stage 1.7 완료** ([보고서 #12](eval/20261111_eval_report_12.md)) · **Stage 2.0 spike 완료 → Go** ([#13](eval/20261111_eval_report_13.md)) · **Stage 2.1 Value Eval → GO (조건부, 리뷰 정정)** ([#14](eval/20261111_eval_report_14.md)) · 다음: 2.2 전 독립 확인 평가
 
 Stage 1 종료 심사: [Eval 보고서 #11](eval/20261111_eval_report_11.md). **제품 수준의 판정 구분력·실제 사용자 효용은 아직 미검증**.
 
@@ -109,6 +109,7 @@ base...head
 | 11-10 | Test Suggestion Validator, #10 | skip·이름 충돌을 결정적으로 표시 |
 | 11-11 | Stage 1 마무리 | 문서 정리 (README·usage·보고서 정리). 블로그는 건너뜀 |
 | 11-11 | Stage 1 종료 재평가, #11 | 코드 변경 `need: no`의 11/12 경고; test-only·삭제 경계 사례 확인. Stage 1.7 신뢰성 보완 필요 |
+| 11-11 | 2.1 정정 (외부 독립 리뷰) | #23 provisional(독립 명세 없음), T5 → ACTIONABLE(우선순위 LOW), SZZ 유형 구분(직접 2·실행 조건 1, 모두 c7733b3), 지표 분모 정정, 어댑터 NO_EXECUTED_TEST. confirmed ACTIONABLE 4건·3개 커밋으로 GO 유지. 2.2 전 새 커밋·2개 이상 저장소에서 독립 확인 |
 | 11-11 | **2.1 Mutation Value Eval**, #14 | 평가 A(2.0 SURVIVED 13개): ACTIONABLE 4건(4개 커밋, 모두 coverage가 '검증됨'으로 본 줄). 평가 B(SZZ 결함 줄 3 vs 대조군 3): SURVIVED 2/6 vs 2/6 — 결함 위치 가설 불지지, 빠진 조건형 결함은 mutation으로 못 겨냥. 테스트 추가 5/5 감지. 사전 기준상 GO, 판정 반영 없이 mutation_result 보고서만 |
 | 11-11 | **2.0 Mutation spike**, #13 | Cosmic Ray 8.9.0 (mutmut은 Windows 거부). Predict 5커밋·mutant 40: 지정 줄 40/40, 저장소 보존, 관련 테스트만 = 전체 40/40, KILLED 27·SURVIVED 13, mutant당 0.72초(관련)·1.33초(전체). Go, 가치는 2.1 |
 | 11-11 | **1.7 Reliability Gate (v3.2)**, #12 | T03·N07, coverage 실제 버전·위치, `nodeid_map`. 심은 사례 26/26·6/6, 58커밋 판정 변화 0 (T03 추가 7, 모두 이미 REVIEW·BLOCK), 과잉 11/12 그대로 |

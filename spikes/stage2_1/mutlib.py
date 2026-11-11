@@ -1,6 +1,6 @@
 """Stage 2.1 어댑터 — 2.0(run_spike.py)에 리뷰 보완 3가지를 더했다. 설계: docs/design_stage2_1.md 2장
 
-1. 수집 오류(pytest rc 2)는 COLLECTION_ERROR로 분리한다 (유효한 KILLED가 아님).
+1. 수집 오류(pytest rc 2)는 COLLECTION_ERROR로 분리한다 (유효한 KILLED가 아님). 전부 skip이면 NO_EXECUTED_TEST (리뷰 보완, 2.1 결과 뒤 추가).
 2. 관련 테스트만 vs 전체: 상태·실패 종류·실패한 테스트 id를 모두 비교한다.
 3. mutant마다 원본 스냅샷을 새로 복사한 폴더에서 실행하고 finally로 지운다 (테스트가 만든 파일도 남지 않음).
 
@@ -9,6 +9,7 @@ Cosmic Ray(spikes/stage2_0/.venv)는 mutation 목록(init·dump)과 적용(apply
 
 import difflib
 import json
+import os
 import py_compile
 import shutil
 import subprocess
@@ -23,7 +24,19 @@ sys.path.insert(0, str(ROOT))
 
 from releaseguard.runner import _env  # noqa: E402
 
-COSMIC_RAY = ROOT / "spikes" / "stage2_0" / ".venv" / "Scripts" / "cosmic-ray.exe"
+def _find_cosmic_ray() -> Path:
+    """Cosmic Ray 실행 파일: 환경 변수 RG_COSMIC_RAY → spike venv의 Windows(Scripts) → POSIX(bin) 위치 순."""
+    if env := os.environ.get("RG_COSMIC_RAY"):
+        return Path(env)
+    venv = ROOT / "spikes" / "stage2_0" / ".venv"
+    for rel in ("Scripts/cosmic-ray.exe", "bin/cosmic-ray"):
+        if (venv / rel).exists():
+            return venv / rel
+    raise FileNotFoundError("cosmic-ray를 찾지 못함: RG_COSMIC_RAY를 지정하거나 spikes/stage2_0/requirements.txt로 설치")
+
+
+COSMIC_RAY = _find_cosmic_ray()
+COSMIC_RAY_VERSION = "8.9.0"  # spikes/stage2_0/requirements.txt와 같아야 함
 TEST_TIMEOUT = 120
 
 # 2.0과 같은 허용 연산자 (설계 2.0 Q4)
@@ -125,7 +138,10 @@ def run_pytest(python: Path, work: Path, nodeids: list[str], tag: str) -> dict:
     failed = sorted(r["nodeid"] for r in results if r["outcome"] in ("failure", "error"))
     kinds = {r["nodeid"]: failure_kind(r) for r in results if r["outcome"] in ("failure", "error")}
     rc = proc.returncode
-    if rc == 0:
+    ran = [r for r in results if r["outcome"] != "skipped"]
+    if rc == 0 and not ran:
+        status = "NO_EXECUTED_TEST"  # 리뷰 보완: 전부 skip이어도 rc 0 — 살아남은 것이 아니라 검증이 없던 것 (Stage 1.7 T03과 같은 이유)
+    elif rc == 0:
         status = "SURVIVED"
     elif rc == 1:
         status = "KILLED"
@@ -141,7 +157,9 @@ def run_pytest(python: Path, work: Path, nodeids: list[str], tag: str) -> dict:
         kind = next((k for k in ("assertion", "exception", "error") if k in found), "unknown")
     msgs = [clean(r["message"])[:160] for r in results if r["outcome"] in ("failure", "error")][:3]
     tail = clean(proc.stdout[-400:]) if status in ("COLLECTION_ERROR", "EXECUTION_ERROR") else None
-    return {"status": status, "kind": kind, "seconds": seconds, "failed": failed, "kinds": kinds, "messages": msgs, "tail": tail}
+    skipped = sum(r["outcome"] == "skipped" for r in results)
+    return {"status": status, "kind": kind, "seconds": seconds, "failed": failed, "kinds": kinds, "messages": msgs, "tail": tail,
+            "executed": len(ran), "skipped": skipped}
 
 
 def compare(selected: dict, full: dict, selected_ids: list[str]) -> dict:
