@@ -16,6 +16,7 @@
 | [docs/eval/reports_summary.md](docs/eval/reports_summary.md) | **평가 보고서 #1~#11 정리** |
 | [docs/status_roadmap.md](docs/status_roadmap.md) | 현재 상태, 한계, 로드맵 |
 | [docs/design_stage1_7.md](docs/design_stage1_7.md) | Stage 1.7 설계 (T03·N07, 외부 리뷰 반영 확정) |
+| [docs/design_stage2_0.md](docs/design_stage2_0.md) | Stage 2.0 Mutation spike 설계안 (사용자 확인 전) |
 | [docs/problem.md](docs/problem.md) · [docs/design.md](docs/design.md) · [docs/proposal.md](docs/proposal.md) | 문제 정의 · 설계 · 제안서 |
 | [docs/samples/report_142912b.md](docs/samples/report_142912b.md) | 보고서 샘플 |
 
