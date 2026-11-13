@@ -25,6 +25,10 @@ survivors:
     reason: >-
       바로 앞 82줄에서 hfs == 0이면 반환하므로 84줄에서는 hfs != 0이다. 금액은 원 단위 정수(API 값)라 0 < hfs < 1인 값이 없다.
       이 입력 영역에서 'hfs < 1'과 'hfs < 0'은 같다. (소수 금액이 들어오면 다르다 — 입력 영역 가정에 기대는 근거)
+    revised: >-
+      EQUIVALENT_SUPPORTED 유지, 도달 가능한 입력 영역 한정 (2026-11-13 사용자 검토 후 확인).
+      hfs == 0 배제는 코드(82줄)로 보장, 0 < |hfs| < 1 배제는 데이터 관측(parsed 369,680개 중 소수 0)으로만 뒷받침 — parse_amount는 소수를 받는다.
+      자세한 내용은 review_corrections.yaml user_review_20261113
   - case: C2
     mutant: "NumberReplacer #15 — hfs < 0 → hfs < -1"
     class: LOW_VALUE

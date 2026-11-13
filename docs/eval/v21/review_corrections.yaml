@@ -36,16 +36,17 @@ t5_reclassification:
       unchanged: EQUIVALENT_SUPPORTED (82줄에서 hfs == 0은 반환, 금액은 원 단위 정수)
 
 szz_defect_types:
-  # DIRECT_DEFECT_LINE: 그 줄의 표현식·조건 자체가 잘못됨 / CONTROL_FLOW_AFFECTED: 줄은 맞지만 실행 전제 조건이 잘못됨
-  - line: 568ea41 src/normalization/manual.py:54
-    type: DIRECT_DEFECT_LINE
-    why: 조건이 mapped만 비교 → mapped·candidate 비교로 바뀜 (그리고 확인 검사 뒤로 이동)
-  - line: b67e806 src/normalization/bs_sections.py:51
-    type: DIRECT_DEFECT_LINE
-    why: 같은 줄의 표현식에 'not unparsed and'가 빠져 있었음 (빠진 조건이지만 그 줄의 식 자체의 결함)
-  - line: b67e806 src/normalization/bs_sections.py:77
-    type: CONTROL_FLOW_AFFECTED
-    why: 줄 내용은 그대로이고, 결측·변환 실패 검사 뒤에서만 실행되도록 흐름이 바뀜
+  lines:
+    # DIRECT_DEFECT_LINE: 그 줄의 표현식·조건 자체가 잘못됨 / CONTROL_FLOW_AFFECTED: 줄은 맞지만 실행 전제 조건이 잘못됨
+    - line: 568ea41 src/normalization/manual.py:54
+      type: DIRECT_DEFECT_LINE
+      why: 조건이 mapped만 비교 → mapped·candidate 비교로 바뀜 (그리고 확인 검사 뒤로 이동)
+    - line: b67e806 src/normalization/bs_sections.py:51
+      type: DIRECT_DEFECT_LINE
+      why: 같은 줄의 표현식에 'not unparsed and'가 빠져 있었음 (빠진 조건이지만 그 줄의 식 자체의 결함)
+    - line: b67e806 src/normalization/bs_sections.py:77
+      type: CONTROL_FLOW_AFFECTED
+      why: 줄 내용은 그대로이고, 결측·변환 실패 검사 뒤에서만 실행되도록 흐름이 바뀜
   independence: 세 줄 모두 같은 수정 커밋 c7733b3에서 나왔다 — 독립된 결함 사례 3개가 아니다
   precision_wording:
     before: "SZZ 정밀도 3/9"
@@ -64,3 +65,79 @@ metric_names:
 adapter:
   - 전부 skip이면 NO_EXECUTED_TEST (rc 0이어도 SURVIVED가 아님). 평가 B 재실행: 12개 결과 동일, 선택 실행 skip 0
   - Cosmic Ray 경로는 RG_COSMIC_RAY 환경 변수 → spike venv Scripts/ → bin/ 순으로 찾고, 버전 상수를 둔다
+
+# ---------------------------------------------------------------------------
+# 사용자 분류 검토 (2026-11-13) — 요약표 기준 판단, 원본 대조는 Claude
+# 사전 고정 파일(eval/mutation_review_2_1.yaml, eval/szz_defect_check_2_1.yaml, eval/mutation_cases_2_1.yaml)은
+# 이번에도 바꾸지 않았다. 그 파일들의 classified_by: claude-draft도 그대로 둔다 — 확정 여부는 아래 항목별로 적는다.
+# user_decision: 사용자가 분류를 승인했는가 / source_check: Claude가 실제 코드·이력과 대조했는가 (승인 ≠ 독립 사실 검증)
+user_review_20261113:
+  count_correction:
+    before: "총 30건"
+    after: "26건 = 평가 A SURVIVED 13 + SZZ 방문 줄 9 + 평가 B SURVIVED 4"
+    cause: SZZ 후보 13줄(방문 안 한 4줄 포함)로 잘못 더함. 방문 안 한 4줄은 판정 대상이 아니다
+  items:
+    - item: "A #13"
+      class: UNRESOLVED
+      user_decision: approved
+      status: unresolved
+      reason: 하루짜리 기간 허용 여부에 대한 독립 명세 없음. 동작 차이는 있지만 어느 쪽이 맞는지 미확정
+      source_check: done (2.1 분류 시 docstring 확인)
+    - item: "A #23"
+      class: ACTIONABLE_GAP
+      user_decision: approved
+      status: provisional
+      reason: 테스트로 감지는 확인. evidence["rule"]이 외부 계약이라는 근거 없음 → GO 계산 제외 유지
+      source_check: done (Predict 전체 이력 git grep / log -S, 위 actionable_23)
+    - item: "A #38"
+      class: MEANINGFUL_UNVERIFIED
+      before_wording: "테스트 대상에서 영구 제외"
+      after_wording: "ORACLE_INVALID (KNOWN_BUG_ORACLE) — 이번 평가에서 ACTIONABLE 검증 대상에서 제외"
+      user_decision: approved_with_change
+      status: unverified
+      reason: >-
+        현재 원본 동작(읽지 못한 행을 0으로 더함)이 c7733b3에서 고쳐진 결함이라, 현재 mutant를 죽이는 테스트는 결함 동작을 정답으로 고정한다.
+        부적격한 것은 '이 mutant를 죽이는 테스트'이지 동작 자체가 아니다. 수정 후 코드에서는 올바른 기대 동작으로 새 테스트를 쓸 수 있다
+      source_check: done (c7733b3 diff, 2.1 분류 시)
+    - item: "B D2 #8"
+      class: ACTIONABLE_GAP
+      review_priority: LOW
+      user_decision: approved
+      status: confirmed (T5)
+      source_check: done
+    - item: "A #5, #7"
+      class: LOW_VALUE
+      user_decision: approved
+      status: plausible
+      source_check: done (시간 상한·바이트 형식 계약 문서 없음)
+    - item: "B C2 #14 (b67e806 bs_sections.py:84, hfs < 0 → hfs < 1)"
+      class: EQUIVALENT_SUPPORTED
+      scope: 도달 가능한 입력 영역 한정
+      user_decision: approved_after_check
+      status: supported (입력 영역 가정 1개에 기댐)
+      concern: "정수 금액이라도 hfs == 0에서 hfs < 0(False)과 hfs < 1(True)이 다르다 — 원 요약표의 '정수 금액에서 같음'은 근거가 부족한 표현"
+      check:
+        - "0 배제 — 코드로 보장: 같은 함수 82줄 'if not hfs_rows or hfs == 0: return out'이 84줄보다 먼저 실행된다 (b67e806 원본 확인). 84줄에 도달하면 hfs != 0"
+        - "0 < hfs < 1 배제 — 데이터로만 뒷받침: parse_amount는 Decimal(text)라 소수도 받는다 (코드 보장 없음). 저장된 dart_facts.csv 20개(현행 1 + runs 19)의 parsed 값 369,680개 중 소수 0개"
+        - "NaN·Infinity: Decimal('NaN') 비교는 원본·mutant 모두 예외, ±Infinity는 두 조건 결과가 같다 — 차이 없음"
+      conclusion: >-
+        도달 가능한 입력(hfs != 0, 원 단위 정수 금액)에서 원본과 mutant의 출력이 같다. 앞의 조건은 코드로, 뒤의 조건은 관측 데이터로만 뒷받침된다.
+        소수 금액이 들어올 수 있게 되면 다시 분류한다
+      source_check: done (2026-11-13)
+    - item: "SZZ 방문 9줄"
+      decision: 결함 3 · 결함 아님 5 · 불분명 1 유지
+      user_decision: approved
+      secondary_class: "manual.py:54 DIRECT_DEFECT_LINE, bs_sections.py:51 DIRECT_DEFECT_LINE, bs_sections.py:77 CONTROL_FLOW_AFFECTED (위 szz_defect_types에 이미 기록)"
+      note: 77줄은 합산 표현식이 아니라 앞선 결측·변환 실패 검사 누락과 관련. 세 줄 모두 c7733b3 — 독립 결함 사례 1건으로 센다
+      source_check: done
+    - item: "나머지 (A #2·#8·#26·#27·#28·#31·#37·#39, B D2 #9·C2 #15)"
+      user_decision: approved (요약 기준)
+      status: "#2·#26·#37 confirmed (T1·T3·T4), 나머지 MEANINGFUL_UNVERIFIED — 예상 동작 차이만으로 ACTIONABLE 확정하지 않음"
+      source_check: done (2.1 분류 시)
+  metrics_recheck:
+    result: 변화 없음
+    detail:
+      - "C2 #14 분류 유지 → EQUIVALENT 1, 의미 있는 SURVIVED 13 (A 10, B 3) 그대로"
+      - "#38은 MEANINGFUL 유지(표현만 변경) → A 10에 그대로 포함, ACTIONABLE 검증 대상에서는 원래도 제외"
+      - "ACTIONABLE confirmed 4 (#2·#26·#37·D2 #8, 커밋 3개) + provisional 1 (#23) 그대로"
+  go_status: "사전 기준상 GO는 조건부 유지. 2.2 통합 판단은 새 독립 커밋에서 같은 신호가 반복되는지 확인한 뒤"
