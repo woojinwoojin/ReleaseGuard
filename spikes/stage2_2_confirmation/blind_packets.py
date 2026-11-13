@@ -49,9 +49,9 @@ def main() -> int:
             lines = src.splitlines()
             s, e, fn = enclosing(src, m["line"])
             original = lines[s - 1:e]
-            mutated = list(original)
-            mutated[m["line"] - s] = mutated[m["line"] - s].replace(m["source_before"], m["source_after"], 1)
-            diff = "\n".join(difflib.unified_diff(original, mutated, f"{m['path']} (원본)", f"{m['path']} (mutant)", lineterm="", n=3))
+            mutated = list(lines)  # 파일 전체로 diff를 만들어야 @@ 줄 번호가 실제 줄 번호와 맞는다
+            mutated[m["line"] - 1] = mutated[m["line"] - 1].replace(m["source_before"], m["source_after"], 1)
+            diff = "\n".join(difflib.unified_diff(lines, mutated, f"{m['path']} (원본)", f"{m['path']} (mutant)", lineterm="", n=3))
             doc = ast.get_docstring(ast.parse(src)) or "(없음)"
             docs = [p for p in run_git(repo, "ls-tree", "-r", "--name-only", sha).splitlines() if p.endswith(DOC_SUFFIXES)]
             sel, full = m.get("selected") or {}, m.get("full") or {}

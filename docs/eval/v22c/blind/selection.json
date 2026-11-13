@@ -1,0 +1,25 @@
+{
+ "R": {
+  "survived": 6,
+  "picked": [
+   6,
+   16
+  ],
+  "shortfall": 0
+ },
+ "W": {
+  "survived": 1,
+  "picked": [
+   23
+  ],
+  "shortfall": 1
+ },
+ "P": {
+  "survived": 3,
+  "picked": [
+   42,
+   44
+  ],
+  "shortfall": 0
+ }
+}
