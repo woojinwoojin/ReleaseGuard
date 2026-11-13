@@ -1,7 +1,7 @@
-# Stage 2.2 전 독립 확인 평가 — 설계 (평가 기준 고정용 초안)
+# Stage 2.2 전 독립 확인 평가 — 설계 (평가 기준 고정)
 
-- 작성: 2026-11-13 · **Claude 초안, 사용자 확인 전** (결정 대기 Q1~Q6는 10장)
-- 근거: 외부 리뷰 "Stage 2.1 최종 승인 및 독립 검증 설계"(2026-11-13), [보고서 #14](eval/20261111_eval_report_14.md), [design_stage2_1.md](design_stage2_1.md), [정정 기록](eval/v21/review_corrections.yaml)
+- 작성: 2026-11-13 · 외부 리뷰 두 번 반영 ("Stage 2.1 최종 승인 및 독립 검증 설계", "Stage 2.2 독립 확인 평가 설계 리뷰"). Q1~Q6 결정은 11장
+- 근거: [보고서 #14](eval/20261111_eval_report_14.md), [design_stage2_1.md](design_stage2_1.md), [정정 기록](eval/v21/review_corrections.yaml)
 - 원칙: 코드는 `spikes/stage2_2_confirmation/` 아래에 둔다. **`releaseguard/` 제품 코드와 판정(SAFE·REVIEW·BLOCK)은 바꾸지 않는다.** 에이전트 API 호출 없음.
 
 ## 1. 질문 하나만 검증한다
@@ -10,27 +10,30 @@
 
 이번에 검증할 것:
 
-> **새로운 코드 변경에서도** mutation이 명세로 정당화되는 테스트 부족을 반복해서 찾고, 그 가치가 실행·사람 검토 비용을 정당화하는가?
+> **새로운 코드 변경에서도**, 이미 실행된 코드에서 기존 coverage가 알려주지 못한 **명세로 정당화되는 테스트 보강 지점**을 mutation이 반복해서 찾고, 그 가치가 실행·사람 검토 비용을 정당화하는가?
 
-- 2.1의 분류 기준(3장)·선택 규칙(커밋당 8개·줄당 1개·연산자 계열)은 **Predict 결과를 보고 정한 것**이다. 이번 평가는 그 규칙을 새 커밋에 그대로 적용해 유효한지 본다. 결과를 보고 바꾸지 않는다.
+- 2.1의 분류 기준과 선택 규칙(커밋당 8개·줄당 1개·연산자 계열)은 **Predict 결과를 보고 정한 것**이다. 이번 평가는 그 규칙을 새 커밋에 그대로 적용해 유효한지 본다. 결과를 보고 바꾸지 않는다.
 - KILLED/SURVIVED 비율은 목표가 아니다. 보는 것은 명세로 정당화된 테스트 개선과 그 비용이다.
 - 기존 공백 보고서가 표시하지 않았다는 사실은 "**기존 자동 분석 결과 대비 추가 정보**"까지만 말한다. 개발자가 그 문제를 발견할 수 없었다고 주장하지 않는다.
+- R·W 두 곳에서 ACTIONABLE을 찾더라도 **mutation이 결함을 예측한다고 결론 내리지 않는다.**
+- R·W는 서로 다른 코드베이스지만 개발자·작성 도구가 같다. 이 평가는 독립된 개발자·조직에서의 재현이 아니다. 선택형 기능 통합을 검토할 근거까지만 주고, 일반적인 제품 성능 근거로는 쓰지 않는다.
 
 비목표: 통계적 일반화(소규모 확인 평가다), 판정 연동, 새 연산자 개발, SZZ 결함 위치 평가.
 
-## 2. 정보 누출 방지 — 순서와 고정 파일
+## 2. 순서 — 정보 누출 방지
 
-| 순서 | 작업 | 고정 시점·산출물 |
+| 단계 | 작업 | 고정 방법·산출물 |
 |---|---|---|
-| 1 | 이 프로토콜과 판정 기준 확정 | 이 문서 커밋 (Q1~Q6 반영) |
-| 2 | 커밋·파일·줄·연산자 선정 | `eval/mutation_confirmation_cases.yaml` 커밋 — **mutant 실행 전** |
-| 3 | 원본 테스트 결과와 줄·분기 상태 기록 | cases 파일에 함께 (ReleaseGuard analyze 결과에서) |
-| 4 | Mutation 실행, 전체 결과 보존 | `docs/eval/v22c/mutation_result.json` + 실행 조건 |
-| 5 | **모든** SURVIVED의 의미 분류 | `eval/mutation_confirmation_review.yaml` |
-| 6 | 명세 근거 확인 → 새 테스트로 차등 검증 | `docs/eval/v22c/test_additions.json`, 테스트 코드 `docs/eval/v22c/tests/` |
-| 7 | 8장 기준 적용 | 보고서 #15 |
+| 1 | 프로토콜과 **평가 코드** 고정 | 이 문서 + `spikes/stage2_2_confirmation/` 커밋 |
+| 2 | 후보 커밋의 기준 테스트·coverage 실행 | `docs/eval/v22c/baseline.json` (mutant 없음) |
+| 3 | 정해진 규칙으로 후보 줄·mutant 선정 | 스크립트가 2단계 결과만 읽어 결정적으로 만든다 |
+| 4 | 선정 목록·coverage 근거·제외 사유 커밋 | `eval/mutation_confirmation_cases.yaml` — **mutant 실행 전 커밋** |
+| 5 | Mutation 실행, 전체 결과 보존 | `docs/eval/v22c/mutation_result.json` + 실행 조건 |
+| 6 | 모든 SURVIVED 분류 (커밋 시점 정보만), 블라인드 검토 | `eval/mutation_confirmation_review.yaml` (1차), `docs/eval/v22c/blind/` |
+| 7 | 이후 이력으로 오라클 확인, 차등 테스트 | review 파일의 2차 칸, `docs/eval/v22c/test_additions.json`, `tests/` |
+| 8 | 비용 분석, GO/HOLD/NO-GO | 보고서 #15 |
 
-- 2단계 선정에는 coverage 상태(실행된 줄인지)만 쓰고 mutation 결과는 쓰지 않는다. 2단계 커밋 전에는 어떤 mutant도 실행하지 않는다.
+- coverage는 선정 근거라서 2단계에서 미리 본다. 금지하는 것은 **mutant의 KILLED/SURVIVED를 보고 선정하는 것**이다. 4단계 커밋 전에는 어떤 mutant도 실행하지 않는다.
 - 실행 뒤 규칙을 고쳐야 하면 `docs/eval/v22c/protocol_changes.yaml`에 따로 남긴다. 고친 기준으로 다시 계산한 값은 **사후 분석**으로만 보고하고, 독립 확인에 성공했다고 표현하지 않는다.
 - 단계마다 따로 커밋한다. 커밋 순서가 곧 사전 고정의 증거다.
 
@@ -38,84 +41,117 @@
 
 ### 3.1 코드베이스 (2026-11-13 확인한 사실)
 
-| 코드베이스 | 저장소 | 소스 Python을 바꾼 커밋 | 전체 테스트 시간 | 비고 |
-|---|---|---|---|---|
-| **P** Predict_Success | `predict-success/` | 19 (이미 관찰한 6개 제외 → 약 13) | 약 3초 | 2.0·2.1 규칙을 만든 곳 |
-| **R** ReleaseGuard | `release-guard/` | 19 | **167초** (194개) | 다른 도메인(도구 자체). 명세 문서가 많다 → 아래 편향 주의 |
-| **W** AI Data Analyst 계열 | `2026-10/week1~4` | 2 + 7 + 11 + 1 = 21 | week3·4 약 16초 | 한 프로젝트의 연속 버전 → **코드베이스 1개로 센다** |
+| 코드베이스 | 저장소 | 소스 Python을 바꾼 커밋 | 전체 테스트 시간 | 목표 mutant | GO 재현 조건 |
+|---|---|---|---|---|---|
+| **R** ReleaseGuard | `release-guard/` | 19 | **167초** (194개) | 20 | 포함 |
+| **W** AI Data Analyst 계열 | `2026-10/week1~4` | 2 + 7 + 11 + 1 = 21 | week3·4 약 16초 | 20 | 포함 |
+| **P** Predict_Success | `predict-success/` | 19 (이미 관찰한 6개 제외 → 약 13) | 약 3초 | 15 | **제외** (규칙을 만든 곳) |
 
-- 관찰한 커밋(제외): `fc58c0e` `99309f2` `82e4305` `568ea41` `b67e806` `c7733b3`, 그리고 2.1 평가 B 대조군에 쓴 커밋 전부 (`eval/mutation_cases_2_1.yaml`에서 자동 추출).
-- 편향 주의: R은 Claude가 이 세션들에서 만든 코드이고 설계 문서가 촘촘하다. 명세 근거를 찾기 쉬워 ACTIONABLE이 부풀 수 있다. R의 명세 근거는 **그 커밋 시점 이전에 저장소에 있던 문서·docstring·테스트 이름**만 인정한다 (P·W도 같은 규칙).
-- W는 week1 `test_app.py`가 `data/` 없음으로 skip된다 (Stage 1.7 기록). 선택 테스트가 전부 skip인 mutant는 `NO_EXECUTED_TEST`로 따로 센다.
+- 목표는 총 55개. 조건을 충족하는 mutant가 모자라면 **다른 것으로 채우지 않고 부족 수를 보고**한다.
+- 관찰한 커밋(제외): `fc58c0e` `99309f2` `82e4305` `568ea41` `b67e806` `c7733b3`, 그리고 `eval/mutation_cases_2_1.yaml`에 나오는 모든 커밋 (스크립트가 자동 추출).
+- W의 커밋 순서: week1 → week2 → week3 → week4, 저장소 안에서는 커밋 시간순. 같은 코드가 다음 주차 저장소의 첫 커밋으로 복사된 경우 그 줄은 '바뀐 줄'로 잡히므로, **이미 앞 주차에서 같은 파일·같은 줄 내용으로 선정된 줄은 건너뛴다** (내용 기준 중복 제거).
+- 편향 주의: R은 Claude가 이 세션들에서 만든 코드이고 설계 문서가 촘촘하다. 명세 근거를 찾기 쉬워 ACTIONABLE이 부풀 수 있다. 그래서 명세 근거는 모든 코드베이스에서 **대상 커밋 시점에 저장소에 있던 문서·docstring·테스트 이름만** 인정한다.
+- W는 week1 `test_app.py`가 `data/` 없음으로 skip된다 (Stage 1.7 기록). 선택한 테스트가 전부 skip인 mutant는 `NO_EXECUTED_TEST`로 따로 센다.
 
 ### 3.2 선정 규칙 (고정)
 
 | 항목 | 규칙 |
 |---|---|
-| 커밋 | 관찰하지 않은 커밋 중 소스 Python을 바꾼 커밋, **커밋 시간순**(오래된 것부터) |
-| 대상 줄 | 그 커밋에서 바뀌었고 ReleaseGuard analyze가 **covered**로 본 줄 (`not_executable`·줄 공백 제외). 테스트 파일·`spikes/`·`eval/` 제외 |
+| 커밋 | 관찰하지 않은 커밋 중 소스 Python을 바꾼 커밋, **커밋 시간순(오래된 것부터)** |
+| 대상 줄 | 그 커밋에서 추가·수정됐고 2단계 coverage에서 **테스트가 실행한** 줄. `not_executable`·줄 공백 제외. 테스트 파일·`spikes/`·`eval/` 제외 |
 | 분기 공백 | 분기 공백이 없는 줄을 먼저 고른다. 분기 공백 줄은 같은 커밋에서 예산이 남을 때만 |
-| 연산자 계열 | 2.1과 같다: 불리언(`ReplaceAndWithOr` 계열), 비교(`ReplaceComparisonOperator`), 상수(`NumberReplacer`) |
-| 계열 균형 | 코드베이스마다 계열별 예산을 같게 (예: 20개면 7·7·6). 한 계열 후보가 모자라면 남은 예산을 다른 계열에 **정해진 순서**(비교 → 불리언 → 상수)로 넘긴다 |
-| 상한 | 커밋당 8개, 줄당 1개. 줄 안에서는 Cosmic Ray `dump` 순서의 첫 후보 |
-| 규모 | 코드베이스당 약 20개, 전체 40~60개 (Q1에 따라) |
-| 배제 | 기준 테스트 실패, 스냅샷·환경 오류, 수집 불가 → mutant를 만들지 않고 **사유를 cases 파일에 기록**. 다음 커밋으로 넘어간다 |
-| 무작위성 | 쓰지 않는다. 순서는 위 규칙과 `dump` 순서로 정해진다 |
+| 연산자 계열 | 2.1과 같다: 불리언(and/or 바꾸기), 비교(비교 연산자 바꾸기), 상수(`NumberReplacer`) |
+| 계열 균형 | 코드베이스 예산을 세 계열에 나눈다 (20 → 비교 7·불리언 7·상수 6, 15 → 5·5·5). 한 계열 후보가 모자라면 남은 예산을 정해진 순서(비교 → 불리언 → 상수)로 넘긴다 |
+| 상한 | 커밋당 8개, 줄당 1개. 줄 안에서는 Cosmic Ray `dump` 순서(연산자 이름, occurrence)의 첫 후보 |
+| 채우는 순서 | 커밋을 시간순으로 돌며, 각 커밋 안에서 (분기 공백 없음 우선, 파일 경로, 줄 번호) 순으로 계열 예산이 남은 후보를 고른다 |
+| 배제 | 기준 테스트 실패, 스냅샷·환경 오류, 수집 불가 → mutant를 만들지 않고 **사유를 cases 파일에 기록**한 뒤 다음 커밋으로 |
+| 무작위성 | 쓰지 않는다 |
+
+오래된 커밋부터 고르면 초기 구현의 단순한 코드가 과대표집될 수 있다. 이 한계는 인정하고 규칙을 바꾸지 않는다. 커밋별 분포를 보고서에 적는다.
 
 **SZZ 결함 위치는 쓰지 않는다.** 결함 위치를 고르면 일반 변경에서의 효용이 부풀고, 2.1에서 SZZ 오류도 확인됐다.
 
 ## 4. 실행
 
-- 어댑터는 `spikes/stage2_1/mutlib.py`를 그대로 쓴다 (`COLLECTION_ERROR`·`NO_EXECUTED_TEST` 분리, mutant마다 새 스냅샷, 선택 vs 전체 비교). 바꿔야 하면 실행 전 커밋에서 바꾸고 이 문서에 적는다.
+- 어댑터는 `spikes/stage2_1/mutlib.py`를 그대로 쓴다 (`COLLECTION_ERROR`·`NO_EXECUTED_TEST` 분리, mutant마다 새 스냅샷, 선택 vs 전체 비교). 바꿔야 하면 1단계 커밋 안에서 바꾼다.
+- **mutant마다 결과를 바로 파일에 저장**하고, 다시 실행하면 저장된 mutant는 건너뛴다(중단·재개). 실패한 mutant는 `EXECUTION_ERROR`로 남기며 조용히 빼지 않는다. 선정 목록과 결과 수가 다르면 보고서에 적는다.
 - 저장: 원본 JSON 전체, Cosmic Ray·pytest·coverage·Python 버전, 저장소별 HEAD, 실행 시각, 테스트 명령. 홈·임시 경로·계정 이름은 2.0과 같이 가린다.
-- **선택 실행 vs 전체 실행**: Q2에 따른다. R은 전체가 167초라 모든 mutant에 전체를 돌리면 R 20개에 약 1시간이다.
+- **모든 mutant에 선택 실행과 전체 실행을 둘 다** 한다 (Q2). 시간은 나눠 기록한다:
 
-## 5. 분류 기준 — 2.1 그대로 + 2.1 검토에서 확정된 두 가지
+| 비용 | 의미 | 기록 |
+|---|---|---|
+| 제품 경로 비용 | 향후 기능의 실행 비용 = mutant 생성(`init`·`dump`) + 스냅샷 준비 + `apply` + **선택 테스트 실행** + 결과 정리 | mutant마다 단계별 초 |
+| 선택 정확성 확인 비용 | 이번 평가에서만 드는 **전체 테스트 실행** | mutant마다 초, 따로 보고 |
 
-2.1 3장의 분류(`ACTIONABLE_GAP` · `MEANINGFUL_UNVERIFIED` · `LOW_VALUE` · `EQUIVALENT_SUPPORTED` · `UNRESOLVED`)와 `ACTIONABLE_GAP` 세 조건(명세 근거 · 차등 테스트 · assertion 기반)을 바꾸지 않는다. 2.1 리뷰에서 확정된 두 규칙은 결과를 보기 전인 지금 넣는다.
+## 5. 분류 기준 — 2.1 그대로 + 실행 전에 넣는 규칙
 
-1. **오라클 부적격 (`KNOWN_BUG_ORACLE`)**: 원본 동작이 이후 이력에서 결함으로 고쳐졌으면, 그 mutant를 죽이는 테스트는 ACTIONABLE 검증 대상에서 뺀다. 분류는 `MEANINGFUL_UNVERIFIED`에 표시를 단다. 확인 방법: 대상 줄·함수를 이후 커밋에서 바꾼 수정 커밋 메시지·diff를 본다 (`git log -L` 범위).
+2.1 3장의 분류(`ACTIONABLE_GAP` · `MEANINGFUL_UNVERIFIED` · `LOW_VALUE` · `EQUIVALENT_SUPPORTED` · `UNRESOLVED`)와 `ACTIONABLE_GAP` 세 조건(명세 근거 · 차등 테스트 · assertion 기반)을 바꾸지 않는다. 2.1 검토에서 확정된 규칙을 결과를 보기 전인 지금 넣는다.
+
+1. **명세 시점**: 명세 근거는 대상 커밋 시점에 저장소에 있던 것만 인정한다. 근거를 지금 새로 쓰는 것은 인정하지 않는다 (2.1 #23 provisional과 같은 처리).
 2. **동등성 범위 표시**: `EQUIVALENT_SUPPORTED`에는 근거를 세 칸으로 적는다 — 코드로 보장 / 데이터로 관측 / 아직 미보장. 일반적인 의미의 equivalent mutant로 확정하지 않는다.
 3. **의미 있는 차이 ≠ 우선순위** (2.1 T5): 계약 안의 변화면 `ACTIONABLE_GAP`이고, 실무 우선순위는 `review_priority`로 따로 적는다.
-4. **명세 시점**: 명세 근거는 대상 커밋 시점 이전에 저장소에 있던 것만 인정한다. 근거를 지금 새로 쓰는 것은 인정하지 않는다 (2.1 #23의 provisional과 같은 처리).
+4. **오라클 확인은 두 단계로 나눈다** (미래 이력 누출 방지):
+   - **1차 (6단계)**: 대상 커밋 시점의 코드·문서·테스트만 보고 분류하고, 테스트의 **기대 결과를 먼저 적는다**. 이 단계에서는 대상 커밋 이후의 이력을 읽지 않는다.
+   - **2차 (7단계, 1차 커밋 뒤)**: 대상 줄·함수를 이후에 바꾼 커밋(`git log -L` 범위)을 보고, 원본 동작이 결함으로 고쳐졌으면 `KNOWN_BUG_ORACLE`로 표시한다. 그 mutant를 죽이는 테스트는 ACTIONABLE 검증에서 뺀다.
+   - 2차에서 바뀐 분류는 `revised_after_history`로 따로 적고, 1차 분류를 덮어쓰지 않는다. 이후 이력에서 얻은 정보를 1차 분류에 영향을 주지 않은 정보처럼 다루지 않는다.
 
-분류자: Claude 초안 → 사용자 확인. 다만 사람 검토 비용을 재기 위해 **일부는 사용자가 먼저 분류한다** (Q4).
+## 6. 블라인드 독립 분류와 사람 검토 비용 (Q4)
 
-## 6. 테스트로 차등 검증
+두 가지를 분리한다.
 
-2.1은 커밋마다 1개만 테스트했다. 그러면 유용할 가능성이 높은 사례만 골라 성공률이 부풀 수 있다. 이번에는:
+| | A. 블라인드 독립 분류 | B. 사람 검토 비용 |
+|---|---|---|
+| 누가 | 외부 리뷰어 (Claude 초안 없이) | 사용자 또는 별도 사람 평가자 |
+| 무엇 | 6개 (R·W·P 각 2개) 분류·근거·불확실성 | 같은 6개를 독립 검토한 실제 시간 |
+| 기록 | 분류, 근거, 불확실성, Claude 초안과의 사후 일치 여부 | 사례별 소요 분, 그중 명세 탐색 분, 판단 불가 여부 |
+| 쓰임 | 분류 신뢰도 (일치도) | 7장 Review Effort, 8장 비용 조건 |
+
+- A의 시간은 사람 검토 시간이 아니다. 기록은 하지만 비용 조건에 쓰지 않는다.
+- **B를 측정하지 못하면 사람 비용은 `NOT_MEASURED`이고, 비용 조건을 충족한 것으로 보지 않는다** (8장).
+- **사례 선택 (결과 보기 전 고정)**: 코드베이스마다 SURVIVED를 `sha256("rg-2.2c-blind|" + 코드베이스 + "|" + 커밋 + "|" + 경로 + "|" + 줄 + "|" + 연산자 + "|" + occurrence)`의 16진 문자열 오름차순으로 정렬해 앞의 2개. SURVIVED가 2개 미만이면 있는 만큼만 쓰고 부족을 기록한다.
+- **블라인드 자료** (스크립트가 만든다, 같은 형식): 대상 커밋의 원본 함수 전체와 모듈 docstring, mutant diff, 그 커밋 시점 저장소의 문서 파일 목록(요청하면 원문 제공), 선택·전체 테스트 결과와 실행된 테스트 id. **Claude의 분류·평가 초안은 넣지 않는다.** 자료에 넣을 명세 발췌를 Claude가 고르면 판단이 섞이므로, 발췌하지 않고 위의 기계적 범위만 준다.
+- Claude의 1차 분류는 블라인드 결과를 받기 **전에** 커밋한다. 블라인드 결과는 받은 그대로 `docs/eval/v22c/blind/`에 저장하고, 비교는 그 뒤에 한다.
+
+## 7. 테스트로 차등 검증 (Q3)
+
+2.1은 커밋마다 1개만 테스트했다. 유망한 사례만 골라 성공률이 부풀 수 있었다. 이번에는:
 
 - **모든 SURVIVED가 검토 대상이다.** 분류 없이 남기는 SURVIVED는 없다.
-- `MEANINGFUL_UNVERIFIED` 중 명세 근거가 있는 것은 **전부** 테스트를 시도한다 (Q3의 상한까지, 넘으면 mutant 번호 순).
+- 명세 근거가 있는 `MEANINGFUL_UNVERIFIED`는 **전부** 테스트를 시도한다. **상한 15개.**
+- 15개를 넘으면 **R → W → P 순서로 한 개씩 번갈아** 고른다. 각 코드베이스 안에서는 mutant 번호(선정 순서) 오름차순. 한 코드베이스가 소진되면 남은 코드베이스로 순환을 계속한다.
+- 상한 때문에 시도하지 못한 수를 **코드베이스별로** 기록한다.
 - 시도한 것은 실패까지 모두 보고한다. 시도하지 않은 것은 실패로도 성공으로도 세지 않는다.
-- 절차·결과 해석 표·보관 위치는 2.1 6장과 같다 (대상 저장소에는 넣지 않음).
+- 기대 결과는 1차 분류에서 이미 적은 것을 쓴다 (5장 4). 절차·결과 해석 표·보관 위치는 2.1 6장과 같다 (대상 저장소에는 넣지 않음).
 
-## 7. 지표
+## 8. 지표
 
 | 지표 | 정의 |
 |---|---|
-| **Actionable Yield** | confirmed `ACTIONABLE_GAP` / 전체 SURVIVED. **세 값을 함께**: confirmed, provisional, 미검증(`MEANINGFUL_UNVERIFIED` 중 시도 안 함). 분모를 "테스트를 시도한 SURVIVED"로 한 값도 |
+| **Actionable Yield** | confirmed `ACTIONABLE_GAP` / 전체 SURVIVED. **세 값을 함께**: confirmed, provisional, 미검증(시도 안 함·상한 초과). 분모를 "테스트를 시도한 SURVIVED"로 한 값도 |
 | **Incremental Value** | confirmed `ACTIONABLE_GAP` 중 기존 보고서에서 줄 공백도 분기 공백도 아니었던 수. 위치마다 기존 표시(`covered` / `not_executable` / `branch_gap` / `fixture_only`)를 기록 |
-| **Oracle Validity** | `KNOWN_BUG_ORACLE`로 뺀 수와, 확인 방법을 적용한 SURVIVED 수 (모든 ACTIONABLE 후보에 이력 확인을 했는가) |
-| **Review Effort** | 사용자가 직접 분류한 SURVIVED당 실제 분(사용자 기록). Claude 초안의 읽은 파일 수는 참고로만 |
-| **Execution Overhead** | 커밋당 mutation 추가 시간(선택 실행 합), mutant당 선택·전체 실행 시간 중앙값. 기준 analyze 시간 대비 배수 |
+| **Oracle Validity** | 2차 확인을 적용한 후보 수, `KNOWN_BUG_ORACLE`로 뺀 수, 2차에서 분류가 바뀐 수 |
+| **Review Effort** | B의 사례별 실제 분 (중앙값·최대). 측정 못 하면 `NOT_MEASURED` |
+| **Cost per Actionable** | B의 총 검토 분 ÷ (B 사례 중 confirmed ACTIONABLE 수), 그리고 6개 평균 시간 × 전체 SURVIVED ÷ 전체 confirmed ACTIONABLE (추정, 추정이라고 적음). **상한 없이 반드시 보고** |
+| **Execution Overhead** | 코드베이스별 커밋당 제품 경로 비용(4장) 중앙값. 전체 실행 비용은 따로 |
 | **Operator Value** | 계열별 mutant·SURVIVED·confirmed ACTIONABLE·LOW/EQUIVALENT 수 |
-| **Selection Fidelity** | 선택 실행과 전체 실행의 상태·실패 종류·실패 id 완전 일치 비율 (전체를 돌린 mutant만) |
+| **Selection Fidelity** | 선택 실행과 전체 실행의 상태·실패 종류·실패 id 완전 일치 비율 |
+| **Blind Agreement** | A 6개에서 외부 리뷰어와 Claude 1차 분류의 일치 수 |
 
 모든 지표를 **코드베이스별로** 나눠 보고하고, 합계는 그 뒤에 둔다.
 
-## 8. Go / Hold / No-Go (고정)
+## 9. Go / Hold / No-Go (고정)
 
-| 결정 | 기준 |
+| 결정 | 기준 (모두 만족) |
 |---|---|
-| **GO** — 2.2 정식 통합 | confirmed `ACTIONABLE_GAP`이 **P를 뺀 독립 코드베이스 2곳(R·W) 각각에서 1건 이상**, 전체로는 **서로 다른 커밋 2건 이상**, 그중 Incremental Value 1건 이상. 그리고 비용 상한(Q5) 안 |
-| **HOLD** — 제한적 기능만 | ACTIONABLE은 있지만 한 코드베이스에만 몰려 있거나(P만 포함), 비용 상한을 넘거나, 미검증이 많아 판단 근거가 부족 |
-| **NO-GO** — 2b로 | confirmed ACTIONABLE이 없거나, 검토 비용이 상한을 크게 넘어 실용성이 없음 |
+| **GO** — 2.2 선택형 기능 통합 | ① confirmed `ACTIONABLE_GAP`이 **R과 W 각각에서 1건 이상**, R·W 합쳐 **서로 다른 커밋 2건 이상** ② 그중 Incremental Value 1건 이상 ③ 비용: R 커밋당 제품 경로 비용 중앙값 ≤ 5분, W 커밋당 중앙값 ≤ 5분, **사람의** SURVIVED 검토 시간 중앙값 ≤ 5분 (B 측정 필요) |
+| **HOLD** — 제한적 기능만 | ACTIONABLE이 R·W 중 한 곳에만 있거나(P만 포함), 비용 조건 중 하나라도 초과 **또는 `NOT_MEASURED`**, 또는 미검증이 많아 판단 근거가 부족 |
+| **NO-GO** — 2b로 | R·W에서 confirmed ACTIONABLE이 없거나, 비용이 상한을 크게 넘어(어느 하나가 3배 이상) 실용성이 없음 |
 
-- P의 결과는 보고하지만 GO의 재현 조건에는 넣지 않는다 (규칙을 만든 코드베이스라서). Q1에서 P를 빼면 이 줄은 지운다.
+- P의 결과는 보고하지만 GO 조건에 넣지 않는다.
+- Cost per Actionable은 기준 없이 보고만 한다. GO여도 이 값을 보고서 결론에 함께 적는다.
 - 결과가 GO여도 mutation 결과를 판정(SAFE·REVIEW·BLOCK)에 반영하지 않는다.
 
-## 9. GO일 때 Stage 2.2 구현 범위 (미리 제한)
+## 10. GO일 때 Stage 2.2 구현 범위 (미리 제한)
 
 | 항목 | 내용 |
 |---|---|
@@ -128,27 +164,34 @@
 | 판정 | 변경 없음 |
 | 에이전트 | 필수 아님 |
 
-목표는 mutation 엔진을 풍부하게 만드는 것이 아니라, 테스트가 감지하지 못한 동작 변화를 개발자가 검토할 수 있는 근거로 주는 것이다.
+목표는 mutation 엔진을 풍부하게 만드는 것이 아니라, 테스트가 감지하지 못한 동작 변화를 개발자가 검토할 수 있는 근거로 주는 것이다. 판정 연동은 실제 사용 데이터를 모은 뒤에만 논의한다.
 
-## 10. 결정 대기 (사용자)
+## 11. 결정 기록 (2026-11-13, 외부 리뷰)
 
-| # | 질문 | 선택지 | 추천 |
-|---|---|---|---|
-| Q1 | 코드베이스 구성 | (a) **R + W 각 약 20개 + P 신규 커밋 약 15개 (P는 GO 재현 조건에서 제외)** (b) R + W만 각 약 25개 (c) P + R + W 동등 | **(a)**. P의 새 커밋으로 "같은 코드베이스의 새 커밋에서도 반복되나"를 따로 보고, 독립 재현은 R·W로만 판단한다 |
-| Q2 | 전체 실행 범위 (Selection Fidelity·비용) | (a) **모든 mutant에 선택 + 전체** (R 약 1시간, 백그라운드) (b) R은 SURVIVED 전부 + KILLED 중 mutant 번호 순 1/3만 전체 | **(a)**. 일치율을 표본 없이 재고, 실제 비용 숫자가 나온다. 한 번만 돌리면 된다 |
-| Q3 | 테스트 시도 상한 | (a) **명세 근거가 있는 `MEANINGFUL_UNVERIFIED` 전부, 최대 15개** (b) 커밋당 1개 (2.1과 같음) | **(a)**. 2.1의 선택 편향을 줄이는 것이 이번 평가의 핵심이다 |
-| Q4 | 사람 검토 시간 측정 | (a) **사용자가 SURVIVED 중 정해진 6개(코드베이스별 mutant 번호 앞에서부터 2개씩)를 Claude 초안을 보기 전에 직접 분류하고 분을 기록** → 시간 + Claude 초안과의 일치도 (b) 사용자가 Claude 초안을 확인하는 시간만 기록 (c) 재지 않고 읽은 파일 수로 대신 | **(a)**. 실제 제품에서는 개발자가 초안 없이 SURVIVED를 읽는다. (b)는 사람 비용을 낮게 잰다 |
-| Q5 | GO 비용 상한 | (a) **커밋당 선택 실행 추가 시간 중앙값 ≤ 5분(8 mutant 기준), 사람 검토 SURVIVED당 중앙값 ≤ 5분** (b) 상한 없이 숫자만 보고 | **(a)**. "감당 가능"을 결과 보기 전에 숫자로 정해 둔다 |
-| Q6 | 시간순 선택의 방향 | (a) **오래된 커밋부터** (b) 최신 커밋부터 | **(a)**. 2.0과 같은 규칙이라 규칙 자체를 바꾸지 않는다. R의 초기 커밋은 단순하다는 편향이 있지만 W·P와 같은 조건이다 |
+| # | 결정 |
+|---|---|
+| Q1 | R 20 · W 20 · P 15. GO 재현 조건은 R·W만 |
+| Q2 | 모든 mutant에 선택 + 전체 실행. 전체 실행 비용은 평가 비용으로 따로 보고 |
+| Q3 | 명세 근거가 있는 `MEANINGFUL_UNVERIFIED` 전부, 최대 15개. 초과 시 R → W → P 순환 |
+| Q4 | 수정 승인: A 블라인드 분류(외부 리뷰어)와 B 사람 검토 시간을 분리. 사례는 고정 해시 순서 |
+| Q5 | 조건부 승인: 코드베이스별 제품 경로 비용 중앙값 ≤ 5분, 사람 검토 중앙값 ≤ 5분, Cost per Actionable 필수 보고, 미측정이면 `NOT_MEASURED` |
+| Q6 | 오래된 커밋부터. 시기 편향은 한계로 기록 |
+| 순서 | coverage 실행(2) → 선정(3) → 고정 커밋(4) → mutation(5) |
+| 오라클 | 1차(커밋 시점 정보만) → 2차(이후 이력) 분리 |
+| Q7 | **B 측정자: 미정** (사용자 확인 필요) |
 
-## 11. 산출물
+## 12. 산출물
 
 ```text
 release-guard/
-├── docs/design_stage2_2_confirmation.md      ← 이 문서 (1단계 고정)
-├── eval/mutation_confirmation_cases.yaml      ← 2·3단계, mutant 실행 전 커밋
-├── eval/mutation_confirmation_review.yaml     ← 5·6단계, 실행 뒤 분류·명세 근거
-├── docs/eval/v22c/                           ← 원본 JSON, 실행 조건, test_additions, tests/, protocol_changes
-├── docs/eval/202611xx_eval_report_15.md
-└── spikes/stage2_2_confirmation/              ← 선정·실행 스크립트 (mutlib 재사용)
+├── docs/design_stage2_2_confirmation.md      ← 이 문서 (1단계)
+├── spikes/stage2_2_confirmation/              ← 기준 실행·선정·실행·블라인드 자료 스크립트 (1단계, mutlib 재사용)
+├── docs/eval/v22c/baseline.json               ← 2단계
+├── eval/mutation_confirmation_cases.yaml      ← 3·4단계, mutant 실행 전 커밋
+├── docs/eval/v22c/mutation_result.json        ← 5단계 (+ 실행 조건)
+├── eval/mutation_confirmation_review.yaml     ← 6단계 1차 분류, 7단계 2차 칸
+├── docs/eval/v22c/blind/                      ← 블라인드 자료와 받은 결과
+├── docs/eval/v22c/test_additions.json, tests/ ← 7단계
+├── docs/eval/v22c/protocol_changes.yaml       ← 실행 뒤 규칙 변경이 있을 때만
+└── docs/eval/202611xx_eval_report_15.md       ← 8단계
 ```
