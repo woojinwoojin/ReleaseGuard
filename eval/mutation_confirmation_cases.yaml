@@ -1,0 +1,1409 @@
+note: Stage 2.2 확인 평가 선정 목록 — mutant 실행 전 커밋으로 고정 (설계 docs/design_stage2_2_confirmation.md 2·3장). select_confirmation.py가 baseline.json만 보고 만든다. 손으로 고치지 않는다.
+observed_commits_excluded:
+- 568ea41
+- 82e4305
+- 99309f2
+- b67e806
+- c7733b3
+- fc58c0e
+per_commit: 8
+codebases:
+  P:
+    target: 15
+    family_budget:
+      comparison: 5
+      boolean: 5
+      constant: 5
+    selected: 15
+    shortfall: 0
+    by_family:
+      comparison: 5
+      boolean: 5
+      constant: 5
+    spilled_to: []
+    commits_visited:
+    - repo: predict-success
+      sha: 0fc36c3
+      subject: Write README from the EvidenceFirst proposal
+      excluded: 소스 Python 변경 없음
+      baseline: null
+      picked: 0
+    - repo: predict-success
+      sha: 93fd788
+      subject: Add roadmap checklist for the 4-week MVP
+      excluded: 소스 Python 변경 없음
+      baseline: null
+      picked: 0
+    - repo: predict-success
+      sha: f962d60
+      subject: Record OpenDART key setup and add env example
+      excluded: 소스 Python 변경 없음
+      baseline: null
+      picked: 0
+    - repo: predict-success
+      sha: c7878e3
+      subject: Define the five questions, trust checks, and why V1 is a score
+      excluded: 소스 Python 변경 없음
+      baseline: null
+      picked: 0
+    - repo: predict-success
+      sha: 60dbee2
+      subject: Fix the pilot companies and the data-handling rules they surfaced
+      excluded: 소스 Python 변경 없음
+      baseline: null
+      picked: 0
+    - repo: predict-success
+      sha: 32c4dc5
+      subject: Record the raw storage decision and first collection results
+      excluded: 소스 Python 변경 없음
+      baseline: null
+      picked: 0
+    - repo: predict-success
+      sha: 3db2f31
+      subject: Fix the reporting basis per company and compute the first 2025 metrics
+      excluded: null
+      baseline:
+        status: passed
+        reason: null
+        seconds: 6.0
+        attempts: 1
+        counts:
+          passed: 76
+          failed: 0
+          error: 0
+          skipped: 0
+      picked: 8
+    - repo: predict-success
+      sha: 9e9c12b
+      subject: Fill 2025 note gaps with separated amount, scope, and component checks
+      excluded: null
+      baseline:
+        status: passed
+        reason: null
+        seconds: 3.2
+        attempts: 1
+        counts:
+          passed: 79
+          failed: 0
+          error: 0
+          skipped: 0
+      picked: 3
+    - repo: predict-success
+      sha: 99c3179
+      subject: Add run manifests, proposed scoring rules, and coverage without redistribution
+      excluded: null
+      baseline:
+        status: passed
+        reason: null
+        seconds: 5.6
+        attempts: 1
+        counts:
+          passed: 116
+          failed: 0
+          error: 0
+          skipped: 0
+      picked: 4
+    mutants:
+    - codebase: P
+      repo: predict-success
+      commit: 3db2f31
+      path: src/metrics/engine.py
+      line: 56
+      text: 'if i.calc_status == "reference":'
+      operator: core/ReplaceComparisonOperator_Eq_NotEq
+      occurrence: 0
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_metrics.py::test_cagr_uses_2022_and_2025_and_refuses_non_positive_start
+      - tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score
+      - tests/test_metrics.py::test_excluded_company_gets_no_peer_score_not_zero
+      - tests/test_metrics.py::test_normal_inputs_give_normal_result
+      - tests/test_metrics.py::test_peer_median_excludes_the_company_itself_and_is_validation_only
+      - tests/test_metrics.py::test_reported_current_ratio_is_view_only_and_hfs_ratio_is_the_scoring_one
+      - tests/test_metrics.py::test_three_year_decline_is_not_called_stable
+      - tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason
+      - tests/test_metrics.py::test_zero_current_liabilities_is_never_infinite
+      'no': 41
+    - codebase: P
+      repo: predict-success
+      commit: 3db2f31
+      path: src/metrics/engine.py
+      line: 57
+      text: 'result.hold_reasons.append(f"{i.label} {i.year}: 후보값 — {i.note[:60]}")'
+      operator: core/NumberReplacer
+      occurrence: 6
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score
+      'no': 42
+    - codebase: P
+      repo: predict-success
+      commit: 3db2f31
+      path: src/metrics/engine.py
+      line: 58
+      text: 'elif i.calc_status == "not_computed":'
+      operator: core/ReplaceComparisonOperator_Eq_NotEq
+      occurrence: 1
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_metrics.py::test_cagr_uses_2022_and_2025_and_refuses_non_positive_start
+      - tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score
+      - tests/test_metrics.py::test_excluded_company_gets_no_peer_score_not_zero
+      - tests/test_metrics.py::test_normal_inputs_give_normal_result
+      - tests/test_metrics.py::test_peer_median_excludes_the_company_itself_and_is_validation_only
+      - tests/test_metrics.py::test_reported_current_ratio_is_view_only_and_hfs_ratio_is_the_scoring_one
+      - tests/test_metrics.py::test_three_year_decline_is_not_called_stable
+      - tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason
+      - tests/test_metrics.py::test_zero_current_liabilities_is_never_infinite
+      'no': 43
+    - codebase: P
+      repo: predict-success
+      commit: 3db2f31
+      path: src/metrics/engine.py
+      line: 59
+      text: 'result.hold_reasons.append(f"{i.label} {i.year}: {i.status} — {i.note[:60]}")'
+      operator: core/NumberReplacer
+      occurrence: 8
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason
+      'no': 44
+    - codebase: P
+      repo: predict-success
+      commit: 3db2f31
+      path: src/metrics/engine.py
+      line: 60
+      text: 'if worst != "normal":'
+      operator: core/ReplaceComparisonOperator_NotEq_Eq
+      occurrence: 0
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_metrics.py::test_cagr_uses_2022_and_2025_and_refuses_non_positive_start
+      - tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score
+      - tests/test_metrics.py::test_excluded_company_gets_no_peer_score_not_zero
+      - tests/test_metrics.py::test_normal_inputs_give_normal_result
+      - tests/test_metrics.py::test_peer_median_excludes_the_company_itself_and_is_validation_only
+      - tests/test_metrics.py::test_reported_current_ratio_is_view_only_and_hfs_ratio_is_the_scoring_one
+      - tests/test_metrics.py::test_three_year_decline_is_not_called_stable
+      - tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason
+      - tests/test_metrics.py::test_zero_current_liabilities_is_never_infinite
+      'no': 45
+    - codebase: P
+      repo: predict-success
+      commit: 3db2f31
+      path: src/metrics/engine.py
+      line: 70
+      text: return (a + b) / 2
+      operator: core/NumberReplacer
+      occurrence: 10
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_metrics.py::test_normal_inputs_give_normal_result
+      'no': 46
+    - codebase: P
+      repo: predict-success
+      commit: 3db2f31
+      path: src/metrics/engine.py
+      line: 77
+      text: ocf, ta0, ta1 = get("operating_cash_flow", 2025), get("total_assets", 2024), get("total_assets", 2025)
+      operator: core/NumberReplacer
+      occurrence: 12
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_metrics.py::test_normal_inputs_give_normal_result
+      'no': 47
+    - codebase: P
+      repo: predict-success
+      commit: 3db2f31
+      path: src/metrics/engine.py
+      line: 102
+      text: oi, ie = get("operating_income", 2025), get("interest_expense", 2025)
+      operator: core/NumberReplacer
+      occurrence: 26
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score
+      - tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason
+      'no': 48
+    - codebase: P
+      repo: predict-success
+      commit: 9e9c12b
+      path: src/normalization/manual.py
+      line: 59
+      text: replaces = (entry.get("api_relation") == "replaces_incomplete_api" and result["canonical_account"] in COMPONENT_ACCOUNTS
+      operator: core/ReplaceAndWithOr
+      occurrence: 6
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_manual.py::test_manual_total_replaces_api_total_only_when_marked_and_components_confirmed
+      - tests/test_manual.py::test_manual_value_that_disagrees_with_api_value_is_flagged
+      'no': 49
+    - codebase: P
+      repo: predict-success
+      commit: 9e9c12b
+      path: src/normalization/manual.py
+      line: 67
+      text: 'if entry.get("amount_check") != "확인":'
+      operator: core/ReplaceComparisonOperator_NotEq_Eq
+      occurrence: 2
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit
+      - tests/test_manual.py::test_partial_components_never_make_a_normal_debt_total
+      - tests/test_manual.py::test_scope_unconfirmed_note_value_is_only_a_candidate
+      - tests/test_manual.py::test_unconfirmed_amount_is_not_used
+      'no': 50
+    - codebase: P
+      repo: predict-success
+      commit: 9e9c12b
+      path: src/normalization/manual.py
+      line: 70
+      text: 'if result["canonical_account"] in COMPONENT_ACCOUNTS and entry.get("component_check") != "확인":'
+      operator: core/ReplaceAndWithOr
+      occurrence: 8
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit
+      - tests/test_manual.py::test_partial_components_never_make_a_normal_debt_total
+      - tests/test_manual.py::test_scope_unconfirmed_note_value_is_only_a_candidate
+      'no': 51
+    - codebase: P
+      repo: predict-success
+      commit: 99c3179
+      path: src/normalization/selection.py
+      line: 64
+      text: 'if len(hashes) > 1:'
+      operator: core/ReplaceComparisonOperator_Gt_GtE
+      occurrence: 1
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_dart_facts.py::test_changed_response_for_same_report_is_warned_and_latest_is_used
+      - tests/test_dart_facts.py::test_identical_repeated_responses_are_not_warned
+      - tests/test_dart_facts.py::test_repeated_collection_of_same_report_uses_latest_run
+      - tests/test_dart_facts.py::test_snapshot_choice_does_not_depend_on_row_order[0]
+      - tests/test_dart_facts.py::test_snapshot_choice_does_not_depend_on_row_order[1]
+      'no': 52
+    - codebase: P
+      repo: predict-success
+      commit: 99c3179
+      path: src/scoring/score.py
+      line: 34
+      text: 'if rule.get("cap_if_all_decline") is not None and "3년 연속 감소" in (metric.get("notes") or ""):'
+      operator: core/ReplaceAndWithOr
+      occurrence: 0
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_scoring.py::test_excess_liquidity_gets_no_extra_points
+      - tests/test_scoring.py::test_lower_is_better_rule_scores_high_for_low_debt
+      - tests/test_scoring.py::test_normal_calculation_is_scored
+      - tests/test_scoring.py::test_reference_calculation_shows_trace_score_but_is_held
+      - tests/test_scoring.py::test_three_year_decline_caps_volatility_score
+      'no': 53
+    - codebase: P
+      repo: predict-success
+      commit: 99c3179
+      path: src/scoring/score.py
+      line: 56
+      text: eligible = metric.get("score_eligible") or ""
+      operator: core/ReplaceOrWithAnd
+      occurrence: 1
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_scoring.py::test_excluded_peer_metric_is_not_applicable_not_zero
+      - tests/test_scoring.py::test_normal_calculation_is_scored
+      - tests/test_scoring.py::test_peer_metric_is_validation_only_even_when_computed
+      - tests/test_scoring.py::test_reference_calculation_shows_trace_score_but_is_held
+      'no': 54
+    - codebase: P
+      repo: predict-success
+      commit: 99c3179
+      path: src/scoring/score.py
+      line: 65
+      text: 'if rule["method"] == "A" or eligible.startswith("검증용"):'
+      operator: core/ReplaceOrWithAnd
+      occurrence: 2
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_scoring.py::test_normal_calculation_is_scored
+      - tests/test_scoring.py::test_peer_metric_is_validation_only_even_when_computed
+      'no': 55
+  W:
+    target: 20
+    family_budget:
+      comparison: 7
+      boolean: 7
+      constant: 6
+    selected: 20
+    shortfall: 0
+    by_family:
+      comparison: 7
+      boolean: 7
+      constant: 6
+    spilled_to: []
+    commits_visited:
+    - repo: 2026-10/week1-csv-llm-report
+      sha: 44ed326
+      subject: Add KPI analysis and LLM report generation
+      excluded: 기준 실행 no_tests
+      baseline:
+        status: no_tests
+        reason: null
+        seconds: 1.2
+        attempts: 1
+        counts:
+          passed: 0
+          failed: 0
+          error: 0
+          skipped: 0
+      picked: 0
+    - repo: 2026-10/week1-csv-llm-report
+      sha: f483ebe
+      subject: Add Streamlit UI and pytest suite
+      excluded: null
+      baseline:
+        status: passed
+        reason: null
+        seconds: 16.5
+        attempts: 1
+        counts:
+          passed: 14
+          failed: 0
+          error: 0
+          skipped: 1
+      picked: 1
+    - repo: 2026-10/week1-csv-llm-report
+      sha: 06a8bd0
+      subject: 'Add week 1 report: results, limitations, next steps'
+      excluded: 소스 Python 변경 없음
+      baseline: null
+      picked: 0
+    - repo: 2026-10/week1-csv-llm-report
+      sha: 0fce2c7
+      subject: Ignore personal blog notes
+      excluded: 소스 Python 변경 없음
+      baseline: null
+      picked: 0
+    - repo: 2026-10/week2-tool-calling
+      sha: 5b31f70
+      subject: Fix tool gaps found with ambiguous questions
+      excluded: null
+      baseline:
+        status: passed
+        reason: null
+        seconds: 7.3
+        attempts: 1
+        counts:
+          passed: 35
+          failed: 0
+          error: 0
+          skipped: 0
+      picked: 8
+    - repo: 2026-10/week2-tool-calling
+      sha: ef7ed86
+      subject: Add region/segment, customer, and anomaly tools
+      excluded: null
+      baseline:
+        status: passed
+        reason: null
+        seconds: 4.1
+        attempts: 1
+        counts:
+          passed: 42
+          failed: 0
+          error: 0
+          skipped: 0
+      picked: 5
+    - repo: 2026-10/week2-tool-calling
+      sha: 7f9efeb
+      subject: Split tool arguments into shared filters and group_by
+      excluded: null
+      baseline:
+        status: passed
+        reason: null
+        seconds: 4.5
+        attempts: 1
+        counts:
+          passed: 46
+          failed: 0
+          error: 0
+          skipped: 0
+      picked: 4
+    - repo: 2026-10/week2-tool-calling
+      sha: 7bc367a
+      subject: Add fast and careful answer modes
+      excluded: null
+      baseline:
+        status: passed
+        reason: null
+        seconds: 4.1
+        attempts: 1
+        counts:
+          passed: 48
+          failed: 0
+          error: 0
+          skipped: 0
+      picked: 0
+    - repo: 2026-10/week2-tool-calling
+      sha: 1d72d34
+      subject: Add experiment comparing parallel, wide, and careful answering
+      excluded: null
+      baseline:
+        status: passed
+        reason: null
+        seconds: 6.8
+        attempts: 1
+        counts:
+          passed: 48
+          failed: 0
+          error: 0
+          skipped: 0
+      picked: 0
+    - repo: 2026-10/week2-tool-calling
+      sha: 4f9c0f0
+      subject: Add standard mode and make it the default
+      excluded: null
+      baseline:
+        status: passed
+        reason: null
+        seconds: 4.9
+        attempts: 1
+        counts:
+          passed: 48
+          failed: 0
+          error: 0
+          skipped: 0
+      picked: 0
+    - repo: 2026-10/week2-tool-calling
+      sha: dda429c
+      subject: 'Add week 2 report: results, findings, limitations, next steps'
+      excluded: 소스 Python 변경 없음
+      baseline: null
+      picked: 0
+    - repo: 2026-10/week3-fastapi-ui
+      sha: bd92d3d
+      subject: Record week 3 design decisions, API, and SQLite schema
+      excluded: 소스 Python 변경 없음
+      baseline: null
+      picked: 0
+    - repo: 2026-10/week3-fastapi-ui
+      sha: 2f57c73
+      subject: Bring in week 2 agent and split core from CLI
+      excluded: null
+      baseline:
+        status: passed
+        reason: null
+        seconds: 6.4
+        attempts: 1
+        counts:
+          passed: 50
+          failed: 0
+          error: 0
+          skipped: 0
+      picked: 2
+    mutants:
+    - codebase: W
+      repo: 2026-10/week1-csv-llm-report
+      commit: f483ebe
+      path: report.py
+      line: 51
+      text: result[f"{key}_pct"] = round(float(value) * 100, 1)
+      operator: core/NumberReplacer
+      occurrence: 2
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_report.py::test_payload_converts_ratios_to_percent_and_nan_to_null
+      - tests/test_report.py::test_payload_is_json_serializable
+      - tests/test_report.py::test_payload_keeps_only_recent_months
+      - tests/test_report.py::test_payload_without_profit
+      'no': 21
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: 5b31f70
+      path: tools.py
+      line: 54
+      text: parent = df.loc[df["sub_category"] == category, "category"]
+      operator: core/ReplaceComparisonOperator_Eq_NotEq
+      occurrence: 0
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_category_breakdown_unknown_category
+      - tests/test_tools.py::test_unknown_category_hints_sub_category
+      'no': 22
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: 5b31f70
+      path: tools.py
+      line: 56
+      text: error["hint"] = f"{category}는 {parent.iloc[0]}의 하위 카테고리입니다."
+      operator: core/NumberReplacer
+      occurrence: 22
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_unknown_category_hints_sub_category
+      'no': 23
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: 5b31f70
+      path: tools.py
+      line: 117
+      text: 'if category is not None:'
+      operator: core/ReplaceComparisonOperator_IsNot_Is
+      occurrence: 0
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_monthly_trend_fills_missing_month
+      - tests/test_tools.py::test_monthly_trend_filters_category
+      - tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing
+      - tests/test_tools.py::test_unknown_category_hints_sub_category
+      'no': 24
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: 5b31f70
+      path: tools.py
+      line: 120
+      text: df = df[df["category"] == category]
+      operator: core/ReplaceComparisonOperator_Eq_NotEq
+      occurrence: 2
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_monthly_trend_filters_category
+      'no': 25
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: 5b31f70
+      path: tools.py
+      line: 221
+      text: 'if base.empty or compare.empty:'
+      operator: core/ReplaceOrWithAnd
+      occurrence: 4
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_compare_periods_by_category
+      - tests/test_tools.py::test_compare_periods_drills_down_and_orders_by_change
+      - tests/test_tools.py::test_compare_periods_empty_period
+      'no': 26
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: 5b31f70
+      path: tools.py
+      line: 233
+      text: order = (table["compare"]["sales"] - table["base"]["sales"]).abs().sort_values(ascending=False).index
+      operator: core/ReplaceFalseWithTrue
+      occurrence: 1
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_compare_periods_by_category
+      - tests/test_tools.py::test_compare_periods_drills_down_and_orders_by_change
+      'no': 27
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: 5b31f70
+      path: tools.py
+      line: 251
+      text: 'if sub_category is not None:'
+      operator: core/ReplaceComparisonOperator_IsNot_Is
+      occurrence: 3
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_discount_impact
+      - tests/test_tools.py::test_discount_impact_by_sub_category
+      - tests/test_tools.py::test_discount_impact_sub_category_must_belong_to_category
+      'no': 28
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: 5b31f70
+      path: tools.py
+      line: 257
+      text: df = df[df["sub_category"] == sub_category]
+      operator: core/ReplaceComparisonOperator_Eq_NotEq
+      occurrence: 6
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_discount_impact_by_sub_category
+      'no': 29
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: ef7ed86
+      path: tools.py
+      line: 136
+      text: return monthly.reindex(full_range, fill_value=0)
+      operator: core/NumberReplacer
+      occurrence: 30
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_detect_anomaly_ignores_seasonality
+      - tests/test_tools.py::test_detect_anomaly_needs_two_years
+      - tests/test_tools.py::test_monthly_trend_fills_missing_month
+      - tests/test_tools.py::test_monthly_trend_filters_category
+      - tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing
+      'no': 30
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: ef7ed86
+      path: tools.py
+      line: 326
+      text: new_customers = set(first_month[customers][first_month[customers] >= start].index)
+      operator: core/ReplaceComparisonOperator_GtE_Gt
+      occurrence: 1
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data
+      - tests/test_tools.py::test_customer_analysis_whole_period_has_note
+      'no': 31
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: ef7ed86
+      path: tools.py
+      line: 328
+      text: sales_per_customer = period.groupby("customer_id")["sales"].sum().sort_values(ascending=False)
+      operator: core/ReplaceFalseWithTrue
+      occurrence: 2
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data
+      - tests/test_tools.py::test_customer_analysis_whole_period_has_note
+      'no': 32
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: ef7ed86
+      path: tools.py
+      line: 329
+      text: top_n = max(1, round(len(customers) * TOP_CUSTOMER_RATIO))
+      operator: core/NumberReplacer
+      occurrence: 42
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data
+      - tests/test_tools.py::test_customer_analysis_whole_period_has_note
+      'no': 33
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: ef7ed86
+      path: tools.py
+      line: 348
+      text: 'if start == first_month.min():'
+      operator: core/ReplaceComparisonOperator_Eq_NotEq
+      occurrence: 8
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data
+      - tests/test_tools.py::test_customer_analysis_whole_period_has_note
+      'no': 34
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: 7f9efeb
+      path: tools.py
+      line: 63
+      text: 'return {key: value for key, value in (filters or {}).items() if value is not None}'
+      operator: core/ReplaceOrWithAnd
+      occurrence: 1
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_agent.py::test_forces_answer_on_last_step
+      - tests/test_agent.py::test_raises_when_model_never_stops_calling_tools
+      - tests/test_agent.py::test_runs_requested_tools_and_returns_results
+      - tests/test_tools.py::test_breakdown_by_category
+      - tests/test_tools.py::test_breakdown_by_region
+      - tests/test_tools.py::test_breakdown_rejects_group_by_used_as_filter
+      - tests/test_tools.py::test_breakdown_with_filter
+      - tests/test_tools.py::test_compare_periods_by_category
+      - tests/test_tools.py::test_compare_periods_empty_period
+      - tests/test_tools.py::test_compare_periods_with_filter_orders_by_change
+      - tests/test_tools.py::test_customer_analysis_new_means_new_to_company
+      - tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data
+      - tests/test_tools.py::test_customer_analysis_whole_period_has_note
+      - tests/test_tools.py::test_detect_anomaly_ignores_seasonality
+      - tests/test_tools.py::test_detect_anomaly_needs_two_years
+      - tests/test_tools.py::test_discount_impact
+      - tests/test_tools.py::test_discount_impact_with_filters
+      - tests/test_tools.py::test_filter_available_values_respect_earlier_filters
+      - tests/test_tools.py::test_filter_on_missing_column
+      - tests/test_tools.py::test_filter_value_in_other_column_gets_hint
+      - tests/test_tools.py::test_filters_combine
+      - tests/test_tools.py::test_get_summary
+      - tests/test_tools.py::test_get_summary_empty_period
+      - tests/test_tools.py::test_get_summary_filters_period
+      - tests/test_tools.py::test_monthly_trend_fills_missing_month
+      - tests/test_tools.py::test_monthly_trend_filters
+      - tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing
+      - 'tests/test_tools.py::test_run_tool_returns_error_instead_of_raising[get_summary-{"start_month": "2024-13", "end_month": null}]'
+      - 'tests/test_tools.py::test_run_tool_returns_error_instead_of_raising[get_summary-{"wrong_arg": 1}]'
+      - tests/test_tools.py::test_run_tool_returns_error_instead_of_raising[no_such_tool-{}]
+      - tests/test_tools.py::test_run_tool_returns_json
+      'no': 35
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: 7f9efeb
+      path: tools.py
+      line: 70
+      text: 'if key not in DIMENSIONS or key not in df:'
+      operator: core/ReplaceOrWithAnd
+      occurrence: 2
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_breakdown_with_filter
+      - tests/test_tools.py::test_compare_periods_with_filter_orders_by_change
+      - tests/test_tools.py::test_customer_analysis_new_means_new_to_company
+      - tests/test_tools.py::test_discount_impact_with_filters
+      - tests/test_tools.py::test_filter_available_values_respect_earlier_filters
+      - tests/test_tools.py::test_filter_on_missing_column
+      - tests/test_tools.py::test_filter_value_in_other_column_gets_hint
+      - tests/test_tools.py::test_filters_combine
+      - tests/test_tools.py::test_monthly_trend_filters
+      'no': 36
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: 7f9efeb
+      path: tools.py
+      line: 79
+      text: other = [d for d in DIMENSIONS if d != key and d in full and value in full[d].values]
+      operator: core/ReplaceAndWithOr
+      occurrence: 0
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_filter_available_values_respect_earlier_filters
+      - tests/test_tools.py::test_filter_value_in_other_column_gets_hint
+      'no': 37
+    - codebase: W
+      repo: 2026-10/week2-tool-calling
+      commit: 7f9efeb
+      path: tools.py
+      line: 89
+      text: 'if group_by not in DIMENSIONS or group_by not in df:'
+      operator: core/ReplaceOrWithAnd
+      occurrence: 3
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_agent.py::test_runs_requested_tools_and_returns_results
+      - tests/test_tools.py::test_breakdown_by_category
+      - tests/test_tools.py::test_breakdown_by_region
+      - tests/test_tools.py::test_breakdown_rejects_group_by_used_as_filter
+      - tests/test_tools.py::test_breakdown_unavailable_group_by
+      - tests/test_tools.py::test_breakdown_with_filter
+      - tests/test_tools.py::test_compare_periods_by_category
+      - tests/test_tools.py::test_compare_periods_empty_period
+      - tests/test_tools.py::test_compare_periods_with_filter_orders_by_change
+      'no': 38
+    - codebase: W
+      repo: 2026-10/week3-fastapi-ui
+      commit: 2f57c73
+      path: tools.py
+      line: 37
+      text: 'if pd.isna(value) or value in (float("inf"), float("-inf")):'
+      operator: core/ReplaceOrWithAnd
+      occurrence: 0
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_agent.py::test_fast_mode_answers_after_one_tool_round
+      - tests/test_agent.py::test_forces_answer_on_last_step
+      - tests/test_agent.py::test_history_is_json_serializable
+      - tests/test_agent.py::test_raises_when_model_never_stops_calling_tools
+      - tests/test_agent.py::test_runs_requested_tools_and_returns_results
+      - tests/test_agent.py::test_skipped_calls_are_not_in_tools_used
+      - tests/test_agent.py::test_tool_calls_over_limit_get_error_output
+      - tests/test_tools.py::test_breakdown_by_category
+      - tests/test_tools.py::test_breakdown_by_region
+      - tests/test_tools.py::test_breakdown_with_filter
+      - tests/test_tools.py::test_compare_periods_by_category
+      - tests/test_tools.py::test_compare_periods_with_filter_orders_by_change
+      - tests/test_tools.py::test_customer_analysis_new_means_new_to_company
+      - tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data
+      - tests/test_tools.py::test_customer_analysis_whole_period_has_note
+      - tests/test_tools.py::test_detect_anomaly_ignores_seasonality
+      - tests/test_tools.py::test_discount_impact
+      - tests/test_tools.py::test_discount_impact_with_filters
+      - tests/test_tools.py::test_filters_combine
+      - tests/test_tools.py::test_get_summary
+      - tests/test_tools.py::test_get_summary_filters_period
+      - tests/test_tools.py::test_monthly_trend_fills_missing_month
+      - tests/test_tools.py::test_monthly_trend_filters
+      - tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing
+      - tests/test_tools.py::test_run_tool_returns_json
+      'no': 39
+    - codebase: W
+      repo: 2026-10/week3-fastapi-ui
+      commit: 2f57c73
+      path: tools.py
+      line: 142
+      text: 'if metric not in METRICS or (metric == "profit" and "profit" not in df):'
+      operator: core/ReplaceAndWithOr
+      occurrence: 2
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_tools.py::test_detect_anomaly_ignores_seasonality
+      - tests/test_tools.py::test_detect_anomaly_needs_two_years
+      - tests/test_tools.py::test_monthly_trend_fills_missing_month
+      - tests/test_tools.py::test_monthly_trend_filters
+      - tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing
+      - tests/test_tools.py::test_monthly_trend_unknown_metric
+      'no': 40
+  R:
+    target: 20
+    family_budget:
+      comparison: 7
+      boolean: 7
+      constant: 6
+    selected: 20
+    shortfall: 0
+    by_family:
+      comparison: 7
+      boolean: 7
+      constant: 6
+    spilled_to: []
+    commits_visited:
+    - repo: release-guard
+      sha: c910160
+      subject: Add problem definition, design and rule-based analysis pipeline
+      excluded: null
+      baseline:
+        status: passed
+        reason: null
+        seconds: 7.7
+        attempts: 1
+        counts:
+          passed: 31
+          failed: 0
+          error: 0
+          skipped: 0
+      picked: 8
+    - repo: release-guard
+      sha: 6fb437c
+      subject: Add impact analysis agent with read-only tools and evidence checks
+      excluded: null
+      baseline:
+        status: passed
+        reason: null
+        seconds: 14.3
+        attempts: 1
+        counts:
+          passed: 48
+          failed: 0
+          error: 0
+          skipped: 0
+      picked: 8
+    - repo: release-guard
+      sha: 2404a6c
+      subject: Add eval set over target repo commits and skip empty sources in R02
+      excluded: null
+      baseline:
+        status: passed
+        reason: null
+        seconds: 16.4
+        attempts: 1
+        counts:
+          passed: 51
+          failed: 0
+          error: 0
+          skipped: 0
+      picked: 4
+    mutants:
+    - codebase: R
+      repo: release-guard
+      commit: c910160
+      path: releaseguard/__main__.py
+      line: 17
+      text: sub = parser.add_subparsers(dest="command", required=True)
+      operator: core/ReplaceTrueWithFalse
+      occurrence: 0
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_analyze.py::test_cli_writes_json_and_markdown
+      'no': 1
+    - codebase: R
+      repo: release-guard
+      commit: c910160
+      path: releaseguard/__main__.py
+      line: 19
+      text: p.add_argument("--repo", type=Path, required=True)
+      operator: core/ReplaceTrueWithFalse
+      occurrence: 1
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_analyze.py::test_cli_writes_json_and_markdown
+      'no': 2
+    - codebase: R
+      repo: release-guard
+      commit: c910160
+      path: releaseguard/__main__.py
+      line: 20
+      text: p.add_argument("--base", required=True)
+      operator: core/ReplaceTrueWithFalse
+      occurrence: 2
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_analyze.py::test_cli_writes_json_and_markdown
+      'no': 3
+    - codebase: R
+      repo: release-guard
+      commit: c910160
+      path: releaseguard/__main__.py
+      line: 32
+      text: args.out.mkdir(parents=True, exist_ok=True)
+      operator: core/ReplaceTrueWithFalse
+      occurrence: 3
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_analyze.py::test_cli_writes_json_and_markdown
+      'no': 4
+    - codebase: R
+      repo: release-guard
+      commit: c910160
+      path: releaseguard/__main__.py
+      line: 33
+      text: stem = args.out / f"{date.today():%Y%m%d}_{result['head_sha'][:7]}"
+      operator: core/NumberReplacer
+      occurrence: 2
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_analyze.py::test_cli_writes_json_and_markdown
+      'no': 5
+    - codebase: R
+      repo: release-guard
+      commit: c910160
+      path: releaseguard/__main__.py
+      line: 34
+      text: stem.with_suffix(".json").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
+      operator: core/NumberReplacer
+      occurrence: 4
+      family: constant
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_analyze.py::test_cli_writes_json_and_markdown
+      'no': 6
+    - codebase: R
+      repo: release-guard
+      commit: c910160
+      path: releaseguard/analyze.py
+      line: 22
+      text: 'is_test = lambda p: classify(p, ruleset)[0] == "test"  # noqa: E731'
+      operator: core/ReplaceComparisonOperator_Eq_NotEq
+      occurrence: 0
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_analyze.py::test_cli_writes_json_and_markdown
+      - tests/test_analyze.py::test_config_deps_data_need_review
+      - tests/test_analyze.py::test_deleted_related_test_blocks
+      - tests/test_analyze.py::test_docs_only_is_safe
+      - tests/test_analyze.py::test_secret_blocks_without_leaking_value
+      - tests/test_analyze.py::test_source_with_test_change_is_safe
+      - tests/test_analyze.py::test_source_without_test_change_needs_review
+      - tests/test_analyze.py::test_three_dot_uses_merge_base
+      'no': 7
+    - codebase: R
+      repo: release-guard
+      commit: c910160
+      path: releaseguard/analyze.py
+      line: 23
+      text: deleted_tests = {f["path"] for f in files if f["category"] == "test" and f["status"] == "D"}
+      operator: core/ReplaceAndWithOr
+      occurrence: 0
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_analyze.py::test_cli_writes_json_and_markdown
+      - tests/test_analyze.py::test_config_deps_data_need_review
+      - tests/test_analyze.py::test_deleted_related_test_blocks
+      - tests/test_analyze.py::test_docs_only_is_safe
+      - tests/test_analyze.py::test_secret_blocks_without_leaking_value
+      - tests/test_analyze.py::test_source_with_test_change_is_safe
+      - tests/test_analyze.py::test_source_without_test_change_needs_review
+      - tests/test_analyze.py::test_three_dot_uses_merge_base
+      'no': 8
+    - codebase: R
+      repo: release-guard
+      commit: 6fb437c
+      path: releaseguard/agent.py
+      line: 150
+      text: calls = [item for item in response.output if item.type == "function_call"]
+      operator: core/ReplaceComparisonOperator_Eq_NotEq
+      occurrence: 1
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_agent.py::test_last_step_disables_tools
+      - tests/test_agent.py::test_loop_numbers_tool_calls_and_records_meta
+      - tests/test_agent.py::test_only_verified_high_risk_adds_r07
+      - tests/test_agent.py::test_tool_call_cap
+      'no': 9
+    - codebase: R
+      repo: release-guard
+      commit: 6fb437c
+      path: releaseguard/agent.py
+      line: 168
+      text: 'if len(tool_log) >= limits.max_tool_calls:'
+      operator: core/ReplaceComparisonOperator_GtE_Gt
+      occurrence: 0
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_agent.py::test_last_step_disables_tools
+      - tests/test_agent.py::test_loop_numbers_tool_calls_and_records_meta
+      - tests/test_agent.py::test_only_verified_high_risk_adds_r07
+      - tests/test_agent.py::test_tool_call_cap
+      'no': 10
+    - codebase: R
+      repo: release-guard
+      commit: 6fb437c
+      path: releaseguard/agent.py
+      line: 187
+      text: start, end = int(m.group(2)), int(m.group(3) or m.group(2))
+      operator: core/ReplaceOrWithAnd
+      occurrence: 0
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_agent.py::test_only_verified_high_risk_adds_r07
+      - tests/test_agent.py::test_validate_evidence
+      'no': 11
+    - codebase: R
+      repo: release-guard
+      commit: 6fb437c
+      path: releaseguard/agent.py
+      line: 189
+      text: return count is not None and 1 <= start <= end <= count
+      operator: core/ReplaceAndWithOr
+      occurrence: 0
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_agent.py::test_only_verified_high_risk_adds_r07
+      - tests/test_agent.py::test_validate_evidence
+      'no': 12
+    - codebase: R
+      repo: release-guard
+      commit: 6fb437c
+      path: releaseguard/agent.py
+      line: 205
+      text: 'if key == "recommended_tests" and item["kind"] == "run_existing" and view.file_line_count(item["target"]) is None:'
+      operator: core/ReplaceAndWithOr
+      occurrence: 1
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_agent.py::test_only_verified_high_risk_adds_r07
+      - tests/test_agent.py::test_validate_evidence
+      'no': 13
+    - codebase: R
+      repo: release-guard
+      commit: 6fb437c
+      path: releaseguard/agent.py
+      line: 207
+      text: 'items.append({**item, "verified": bool(item["evidence"]) and not bad, "unverified": bad})'
+      operator: core/ReplaceAndWithOr
+      occurrence: 3
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_agent.py::test_only_verified_high_risk_adds_r07
+      - tests/test_agent.py::test_validate_evidence
+      'no': 14
+    - codebase: R
+      repo: release-guard
+      commit: 6fb437c
+      path: releaseguard/agent_tools.py
+      line: 25
+      text: 'if not p or p.startswith("/") or ":" in p or ".." in PurePosixPath(p).parts:'
+      operator: core/ReplaceOrWithAnd
+      occurrence: 0
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_agent.py::test_loop_numbers_tool_calls_and_records_meta
+      - tests/test_agent.py::test_only_verified_high_risk_adds_r07
+      - tests/test_agent.py::test_validate_evidence
+      - tests/test_agent_tools.py::test_check_path_normalizes
+      - tests/test_agent_tools.py::test_check_path_rejects_outside[../secret]
+      - tests/test_agent_tools.py::test_check_path_rejects_outside[/etc/passwd]
+      - tests/test_agent_tools.py::test_check_path_rejects_outside[C:/Windows]
+      - tests/test_agent_tools.py::test_check_path_rejects_outside[]
+      - tests/test_agent_tools.py::test_check_path_rejects_outside[src/../../x]
+      - tests/test_agent_tools.py::test_git_diff_single_file
+      - tests/test_agent_tools.py::test_list_files_prefix
+      - tests/test_agent_tools.py::test_read_file_numbers_and_caps
+      - tests/test_agent_tools.py::test_run_tool_returns_errors_as_json
+      - tests/test_agent_tools.py::test_search_code_reads_head_not_working_tree
+      'no': 15
+    - codebase: R
+      repo: release-guard
+      commit: 6fb437c
+      path: releaseguard/agent_tools.py
+      line: 54
+      text: 'return {"path": path, "diff": text[:MAX_DIFF_CHARS], "truncated": len(text) > MAX_DIFF_CHARS}'
+      operator: core/ReplaceComparisonOperator_Gt_GtE
+      occurrence: 0
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_agent_tools.py::test_git_diff_single_file
+      'no': 16
+    - codebase: R
+      repo: release-guard
+      commit: 2404a6c
+      path: releaseguard/analyze.py
+      line: 43
+      text: 'if f["added"] == 0 and f["deleted"] == 0:  # 빈 파일 추가(__init__.py 등)·이름만 변경은 검증할 동작이 없다'
+      operator: core/ReplaceAndWithOr
+      occurrence: 2
+      family: boolean
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_agent.py::test_agent_failure_keeps_rule_result
+      - tests/test_agent.py::test_last_step_disables_tools
+      - tests/test_agent.py::test_loop_numbers_tool_calls_and_records_meta
+      - tests/test_agent.py::test_only_verified_high_risk_adds_r07
+      - tests/test_agent.py::test_tool_call_cap
+      - tests/test_agent.py::test_validate_evidence
+      - tests/test_analyze.py::test_cli_writes_json_and_markdown
+      - tests/test_analyze.py::test_deleted_related_test_blocks
+      - tests/test_analyze.py::test_empty_source_is_not_covered
+      - tests/test_analyze.py::test_secret_blocks_without_leaking_value
+      - tests/test_analyze.py::test_source_with_test_change_is_safe
+      - tests/test_analyze.py::test_source_without_test_change_needs_review
+      - tests/test_analyze.py::test_three_dot_uses_merge_base
+      - tests/test_evaluate.py::test_evaluate_on_temp_repo
+      'no': 17
+    - codebase: R
+      repo: release-guard
+      commit: 2404a6c
+      path: releaseguard/evaluate.py
+      line: 47
+      text: actual = sorted({f["path"] for f in result["changed_files"] if f["category"] == "test" and f["status"] != "D"})
+      operator: core/ReplaceComparisonOperator_Eq_NotEq
+      occurrence: 0
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: false
+      selected_tests:
+      - tests/test_evaluate.py::test_evaluate_on_temp_repo
+      'no': 18
+    - codebase: R
+      repo: release-guard
+      commit: 2404a6c
+      path: releaseguard/__main__.py
+      line: 59
+      text: 'if args.command == "eval":'
+      operator: core/ReplaceComparisonOperator_Eq_NotEq
+      occurrence: 0
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: true
+      selected_tests:
+      - tests/test_analyze.py::test_cli_writes_json_and_markdown
+      'no': 19
+    - codebase: R
+      repo: release-guard
+      commit: 2404a6c
+      path: releaseguard/evaluate.py
+      line: 63
+      text: 'if result["impact"] is not None or result["agent_error"]:'
+      operator: core/ReplaceComparisonOperator_IsNot_Is
+      occurrence: 0
+      family: comparison
+      coverage:
+        line_status: covered
+        fixture_only: false
+        branch_gap: true
+      selected_tests:
+      - tests/test_evaluate.py::test_evaluate_on_temp_repo
+      'no': 20
