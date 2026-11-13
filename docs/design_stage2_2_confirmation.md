@@ -73,7 +73,12 @@
 
 ## 4. 실행
 
-- 어댑터는 `spikes/stage2_1/mutlib.py`를 그대로 쓴다 (`COLLECTION_ERROR`·`NO_EXECUTED_TEST` 분리, mutant마다 새 스냅샷, 선택 vs 전체 비교). 바꿔야 하면 1단계 커밋 안에서 바꾼다.
+- 어댑터는 `spikes/stage2_1/mutlib.py`를 바꾸지 않고 쓴다 (`COLLECTION_ERROR`·`NO_EXECUTED_TEST` 분리, mutant마다 새 스냅샷, 선택 vs 전체 비교). 1단계에서 정한 차이 두 가지:
+  - 시간을 단계별로 나눠 재려고 `run_mutants.py`의 `run_one`이 `run_mutant`와 같은 절차를 mutlib 함수로 다시 조립한다.
+  - 테스트 시간 상한은 mutlib의 120초 고정값 대신 `max(120, 기준 실행 시간 × 3)`초다 (R 전체 실행이 167초).
+- `result`는 2.1과 같이 **전체 실행 기준**이다 (분류 대상 SURVIVED). 선택 실행 결과는 `result_selected`로 따로 둔다.
+- 기준 실행(coverage)의 시간 상한은 900초다 (제품 기본값 300초는 R에 부족할 수 있음).
+- 스크립트: `select_confirmation.py`(2·3단계), `run_mutants.py`(5단계), `blind_packets.py`(6단계 블라인드 자료). 7단계 테스트 실행기는 2.1 `run_test_additions.py`와 같은 절차로, 1차 분류 커밋 뒤·테스트 결과를 보기 전에 만든다.
 - **mutant마다 결과를 바로 파일에 저장**하고, 다시 실행하면 저장된 mutant는 건너뛴다(중단·재개). 실패한 mutant는 `EXECUTION_ERROR`로 남기며 조용히 빼지 않는다. 선정 목록과 결과 수가 다르면 보고서에 적는다.
 - 저장: 원본 JSON 전체, Cosmic Ray·pytest·coverage·Python 버전, 저장소별 HEAD, 실행 시각, 테스트 명령. 홈·임시 경로·계정 이름은 2.0과 같이 가린다.
 - **모든 mutant에 선택 실행과 전체 실행을 둘 다** 한다 (Q2). 시간은 나눠 기록한다:
@@ -185,7 +190,7 @@
 ```text
 release-guard/
 ├── docs/design_stage2_2_confirmation.md      ← 이 문서 (1단계)
-├── spikes/stage2_2_confirmation/              ← 기준 실행·선정·실행·블라인드 자료 스크립트 (1단계, mutlib 재사용)
+├── spikes/stage2_2_confirmation/              ← conflib · select_confirmation · run_mutants · blind_packets (1단계, mutlib 재사용)
 ├── docs/eval/v22c/baseline.json               ← 2단계
 ├── eval/mutation_confirmation_cases.yaml      ← 3·4단계, mutant 실행 전 커밋
 ├── docs/eval/v22c/mutation_result.json        ← 5단계 (+ 실행 조건)
