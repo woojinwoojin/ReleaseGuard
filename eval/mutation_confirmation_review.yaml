@@ -1,0 +1,134 @@
+# Stage 2.2 확인 평가 — SURVIVED 10개 분류 (설계 docs/design_stage2_2_confirmation.md 5~7장)
+# 1차(6단계): 대상 커밋 시점의 코드·문서·테스트만 봤다. 대상 커밋 이후 이력은 읽지 않았다 (git show <commit>:<path>, git grep <commit>만 사용).
+# 블라인드 결과(외부 리뷰어 A, 사용자 B)를 받기 전에 커밋한다. 이 파일은 블라인드 자료에 넣지 않는다.
+# 2차(7단계, 1차 커밋 뒤): oracle_check 칸 — 이후 이력으로 KNOWN_BUG_ORACLE 여부. 1차 분류를 덮어쓰지 않고 revised_after_history에 적는다.
+# spec_strength: strong(독립 명세가 기대 동작을 직접 말함) / weak(사용 예·이름·코드 내부 일관성뿐) / none
+#   weak 명세로 테스트가 감지하면 2.1 #23과 같이 ACTIONABLE_GAP (provisional) — GO 계산 제외
+classified_by: claude-draft   # 1차, 사용자 확인 전
+survivors:
+  - mutant: 1
+    codebase: R
+    where: c910160 releaseguard/__main__.py:17 main
+    change: "add_subparsers(..., required=True) → required=False"
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: 명령 없이 실행하면 원본은 argparse 사용법 오류(SystemExit 2), mutant는 args.repo 접근에서 AttributeError 추적 메시지로 죽는다.
+    spec: >-
+      모듈 docstring '실행: python -m releaseguard analyze --repo <경로> --base <ref> --head <ref>' — 명령이 필요하다는 사용 예뿐
+    spec_strength: weak
+    expected_test: "main([])이 SystemExit(code=2)를 낸다 (AttributeError가 아님)"
+    review_priority: LOW
+    test_target: true
+  - mutant: 2
+    codebase: R
+    where: c910160 releaseguard/__main__.py:19 main
+    change: "--repo required=True → False"
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: --repo 없이 실행하면 원본은 사용법 오류(SystemExit 2), mutant는 analyze(None, …)로 들어가 다른 예외로 죽는다.
+    spec: 같은 사용 예 (--repo <경로>는 기본값 없는 인자로 표기, --head만 기본값 HEAD가 코드에 있음)
+    spec_strength: weak
+    expected_test: "main(['analyze', '--base', 'x'])가 SystemExit(code=2)를 낸다"
+    review_priority: LOW
+    test_target: true
+  - mutant: 3
+    codebase: R
+    where: c910160 releaseguard/__main__.py:20 main
+    change: "--base required=True → False"
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: --base 없이 실행하면 원본은 사용법 오류, mutant는 base=None으로 git 비교에 들어간다 (GitError면 'git 오류' 반환 2, 아니면 예외).
+    spec: 같은 사용 예
+    spec_strength: weak
+    expected_test: "main(['analyze', '--repo', '.'])가 SystemExit(code=2)를 낸다"
+    review_priority: LOW
+    test_target: true
+  - mutant: 4
+    codebase: R
+    where: c910160 releaseguard/__main__.py:32 main
+    change: "args.out.mkdir(parents=True, …) → parents=False"
+    class: LOW_VALUE
+    evidence: plausible
+    behavior: --out의 부모 폴더가 없을 때만 FileNotFoundError. 기본값 out(한 단계)은 같다.
+    spec: 중첩 출력 경로를 지원한다는 문서·테스트 없음 (2.1 #5 시간 상한과 같은 처리)
+    spec_strength: none
+    test_target: false
+  - mutant: 6
+    codebase: R
+    where: c910160 releaseguard/__main__.py:34 main
+    change: "json.dumps(indent=2) → indent=3"
+    class: LOW_VALUE
+    evidence: plausible
+    behavior: 결과 JSON의 들여쓰기만 바뀐다. 값은 같다.
+    spec: 바이트 형식 계약 없음 (2.1 #7과 같은 처리)
+    spec_strength: none
+    test_target: false
+  - mutant: 16
+    codebase: R
+    where: 6fb437c releaseguard/agent_tools.py:54 RepoView.git_diff
+    change: "truncated: len(text) > MAX_DIFF_CHARS → >="
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: diff 길이가 정확히 12,000자일 때 잘리지 않은 diff를 '잘림'으로 표시한다. 에이전트(LLM)가 diff가 더 있다고 오해할 수 있다.
+    spec: >-
+      'truncated'라는 필드 이름과, 같은 파일의 다른 두 도구(search·list_files)가 같은 의미(len > 상한)로 쓰는 내부 일관성.
+      truncated의 의미를 따로 설명한 문서는 커밋 시점에 없다 (git grep 6fb437c).
+    spec_strength: weak
+    expected_test: "길이가 정확히 MAX_DIFF_CHARS인 diff에서 truncated is False"
+    review_priority: LOW   # 정확한 경계값에서만 (2.1 T5와 같은 구분: 의미 있는 차이 ≠ 우선순위)
+    test_target: true
+  - mutant: 23
+    codebase: W
+    where: 5b31f70 tools.py:56 check_category (week2-tool-calling)
+    change: "parent.iloc[0] → parent.iloc[1]"
+    class: MEANINGFUL_UNVERIFIED
+    evidence: plausible
+    behavior: >-
+      하위 카테고리 행이 하나뿐이면 mutant는 IndexError로 죽는다 (원본은 hint를 담은 error dict).
+      행이 둘 이상이면 같은 상위 카테고리라 결과가 같다 (데이터 관측 아님, 일반적인 하위→상위 관계 가정).
+    spec: >-
+      모듈 docstring '잘못된 인자는 예외 대신 {"error": ...}로 돌려줘서, LLM이 결과를 보고 인자를 고쳐 다시 호출할 수 있게 한다', check_category docstring
+    spec_strength: strong
+    expected_test: "sub_category 행이 하나인 df에서 check_category(df, '<하위>')가 예외 없이 hint에 상위 카테고리를 담은 dict를 돌려준다"
+    review_priority: LOW   # 행이 하나뿐인 하위 카테고리에서만
+    test_target: true
+  - mutant: 42
+    codebase: P
+    where: 3db2f31 src/metrics/engine.py:57 combine
+    change: "i.note[:60] → i.note[:61]"
+    class: LOW_VALUE
+    evidence: plausible
+    behavior: 보류 사유에 붙는 비고가 61자째까지 보인다. 표시 길이만 다르다.
+    spec: 비고를 60자로 자른다는 계약 없음 (커밋 시점 README·decisions에서 확인 안 됨 — 60은 표시용 상수)
+    spec_strength: none
+    test_target: false
+  - mutant: 44
+    codebase: P
+    where: 3db2f31 src/metrics/engine.py:59 combine
+    change: "i.note[:60] → i.note[:61]"
+    class: LOW_VALUE
+    evidence: plausible
+    behavior: "#42와 같음 (계산 안 함 사유 쪽)"
+    spec: "#42와 같음"
+    spec_strength: none
+    test_target: false
+  - mutant: 55
+    codebase: P
+    where: 99c3179 src/scoring/score.py:65 score_metric
+    change: "rule['method'] == 'A' or eligible.startswith('검증용') → and"
+    class: UNRESOLVED
+    evidence: unresolved
+    behavior: >-
+      (1) A 방식인데 score_eligible이 '가능'이면 원본은 검증용, mutant는 점수 반영.
+      (2) A 방식이 아닌데 '검증용'이면 원본은 검증용, mutant는 '점수 반영 불가'로 보류.
+      파일럿(비교군 3개사)에서는 지표 엔진이 비교군 지표를 늘 '검증용'으로 표시해 두 경우 모두 생기지 않을 수 있다 (엔진 코드로 확인하지 않음).
+    spec: >-
+      README(커밋 시점) '비교군 기준 지표 4개는 비교군 백분위(A) — n < 20이면 검증용', 같은 줄 주석 'A 방식은 그 조건을 통과해야만 반영한다'.
+      n ≥ 20이면 A 방식도 반영해야 한다고 읽으면 (1)에서는 mutant 쪽이 명세에 가깝다. 원본 동작을 정답으로 고정하는 테스트는 오라클 위험.
+    spec_strength: weak
+    test_target: false   # 어느 쪽이 맞는지 정해지지 않음
+summary_first_pass:
+  survived: 10
+  by_class: {MEANINGFUL_UNVERIFIED: 5, LOW_VALUE: 4, UNRESOLVED: 1}
+  by_codebase: {R: "MEANINGFUL 4 (전부 weak 명세) · LOW 2", W: "MEANINGFUL 1 (strong 명세)", P: "LOW 2 · UNRESOLVED 1"}
+  test_targets: [1, 2, 3, 16, 23]   # 15개 상한 아래라 순환 선정 불필요
