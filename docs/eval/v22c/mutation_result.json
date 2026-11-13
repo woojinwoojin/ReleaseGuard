@@ -1,0 +1,4741 @@
+{
+ "cases_file": "eval/mutation_confirmation_cases.yaml",
+ "runs": [
+  {
+   "started": "2026-11-13T14:46:26",
+   "repos": {
+    "predict-success": {
+     "before": {
+      "head": "895dbe41832d5d60079fe38872689646918782af",
+      "status": ""
+     },
+     "after": {
+      "head": "895dbe41832d5d60079fe38872689646918782af",
+      "status": ""
+     },
+     "preserved": true
+    }
+   },
+   "versions": {
+    "predict-success": {
+     "python": "Python 3.13.9",
+     "pytest": "pytest 9.1.1",
+     "cosmic_ray": "cosmic-ray, version 8.9.0",
+     "cosmic_ray_expected": "8.9.0",
+     "host": "Windows-11-10.0.26300-SP0"
+    }
+   },
+   "finished": "2026-11-13T14:46:37"
+  },
+  {
+   "started": "2026-11-13T14:46:42",
+   "repos": {
+    "predict-success": {
+     "before": {
+      "head": "895dbe41832d5d60079fe38872689646918782af",
+      "status": ""
+     },
+     "after": {
+      "head": "895dbe41832d5d60079fe38872689646918782af",
+      "status": ""
+     },
+     "preserved": true
+    },
+    "2026-10/week1-csv-llm-report": {
+     "before": {
+      "head": "0fce2c7302d3a687cda8ea6408a1ad95d68f6a76",
+      "status": ""
+     },
+     "after": {
+      "head": "0fce2c7302d3a687cda8ea6408a1ad95d68f6a76",
+      "status": ""
+     },
+     "preserved": true
+    },
+    "2026-10/week2-tool-calling": {
+     "before": {
+      "head": "dda429cac88b0723c99cf1143ca7ac961d40968d",
+      "status": ""
+     },
+     "after": {
+      "head": "dda429cac88b0723c99cf1143ca7ac961d40968d",
+      "status": ""
+     },
+     "preserved": true
+    },
+    "2026-10/week3-fastapi-ui": {
+     "before": {
+      "head": "b381463d5be103530de8792ca782afeb18ff2b58",
+      "status": ""
+     },
+     "after": {
+      "head": "b381463d5be103530de8792ca782afeb18ff2b58",
+      "status": ""
+     },
+     "preserved": true
+    },
+    "release-guard": {
+     "before": {
+      "head": "71fa3137282c5a1603dfd8950b2f7c8342e7fedb",
+      "status": ""
+     },
+     "after": {
+      "head": "71fa3137282c5a1603dfd8950b2f7c8342e7fedb",
+      "status": ""
+     },
+     "preserved": true
+    }
+   },
+   "versions": {
+    "predict-success": {
+     "python": "Python 3.13.9",
+     "pytest": "pytest 9.1.1",
+     "cosmic_ray": "cosmic-ray, version 8.9.0",
+     "cosmic_ray_expected": "8.9.0",
+     "host": "Windows-11-10.0.26300-SP0"
+    },
+    "2026-10/week1-csv-llm-report": {
+     "python": "Python 3.13.9",
+     "pytest": "pytest 9.1.1",
+     "cosmic_ray": "cosmic-ray, version 8.9.0",
+     "cosmic_ray_expected": "8.9.0",
+     "host": "Windows-11-10.0.26300-SP0"
+    },
+    "2026-10/week2-tool-calling": {
+     "python": "Python 3.13.9",
+     "pytest": "pytest 9.1.1",
+     "cosmic_ray": "cosmic-ray, version 8.9.0",
+     "cosmic_ray_expected": "8.9.0",
+     "host": "Windows-11-10.0.26300-SP0"
+    },
+    "2026-10/week3-fastapi-ui": {
+     "python": "Python 3.13.9",
+     "pytest": "pytest 9.1.1",
+     "cosmic_ray": "cosmic-ray, version 8.9.0",
+     "cosmic_ray_expected": "8.9.0",
+     "host": "Windows-11-10.0.26300-SP0"
+    },
+    "release-guard": {
+     "python": "Python 3.13.9",
+     "pytest": "pytest 9.1.1",
+     "cosmic_ray": "cosmic-ray, version 8.9.0",
+     "cosmic_ray_expected": "8.9.0",
+     "host": "Windows-11-10.0.26300-SP0"
+    }
+   },
+   "finished": "2026-11-13T14:54:43"
+  }
+ ],
+ "listing": {
+  "P|predict-success|3db2f31|src/metrics/engine.py": {
+   "seconds": 2.41
+  },
+  "P|predict-success|9e9c12b|src/normalization/manual.py": {
+   "seconds": 2.12
+  },
+  "P|predict-success|99c3179|src/normalization/selection.py": {
+   "seconds": 2.1
+  },
+  "P|predict-success|99c3179|src/scoring/score.py": {
+   "seconds": 2.1
+  },
+  "W|2026-10/week1-csv-llm-report|f483ebe|report.py": {
+   "seconds": 1.91
+  },
+  "W|2026-10/week2-tool-calling|5b31f70|tools.py": {
+   "seconds": 2.32
+  },
+  "W|2026-10/week2-tool-calling|ef7ed86|tools.py": {
+   "seconds": 2.45
+  },
+  "W|2026-10/week2-tool-calling|7f9efeb|tools.py": {
+   "seconds": 2.53
+  },
+  "W|2026-10/week3-fastapi-ui|2f57c73|tools.py": {
+   "seconds": 2.74
+  },
+  "R|release-guard|c910160|releaseguard/__main__.py": {
+   "seconds": 1.84
+  },
+  "R|release-guard|c910160|releaseguard/analyze.py": {
+   "seconds": 1.81
+  },
+  "R|release-guard|6fb437c|releaseguard/agent.py": {
+   "seconds": 1.93
+  },
+  "R|release-guard|6fb437c|releaseguard/agent_tools.py": {
+   "seconds": 1.98
+  },
+  "R|release-guard|2404a6c|releaseguard/analyze.py": {
+   "seconds": 1.81
+  },
+  "R|release-guard|2404a6c|releaseguard/evaluate.py": {
+   "seconds": 2.0
+  },
+  "R|release-guard|2404a6c|releaseguard/__main__.py": {
+   "seconds": 1.82
+  }
+ },
+ "mutants": {
+  "41": {
+   "no": 41,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "3db2f31",
+   "path": "src/metrics/engine.py",
+   "line": 56,
+   "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+   "occurrence": 0,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_metrics.py::test_cagr_uses_2022_and_2025_and_refuses_non_positive_start",
+    "tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score",
+    "tests/test_metrics.py::test_excluded_company_gets_no_peer_score_not_zero",
+    "tests/test_metrics.py::test_normal_inputs_give_normal_result",
+    "tests/test_metrics.py::test_peer_median_excludes_the_company_itself_and_is_validation_only",
+    "tests/test_metrics.py::test_reported_current_ratio_is_view_only_and_hfs_ratio_is_the_scoring_one",
+    "tests/test_metrics.py::test_three_year_decline_is_not_called_stable",
+    "tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason",
+    "tests/test_metrics.py::test_zero_current_liabilities_is_never_infinite"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    56
+   ],
+   "on_target_line": true,
+   "source_before": "if i.calc_status == \"reference\":",
+   "source_after": "if i.calc_status != \"reference\":",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.46,
+    "failed": [
+     "tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason"
+    ],
+    "kinds": {
+     "tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason": "assertion"
+    },
+    "messages": [
+     "assert False\n +  where False = any(<generator object test_unconfirmed_input_is_not_computed_with_reason.<locals>.<genexpr> at 0x0000027C4F7B4040>)"
+    ],
+    "tail": null,
+    "executed": 9,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.0,
+    "failed": [
+     "tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason"
+    ],
+    "kinds": {
+     "tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason": "assertion"
+    },
+    "messages": [
+     "assert False\n +  where False = any(<generator object test_unconfirmed_input_is_not_computed_with_reason.<locals>.<genexpr> at 0x0000020FEBA3DCB0>)"
+    ],
+    "tail": null,
+    "executed": 76,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.03,
+    "apply": 0.98,
+    "selected": 0.47,
+    "full": 2.01,
+    "cleanup": 0.01,
+    "product_path": 1.48
+   }
+  },
+  "42": {
+   "no": 42,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "3db2f31",
+   "path": "src/metrics/engine.py",
+   "line": 57,
+   "operator": "core/NumberReplacer",
+   "occurrence": 6,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    57
+   ],
+   "on_target_line": true,
+   "source_before": "result.hold_reasons.append(f\"{i.label} {i.year}: 후보값 — {i.note[:60]}\")",
+   "source_after": "result.hold_reasons.append(f\"{i.label} {i.year}: 후보값 — {i.note[: 61]}\")",
+   "selected": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 0.4,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 1.75,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 76,
+    "skipped": 0
+   },
+   "result": "SURVIVED",
+   "result_selected": "SURVIVED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.11,
+    "apply": 1.03,
+    "selected": 0.41,
+    "full": 1.76,
+    "cleanup": 0.01,
+    "product_path": 1.55
+   }
+  },
+  "43": {
+   "no": 43,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "3db2f31",
+   "path": "src/metrics/engine.py",
+   "line": 58,
+   "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+   "occurrence": 1,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_metrics.py::test_cagr_uses_2022_and_2025_and_refuses_non_positive_start",
+    "tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score",
+    "tests/test_metrics.py::test_excluded_company_gets_no_peer_score_not_zero",
+    "tests/test_metrics.py::test_normal_inputs_give_normal_result",
+    "tests/test_metrics.py::test_peer_median_excludes_the_company_itself_and_is_validation_only",
+    "tests/test_metrics.py::test_reported_current_ratio_is_view_only_and_hfs_ratio_is_the_scoring_one",
+    "tests/test_metrics.py::test_three_year_decline_is_not_called_stable",
+    "tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason",
+    "tests/test_metrics.py::test_zero_current_liabilities_is_never_infinite"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    58
+   ],
+   "on_target_line": true,
+   "source_before": "elif i.calc_status == \"not_computed\":",
+   "source_after": "elif i.calc_status != \"not_computed\":",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.46,
+    "failed": [
+     "tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason"
+    ],
+    "kinds": {
+     "tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason": "assertion"
+    },
+    "messages": [
+     "assert False\n +  where False = any(<generator object test_unconfirmed_input_is_not_computed_with_reason.<locals>.<genexpr> at 0x000001DA6A318040>)"
+    ],
+    "tail": null,
+    "executed": 9,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.0,
+    "failed": [
+     "tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason"
+    ],
+    "kinds": {
+     "tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason": "assertion"
+    },
+    "messages": [
+     "assert False\n +  where False = any(<generator object test_unconfirmed_input_is_not_computed_with_reason.<locals>.<genexpr> at 0x000001F8EC5CDCB0>)"
+    ],
+    "tail": null,
+    "executed": 76,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 0.92,
+    "selected": 0.47,
+    "full": 2.01,
+    "cleanup": 0.01,
+    "product_path": 1.42
+   }
+  },
+  "44": {
+   "no": 44,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "3db2f31",
+   "path": "src/metrics/engine.py",
+   "line": 59,
+   "operator": "core/NumberReplacer",
+   "occurrence": 8,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    59
+   ],
+   "on_target_line": true,
+   "source_before": "result.hold_reasons.append(f\"{i.label} {i.year}: {i.status} — {i.note[:60]}\")",
+   "source_after": "result.hold_reasons.append(f\"{i.label} {i.year}: {i.status} — {i.note[: 61]}\")",
+   "selected": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 0.52,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 1.46,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 76,
+    "skipped": 0
+   },
+   "result": "SURVIVED",
+   "result_selected": "SURVIVED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 1.11,
+    "selected": 0.53,
+    "full": 1.47,
+    "cleanup": 0.01,
+    "product_path": 1.67
+   }
+  },
+  "45": {
+   "no": 45,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "3db2f31",
+   "path": "src/metrics/engine.py",
+   "line": 60,
+   "operator": "core/ReplaceComparisonOperator_NotEq_Eq",
+   "occurrence": 0,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_metrics.py::test_cagr_uses_2022_and_2025_and_refuses_non_positive_start",
+    "tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score",
+    "tests/test_metrics.py::test_excluded_company_gets_no_peer_score_not_zero",
+    "tests/test_metrics.py::test_normal_inputs_give_normal_result",
+    "tests/test_metrics.py::test_peer_median_excludes_the_company_itself_and_is_validation_only",
+    "tests/test_metrics.py::test_reported_current_ratio_is_view_only_and_hfs_ratio_is_the_scoring_one",
+    "tests/test_metrics.py::test_three_year_decline_is_not_called_stable",
+    "tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason",
+    "tests/test_metrics.py::test_zero_current_liabilities_is_never_infinite"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    60
+   ],
+   "on_target_line": true,
+   "source_before": "if worst != \"normal\":",
+   "source_after": "if worst == \"normal\":",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.5,
+    "failed": [
+     "tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score",
+     "tests/test_metrics.py::test_normal_inputs_give_normal_result"
+    ],
+    "kinds": {
+     "tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score": "assertion",
+     "tests/test_metrics.py::test_normal_inputs_give_normal_result": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ('reference', 4.0, '가능') == ('reference', 4.0, '보류')\n  \n  At index 2 diff: '가능' != '보류'\n  Use -v to get more diff",
+     "AssertionError: assert ('normal', 0.1, '보류') == ('normal', 0.1, '가능')\n  \n  At index 2 diff: '보류' != '가능'\n  Use -v to get more diff"
+    ],
+    "tail": null,
+    "executed": 9,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.54,
+    "failed": [
+     "tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score",
+     "tests/test_metrics.py::test_normal_inputs_give_normal_result"
+    ],
+    "kinds": {
+     "tests/test_metrics.py::test_normal_inputs_give_normal_result": "assertion",
+     "tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ('normal', 0.1, '보류') == ('normal', 0.1, '가능')\n  \n  At index 2 diff: '보류' != '가능'\n  Use -v to get more diff",
+     "AssertionError: assert ('reference', 4.0, '가능') == ('reference', 4.0, '보류')\n  \n  At index 2 diff: '가능' != '보류'\n  Use -v to get more diff"
+    ],
+    "tail": null,
+    "executed": 76,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.03,
+    "apply": 0.96,
+    "selected": 0.51,
+    "full": 1.55,
+    "cleanup": 0.01,
+    "product_path": 1.51
+   }
+  },
+  "46": {
+   "no": 46,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "3db2f31",
+   "path": "src/metrics/engine.py",
+   "line": 70,
+   "operator": "core/NumberReplacer",
+   "occurrence": 10,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_metrics.py::test_normal_inputs_give_normal_result"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    70
+   ],
+   "on_target_line": true,
+   "source_before": "return (a + b) / 2",
+   "source_after": "return (a + b) / 3",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.42,
+    "failed": [
+     "tests/test_metrics.py::test_normal_inputs_give_normal_result"
+    ],
+    "kinds": {
+     "tests/test_metrics.py::test_normal_inputs_give_normal_result": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ('normal', 0.15, '가능') == ('normal', 0.1, '가능')\n  \n  At index 1 diff: 0.15 != 0.1\n  Use -v to get more diff"
+    ],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.4,
+    "failed": [
+     "tests/test_metrics.py::test_normal_inputs_give_normal_result"
+    ],
+    "kinds": {
+     "tests/test_metrics.py::test_normal_inputs_give_normal_result": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ('normal', 0.15, '가능') == ('normal', 0.1, '가능')\n  \n  At index 1 diff: 0.15 != 0.1\n  Use -v to get more diff"
+    ],
+    "tail": null,
+    "executed": 76,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 0.97,
+    "selected": 0.43,
+    "full": 1.41,
+    "cleanup": 0.01,
+    "product_path": 1.42
+   }
+  },
+  "47": {
+   "no": 47,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "3db2f31",
+   "path": "src/metrics/engine.py",
+   "line": 77,
+   "operator": "core/NumberReplacer",
+   "occurrence": 12,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_metrics.py::test_normal_inputs_give_normal_result"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    77
+   ],
+   "on_target_line": true,
+   "source_before": "ocf, ta0, ta1 = get(\"operating_cash_flow\", 2025), get(\"total_assets\", 2024), get(\"total_assets\", 2025)",
+   "source_after": "ocf, ta0, ta1 = get(\"operating_cash_flow\", 2026), get(\"total_assets\", 2024), get(\"total_assets\", 2025)",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.44,
+    "failed": [
+     "tests/test_metrics.py::test_normal_inputs_give_normal_result"
+    ],
+    "kinds": {
+     "tests/test_metrics.py::test_normal_inputs_give_normal_result": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ('not_computed', None, '보류') == ('normal', 0.1, '가능')\n  \n  At index 0 diff: 'not_computed' != 'normal'\n  Use -v to get more diff"
+    ],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.06,
+    "failed": [
+     "tests/test_metrics.py::test_normal_inputs_give_normal_result"
+    ],
+    "kinds": {
+     "tests/test_metrics.py::test_normal_inputs_give_normal_result": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ('not_computed', None, '보류') == ('normal', 0.1, '가능')\n  \n  At index 0 diff: 'not_computed' != 'normal'\n  Use -v to get more diff"
+    ],
+    "tail": null,
+    "executed": 76,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.03,
+    "apply": 1.01,
+    "selected": 0.45,
+    "full": 2.07,
+    "cleanup": 0.0,
+    "product_path": 1.5
+   }
+  },
+  "48": {
+   "no": 48,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "3db2f31",
+   "path": "src/metrics/engine.py",
+   "line": 102,
+   "operator": "core/NumberReplacer",
+   "occurrence": 26,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score",
+    "tests/test_metrics.py::test_unconfirmed_input_is_not_computed_with_reason"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    102
+   ],
+   "on_target_line": true,
+   "source_before": "oi, ie = get(\"operating_income\", 2025), get(\"interest_expense\", 2025)",
+   "source_after": "oi, ie = get(\"operating_income\", 2026), get(\"interest_expense\", 2025)",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.48,
+    "failed": [
+     "tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score"
+    ],
+    "kinds": {
+     "tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ('not_computed', None, '보류') == ('reference', 4.0, '보류')\n  \n  At index 0 diff: 'not_computed' != 'reference'\n  Use -v to get more diff"
+    ],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.53,
+    "failed": [
+     "tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score"
+    ],
+    "kinds": {
+     "tests/test_metrics.py::test_candidate_input_gives_reference_calculation_and_holds_score": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ('not_computed', None, '보류') == ('reference', 4.0, '보류')\n  \n  At index 0 diff: 'not_computed' != 'reference'\n  Use -v to get more diff"
+    ],
+    "tail": null,
+    "executed": 76,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 1.04,
+    "selected": 0.49,
+    "full": 1.54,
+    "cleanup": 0.01,
+    "product_path": 1.56
+   }
+  },
+  "49": {
+   "no": 49,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "9e9c12b",
+   "path": "src/normalization/manual.py",
+   "line": 59,
+   "operator": "core/ReplaceAndWithOr",
+   "occurrence": 6,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_manual.py::test_manual_total_replaces_api_total_only_when_marked_and_components_confirmed",
+    "tests/test_manual.py::test_manual_value_that_disagrees_with_api_value_is_flagged"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    59
+   ],
+   "on_target_line": true,
+   "source_before": "replaces = (entry.get(\"api_relation\") == \"replaces_incomplete_api\" and result[\"canonical_account\"] in COMPONENT_ACCOUNTS",
+   "source_after": "replaces = (entry.get(\"api_relation\") == \"replaces_incomplete_api\" or result[\"canonical_account\"] in COMPONENT_ACCOUNTS",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.96,
+    "failed": [
+     "tests/test_manual.py::test_manual_total_replaces_api_total_only_when_marked_and_components_confirmed"
+    ],
+    "kinds": {
+     "tests/test_manual.py::test_manual_total_replaces_api_total_only_when_marked_and_components_confirmed": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped"
+    ],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.78,
+    "failed": [
+     "tests/test_manual.py::test_manual_total_replaces_api_total_only_when_marked_and_components_confirmed"
+    ],
+    "kinds": {
+     "tests/test_manual.py::test_manual_total_replaces_api_total_only_when_marked_and_components_confirmed": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'mapped' == 'review_needed'\n  \n  - review_needed\n  + mapped"
+    ],
+    "tail": null,
+    "executed": 79,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 1.0,
+    "selected": 0.97,
+    "full": 1.79,
+    "cleanup": 0.01,
+    "product_path": 2.0
+   }
+  },
+  "50": {
+   "no": 50,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "9e9c12b",
+   "path": "src/normalization/manual.py",
+   "line": 67,
+   "operator": "core/ReplaceComparisonOperator_NotEq_Eq",
+   "occurrence": 2,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit",
+    "tests/test_manual.py::test_partial_components_never_make_a_normal_debt_total",
+    "tests/test_manual.py::test_scope_unconfirmed_note_value_is_only_a_candidate",
+    "tests/test_manual.py::test_unconfirmed_amount_is_not_used"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    67
+   ],
+   "on_target_line": true,
+   "source_before": "if entry.get(\"amount_check\") != \"확인\":",
+   "source_after": "if entry.get(\"amount_check\") == \"확인\":",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.9,
+    "failed": [
+     "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit",
+     "tests/test_manual.py::test_partial_components_never_make_a_normal_debt_total",
+     "tests/test_manual.py::test_scope_unconfirmed_note_value_is_only_a_candidate",
+     "tests/test_manual.py::test_unconfirmed_amount_is_not_used"
+    ],
+    "kinds": {
+     "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit": "assertion",
+     "tests/test_manual.py::test_partial_components_never_make_a_normal_debt_total": "assertion",
+     "tests/test_manual.py::test_scope_unconfirmed_note_value_is_only_a_candidate": "assertion",
+     "tests/test_manual.py::test_unconfirmed_amount_is_not_used": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'review_needed' == 'mapped'\n  \n  - mapped\n  + review_needed",
+     "AssertionError: assert 'review_needed' == 'candidate'\n  \n  - candidate\n  + review_needed",
+     "AssertionError: assert 'review_needed' == 'candidate'\n  \n  - candidate\n  + review_needed"
+    ],
+    "tail": null,
+    "executed": 4,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.48,
+    "failed": [
+     "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit",
+     "tests/test_manual.py::test_partial_components_never_make_a_normal_debt_total",
+     "tests/test_manual.py::test_scope_unconfirmed_note_value_is_only_a_candidate",
+     "tests/test_manual.py::test_unconfirmed_amount_is_not_used"
+    ],
+    "kinds": {
+     "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit": "assertion",
+     "tests/test_manual.py::test_scope_unconfirmed_note_value_is_only_a_candidate": "assertion",
+     "tests/test_manual.py::test_partial_components_never_make_a_normal_debt_total": "assertion",
+     "tests/test_manual.py::test_unconfirmed_amount_is_not_used": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'review_needed' == 'mapped'\n  \n  - mapped\n  + review_needed",
+     "AssertionError: assert 'review_needed' == 'candidate'\n  \n  - candidate\n  + review_needed",
+     "AssertionError: assert 'review_needed' == 'candidate'\n  \n  - candidate\n  + review_needed"
+    ],
+    "tail": null,
+    "executed": 79,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.06,
+    "apply": 1.13,
+    "selected": 0.91,
+    "full": 1.49,
+    "cleanup": 0.01,
+    "product_path": 2.1
+   }
+  },
+  "51": {
+   "no": 51,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "9e9c12b",
+   "path": "src/normalization/manual.py",
+   "line": 70,
+   "operator": "core/ReplaceAndWithOr",
+   "occurrence": 8,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit",
+    "tests/test_manual.py::test_partial_components_never_make_a_normal_debt_total",
+    "tests/test_manual.py::test_scope_unconfirmed_note_value_is_only_a_candidate"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    70
+   ],
+   "on_target_line": true,
+   "source_before": "if result[\"canonical_account\"] in COMPONENT_ACCOUNTS and entry.get(\"component_check\") != \"확인\":",
+   "source_after": "if result[\"canonical_account\"] in COMPONENT_ACCOUNTS or entry.get(\"component_check\") != \"확인\":",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.98,
+    "failed": [
+     "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit",
+     "tests/test_manual.py::test_partial_components_never_make_a_normal_debt_total",
+     "tests/test_manual.py::test_scope_unconfirmed_note_value_is_only_a_candidate"
+    ],
+    "kinds": {
+     "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit": "assertion",
+     "tests/test_manual.py::test_partial_components_never_make_a_normal_debt_total": "assertion",
+     "tests/test_manual.py::test_scope_unconfirmed_note_value_is_only_a_candidate": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'candidate' == 'mapped'\n  \n  - mapped\n  + candidate",
+     "AssertionError: assert 'candidate' == 'mapped'\n  \n  - mapped\n  + candidate",
+     "AssertionError: assert 'candidate' == 'mapped'\n  \n  - mapped\n  + candidate"
+    ],
+    "tail": null,
+    "executed": 3,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.62,
+    "failed": [
+     "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit",
+     "tests/test_manual.py::test_partial_components_never_make_a_normal_debt_total",
+     "tests/test_manual.py::test_scope_unconfirmed_note_value_is_only_a_candidate"
+    ],
+    "kinds": {
+     "tests/test_manual.py::test_confirmed_note_value_fills_review_and_converts_unit": "assertion",
+     "tests/test_manual.py::test_scope_unconfirmed_note_value_is_only_a_candidate": "assertion",
+     "tests/test_manual.py::test_partial_components_never_make_a_normal_debt_total": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'candidate' == 'mapped'\n  \n  - mapped\n  + candidate",
+     "AssertionError: assert 'candidate' == 'mapped'\n  \n  - mapped\n  + candidate",
+     "AssertionError: assert 'candidate' == 'mapped'\n  \n  - mapped\n  + candidate"
+    ],
+    "tail": null,
+    "executed": 79,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.03,
+    "apply": 0.86,
+    "selected": 0.99,
+    "full": 1.63,
+    "cleanup": 0.01,
+    "product_path": 1.88
+   }
+  },
+  "52": {
+   "no": 52,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "99c3179",
+   "path": "src/normalization/selection.py",
+   "line": 64,
+   "operator": "core/ReplaceComparisonOperator_Gt_GtE",
+   "occurrence": 1,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_dart_facts.py::test_changed_response_for_same_report_is_warned_and_latest_is_used",
+    "tests/test_dart_facts.py::test_identical_repeated_responses_are_not_warned",
+    "tests/test_dart_facts.py::test_repeated_collection_of_same_report_uses_latest_run",
+    "tests/test_dart_facts.py::test_snapshot_choice_does_not_depend_on_row_order[0]",
+    "tests/test_dart_facts.py::test_snapshot_choice_does_not_depend_on_row_order[1]"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    64
+   ],
+   "on_target_line": true,
+   "source_before": "if len(hashes) > 1:",
+   "source_after": "if len(hashes) >= 1:",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.62,
+    "failed": [
+     "tests/test_dart_facts.py::test_identical_repeated_responses_are_not_warned"
+    ],
+    "kinds": {
+     "tests/test_dart_facts.py::test_identical_repeated_responses_are_not_warned": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ['응답 내용 변경: 같...1005T000000Z'] == []\n  \n  Left contains one more item: '응답 내용 변경: 같은 보고서 c의 스냅샷 2개, 해시 1종 — 최근 수집본 사용, 이전 응답 보존: 20261001"
+    ],
+    "tail": null,
+    "executed": 5,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.66,
+    "failed": [
+     "tests/test_dart_facts.py::test_identical_repeated_responses_are_not_warned"
+    ],
+    "kinds": {
+     "tests/test_dart_facts.py::test_identical_repeated_responses_are_not_warned": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ['응답 내용 변경: 같...1005T000000Z'] == []\n  \n  Left contains one more item: '응답 내용 변경: 같은 보고서 c의 스냅샷 2개, 해시 1종 — 최근 수집본 사용, 이전 응답 보존: 20261001"
+    ],
+    "tail": null,
+    "executed": 116,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.03,
+    "apply": 1.01,
+    "selected": 0.63,
+    "full": 1.67,
+    "cleanup": 0.01,
+    "product_path": 1.68
+   }
+  },
+  "53": {
+   "no": 53,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "99c3179",
+   "path": "src/scoring/score.py",
+   "line": 34,
+   "operator": "core/ReplaceAndWithOr",
+   "occurrence": 0,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_scoring.py::test_excess_liquidity_gets_no_extra_points",
+    "tests/test_scoring.py::test_lower_is_better_rule_scores_high_for_low_debt",
+    "tests/test_scoring.py::test_normal_calculation_is_scored",
+    "tests/test_scoring.py::test_reference_calculation_shows_trace_score_but_is_held",
+    "tests/test_scoring.py::test_three_year_decline_caps_volatility_score"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    34
+   ],
+   "on_target_line": true,
+   "source_before": "if rule.get(\"cap_if_all_decline\") is not None and \"3년 연속 감소\" in (metric.get(\"notes\") or \"\"):",
+   "source_after": "if rule.get(\"cap_if_all_decline\") is not None or \"3년 연속 감소\" in (metric.get(\"notes\") or \"\"):",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.44,
+    "failed": [
+     "tests/test_scoring.py::test_three_year_decline_caps_volatility_score"
+    ],
+    "kinds": {
+     "tests/test_scoring.py::test_three_year_decline_caps_volatility_score": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 30 == 100\n +  where 30 = raw_score({'metric': 'growth_volatility', 'value': '0.0', 'calc_status': '정상', 'score_eligible': '가능', ...}, {'a"
+    ],
+    "tail": null,
+    "executed": 5,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.55,
+    "failed": [
+     "tests/test_scoring.py::test_three_year_decline_caps_volatility_score"
+    ],
+    "kinds": {
+     "tests/test_scoring.py::test_three_year_decline_caps_volatility_score": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 30 == 100\n +  where 30 = raw_score({'metric': 'growth_volatility', 'value': '0.0', 'calc_status': '정상', 'score_eligible': '가능', ...}, {'a"
+    ],
+    "tail": null,
+    "executed": 116,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.03,
+    "apply": 0.89,
+    "selected": 0.45,
+    "full": 1.56,
+    "cleanup": 0.01,
+    "product_path": 1.38
+   }
+  },
+  "54": {
+   "no": 54,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "99c3179",
+   "path": "src/scoring/score.py",
+   "line": 56,
+   "operator": "core/ReplaceOrWithAnd",
+   "occurrence": 1,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_scoring.py::test_excluded_peer_metric_is_not_applicable_not_zero",
+    "tests/test_scoring.py::test_normal_calculation_is_scored",
+    "tests/test_scoring.py::test_peer_metric_is_validation_only_even_when_computed",
+    "tests/test_scoring.py::test_reference_calculation_shows_trace_score_but_is_held"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    56
+   ],
+   "on_target_line": true,
+   "source_before": "eligible = metric.get(\"score_eligible\") or \"\"",
+   "source_after": "eligible = metric.get(\"score_eligible\") and \"\"",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.48,
+    "failed": [
+     "tests/test_scoring.py::test_excluded_peer_metric_is_not_applicable_not_zero",
+     "tests/test_scoring.py::test_normal_calculation_is_scored"
+    ],
+    "kinds": {
+     "tests/test_scoring.py::test_excluded_peer_metric_is_not_applicable_not_zero": "assertion",
+     "tests/test_scoring.py::test_normal_calculation_is_scored": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ('held' == 'not_applicable'\n  \n  - not_applicable\n  + held)",
+     "AssertionError: assert ('held', None, None) == ('scored', 50, 5.0)\n  \n  At index 0 diff: 'held' != 'scored'\n  Use -v to get more diff"
+    ],
+    "tail": null,
+    "executed": 4,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.76,
+    "failed": [
+     "tests/test_scoring.py::test_excluded_peer_metric_is_not_applicable_not_zero",
+     "tests/test_scoring.py::test_normal_calculation_is_scored"
+    ],
+    "kinds": {
+     "tests/test_scoring.py::test_normal_calculation_is_scored": "assertion",
+     "tests/test_scoring.py::test_excluded_peer_metric_is_not_applicable_not_zero": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ('held', None, None) == ('scored', 50, 5.0)\n  \n  At index 0 diff: 'held' != 'scored'\n  Use -v to get more diff",
+     "AssertionError: assert ('held' == 'not_applicable'\n  \n  - not_applicable\n  + held)"
+    ],
+    "tail": null,
+    "executed": 116,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.06,
+    "apply": 0.97,
+    "selected": 0.5,
+    "full": 1.77,
+    "cleanup": 0.01,
+    "product_path": 1.54
+   }
+  },
+  "55": {
+   "no": 55,
+   "codebase": "P",
+   "repo": "predict-success",
+   "commit": "99c3179",
+   "path": "src/scoring/score.py",
+   "line": 65,
+   "operator": "core/ReplaceOrWithAnd",
+   "occurrence": 2,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_scoring.py::test_normal_calculation_is_scored",
+    "tests/test_scoring.py::test_peer_metric_is_validation_only_even_when_computed"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    65
+   ],
+   "on_target_line": true,
+   "source_before": "if rule[\"method\"] == \"A\" or eligible.startswith(\"검증용\"):",
+   "source_after": "if rule[\"method\"] == \"A\" and eligible.startswith(\"검증용\"):",
+   "selected": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 0.45,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "full": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 1.61,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 116,
+    "skipped": 0
+   },
+   "result": "SURVIVED",
+   "result_selected": "SURVIVED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.13,
+    "apply": 0.91,
+    "selected": 0.46,
+    "full": 1.62,
+    "cleanup": 0.01,
+    "product_path": 1.5
+   }
+  },
+  "21": {
+   "no": 21,
+   "codebase": "W",
+   "repo": "2026-10/week1-csv-llm-report",
+   "commit": "f483ebe",
+   "path": "report.py",
+   "line": 51,
+   "operator": "core/NumberReplacer",
+   "occurrence": 2,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_report.py::test_payload_converts_ratios_to_percent_and_nan_to_null",
+    "tests/test_report.py::test_payload_is_json_serializable",
+    "tests/test_report.py::test_payload_keeps_only_recent_months",
+    "tests/test_report.py::test_payload_without_profit"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    51
+   ],
+   "on_target_line": true,
+   "source_before": "result[f\"{key}_pct\"] = round(float(value) * 100, 1)",
+   "source_after": "result[f\"{key}_pct\"] = round(float(value) * 101, 1)",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 5.92,
+    "failed": [
+     "tests/test_report.py::test_payload_converts_ratios_to_percent_and_nan_to_null"
+    ],
+    "kinds": {
+     "tests/test_report.py::test_payload_converts_ratios_to_percent_and_nan_to_null": "assertion"
+    },
+    "messages": [
+     "assert 200.8 == 198.8 ± 0.1\n  \n  comparison failed\n  Obtained: 200.8\n  Expected: 198.8 ± 0.1"
+    ],
+    "tail": null,
+    "executed": 4,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 5.29,
+    "failed": [
+     "tests/test_report.py::test_payload_converts_ratios_to_percent_and_nan_to_null"
+    ],
+    "kinds": {
+     "tests/test_report.py::test_payload_converts_ratios_to_percent_and_nan_to_null": "assertion"
+    },
+    "messages": [
+     "assert 200.8 == 198.8 ± 0.1\n  \n  comparison failed\n  Obtained: 200.8\n  Expected: 198.8 ± 0.1"
+    ],
+    "tail": null,
+    "executed": 14,
+    "skipped": 1
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.86,
+    "selected": 5.93,
+    "full": 5.31,
+    "cleanup": 0.0,
+    "product_path": 6.8
+   }
+  },
+  "22": {
+   "no": 22,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "5b31f70",
+   "path": "tools.py",
+   "line": 54,
+   "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+   "occurrence": 0,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_category_breakdown_unknown_category",
+    "tests/test_tools.py::test_unknown_category_hints_sub_category"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    54
+   ],
+   "on_target_line": true,
+   "source_before": "parent = df.loc[df[\"sub_category\"] == category, \"category\"]",
+   "source_after": "parent = df.loc[df[\"sub_category\"] != category, \"category\"]",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.14,
+    "failed": [
+     "tests/test_tools.py::test_unknown_category_hints_sub_category"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_unknown_category_hints_sub_category": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'A1는 A의 하위 카테고리' in 'A1는 B의 하위 카테고리입니다.'"
+    ],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.38,
+    "failed": [
+     "tests/test_tools.py::test_unknown_category_hints_sub_category"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_unknown_category_hints_sub_category": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'A1는 A의 하위 카테고리' in 'A1는 B의 하위 카테고리입니다.'"
+    ],
+    "tail": null,
+    "executed": 35,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.91,
+    "selected": 1.15,
+    "full": 2.39,
+    "cleanup": 0.0,
+    "product_path": 2.07
+   }
+  },
+  "23": {
+   "no": 23,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "5b31f70",
+   "path": "tools.py",
+   "line": 56,
+   "operator": "core/NumberReplacer",
+   "occurrence": 22,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_unknown_category_hints_sub_category"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    56
+   ],
+   "on_target_line": true,
+   "source_before": "error[\"hint\"] = f\"{category}는 {parent.iloc[0]}의 하위 카테고리입니다.\"",
+   "source_after": "error[\"hint\"] = f\"{category}는 {parent.iloc[ 1]}의 하위 카테고리입니다.\"",
+   "selected": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 1.11,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 2.23,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 35,
+    "skipped": 0
+   },
+   "result": "SURVIVED",
+   "result_selected": "SURVIVED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.84,
+    "selected": 1.12,
+    "full": 2.24,
+    "cleanup": 0.0,
+    "product_path": 1.97
+   }
+  },
+  "24": {
+   "no": 24,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "5b31f70",
+   "path": "tools.py",
+   "line": 117,
+   "operator": "core/ReplaceComparisonOperator_IsNot_Is",
+   "occurrence": 0,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_monthly_trend_fills_missing_month",
+    "tests/test_tools.py::test_monthly_trend_filters_category",
+    "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing",
+    "tests/test_tools.py::test_unknown_category_hints_sub_category"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    117
+   ],
+   "on_target_line": true,
+   "source_before": "if category is not None:",
+   "source_after": "if category is None:",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.22,
+    "failed": [
+     "tests/test_tools.py::test_monthly_trend_fills_missing_month",
+     "tests/test_tools.py::test_monthly_trend_filters_category",
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing",
+     "tests/test_tools.py::test_unknown_category_hints_sub_category"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_monthly_trend_fills_missing_month": "exception",
+     "tests/test_tools.py::test_monthly_trend_filters_category": "assertion",
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing": "exception",
+     "tests/test_tools.py::test_unknown_category_hints_sub_category": "exception"
+    },
+    "messages": [
+     "KeyError: 'months'",
+     "AssertionError: assert [('2024-01', ...024-04', 100)] == [('2024-01', ...'2024-04', 0)]\n  \n  At index 0 diff: ('2024-01', 200) != ('2024-01', 100)\n  Use -v to g",
+     "KeyError: 'months'"
+    ],
+    "tail": null,
+    "executed": 4,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.2,
+    "failed": [
+     "tests/test_tools.py::test_monthly_trend_fills_missing_month",
+     "tests/test_tools.py::test_monthly_trend_filters_category",
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing",
+     "tests/test_tools.py::test_unknown_category_hints_sub_category"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_monthly_trend_fills_missing_month": "exception",
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing": "exception",
+     "tests/test_tools.py::test_monthly_trend_filters_category": "assertion",
+     "tests/test_tools.py::test_unknown_category_hints_sub_category": "exception"
+    },
+    "messages": [
+     "KeyError: 'months'",
+     "KeyError: 'months'",
+     "AssertionError: assert [('2024-01', ...024-04', 100)] == [('2024-01', ...'2024-04', 0)]\n  \n  At index 0 diff: ('2024-01', 200) != ('2024-01', 100)\n  Use -v to g"
+    ],
+    "tail": null,
+    "executed": 35,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.88,
+    "selected": 1.24,
+    "full": 2.21,
+    "cleanup": 0.0,
+    "product_path": 2.13
+   }
+  },
+  "25": {
+   "no": 25,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "5b31f70",
+   "path": "tools.py",
+   "line": 120,
+   "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+   "occurrence": 2,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_monthly_trend_filters_category"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    120
+   ],
+   "on_target_line": true,
+   "source_before": "df = df[df[\"category\"] == category]",
+   "source_after": "df = df[df[\"category\"] != category]",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.18,
+    "failed": [
+     "tests/test_tools.py::test_monthly_trend_filters_category"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_monthly_trend_filters_category": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert [('2024-01', ...024-04', 100)] == [('2024-01', ...'2024-04', 0)]\n  \n  At index 1 diff: ('2024-02', 200) != ('2024-02', 0)\n  Use -v to get"
+    ],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.2,
+    "failed": [
+     "tests/test_tools.py::test_monthly_trend_filters_category"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_monthly_trend_filters_category": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert [('2024-01', ...024-04', 100)] == [('2024-01', ...'2024-04', 0)]\n  \n  At index 1 diff: ('2024-02', 200) != ('2024-02', 0)\n  Use -v to get"
+    ],
+    "tail": null,
+    "executed": 35,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.91,
+    "selected": 1.19,
+    "full": 2.21,
+    "cleanup": 0.0,
+    "product_path": 2.12
+   }
+  },
+  "26": {
+   "no": 26,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "5b31f70",
+   "path": "tools.py",
+   "line": 221,
+   "operator": "core/ReplaceOrWithAnd",
+   "occurrence": 4,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_compare_periods_by_category",
+    "tests/test_tools.py::test_compare_periods_drills_down_and_orders_by_change",
+    "tests/test_tools.py::test_compare_periods_empty_period"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    221
+   ],
+   "on_target_line": true,
+   "source_before": "if base.empty or compare.empty:",
+   "source_after": "if base.empty and compare.empty:",
+   "selected": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 1.17,
+    "failed": [
+     "tests/test_tools.py::test_compare_periods_empty_period"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_compare_periods_empty_period": "exception"
+    },
+    "messages": [
+     "KeyError: 'error'"
+    ],
+    "tail": null,
+    "executed": 3,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 2.18,
+    "failed": [
+     "tests/test_tools.py::test_compare_periods_empty_period"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_compare_periods_empty_period": "exception"
+    },
+    "messages": [
+     "KeyError: 'error'"
+    ],
+    "tail": null,
+    "executed": 35,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.84,
+    "selected": 1.18,
+    "full": 2.19,
+    "cleanup": 0.0,
+    "product_path": 2.04
+   }
+  },
+  "27": {
+   "no": 27,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "5b31f70",
+   "path": "tools.py",
+   "line": 233,
+   "operator": "core/ReplaceFalseWithTrue",
+   "occurrence": 1,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_compare_periods_by_category",
+    "tests/test_tools.py::test_compare_periods_drills_down_and_orders_by_change"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    233
+   ],
+   "on_target_line": true,
+   "source_before": "order = (table[\"compare\"][\"sales\"] - table[\"base\"][\"sales\"]).abs().sort_values(ascending=False).index",
+   "source_after": "order = (table[\"compare\"][\"sales\"] - table[\"base\"][\"sales\"]).abs().sort_values(ascending=True).index",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.34,
+    "failed": [
+     "tests/test_tools.py::test_compare_periods_drills_down_and_orders_by_change"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_compare_periods_drills_down_and_orders_by_change": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert [('A1', 100, ... -200, 200.0)] == [('A2', -200,... 100, -100.0)]\n  \n  At index 0 diff: ('A1', 100, -100.0) != ('A2', -200, 200.0)\n  Use -"
+    ],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.01,
+    "failed": [
+     "tests/test_tools.py::test_compare_periods_drills_down_and_orders_by_change"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_compare_periods_drills_down_and_orders_by_change": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert [('A1', 100, ... -200, 200.0)] == [('A2', -200,... 100, -100.0)]\n  \n  At index 0 diff: ('A1', 100, -100.0) != ('A2', -200, 200.0)\n  Use -"
+    ],
+    "tail": null,
+    "executed": 35,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 0.86,
+    "selected": 1.35,
+    "full": 2.02,
+    "cleanup": 0.0,
+    "product_path": 2.23
+   }
+  },
+  "28": {
+   "no": 28,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "5b31f70",
+   "path": "tools.py",
+   "line": 251,
+   "operator": "core/ReplaceComparisonOperator_IsNot_Is",
+   "occurrence": 3,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_discount_impact",
+    "tests/test_tools.py::test_discount_impact_by_sub_category",
+    "tests/test_tools.py::test_discount_impact_sub_category_must_belong_to_category"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    251
+   ],
+   "on_target_line": true,
+   "source_before": "if sub_category is not None:",
+   "source_after": "if sub_category is None:",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.28,
+    "failed": [
+     "tests/test_tools.py::test_discount_impact",
+     "tests/test_tools.py::test_discount_impact_by_sub_category",
+     "tests/test_tools.py::test_discount_impact_sub_category_must_belong_to_category"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_discount_impact": "exception",
+     "tests/test_tools.py::test_discount_impact_by_sub_category": "assertion",
+     "tests/test_tools.py::test_discount_impact_sub_category_must_belong_to_category": "exception"
+    },
+    "messages": [
+     "KeyError: 'bands'",
+     "AssertionError: assert ['0%', '1~20%', '41%+'] == ['0%']\n  \n  Left contains 2 more items, first extra item: '1~20%'\n  Use -v to get more diff",
+     "KeyError: 'available'"
+    ],
+    "tail": null,
+    "executed": 3,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.37,
+    "failed": [
+     "tests/test_tools.py::test_discount_impact",
+     "tests/test_tools.py::test_discount_impact_by_sub_category",
+     "tests/test_tools.py::test_discount_impact_sub_category_must_belong_to_category"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_discount_impact": "exception",
+     "tests/test_tools.py::test_discount_impact_by_sub_category": "assertion",
+     "tests/test_tools.py::test_discount_impact_sub_category_must_belong_to_category": "exception"
+    },
+    "messages": [
+     "KeyError: 'bands'",
+     "AssertionError: assert ['0%', '1~20%', '41%+'] == ['0%']\n  \n  Left contains 2 more items, first extra item: '1~20%'\n  Use -v to get more diff",
+     "KeyError: 'available'"
+    ],
+    "tail": null,
+    "executed": 35,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.82,
+    "selected": 1.29,
+    "full": 2.38,
+    "cleanup": 0.0,
+    "product_path": 2.12
+   }
+  },
+  "29": {
+   "no": 29,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "5b31f70",
+   "path": "tools.py",
+   "line": 257,
+   "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+   "occurrence": 6,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_discount_impact_by_sub_category"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    257
+   ],
+   "on_target_line": true,
+   "source_before": "df = df[df[\"sub_category\"] == sub_category]",
+   "source_after": "df = df[df[\"sub_category\"] != sub_category]",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.24,
+    "failed": [
+     "tests/test_tools.py::test_discount_impact_by_sub_category"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_discount_impact_by_sub_category": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ['1~20%', '41%+'] == ['0%']\n  \n  At index 0 diff: '1~20%' != '0%'\n  Left contains one more item: '41%+'\n  Use -v to get more diff"
+    ],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.15,
+    "failed": [
+     "tests/test_tools.py::test_discount_impact_by_sub_category"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_discount_impact_by_sub_category": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ['1~20%', '41%+'] == ['0%']\n  \n  At index 0 diff: '1~20%' != '0%'\n  Left contains one more item: '41%+'\n  Use -v to get more diff"
+    ],
+    "tail": null,
+    "executed": 35,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.9,
+    "selected": 1.25,
+    "full": 2.17,
+    "cleanup": 0.0,
+    "product_path": 2.17
+   }
+  },
+  "30": {
+   "no": 30,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "ef7ed86",
+   "path": "tools.py",
+   "line": 136,
+   "operator": "core/NumberReplacer",
+   "occurrence": 30,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_detect_anomaly_ignores_seasonality",
+    "tests/test_tools.py::test_detect_anomaly_needs_two_years",
+    "tests/test_tools.py::test_monthly_trend_fills_missing_month",
+    "tests/test_tools.py::test_monthly_trend_filters_category",
+    "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    136
+   ],
+   "on_target_line": true,
+   "source_before": "return monthly.reindex(full_range, fill_value=0)",
+   "source_after": "return monthly.reindex(full_range, fill_value= 1)",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.2,
+    "failed": [
+     "tests/test_tools.py::test_monthly_trend_fills_missing_month",
+     "tests/test_tools.py::test_monthly_trend_filters_category",
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_monthly_trend_fills_missing_month": "assertion",
+     "tests/test_tools.py::test_monthly_trend_filters_category": "assertion",
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing": "assertion"
+    },
+    "messages": [
+     "assert 1 == 0",
+     "AssertionError: assert [('2024-01', ...'2024-04', 1)] == [('2024-01', ...'2024-04', 0)]\n  \n  At index 1 diff: ('2024-02', 1) != ('2024-02', 0)\n  Use -v to get m",
+     "assert 9900.0 is None"
+    ],
+    "tail": null,
+    "executed": 5,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.03,
+    "failed": [
+     "tests/test_tools.py::test_monthly_trend_fills_missing_month",
+     "tests/test_tools.py::test_monthly_trend_filters_category",
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_monthly_trend_fills_missing_month": "assertion",
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing": "assertion",
+     "tests/test_tools.py::test_monthly_trend_filters_category": "assertion"
+    },
+    "messages": [
+     "assert 1 == 0",
+     "assert 9900.0 is None",
+     "AssertionError: assert [('2024-01', ...'2024-04', 1)] == [('2024-01', ...'2024-04', 0)]\n  \n  At index 1 diff: ('2024-02', 1) != ('2024-02', 0)\n  Use -v to get m"
+    ],
+    "tail": null,
+    "executed": 42,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.94,
+    "selected": 1.21,
+    "full": 2.05,
+    "cleanup": 0.0,
+    "product_path": 2.16
+   }
+  },
+  "31": {
+   "no": 31,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "ef7ed86",
+   "path": "tools.py",
+   "line": 326,
+   "operator": "core/ReplaceComparisonOperator_GtE_Gt",
+   "occurrence": 1,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data",
+    "tests/test_tools.py::test_customer_analysis_whole_period_has_note"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    326
+   ],
+   "on_target_line": true,
+   "source_before": "new_customers = set(first_month[customers][first_month[customers] >= start].index)",
+   "source_after": "new_customers = set(first_month[customers][first_month[customers] > start].index)",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.17,
+    "failed": [
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data",
+     "tests/test_tools.py::test_customer_analysis_whole_period_has_note"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data": "assertion",
+     "tests/test_tools.py::test_customer_analysis_whole_period_has_note": "assertion"
+    },
+    "messages": [
+     "assert 0 == 1",
+     "assert 1 == 2"
+    ],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.34,
+    "failed": [
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data",
+     "tests/test_tools.py::test_customer_analysis_whole_period_has_note"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data": "assertion",
+     "tests/test_tools.py::test_customer_analysis_whole_period_has_note": "assertion"
+    },
+    "messages": [
+     "assert 0 == 1",
+     "assert 1 == 2"
+    ],
+    "tail": null,
+    "executed": 42,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.83,
+    "selected": 1.18,
+    "full": 2.36,
+    "cleanup": 0.0,
+    "product_path": 2.02
+   }
+  },
+  "32": {
+   "no": 32,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "ef7ed86",
+   "path": "tools.py",
+   "line": 328,
+   "operator": "core/ReplaceFalseWithTrue",
+   "occurrence": 2,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data",
+    "tests/test_tools.py::test_customer_analysis_whole_period_has_note"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    328
+   ],
+   "on_target_line": true,
+   "source_before": "sales_per_customer = period.groupby(\"customer_id\")[\"sales\"].sum().sort_values(ascending=False)",
+   "source_after": "sales_per_customer = period.groupby(\"customer_id\")[\"sales\"].sum().sort_values(ascending=True)",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.15,
+    "failed": [
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data": "assertion"
+    },
+    "messages": [
+     "assert 33.3 == 66.7\n +  where 66.7 = round(((200 / 300) * 100), 1)"
+    ],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.3,
+    "failed": [
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data": "assertion"
+    },
+    "messages": [
+     "assert 33.3 == 66.7\n +  where 66.7 = round(((200 / 300) * 100), 1)"
+    ],
+    "tail": null,
+    "executed": 42,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 1.06,
+    "selected": 1.16,
+    "full": 2.32,
+    "cleanup": 0.0,
+    "product_path": 2.23
+   }
+  },
+  "33": {
+   "no": 33,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "ef7ed86",
+   "path": "tools.py",
+   "line": 329,
+   "operator": "core/NumberReplacer",
+   "occurrence": 42,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data",
+    "tests/test_tools.py::test_customer_analysis_whole_period_has_note"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    329
+   ],
+   "on_target_line": true,
+   "source_before": "top_n = max(1, round(len(customers) * TOP_CUSTOMER_RATIO))",
+   "source_after": "top_n = max( 2, round(len(customers) * TOP_CUSTOMER_RATIO))",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.78,
+    "failed": [
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data": "assertion"
+    },
+    "messages": [
+     "assert 100.0 == 66.7\n +  where 66.7 = round(((200 / 300) * 100), 1)"
+    ],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 3.04,
+    "failed": [
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data": "assertion"
+    },
+    "messages": [
+     "assert 100.0 == 66.7\n +  where 66.7 = round(((200 / 300) * 100), 1)"
+    ],
+    "tail": null,
+    "executed": 42,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.03,
+    "apply": 1.63,
+    "selected": 1.8,
+    "full": 3.05,
+    "cleanup": 0.01,
+    "product_path": 3.46
+   }
+  },
+  "34": {
+   "no": 34,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "ef7ed86",
+   "path": "tools.py",
+   "line": 348,
+   "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+   "occurrence": 8,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data",
+    "tests/test_tools.py::test_customer_analysis_whole_period_has_note"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    348
+   ],
+   "on_target_line": true,
+   "source_before": "if start == first_month.min():",
+   "source_after": "if start != first_month.min():",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.54,
+    "failed": [
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data",
+     "tests/test_tools.py::test_customer_analysis_whole_period_has_note"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data": "assertion",
+     "tests/test_tools.py::test_customer_analysis_whole_period_has_note": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'note' not in {'period': '2024-02 ~ 2024-04', 'customer_count': 2, 'new_customers': 1, 'returning_customers': 1, ...}",
+     "AssertionError: assert 'note' in {'period': '2024-01 ~ 2024-04', 'customer_count': 2, 'new_customers': 2, 'returning_customers': 0, ...}"
+    ],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 3.43,
+    "failed": [
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data",
+     "tests/test_tools.py::test_customer_analysis_whole_period_has_note"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data": "assertion",
+     "tests/test_tools.py::test_customer_analysis_whole_period_has_note": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'note' not in {'period': '2024-02 ~ 2024-04', 'customer_count': 2, 'new_customers': 1, 'returning_customers': 1, ...}",
+     "AssertionError: assert 'note' in {'period': '2024-01 ~ 2024-04', 'customer_count': 2, 'new_customers': 2, 'returning_customers': 0, ...}"
+    ],
+    "tail": null,
+    "executed": 42,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.05,
+    "apply": 2.48,
+    "selected": 2.55,
+    "full": 3.44,
+    "cleanup": 0.0,
+    "product_path": 5.09
+   }
+  },
+  "35": {
+   "no": 35,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "7f9efeb",
+   "path": "tools.py",
+   "line": 63,
+   "operator": "core/ReplaceOrWithAnd",
+   "occurrence": 1,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_agent.py::test_forces_answer_on_last_step",
+    "tests/test_agent.py::test_raises_when_model_never_stops_calling_tools",
+    "tests/test_agent.py::test_runs_requested_tools_and_returns_results",
+    "tests/test_tools.py::test_breakdown_by_category",
+    "tests/test_tools.py::test_breakdown_by_region",
+    "tests/test_tools.py::test_breakdown_rejects_group_by_used_as_filter",
+    "tests/test_tools.py::test_breakdown_with_filter",
+    "tests/test_tools.py::test_compare_periods_by_category",
+    "tests/test_tools.py::test_compare_periods_empty_period",
+    "tests/test_tools.py::test_compare_periods_with_filter_orders_by_change",
+    "tests/test_tools.py::test_customer_analysis_new_means_new_to_company",
+    "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data",
+    "tests/test_tools.py::test_customer_analysis_whole_period_has_note",
+    "tests/test_tools.py::test_detect_anomaly_ignores_seasonality",
+    "tests/test_tools.py::test_detect_anomaly_needs_two_years",
+    "tests/test_tools.py::test_discount_impact",
+    "tests/test_tools.py::test_discount_impact_with_filters",
+    "tests/test_tools.py::test_filter_available_values_respect_earlier_filters",
+    "tests/test_tools.py::test_filter_on_missing_column",
+    "tests/test_tools.py::test_filter_value_in_other_column_gets_hint",
+    "tests/test_tools.py::test_filters_combine",
+    "tests/test_tools.py::test_get_summary",
+    "tests/test_tools.py::test_get_summary_empty_period",
+    "tests/test_tools.py::test_get_summary_filters_period",
+    "tests/test_tools.py::test_monthly_trend_fills_missing_month",
+    "tests/test_tools.py::test_monthly_trend_filters",
+    "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing",
+    "tests/test_tools.py::test_run_tool_returns_error_instead_of_raising[get_summary-{\"start_month\": \"2024-13\", \"end_month\": null}]",
+    "tests/test_tools.py::test_run_tool_returns_error_instead_of_raising[get_summary-{\"wrong_arg\": 1}]",
+    "tests/test_tools.py::test_run_tool_returns_error_instead_of_raising[no_such_tool-{}]",
+    "tests/test_tools.py::test_run_tool_returns_json"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    63
+   ],
+   "on_target_line": true,
+   "source_before": "return {key: value for key, value in (filters or {}).items() if value is not None}",
+   "source_after": "return {key: value for key, value in (filters and {}).items() if value is not None}",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.78,
+    "failed": [
+     "tests/test_agent.py::test_forces_answer_on_last_step",
+     "tests/test_agent.py::test_raises_when_model_never_stops_calling_tools",
+     "tests/test_agent.py::test_runs_requested_tools_and_returns_results",
+     "tests/test_tools.py::test_breakdown_by_category",
+     "tests/test_tools.py::test_breakdown_by_region",
+     "tests/test_tools.py::test_breakdown_rejects_group_by_used_as_filter",
+     "tests/test_tools.py::test_breakdown_with_filter",
+     "tests/test_tools.py::test_compare_periods_by_category",
+     "tests/test_tools.py::test_compare_periods_empty_period",
+     "tests/test_tools.py::test_customer_analysis_new_means_new_to_company",
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data",
+     "tests/test_tools.py::test_customer_analysis_whole_period_has_note",
+     "tests/test_tools.py::test_detect_anomaly_ignores_seasonality",
+     "tests/test_tools.py::test_detect_anomaly_needs_two_years",
+     "tests/test_tools.py::test_discount_impact",
+     "tests/test_tools.py::test_discount_impact_with_filters",
+     "tests/test_tools.py::test_filter_available_values_respect_earlier_filters",
+     "tests/test_tools.py::test_filter_on_missing_column",
+     "tests/test_tools.py::test_filter_value_in_other_column_gets_hint",
+     "tests/test_tools.py::test_filters_combine",
+     "tests/test_tools.py::test_get_summary",
+     "tests/test_tools.py::test_get_summary_empty_period",
+     "tests/test_tools.py::test_get_summary_filters_period",
+     "tests/test_tools.py::test_monthly_trend_fills_missing_month",
+     "tests/test_tools.py::test_monthly_trend_filters",
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing",
+     "tests/test_tools.py::test_run_tool_returns_error_instead_of_raising[get_summary-{\"start_month\": \"2024-13\", \"end_month\": null}]",
+     "tests/test_tools.py::test_run_tool_returns_json"
+    ],
+    "kinds": {
+     "tests/test_agent.py::test_forces_answer_on_last_step": "exception",
+     "tests/test_agent.py::test_raises_when_model_never_stops_calling_tools": "exception",
+     "tests/test_agent.py::test_runs_requested_tools_and_returns_results": "exception",
+     "tests/test_tools.py::test_breakdown_by_category": "exception",
+     "tests/test_tools.py::test_breakdown_by_region": "exception",
+     "tests/test_tools.py::test_breakdown_rejects_group_by_used_as_filter": "exception",
+     "tests/test_tools.py::test_breakdown_with_filter": "assertion",
+     "tests/test_tools.py::test_compare_periods_by_category": "exception",
+     "tests/test_tools.py::test_compare_periods_empty_period": "exception",
+     "tests/test_tools.py::test_customer_analysis_new_means_new_to_company": "assertion",
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data": "exception",
+     "tests/test_tools.py::test_customer_analysis_whole_period_has_note": "exception",
+     "tests/test_tools.py::test_detect_anomaly_ignores_seasonality": "exception",
+     "tests/test_tools.py::test_detect_anomaly_needs_two_years": "exception",
+     "tests/test_tools.py::test_discount_impact": "exception",
+     "tests/test_tools.py::test_discount_impact_with_filters": "assertion",
+     "tests/test_tools.py::test_filter_available_values_respect_earlier_filters": "exception",
+     "tests/test_tools.py::test_filter_on_missing_column": "exception",
+     "tests/test_tools.py::test_filter_value_in_other_column_gets_hint": "exception",
+     "tests/test_tools.py::test_filters_combine": "assertion",
+     "tests/test_tools.py::test_get_summary": "exception",
+     "tests/test_tools.py::test_get_summary_empty_period": "exception",
+     "tests/test_tools.py::test_get_summary_filters_period": "exception",
+     "tests/test_tools.py::test_monthly_trend_fills_missing_month": "exception",
+     "tests/test_tools.py::test_monthly_trend_filters": "assertion",
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing": "exception",
+     "tests/test_tools.py::test_run_tool_returns_error_instead_of_raising[get_summary-{\"start_month\": \"2024-13\", \"end_month\": null}]": "exception",
+     "tests/test_tools.py::test_run_tool_returns_json": "exception"
+    },
+    "messages": [
+     "AttributeError: 'NoneType' object has no attribute 'items'",
+     "AttributeError: 'NoneType' object has no attribute 'items'",
+     "AttributeError: 'NoneType' object has no attribute 'items'"
+    ],
+    "tail": null,
+    "executed": 31,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.67,
+    "failed": [
+     "tests/test_agent.py::test_forces_answer_on_last_step",
+     "tests/test_agent.py::test_raises_when_model_never_stops_calling_tools",
+     "tests/test_agent.py::test_runs_requested_tools_and_returns_results",
+     "tests/test_tools.py::test_breakdown_by_category",
+     "tests/test_tools.py::test_breakdown_by_region",
+     "tests/test_tools.py::test_breakdown_rejects_group_by_used_as_filter",
+     "tests/test_tools.py::test_breakdown_with_filter",
+     "tests/test_tools.py::test_compare_periods_by_category",
+     "tests/test_tools.py::test_compare_periods_empty_period",
+     "tests/test_tools.py::test_customer_analysis_new_means_new_to_company",
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data",
+     "tests/test_tools.py::test_customer_analysis_whole_period_has_note",
+     "tests/test_tools.py::test_detect_anomaly_ignores_seasonality",
+     "tests/test_tools.py::test_detect_anomaly_needs_two_years",
+     "tests/test_tools.py::test_discount_impact",
+     "tests/test_tools.py::test_discount_impact_with_filters",
+     "tests/test_tools.py::test_filter_available_values_respect_earlier_filters",
+     "tests/test_tools.py::test_filter_on_missing_column",
+     "tests/test_tools.py::test_filter_value_in_other_column_gets_hint",
+     "tests/test_tools.py::test_filters_combine",
+     "tests/test_tools.py::test_get_summary",
+     "tests/test_tools.py::test_get_summary_empty_period",
+     "tests/test_tools.py::test_get_summary_filters_period",
+     "tests/test_tools.py::test_monthly_trend_fills_missing_month",
+     "tests/test_tools.py::test_monthly_trend_filters",
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing",
+     "tests/test_tools.py::test_run_tool_returns_error_instead_of_raising[get_summary-{\"start_month\": \"2024-13\", \"end_month\": null}]",
+     "tests/test_tools.py::test_run_tool_returns_json"
+    ],
+    "kinds": {
+     "tests/test_agent.py::test_runs_requested_tools_and_returns_results": "exception",
+     "tests/test_agent.py::test_forces_answer_on_last_step": "exception",
+     "tests/test_agent.py::test_raises_when_model_never_stops_calling_tools": "exception",
+     "tests/test_tools.py::test_get_summary": "exception",
+     "tests/test_tools.py::test_get_summary_filters_period": "exception",
+     "tests/test_tools.py::test_get_summary_empty_period": "exception",
+     "tests/test_tools.py::test_monthly_trend_fills_missing_month": "exception",
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing": "exception",
+     "tests/test_tools.py::test_monthly_trend_filters": "assertion",
+     "tests/test_tools.py::test_filters_combine": "assertion",
+     "tests/test_tools.py::test_filter_value_in_other_column_gets_hint": "exception",
+     "tests/test_tools.py::test_filter_available_values_respect_earlier_filters": "exception",
+     "tests/test_tools.py::test_filter_on_missing_column": "exception",
+     "tests/test_tools.py::test_breakdown_by_category": "exception",
+     "tests/test_tools.py::test_breakdown_with_filter": "assertion",
+     "tests/test_tools.py::test_breakdown_by_region": "exception",
+     "tests/test_tools.py::test_breakdown_rejects_group_by_used_as_filter": "exception",
+     "tests/test_tools.py::test_compare_periods_by_category": "exception",
+     "tests/test_tools.py::test_compare_periods_empty_period": "exception",
+     "tests/test_tools.py::test_discount_impact": "exception",
+     "tests/test_tools.py::test_discount_impact_with_filters": "assertion",
+     "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data": "exception",
+     "tests/test_tools.py::test_customer_analysis_new_means_new_to_company": "assertion",
+     "tests/test_tools.py::test_customer_analysis_whole_period_has_note": "exception",
+     "tests/test_tools.py::test_detect_anomaly_ignores_seasonality": "exception",
+     "tests/test_tools.py::test_detect_anomaly_needs_two_years": "exception",
+     "tests/test_tools.py::test_run_tool_returns_json": "exception",
+     "tests/test_tools.py::test_run_tool_returns_error_instead_of_raising[get_summary-{\"start_month\": \"2024-13\", \"end_month\": null}]": "exception"
+    },
+    "messages": [
+     "AttributeError: 'NoneType' object has no attribute 'items'",
+     "AttributeError: 'NoneType' object has no attribute 'items'",
+     "AttributeError: 'NoneType' object has no attribute 'items'"
+    ],
+    "tail": null,
+    "executed": 46,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.94,
+    "selected": 2.8,
+    "full": 2.68,
+    "cleanup": 0.0,
+    "product_path": 3.74
+   }
+  },
+  "36": {
+   "no": 36,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "7f9efeb",
+   "path": "tools.py",
+   "line": 70,
+   "operator": "core/ReplaceOrWithAnd",
+   "occurrence": 2,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_breakdown_with_filter",
+    "tests/test_tools.py::test_compare_periods_with_filter_orders_by_change",
+    "tests/test_tools.py::test_customer_analysis_new_means_new_to_company",
+    "tests/test_tools.py::test_discount_impact_with_filters",
+    "tests/test_tools.py::test_filter_available_values_respect_earlier_filters",
+    "tests/test_tools.py::test_filter_on_missing_column",
+    "tests/test_tools.py::test_filter_value_in_other_column_gets_hint",
+    "tests/test_tools.py::test_filters_combine",
+    "tests/test_tools.py::test_monthly_trend_filters"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    70
+   ],
+   "on_target_line": true,
+   "source_before": "if key not in DIMENSIONS or key not in df:",
+   "source_after": "if key not in DIMENSIONS and key not in df:",
+   "selected": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 1.35,
+    "failed": [
+     "tests/test_tools.py::test_filter_on_missing_column"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_filter_on_missing_column": "exception"
+    },
+    "messages": [
+     "KeyError: 'segment'"
+    ],
+    "tail": null,
+    "executed": 9,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 2.54,
+    "failed": [
+     "tests/test_tools.py::test_filter_on_missing_column"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_filter_on_missing_column": "exception"
+    },
+    "messages": [
+     "KeyError: 'segment'"
+    ],
+    "tail": null,
+    "executed": 46,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 0.9,
+    "selected": 1.37,
+    "full": 2.56,
+    "cleanup": 0.0,
+    "product_path": 2.29
+   }
+  },
+  "37": {
+   "no": 37,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "7f9efeb",
+   "path": "tools.py",
+   "line": 79,
+   "operator": "core/ReplaceAndWithOr",
+   "occurrence": 0,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_filter_available_values_respect_earlier_filters",
+    "tests/test_tools.py::test_filter_value_in_other_column_gets_hint"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    79
+   ],
+   "on_target_line": true,
+   "source_before": "other = [d for d in DIMENSIONS if d != key and d in full and value in full[d].values]",
+   "source_after": "other = [d for d in DIMENSIONS if d != key or d in full and value in full[d].values]",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.16,
+    "failed": [
+     "tests/test_tools.py::test_filter_available_values_respect_earlier_filters"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_filter_available_values_respect_earlier_filters": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert '다른 필터와 함께' in 'A1는 category 값입니다.'"
+    ],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.13,
+    "failed": [
+     "tests/test_tools.py::test_filter_available_values_respect_earlier_filters"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_filter_available_values_respect_earlier_filters": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert '다른 필터와 함께' in 'A1는 category 값입니다.'"
+    ],
+    "tail": null,
+    "executed": 46,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 1.08,
+    "selected": 1.17,
+    "full": 2.15,
+    "cleanup": 0.0,
+    "product_path": 2.28
+   }
+  },
+  "38": {
+   "no": 38,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "7f9efeb",
+   "path": "tools.py",
+   "line": 89,
+   "operator": "core/ReplaceOrWithAnd",
+   "occurrence": 3,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_agent.py::test_runs_requested_tools_and_returns_results",
+    "tests/test_tools.py::test_breakdown_by_category",
+    "tests/test_tools.py::test_breakdown_by_region",
+    "tests/test_tools.py::test_breakdown_rejects_group_by_used_as_filter",
+    "tests/test_tools.py::test_breakdown_unavailable_group_by",
+    "tests/test_tools.py::test_breakdown_with_filter",
+    "tests/test_tools.py::test_compare_periods_by_category",
+    "tests/test_tools.py::test_compare_periods_empty_period",
+    "tests/test_tools.py::test_compare_periods_with_filter_orders_by_change"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    89
+   ],
+   "on_target_line": true,
+   "source_before": "if group_by not in DIMENSIONS or group_by not in df:",
+   "source_after": "if group_by not in DIMENSIONS and group_by not in df:",
+   "selected": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 2.26,
+    "failed": [
+     "tests/test_tools.py::test_breakdown_unavailable_group_by"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_breakdown_unavailable_group_by": "exception"
+    },
+    "messages": [
+     "KeyError: 'segment'"
+    ],
+    "tail": null,
+    "executed": 9,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 2.39,
+    "failed": [
+     "tests/test_tools.py::test_breakdown_unavailable_group_by"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_breakdown_unavailable_group_by": "exception"
+    },
+    "messages": [
+     "KeyError: 'segment'"
+    ],
+    "tail": null,
+    "executed": 46,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.97,
+    "selected": 2.27,
+    "full": 2.41,
+    "cleanup": 0.0,
+    "product_path": 3.25
+   }
+  },
+  "39": {
+   "no": 39,
+   "codebase": "W",
+   "repo": "2026-10/week3-fastapi-ui",
+   "commit": "2f57c73",
+   "path": "tools.py",
+   "line": 37,
+   "operator": "core/ReplaceOrWithAnd",
+   "occurrence": 0,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_agent.py::test_fast_mode_answers_after_one_tool_round",
+    "tests/test_agent.py::test_forces_answer_on_last_step",
+    "tests/test_agent.py::test_history_is_json_serializable",
+    "tests/test_agent.py::test_raises_when_model_never_stops_calling_tools",
+    "tests/test_agent.py::test_runs_requested_tools_and_returns_results",
+    "tests/test_agent.py::test_skipped_calls_are_not_in_tools_used",
+    "tests/test_agent.py::test_tool_calls_over_limit_get_error_output",
+    "tests/test_tools.py::test_breakdown_by_category",
+    "tests/test_tools.py::test_breakdown_by_region",
+    "tests/test_tools.py::test_breakdown_with_filter",
+    "tests/test_tools.py::test_compare_periods_by_category",
+    "tests/test_tools.py::test_compare_periods_with_filter_orders_by_change",
+    "tests/test_tools.py::test_customer_analysis_new_means_new_to_company",
+    "tests/test_tools.py::test_customer_analysis_uses_first_purchase_from_all_data",
+    "tests/test_tools.py::test_customer_analysis_whole_period_has_note",
+    "tests/test_tools.py::test_detect_anomaly_ignores_seasonality",
+    "tests/test_tools.py::test_discount_impact",
+    "tests/test_tools.py::test_discount_impact_with_filters",
+    "tests/test_tools.py::test_filters_combine",
+    "tests/test_tools.py::test_get_summary",
+    "tests/test_tools.py::test_get_summary_filters_period",
+    "tests/test_tools.py::test_monthly_trend_fills_missing_month",
+    "tests/test_tools.py::test_monthly_trend_filters",
+    "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing",
+    "tests/test_tools.py::test_run_tool_returns_json"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    37
+   ],
+   "on_target_line": true,
+   "source_before": "if pd.isna(value) or value in (float(\"inf\"), float(\"-inf\")):",
+   "source_after": "if pd.isna(value) and value in (float(\"inf\"), float(\"-inf\")):",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.58,
+    "failed": [
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing": "assertion"
+    },
+    "messages": [
+     "assert inf is None"
+    ],
+    "tail": null,
+    "executed": 25,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.07,
+    "failed": [
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing": "assertion"
+    },
+    "messages": [
+     "assert inf is None"
+    ],
+    "tail": null,
+    "executed": 50,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.86,
+    "selected": 2.6,
+    "full": 2.08,
+    "cleanup": 0.0,
+    "product_path": 3.47
+   }
+  },
+  "40": {
+   "no": 40,
+   "codebase": "W",
+   "repo": "2026-10/week3-fastapi-ui",
+   "commit": "2f57c73",
+   "path": "tools.py",
+   "line": 142,
+   "operator": "core/ReplaceAndWithOr",
+   "occurrence": 2,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_tools.py::test_detect_anomaly_ignores_seasonality",
+    "tests/test_tools.py::test_detect_anomaly_needs_two_years",
+    "tests/test_tools.py::test_monthly_trend_fills_missing_month",
+    "tests/test_tools.py::test_monthly_trend_filters",
+    "tests/test_tools.py::test_monthly_trend_keeps_mom_after_slicing",
+    "tests/test_tools.py::test_monthly_trend_unknown_metric"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    142
+   ],
+   "on_target_line": true,
+   "source_before": "if metric not in METRICS or (metric == \"profit\" and \"profit\" not in df):",
+   "source_after": "if metric not in METRICS or (metric == \"profit\" or \"profit\" not in df):",
+   "selected": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 1.12,
+    "failed": [
+     "tests/test_tools.py::test_detect_anomaly_ignores_seasonality"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_detect_anomaly_ignores_seasonality": "exception"
+    },
+    "messages": [
+     "KeyError: 'anomalies'"
+    ],
+    "tail": null,
+    "executed": 6,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 2.08,
+    "failed": [
+     "tests/test_tools.py::test_detect_anomaly_ignores_seasonality"
+    ],
+    "kinds": {
+     "tests/test_tools.py::test_detect_anomaly_ignores_seasonality": "exception"
+    },
+    "messages": [
+     "KeyError: 'anomalies'"
+    ],
+    "tail": null,
+    "executed": 50,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.88,
+    "selected": 1.13,
+    "full": 2.09,
+    "cleanup": 0.0,
+    "product_path": 2.02
+   }
+  },
+  "1": {
+   "no": 1,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "c910160",
+   "path": "releaseguard/__main__.py",
+   "line": 17,
+   "operator": "core/ReplaceTrueWithFalse",
+   "occurrence": 0,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_analyze.py::test_cli_writes_json_and_markdown"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    17
+   ],
+   "on_target_line": true,
+   "source_before": "sub = parser.add_subparsers(dest=\"command\", required=True)",
+   "source_after": "sub = parser.add_subparsers(dest=\"command\", required=False)",
+   "selected": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 1.01,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 6.42,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 31,
+    "skipped": 0
+   },
+   "result": "SURVIVED",
+   "result_selected": "SURVIVED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.85,
+    "selected": 1.02,
+    "full": 6.43,
+    "cleanup": 0.0,
+    "product_path": 1.88
+   }
+  },
+  "2": {
+   "no": 2,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "c910160",
+   "path": "releaseguard/__main__.py",
+   "line": 19,
+   "operator": "core/ReplaceTrueWithFalse",
+   "occurrence": 1,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_analyze.py::test_cli_writes_json_and_markdown"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    19
+   ],
+   "on_target_line": true,
+   "source_before": "p.add_argument(\"--repo\", type=Path, required=True)",
+   "source_after": "p.add_argument(\"--repo\", type=Path, required=False)",
+   "selected": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 1.21,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 6.41,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 31,
+    "skipped": 0
+   },
+   "result": "SURVIVED",
+   "result_selected": "SURVIVED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.01,
+    "apply": 0.9,
+    "selected": 1.22,
+    "full": 6.43,
+    "cleanup": 0.0,
+    "product_path": 2.14
+   }
+  },
+  "3": {
+   "no": 3,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "c910160",
+   "path": "releaseguard/__main__.py",
+   "line": 20,
+   "operator": "core/ReplaceTrueWithFalse",
+   "occurrence": 2,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_analyze.py::test_cli_writes_json_and_markdown"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    20
+   ],
+   "on_target_line": true,
+   "source_before": "p.add_argument(\"--base\", required=True)",
+   "source_after": "p.add_argument(\"--base\", required=False)",
+   "selected": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 1.39,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 6.14,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 31,
+    "skipped": 0
+   },
+   "result": "SURVIVED",
+   "result_selected": "SURVIVED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 0.9,
+    "selected": 1.4,
+    "full": 6.15,
+    "cleanup": 0.0,
+    "product_path": 2.32
+   }
+  },
+  "4": {
+   "no": 4,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "c910160",
+   "path": "releaseguard/__main__.py",
+   "line": 32,
+   "operator": "core/ReplaceTrueWithFalse",
+   "occurrence": 3,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_analyze.py::test_cli_writes_json_and_markdown"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    32
+   ],
+   "on_target_line": true,
+   "source_before": "args.out.mkdir(parents=True, exist_ok=True)",
+   "source_after": "args.out.mkdir(parents=False, exist_ok=True)",
+   "selected": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 1.16,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 6.05,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 31,
+    "skipped": 0
+   },
+   "result": "SURVIVED",
+   "result_selected": "SURVIVED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 1.09,
+    "selected": 1.17,
+    "full": 6.06,
+    "cleanup": 0.01,
+    "product_path": 2.28
+   }
+  },
+  "5": {
+   "no": 5,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "c910160",
+   "path": "releaseguard/__main__.py",
+   "line": 33,
+   "operator": "core/NumberReplacer",
+   "occurrence": 2,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_analyze.py::test_cli_writes_json_and_markdown"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    33
+   ],
+   "on_target_line": true,
+   "source_before": "stem = args.out / f\"{date.today():%Y%m%d}_{result['head_sha'][:7]}\"",
+   "source_after": "stem = args.out / f\"{date.today():%Y%m%d}_{result['head_sha'][: 8]}\"",
+   "selected": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 1.15,
+    "failed": [
+     "tests/test_analyze.py::test_cli_writes_json_and_markdown"
+    ],
+    "kinds": {
+     "tests/test_analyze.py::test_cli_writes_json_and_markdown": "exception"
+    },
+    "messages": [
+     "ValueError: not enough values to unpack (expected 1, got 0)"
+    ],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 6.73,
+    "failed": [
+     "tests/test_analyze.py::test_cli_writes_json_and_markdown"
+    ],
+    "kinds": {
+     "tests/test_analyze.py::test_cli_writes_json_and_markdown": "exception"
+    },
+    "messages": [
+     "ValueError: not enough values to unpack (expected 1, got 0)"
+    ],
+    "tail": null,
+    "executed": 31,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.05,
+    "apply": 0.99,
+    "selected": 1.16,
+    "full": 6.75,
+    "cleanup": 0.01,
+    "product_path": 2.2
+   }
+  },
+  "6": {
+   "no": 6,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "c910160",
+   "path": "releaseguard/__main__.py",
+   "line": 34,
+   "operator": "core/NumberReplacer",
+   "occurrence": 4,
+   "family": "constant",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_analyze.py::test_cli_writes_json_and_markdown"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    34
+   ],
+   "on_target_line": true,
+   "source_before": "stem.with_suffix(\".json\").write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding=\"utf-8\")",
+   "source_after": "stem.with_suffix(\".json\").write_text(json.dumps(result, ensure_ascii=False, indent= 3), encoding=\"utf-8\")",
+   "selected": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 1.3,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 5.63,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 31,
+    "skipped": 0
+   },
+   "result": "SURVIVED",
+   "result_selected": "SURVIVED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.03,
+    "apply": 1.01,
+    "selected": 1.31,
+    "full": 5.65,
+    "cleanup": 0.01,
+    "product_path": 2.36
+   }
+  },
+  "7": {
+   "no": 7,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "c910160",
+   "path": "releaseguard/analyze.py",
+   "line": 22,
+   "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+   "occurrence": 0,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_analyze.py::test_cli_writes_json_and_markdown",
+    "tests/test_analyze.py::test_config_deps_data_need_review",
+    "tests/test_analyze.py::test_deleted_related_test_blocks",
+    "tests/test_analyze.py::test_docs_only_is_safe",
+    "tests/test_analyze.py::test_secret_blocks_without_leaking_value",
+    "tests/test_analyze.py::test_source_with_test_change_is_safe",
+    "tests/test_analyze.py::test_source_without_test_change_needs_review",
+    "tests/test_analyze.py::test_three_dot_uses_merge_base"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    22
+   ],
+   "on_target_line": true,
+   "source_before": "is_test = lambda p: classify(p, ruleset)[0] == \"test\"  # noqa: E731",
+   "source_after": "is_test = lambda p: classify(p, ruleset)[0] != \"test\"  # noqa: E731",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 5.6,
+    "failed": [
+     "tests/test_analyze.py::test_source_with_test_change_is_safe",
+     "tests/test_analyze.py::test_source_without_test_change_needs_review"
+    ],
+    "kinds": {
+     "tests/test_analyze.py::test_source_with_test_change_is_safe": "assertion",
+     "tests/test_analyze.py::test_source_without_test_change_needs_review": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'REVIEW REQUIRED' == 'SAFE'\n  \n  - SAFE\n  + REVIEW REQUIRED",
+     "AssertionError: assert {'R02': ['src...src/util.py']} == {'R01': ['src...src/util.py']}\n  \n  Differing items:\n  {'R02': ['src/metrics/engine.py', 'src/util.py']"
+    ],
+    "tail": null,
+    "executed": 8,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 5.69,
+    "failed": [
+     "tests/test_analyze.py::test_source_with_test_change_is_safe",
+     "tests/test_analyze.py::test_source_without_test_change_needs_review"
+    ],
+    "kinds": {
+     "tests/test_analyze.py::test_source_with_test_change_is_safe": "assertion",
+     "tests/test_analyze.py::test_source_without_test_change_needs_review": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'REVIEW REQUIRED' == 'SAFE'\n  \n  - SAFE\n  + REVIEW REQUIRED",
+     "AssertionError: assert {'R02': ['src...src/util.py']} == {'R01': ['src...src/util.py']}\n  \n  Differing items:\n  {'R02': ['src/metrics/engine.py', 'src/util.py']"
+    ],
+    "tail": null,
+    "executed": 31,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 0.83,
+    "selected": 5.61,
+    "full": 5.71,
+    "cleanup": 0.01,
+    "product_path": 6.47
+   }
+  },
+  "8": {
+   "no": 8,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "c910160",
+   "path": "releaseguard/analyze.py",
+   "line": 23,
+   "operator": "core/ReplaceAndWithOr",
+   "occurrence": 0,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_analyze.py::test_cli_writes_json_and_markdown",
+    "tests/test_analyze.py::test_config_deps_data_need_review",
+    "tests/test_analyze.py::test_deleted_related_test_blocks",
+    "tests/test_analyze.py::test_docs_only_is_safe",
+    "tests/test_analyze.py::test_secret_blocks_without_leaking_value",
+    "tests/test_analyze.py::test_source_with_test_change_is_safe",
+    "tests/test_analyze.py::test_source_without_test_change_needs_review",
+    "tests/test_analyze.py::test_three_dot_uses_merge_base"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    23
+   ],
+   "on_target_line": true,
+   "source_before": "deleted_tests = {f[\"path\"] for f in files if f[\"category\"] == \"test\" and f[\"status\"] == \"D\"}",
+   "source_after": "deleted_tests = {f[\"path\"] for f in files if f[\"category\"] == \"test\" or f[\"status\"] == \"D\"}",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 5.48,
+    "failed": [
+     "tests/test_analyze.py::test_source_with_test_change_is_safe"
+    ],
+    "kinds": {
+     "tests/test_analyze.py::test_source_with_test_change_is_safe": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'BLOCK' == 'SAFE'\n  \n  - SAFE\n  + BLOCK"
+    ],
+    "tail": null,
+    "executed": 8,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 6.43,
+    "failed": [
+     "tests/test_analyze.py::test_source_with_test_change_is_safe"
+    ],
+    "kinds": {
+     "tests/test_analyze.py::test_source_with_test_change_is_safe": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'BLOCK' == 'SAFE'\n  \n  - SAFE\n  + BLOCK"
+    ],
+    "tail": null,
+    "executed": 31,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 1.0,
+    "selected": 5.49,
+    "full": 6.45,
+    "cleanup": 0.01,
+    "product_path": 6.52
+   }
+  },
+  "9": {
+   "no": 9,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "6fb437c",
+   "path": "releaseguard/agent.py",
+   "line": 150,
+   "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+   "occurrence": 1,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_agent.py::test_last_step_disables_tools",
+    "tests/test_agent.py::test_loop_numbers_tool_calls_and_records_meta",
+    "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+    "tests/test_agent.py::test_tool_call_cap"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    150
+   ],
+   "on_target_line": true,
+   "source_before": "calls = [item for item in response.output if item.type == \"function_call\"]",
+   "source_after": "calls = [item for item in response.output if item.type != \"function_call\"]",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.47,
+    "failed": [
+     "tests/test_agent.py::test_last_step_disables_tools",
+     "tests/test_agent.py::test_loop_numbers_tool_calls_and_records_meta",
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+     "tests/test_agent.py::test_tool_call_cap"
+    ],
+    "kinds": {
+     "tests/test_agent.py::test_last_step_disables_tools": "exception",
+     "tests/test_agent.py::test_loop_numbers_tool_calls_and_records_meta": "exception",
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07": "assertion",
+     "tests/test_agent.py::test_tool_call_cap": "exception"
+    },
+    "messages": [
+     "AttributeError: 'types.SimpleNamespace' object has no attribute 'output_text'",
+     "AttributeError: 'types.SimpleNamespace' object has no attribute 'output_text'",
+     "AssertionError: assert [] == [{'rule_id': ...port.py:3)']}]\n  \n  Right contains one more item: {'rule_id': 'R07', 'decision': 'REVIEW REQUIRED', 'message': '에이전"
+    ],
+    "tail": null,
+    "executed": 4,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 12.03,
+    "failed": [
+     "tests/test_agent.py::test_last_step_disables_tools",
+     "tests/test_agent.py::test_loop_numbers_tool_calls_and_records_meta",
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+     "tests/test_agent.py::test_tool_call_cap"
+    ],
+    "kinds": {
+     "tests/test_agent.py::test_loop_numbers_tool_calls_and_records_meta": "exception",
+     "tests/test_agent.py::test_last_step_disables_tools": "exception",
+     "tests/test_agent.py::test_tool_call_cap": "exception",
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07": "assertion"
+    },
+    "messages": [
+     "AttributeError: 'types.SimpleNamespace' object has no attribute 'output_text'",
+     "AttributeError: 'types.SimpleNamespace' object has no attribute 'output_text'",
+     "AttributeError: 'types.SimpleNamespace' object has no attribute 'output_text'"
+    ],
+    "tail": null,
+    "executed": 48,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 0.78,
+    "selected": 2.48,
+    "full": 12.04,
+    "cleanup": 0.0,
+    "product_path": 3.29
+   }
+  },
+  "10": {
+   "no": 10,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "6fb437c",
+   "path": "releaseguard/agent.py",
+   "line": 168,
+   "operator": "core/ReplaceComparisonOperator_GtE_Gt",
+   "occurrence": 0,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_agent.py::test_last_step_disables_tools",
+    "tests/test_agent.py::test_loop_numbers_tool_calls_and_records_meta",
+    "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+    "tests/test_agent.py::test_tool_call_cap"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    168
+   ],
+   "on_target_line": true,
+   "source_before": "if len(tool_log) >= limits.max_tool_calls:",
+   "source_after": "if len(tool_log) > limits.max_tool_calls:",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 3.18,
+    "failed": [
+     "tests/test_agent.py::test_tool_call_cap"
+    ],
+    "kinds": {
+     "tests/test_agent.py::test_tool_call_cap": "assertion"
+    },
+    "messages": [
+     "assert 3 == 2"
+    ],
+    "tail": null,
+    "executed": 4,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 15.93,
+    "failed": [
+     "tests/test_agent.py::test_tool_call_cap"
+    ],
+    "kinds": {
+     "tests/test_agent.py::test_tool_call_cap": "assertion"
+    },
+    "messages": [
+     "assert 3 == 2"
+    ],
+    "tail": null,
+    "executed": 48,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 1.07,
+    "selected": 3.2,
+    "full": 15.94,
+    "cleanup": 0.01,
+    "product_path": 4.29
+   }
+  },
+  "11": {
+   "no": 11,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "6fb437c",
+   "path": "releaseguard/agent.py",
+   "line": 187,
+   "operator": "core/ReplaceOrWithAnd",
+   "occurrence": 0,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+    "tests/test_agent.py::test_validate_evidence"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    187
+   ],
+   "on_target_line": true,
+   "source_before": "start, end = int(m.group(2)), int(m.group(3) or m.group(2))",
+   "source_after": "start, end = int(m.group(2)), int(m.group(3) and m.group(2))",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.12,
+    "failed": [
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+     "tests/test_agent.py::test_validate_evidence"
+    ],
+    "kinds": {
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07": "assertion",
+     "tests/test_agent.py::test_validate_evidence": "exception"
+    },
+    "messages": [
+     "AssertionError: assert [] == [{'rule_id': ...port.py:3)']}]\n  \n  Right contains one more item: {'rule_id': 'R07', 'decision': 'REVIEW REQUIRED', 'message': '에이전",
+     "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'"
+    ],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 13.54,
+    "failed": [
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+     "tests/test_agent.py::test_validate_evidence"
+    ],
+    "kinds": {
+     "tests/test_agent.py::test_validate_evidence": "exception",
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07": "assertion"
+    },
+    "messages": [
+     "TypeError: int() argument must be a string, a bytes-like object or a real number, not 'NoneType'",
+     "AssertionError: assert [] == [{'rule_id': ...port.py:3)']}]\n  \n  Right contains one more item: {'rule_id': 'R07', 'decision': 'REVIEW REQUIRED', 'message': '에이전"
+    ],
+    "tail": null,
+    "executed": 48,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.03,
+    "apply": 1.3,
+    "selected": 2.13,
+    "full": 13.56,
+    "cleanup": 0.0,
+    "product_path": 3.46
+   }
+  },
+  "12": {
+   "no": 12,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "6fb437c",
+   "path": "releaseguard/agent.py",
+   "line": 189,
+   "operator": "core/ReplaceAndWithOr",
+   "occurrence": 0,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+    "tests/test_agent.py::test_validate_evidence"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    189
+   ],
+   "on_target_line": true,
+   "source_before": "return count is not None and 1 <= start <= end <= count",
+   "source_after": "return count is not None or 1 <= start <= end <= count",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.27,
+    "failed": [
+     "tests/test_agent.py::test_validate_evidence"
+    ],
+    "kinds": {
+     "tests/test_agent.py::test_validate_evidence": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ['tool:#7'] == ['file:src/re...9', 'tool:#7']\n  \n  At index 0 diff: 'tool:#7' != 'file:src/report.py:99'\n  Right contains one more item: "
+    ],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 14.54,
+    "failed": [
+     "tests/test_agent.py::test_validate_evidence"
+    ],
+    "kinds": {
+     "tests/test_agent.py::test_validate_evidence": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ['tool:#7'] == ['file:src/re...9', 'tool:#7']\n  \n  At index 0 diff: 'tool:#7' != 'file:src/report.py:99'\n  Right contains one more item: "
+    ],
+    "tail": null,
+    "executed": 48,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 1.03,
+    "selected": 2.28,
+    "full": 14.55,
+    "cleanup": 0.0,
+    "product_path": 3.33
+   }
+  },
+  "13": {
+   "no": 13,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "6fb437c",
+   "path": "releaseguard/agent.py",
+   "line": 205,
+   "operator": "core/ReplaceAndWithOr",
+   "occurrence": 1,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+    "tests/test_agent.py::test_validate_evidence"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    205
+   ],
+   "on_target_line": true,
+   "source_before": "if key == \"recommended_tests\" and item[\"kind\"] == \"run_existing\" and view.file_line_count(item[\"target\"]) is None:",
+   "source_after": "if key == \"recommended_tests\" or item[\"kind\"] == \"run_existing\" and view.file_line_count(item[\"target\"]) is None:",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.99,
+    "failed": [
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+     "tests/test_agent.py::test_validate_evidence"
+    ],
+    "kinds": {
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07": "assertion",
+     "tests/test_agent.py::test_validate_evidence": "exception"
+    },
+    "messages": [
+     "AssertionError: assert [] == [{'rule_id': ...port.py:3)']}]\n  \n  Right contains one more item: {'rule_id': 'R07', 'decision': 'REVIEW REQUIRED', 'message': '에이전",
+     "KeyError: 'kind'"
+    ],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 13.43,
+    "failed": [
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+     "tests/test_agent.py::test_validate_evidence"
+    ],
+    "kinds": {
+     "tests/test_agent.py::test_validate_evidence": "exception",
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07": "assertion"
+    },
+    "messages": [
+     "KeyError: 'kind'",
+     "AssertionError: assert [] == [{'rule_id': ...port.py:3)']}]\n  \n  Right contains one more item: {'rule_id': 'R07', 'decision': 'REVIEW REQUIRED', 'message': '에이전"
+    ],
+    "tail": null,
+    "executed": 48,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.03,
+    "apply": 1.03,
+    "selected": 2.0,
+    "full": 13.44,
+    "cleanup": 0.01,
+    "product_path": 3.07
+   }
+  },
+  "14": {
+   "no": 14,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "6fb437c",
+   "path": "releaseguard/agent.py",
+   "line": 207,
+   "operator": "core/ReplaceAndWithOr",
+   "occurrence": 3,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+    "tests/test_agent.py::test_validate_evidence"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    207
+   ],
+   "on_target_line": true,
+   "source_before": "items.append({**item, \"verified\": bool(item[\"evidence\"]) and not bad, \"unverified\": bad})",
+   "source_after": "items.append({**item, \"verified\": bool(item[\"evidence\"]) or not bad, \"unverified\": bad})",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 2.3,
+    "failed": [
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+     "tests/test_agent.py::test_validate_evidence"
+    ],
+    "kinds": {
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07": "assertion",
+     "tests/test_agent.py::test_validate_evidence": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert [{'rule_id': ...)', '추측 ()']}] == [{'rule_id': ...port.py:3)']}]\n  \n  At index 0 diff: {'rule_id': 'R07', 'decision': 'REVIEW REQUIRED', ",
+     "AssertionError: assert [('출력값 변경', T...'없는 줄', True)] == [('출력값 변경', T...없는 줄', False)]\n  \n  At index 1 diff: ('추측', True) != ('추측', False)\n  Use -v to get more"
+    ],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 12.72,
+    "failed": [
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+     "tests/test_agent.py::test_validate_evidence"
+    ],
+    "kinds": {
+     "tests/test_agent.py::test_validate_evidence": "assertion",
+     "tests/test_agent.py::test_only_verified_high_risk_adds_r07": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert [('출력값 변경', T...'없는 줄', True)] == [('출력값 변경', T...없는 줄', False)]\n  \n  At index 1 diff: ('추측', True) != ('추측', False)\n  Use -v to get more",
+     "AssertionError: assert [{'rule_id': ...)', '추측 ()']}] == [{'rule_id': ...port.py:3)']}]\n  \n  At index 0 diff: {'rule_id': 'R07', 'decision': 'REVIEW REQUIRED', "
+    ],
+    "tail": null,
+    "executed": 48,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.05,
+    "apply": 1.02,
+    "selected": 2.31,
+    "full": 12.73,
+    "cleanup": 0.01,
+    "product_path": 3.38
+   }
+  },
+  "15": {
+   "no": 15,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "6fb437c",
+   "path": "releaseguard/agent_tools.py",
+   "line": 25,
+   "operator": "core/ReplaceOrWithAnd",
+   "occurrence": 0,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_agent.py::test_loop_numbers_tool_calls_and_records_meta",
+    "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+    "tests/test_agent.py::test_validate_evidence",
+    "tests/test_agent_tools.py::test_check_path_normalizes",
+    "tests/test_agent_tools.py::test_check_path_rejects_outside[../secret]",
+    "tests/test_agent_tools.py::test_check_path_rejects_outside[/etc/passwd]",
+    "tests/test_agent_tools.py::test_check_path_rejects_outside[C:/Windows]",
+    "tests/test_agent_tools.py::test_check_path_rejects_outside[]",
+    "tests/test_agent_tools.py::test_check_path_rejects_outside[src/../../x]",
+    "tests/test_agent_tools.py::test_git_diff_single_file",
+    "tests/test_agent_tools.py::test_list_files_prefix",
+    "tests/test_agent_tools.py::test_read_file_numbers_and_caps",
+    "tests/test_agent_tools.py::test_run_tool_returns_errors_as_json",
+    "tests/test_agent_tools.py::test_search_code_reads_head_not_working_tree"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    25
+   ],
+   "on_target_line": true,
+   "source_before": "if not p or p.startswith(\"/\") or \":\" in p or \"..\" in PurePosixPath(p).parts:",
+   "source_after": "if not p and p.startswith(\"/\") or \":\" in p or \"..\" in PurePosixPath(p).parts:",
+   "selected": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 6.82,
+    "failed": [
+     "tests/test_agent_tools.py::test_check_path_rejects_outside[/etc/passwd]",
+     "tests/test_agent_tools.py::test_check_path_rejects_outside[]"
+    ],
+    "kinds": {
+     "tests/test_agent_tools.py::test_check_path_rejects_outside[/etc/passwd]": "exception",
+     "tests/test_agent_tools.py::test_check_path_rejects_outside[]": "exception"
+    },
+    "messages": [
+     "Failed: DID NOT RAISE ToolError",
+     "Failed: DID NOT RAISE ToolError"
+    ],
+    "tail": null,
+    "executed": 14,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 12.31,
+    "failed": [
+     "tests/test_agent_tools.py::test_check_path_rejects_outside[/etc/passwd]",
+     "tests/test_agent_tools.py::test_check_path_rejects_outside[]"
+    ],
+    "kinds": {
+     "tests/test_agent_tools.py::test_check_path_rejects_outside[]": "exception",
+     "tests/test_agent_tools.py::test_check_path_rejects_outside[/etc/passwd]": "exception"
+    },
+    "messages": [
+     "Failed: DID NOT RAISE ToolError",
+     "Failed: DID NOT RAISE ToolError"
+    ],
+    "tail": null,
+    "executed": 48,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 0.78,
+    "selected": 6.84,
+    "full": 12.32,
+    "cleanup": 0.01,
+    "product_path": 7.65
+   }
+  },
+  "16": {
+   "no": 16,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "6fb437c",
+   "path": "releaseguard/agent_tools.py",
+   "line": 54,
+   "operator": "core/ReplaceComparisonOperator_Gt_GtE",
+   "occurrence": 0,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_agent_tools.py::test_git_diff_single_file"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    54
+   ],
+   "on_target_line": true,
+   "source_before": "return {\"path\": path, \"diff\": text[:MAX_DIFF_CHARS], \"truncated\": len(text) > MAX_DIFF_CHARS}",
+   "source_after": "return {\"path\": path, \"diff\": text[:MAX_DIFF_CHARS], \"truncated\": len(text) >= MAX_DIFF_CHARS}",
+   "selected": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 1.17,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 12.64,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 48,
+    "skipped": 0
+   },
+   "result": "SURVIVED",
+   "result_selected": "SURVIVED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.03,
+    "apply": 0.89,
+    "selected": 1.18,
+    "full": 12.65,
+    "cleanup": 0.01,
+    "product_path": 2.12
+   }
+  },
+  "17": {
+   "no": 17,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "2404a6c",
+   "path": "releaseguard/analyze.py",
+   "line": 43,
+   "operator": "core/ReplaceAndWithOr",
+   "occurrence": 2,
+   "family": "boolean",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_agent.py::test_agent_failure_keeps_rule_result",
+    "tests/test_agent.py::test_last_step_disables_tools",
+    "tests/test_agent.py::test_loop_numbers_tool_calls_and_records_meta",
+    "tests/test_agent.py::test_only_verified_high_risk_adds_r07",
+    "tests/test_agent.py::test_tool_call_cap",
+    "tests/test_agent.py::test_validate_evidence",
+    "tests/test_analyze.py::test_cli_writes_json_and_markdown",
+    "tests/test_analyze.py::test_deleted_related_test_blocks",
+    "tests/test_analyze.py::test_empty_source_is_not_covered",
+    "tests/test_analyze.py::test_secret_blocks_without_leaking_value",
+    "tests/test_analyze.py::test_source_with_test_change_is_safe",
+    "tests/test_analyze.py::test_source_without_test_change_needs_review",
+    "tests/test_analyze.py::test_three_dot_uses_merge_base",
+    "tests/test_evaluate.py::test_evaluate_on_temp_repo"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    43
+   ],
+   "on_target_line": true,
+   "source_before": "if f[\"added\"] == 0 and f[\"deleted\"] == 0:  # 빈 파일 추가(__init__.py 등)·이름만 변경은 검증할 동작이 없다",
+   "source_after": "if f[\"added\"] == 0 or f[\"deleted\"] == 0:  # 빈 파일 추가(__init__.py 등)·이름만 변경은 검증할 동작이 없다",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 9.39,
+    "failed": [
+     "tests/test_analyze.py::test_cli_writes_json_and_markdown",
+     "tests/test_analyze.py::test_source_without_test_change_needs_review"
+    ],
+    "kinds": {
+     "tests/test_analyze.py::test_cli_writes_json_and_markdown": "assertion",
+     "tests/test_analyze.py::test_source_without_test_change_needs_review": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert 'SAFE' == 'REVIEW REQUIRED'\n  \n  - REVIEW REQUIRED\n  + SAFE",
+     "AssertionError: assert {'R01': ['src...s/engine.py']} == {'R01': ['src...src/util.py']}\n  \n  Omitting 1 identical items, use -vv to show\n  Right contains 1 more"
+    ],
+    "tail": null,
+    "executed": 14,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 13.17,
+    "failed": [
+     "tests/test_analyze.py::test_cli_writes_json_and_markdown",
+     "tests/test_analyze.py::test_source_without_test_change_needs_review"
+    ],
+    "kinds": {
+     "tests/test_analyze.py::test_source_without_test_change_needs_review": "assertion",
+     "tests/test_analyze.py::test_cli_writes_json_and_markdown": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert {'R01': ['src...s/engine.py']} == {'R01': ['src...src/util.py']}\n  \n  Omitting 1 identical items, use -vv to show\n  Right contains 1 more",
+     "AssertionError: assert 'SAFE' == 'REVIEW REQUIRED'\n  \n  - REVIEW REQUIRED\n  + SAFE"
+    ],
+    "tail": null,
+    "executed": 51,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 0.79,
+    "selected": 9.41,
+    "full": 13.19,
+    "cleanup": 0.01,
+    "product_path": 10.23
+   }
+  },
+  "18": {
+   "no": 18,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "2404a6c",
+   "path": "releaseguard/evaluate.py",
+   "line": 47,
+   "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+   "occurrence": 0,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_evaluate.py::test_evaluate_on_temp_repo"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": false
+   },
+   "changed_lines": [
+    47
+   ],
+   "on_target_line": true,
+   "source_before": "actual = sorted({f[\"path\"] for f in result[\"changed_files\"] if f[\"category\"] == \"test\" and f[\"status\"] != \"D\"})",
+   "source_after": "actual = sorted({f[\"path\"] for f in result[\"changed_files\"] if f[\"category\"] != \"test\" and f[\"status\"] != \"D\"})",
+   "selected": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.65,
+    "failed": [
+     "tests/test_evaluate.py::test_evaluate_on_temp_repo"
+    ],
+    "kinds": {
+     "tests/test_evaluate.py::test_evaluate_on_temp_repo": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert {'commits': 1...'recall': 0.0} == {'commits': 1...'recall': 1.0}\n  \n  Omitting 1 identical items, use -vv to show\n  Differing items:\n  {'"
+    ],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 14.5,
+    "failed": [
+     "tests/test_evaluate.py::test_evaluate_on_temp_repo"
+    ],
+    "kinds": {
+     "tests/test_evaluate.py::test_evaluate_on_temp_repo": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert {'commits': 1...'recall': 0.0} == {'commits': 1...'recall': 1.0}\n  \n  Omitting 1 identical items, use -vv to show\n  Differing items:\n  {'"
+    ],
+    "tail": null,
+    "executed": 51,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 0.8,
+    "selected": 1.65,
+    "full": 14.51,
+    "cleanup": 0.01,
+    "product_path": 2.48
+   }
+  },
+  "19": {
+   "no": 19,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "2404a6c",
+   "path": "releaseguard/__main__.py",
+   "line": 59,
+   "operator": "core/ReplaceComparisonOperator_Eq_NotEq",
+   "occurrence": 0,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_analyze.py::test_cli_writes_json_and_markdown"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": true
+   },
+   "changed_lines": [
+    59
+   ],
+   "on_target_line": true,
+   "source_before": "if args.command == \"eval\":",
+   "source_after": "if args.command != \"eval\":",
+   "selected": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 1.18,
+    "failed": [
+     "tests/test_analyze.py::test_cli_writes_json_and_markdown"
+    ],
+    "kinds": {
+     "tests/test_analyze.py::test_cli_writes_json_and_markdown": "exception"
+    },
+    "messages": [
+     "AttributeError: 'Namespace' object has no attribute 'cases'. Did you mean: 'base'?"
+    ],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 15.22,
+    "failed": [
+     "tests/test_analyze.py::test_cli_writes_json_and_markdown"
+    ],
+    "kinds": {
+     "tests/test_analyze.py::test_cli_writes_json_and_markdown": "exception"
+    },
+    "messages": [
+     "AttributeError: 'Namespace' object has no attribute 'cases'. Did you mean: 'base'?"
+    ],
+    "tail": null,
+    "executed": 51,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.02,
+    "apply": 0.79,
+    "selected": 1.19,
+    "full": 15.24,
+    "cleanup": 0.01,
+    "product_path": 2.01
+   }
+  },
+  "20": {
+   "no": 20,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "2404a6c",
+   "path": "releaseguard/evaluate.py",
+   "line": 63,
+   "operator": "core/ReplaceComparisonOperator_IsNot_Is",
+   "occurrence": 0,
+   "family": "comparison",
+   "timeout": 120,
+   "selected_tests": [
+    "tests/test_evaluate.py::test_evaluate_on_temp_repo"
+   ],
+   "coverage": {
+    "line_status": "covered",
+    "fixture_only": false,
+    "branch_gap": true
+   },
+   "changed_lines": [
+    63
+   ],
+   "on_target_line": true,
+   "source_before": "if result[\"impact\"] is not None or result[\"agent_error\"]:",
+   "source_after": "if result[\"impact\"] is None or result[\"agent_error\"]:",
+   "selected": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 1.62,
+    "failed": [
+     "tests/test_evaluate.py::test_evaluate_on_temp_repo"
+    ],
+    "kinds": {
+     "tests/test_evaluate.py::test_evaluate_on_temp_repo": "exception"
+    },
+    "messages": [
+     "TypeError: 'NoneType' object is not subscriptable"
+    ],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "full": {
+    "status": "KILLED",
+    "kind": "exception",
+    "seconds": 15.75,
+    "failed": [
+     "tests/test_evaluate.py::test_evaluate_on_temp_repo"
+    ],
+    "kinds": {
+     "tests/test_evaluate.py::test_evaluate_on_temp_repo": "exception"
+    },
+    "messages": [
+     "TypeError: 'NoneType' object is not subscriptable"
+    ],
+    "tail": null,
+    "executed": 51,
+    "skipped": 0
+   },
+   "result": "KILLED",
+   "result_selected": "KILLED",
+   "agreement": {
+    "status_same": true,
+    "kind_same": true,
+    "failed_ids_same": true,
+    "full_failures_outside_selection": [],
+    "exact": true
+   },
+   "seconds": {
+    "copy": 0.16,
+    "apply": 1.05,
+    "selected": 1.64,
+    "full": 15.77,
+    "cleanup": 0.02,
+    "product_path": 2.87
+   }
+  }
+ }
+}
