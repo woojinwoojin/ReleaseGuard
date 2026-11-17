@@ -60,9 +60,12 @@ def case_snapshot(repo: Path, base: str, case: dict, dest: Path) -> dict:
     for e in case.get("edits", []):
         f = dest / e["path"]
         text = f.read_bytes().decode("utf-8")
-        if text.count(e["find"]) != 1:
+        find, repl = e["find"], e["replace"]
+        if "\r\n" in text:  # git archive가 core.autocrlf로 CRLF를 낼 수 있다 (protocol_changes P1)
+            find, repl = find.replace("\n", "\r\n"), repl.replace("\n", "\r\n")
+        if text.count(find) != 1:
             raise ValueError(f"{case['id']}: find가 정확히 한 번 나오지 않음 ({e['path']})")
-        f.write_bytes(text.replace(e["find"], e["replace"]).encode("utf-8"))
+        f.write_bytes(text.replace(find, repl).encode("utf-8"))
     return {"head": f"{head[:7]}+{case['id']}", "compare_base": head}
 
 

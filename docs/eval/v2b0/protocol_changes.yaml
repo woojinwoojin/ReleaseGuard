@@ -1,0 +1,19 @@
+# Stage 2b.0 — 사례 고정(9dc0ba3)·검증기 커밋(98e3cfc) 뒤에 생긴 변경. 사례와 기대값은 바꾸지 않는다.
+changes:
+  - id: P1
+    date: 2026-11-17
+    kind: execution_fix
+    what: seed 적용이 CRLF 스냅샷에서 여러 줄 find를 찾지 못함 (W06에서 ValueError, 첫 실행 중단)
+    cause: releaseguard.runner.snapshot(git archive)이 core.autocrlf=true 설정으로 CRLF 파일을 만든다. 사례 파일의 find는 LF
+    fix: 파일에 CRLF가 있으면 find·replace의 줄바꿈을 CRLF로 바꿔 적용 (artifactlib.case_snapshot). 검증기 로직은 바꾸지 않음
+    affects: 사례 적용만. 첫 실행에서 끝난 사례는 W05 하나(한 줄 find라 영향 없음)
+  - id: P2
+    date: 2026-11-17
+    kind: fact_correction
+    what: 설계 2장·사례 W05 expected_evidence의 "app.py 최상위에 이름 api가 없다"는 틀린 사실
+    evidence: app.py 42줄 `def api() -> ApiClient:` (Streamlit 화면이 쓰는 API 클라이언트 생성 함수). 설계 작성 때 `^api\b`로만 grep해서 def를 놓쳤다
+    consequence: >-
+      W05의 app:api는 존재하는 이름이지만 ASGI 앱이 아닌 일반 함수다. V1(이름 존재 확인)은 설계대로 PASS를 낸다.
+      기대값 V1 FAIL은 틀린 사실에 근거했다. 기대값은 고치지 않고 불일치로 보고한다. V1을 결과에 맞춰 고치지 않는다
+      (객체 종류 판단은 정적으로 확정할 수 없는 영역 — 설계 4장 INCONCLUSIVE 범위).
+    note: W05가 실제로 어떻게 실패하는지(import 단계인지, 첫 요청에서인지)는 V2에서 확인한다. 설계 2장의 "컨테이너 시작에서만 실패"도 V2 전까지는 미확인
