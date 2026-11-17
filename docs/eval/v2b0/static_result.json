@@ -1,0 +1,648 @@
+{
+ "cases_file": "eval/artifact_cases_2b0.yaml",
+ "started": "2026-11-17T15:26:22",
+ "results": {
+  "W05": {
+   "id": "W05",
+   "head": "fee0039+W05",
+   "compare_base": "fee0039",
+   "V1": {
+    "status": "PASS",
+    "defined_by": "def",
+    "line": 23,
+    "argv": [
+     "uvicorn",
+     "app:api",
+     "--host",
+     "0.0.0.0",
+     "--port",
+     "8000"
+    ],
+    "server": "uvicorn",
+    "app_ref": "app:api",
+    "module_file": "app.py"
+   },
+   "V3a": {
+    "status": "PASS",
+    "moved_or_renamed": []
+   },
+   "V3b": {
+    "status": "PASS",
+    "steps": [
+     {
+      "workflow": ".github/workflows/ci.yml",
+      "job": "test",
+      "step": "Run tests",
+      "command": "pytest -rs"
+     }
+    ],
+    "events": {
+     ".github/workflows/ci.yml": {
+      "push": [
+       "branches"
+      ],
+      "pull_request": []
+     }
+    }
+   },
+   "V2": {
+    "status": "NOT_RUN",
+    "reason": "9장 3단계 (Docker 데몬 필요)"
+   },
+   "expected": {
+    "V1": "FAIL",
+    "V3a": "PASS",
+    "V3b": "PASS"
+   },
+   "match": {
+    "V1": false,
+    "V3a": true,
+    "V3b": true
+   },
+   "seconds": {
+    "snapshot": 0.124,
+    "V1": 0.0166,
+    "V3": 0.0068
+   }
+  },
+  "W06": {
+   "id": "W06",
+   "head": "fee0039+W06",
+   "compare_base": "fee0039",
+   "V1": {
+    "status": "PASS",
+    "defined_by": "assign",
+    "line": 23,
+    "argv": [
+     "uvicorn",
+     "api:app",
+     "--host",
+     "0.0.0.0",
+     "--port",
+     "8000"
+    ],
+    "server": "uvicorn",
+    "app_ref": "api:app",
+    "module_file": "api.py"
+   },
+   "V3a": {
+    "status": "FAIL",
+    "reason": "base의 테스트 실행 계약이 head에서 제거됨",
+    "removed": [
+     {
+      "base": {
+       "workflow": ".github/workflows/ci.yml",
+       "job": "test",
+       "step": "Run tests",
+       "command": "pytest -rs"
+      },
+      "head": []
+     }
+    ],
+    "disabled": []
+   },
+   "V3b": {
+    "status": "FAIL",
+    "reason": "push·pull_request 워크플로에 활성화된 pytest 실행 단계가 없음",
+    "disabled_steps": [],
+    "events": {
+     ".github/workflows/ci.yml": {
+      "push": [
+       "branches"
+      ],
+      "pull_request": []
+     }
+    }
+   },
+   "V2": {
+    "status": "NOT_RUN",
+    "reason": "9장 3단계 (Docker 데몬 필요)"
+   },
+   "expected": {
+    "V1": "PASS",
+    "V3a": "FAIL",
+    "V3b": "FAIL"
+   },
+   "match": {
+    "V1": true,
+    "V3a": true,
+    "V3b": true
+   },
+   "seconds": {
+    "snapshot": 0.114,
+    "V1": 0.012,
+    "V3": 0.0123
+   }
+  },
+  "N0": {
+   "id": "N0",
+   "head": "fee0039+N0",
+   "compare_base": "fee0039",
+   "V1": {
+    "status": "PASS",
+    "defined_by": "assign",
+    "line": 23,
+    "argv": [
+     "uvicorn",
+     "api:app",
+     "--host",
+     "0.0.0.0",
+     "--port",
+     "8000"
+    ],
+    "server": "uvicorn",
+    "app_ref": "api:app",
+    "module_file": "api.py"
+   },
+   "V3a": {
+    "status": "PASS",
+    "moved_or_renamed": []
+   },
+   "V3b": {
+    "status": "PASS",
+    "steps": [
+     {
+      "workflow": ".github/workflows/ci.yml",
+      "job": "test",
+      "step": "Run tests",
+      "command": "pytest -rs"
+     }
+    ],
+    "events": {
+     ".github/workflows/ci.yml": {
+      "push": [
+       "branches"
+      ],
+      "pull_request": []
+     }
+    }
+   },
+   "V2": {
+    "status": "NOT_RUN",
+    "reason": "9장 3단계 (Docker 데몬 필요)"
+   },
+   "expected": {
+    "V1": "PASS",
+    "V3a": "PASS",
+    "V3b": "PASS"
+   },
+   "match": {
+    "V1": true,
+    "V3a": true,
+    "V3b": true
+   },
+   "seconds": {
+    "snapshot": 0.114,
+    "V1": 0.0119,
+    "V3": 0.0052
+   }
+  },
+  "N1": {
+   "id": "N1",
+   "head": "6a987e0",
+   "compare_base": "e3867fd",
+   "V1": {
+    "status": "NOT_RUN",
+    "reason": "Dockerfile 없음"
+   },
+   "V3a": {
+    "status": "NOT_RUN",
+    "reason": "base에 활성화된 테스트 실행 단계가 없음 (비교 대상 없음)"
+   },
+   "V3b": {
+    "status": "PASS",
+    "steps": [
+     {
+      "workflow": ".github/workflows/ci.yml",
+      "job": "test",
+      "step": "Run tests",
+      "command": "pytest -rs"
+     }
+    ],
+    "events": {
+     ".github/workflows/ci.yml": {
+      "push": [
+       "branches"
+      ],
+      "pull_request": []
+     }
+    }
+   },
+   "V2": {
+    "status": "NOT_RUN",
+    "reason": "9장 3단계 (Docker 데몬 필요)"
+   },
+   "expected": {
+    "V1": "NOT_RUN",
+    "V3a": "NOT_RUN",
+    "V3b": "PASS"
+   },
+   "match": {
+    "V1": true,
+    "V3a": true,
+    "V3b": true
+   },
+   "seconds": {
+    "snapshot": 0.134,
+    "V1": 0.0,
+    "V3": 0.008
+   }
+  },
+  "N2": {
+   "id": "N2",
+   "head": "f54b612",
+   "compare_base": "19a5c0f",
+   "V1": {
+    "status": "PASS",
+    "defined_by": "assign",
+    "line": 23,
+    "argv": [
+     "uvicorn",
+     "api:app",
+     "--host",
+     "0.0.0.0",
+     "--port",
+     "8000"
+    ],
+    "server": "uvicorn",
+    "app_ref": "api:app",
+    "module_file": "api.py"
+   },
+   "V3a": {
+    "status": "PASS",
+    "moved_or_renamed": []
+   },
+   "V3b": {
+    "status": "PASS",
+    "steps": [
+     {
+      "workflow": ".github/workflows/ci.yml",
+      "job": "test",
+      "step": "Run tests",
+      "command": "pytest -rs"
+     }
+    ],
+    "events": {
+     ".github/workflows/ci.yml": {
+      "push": [
+       "branches"
+      ],
+      "pull_request": []
+     }
+    }
+   },
+   "V2": {
+    "status": "NOT_RUN",
+    "reason": "9장 3단계 (Docker 데몬 필요)"
+   },
+   "expected": {
+    "V1": "PASS",
+    "V3a": "PASS",
+    "V3b": "PASS"
+   },
+   "match": {
+    "V1": true,
+    "V3a": true,
+    "V3b": true
+   },
+   "seconds": {
+    "snapshot": 0.133,
+    "V1": 0.0154,
+    "V3": 0.005
+   }
+  },
+  "N3": {
+   "id": "N3",
+   "head": "cc36c47",
+   "compare_base": "f54b612",
+   "V1": {
+    "status": "PASS",
+    "defined_by": "assign",
+    "line": 23,
+    "argv": [
+     "uvicorn",
+     "api:app",
+     "--host",
+     "0.0.0.0",
+     "--port",
+     "8000"
+    ],
+    "server": "uvicorn",
+    "app_ref": "api:app",
+    "module_file": "api.py"
+   },
+   "V3a": {
+    "status": "PASS",
+    "moved_or_renamed": []
+   },
+   "V3b": {
+    "status": "PASS",
+    "steps": [
+     {
+      "workflow": ".github/workflows/ci.yml",
+      "job": "test",
+      "step": "Run tests",
+      "command": "pytest -rs"
+     }
+    ],
+    "events": {
+     ".github/workflows/ci.yml": {
+      "push": [
+       "branches"
+      ],
+      "pull_request": []
+     }
+    }
+   },
+   "V2": {
+    "status": "NOT_RUN",
+    "reason": "9장 3단계 (Docker 데몬 필요)"
+   },
+   "expected": {
+    "V1": "PASS",
+    "V3a": "PASS",
+    "V3b": "PASS"
+   },
+   "match": {
+    "V1": true,
+    "V3a": true,
+    "V3b": true
+   },
+   "seconds": {
+    "snapshot": 0.139,
+    "V1": 0.0132,
+    "V3": 0.006
+   }
+  },
+  "DN1": {
+   "id": "DN1",
+   "head": "fee0039+DN1",
+   "compare_base": "fee0039",
+   "V1": {
+    "status": "PASS",
+    "defined_by": "assign",
+    "line": 23,
+    "argv": [
+     "python",
+     "-m",
+     "uvicorn",
+     "api:app",
+     "--host",
+     "0.0.0.0",
+     "--port",
+     "8000"
+    ],
+    "server": "uvicorn",
+    "app_ref": "api:app",
+    "module_file": "api.py"
+   },
+   "V3a": {
+    "status": "PASS",
+    "moved_or_renamed": []
+   },
+   "V3b": {
+    "status": "PASS",
+    "steps": [
+     {
+      "workflow": ".github/workflows/ci.yml",
+      "job": "test",
+      "step": "Run tests",
+      "command": "pytest -rs"
+     }
+    ],
+    "events": {
+     ".github/workflows/ci.yml": {
+      "push": [
+       "branches"
+      ],
+      "pull_request": []
+     }
+    }
+   },
+   "V2": {
+    "status": "NOT_RUN",
+    "reason": "9장 3단계 (Docker 데몬 필요)"
+   },
+   "expected": {
+    "V1": "PASS",
+    "V3a": "PASS",
+    "V3b": "PASS"
+   },
+   "match": {
+    "V1": true,
+    "V3a": true,
+    "V3b": true
+   },
+   "seconds": {
+    "snapshot": 0.126,
+    "V1": 0.0375,
+    "V3": 0.0115
+   }
+  },
+  "DN2": {
+   "id": "DN2",
+   "head": "fee0039+DN2",
+   "compare_base": "fee0039",
+   "V1": {
+    "status": "PASS",
+    "defined_by": "assign",
+    "line": 23,
+    "argv": [
+     "uvicorn",
+     "api:app",
+     "--host",
+     "0.0.0.0",
+     "--port",
+     "8000",
+     "--timeout-keep-alive",
+     "10"
+    ],
+    "server": "uvicorn",
+    "app_ref": "api:app",
+    "module_file": "api.py"
+   },
+   "V3a": {
+    "status": "PASS",
+    "moved_or_renamed": []
+   },
+   "V3b": {
+    "status": "PASS",
+    "steps": [
+     {
+      "workflow": ".github/workflows/ci.yml",
+      "job": "test",
+      "step": "Run tests",
+      "command": "pytest -rs"
+     }
+    ],
+    "events": {
+     ".github/workflows/ci.yml": {
+      "push": [
+       "branches"
+      ],
+      "pull_request": []
+     }
+    }
+   },
+   "V2": {
+    "status": "NOT_RUN",
+    "reason": "9장 3단계 (Docker 데몬 필요)"
+   },
+   "expected": {
+    "V1": "PASS",
+    "V3a": "PASS",
+    "V3b": "PASS"
+   },
+   "match": {
+    "V1": true,
+    "V3a": true,
+    "V3b": true
+   },
+   "seconds": {
+    "snapshot": 0.316,
+    "V1": 0.0394,
+    "V3": 0.0137
+   }
+  },
+  "CN1": {
+   "id": "CN1",
+   "head": "fee0039+CN1",
+   "compare_base": "fee0039",
+   "V1": {
+    "status": "PASS",
+    "defined_by": "assign",
+    "line": 23,
+    "argv": [
+     "uvicorn",
+     "api:app",
+     "--host",
+     "0.0.0.0",
+     "--port",
+     "8000"
+    ],
+    "server": "uvicorn",
+    "app_ref": "api:app",
+    "module_file": "api.py"
+   },
+   "V3a": {
+    "status": "PASS",
+    "moved_or_renamed": [
+     {
+      "job": "test",
+      "step": "Run tests",
+      "command": "pytest -rs"
+     }
+    ]
+   },
+   "V3b": {
+    "status": "PASS",
+    "steps": [
+     {
+      "workflow": ".github/workflows/ci.yml",
+      "job": "test",
+      "step": "Unit tests",
+      "command": "pytest -rs"
+     }
+    ],
+    "events": {
+     ".github/workflows/ci.yml": {
+      "push": [
+       "branches"
+      ],
+      "pull_request": []
+     }
+    }
+   },
+   "V2": {
+    "status": "NOT_RUN",
+    "reason": "9장 3단계 (Docker 데몬 필요)"
+   },
+   "expected": {
+    "V1": "PASS",
+    "V3a": "PASS",
+    "V3b": "PASS"
+   },
+   "match": {
+    "V1": true,
+    "V3a": true,
+    "V3b": true
+   },
+   "seconds": {
+    "snapshot": 0.263,
+    "V1": 0.0309,
+    "V3": 0.0265
+   }
+  },
+  "CN2": {
+   "id": "CN2",
+   "head": "fee0039+CN2",
+   "compare_base": "fee0039",
+   "V1": {
+    "status": "PASS",
+    "defined_by": "assign",
+    "line": 23,
+    "argv": [
+     "uvicorn",
+     "api:app",
+     "--host",
+     "0.0.0.0",
+     "--port",
+     "8000"
+    ],
+    "server": "uvicorn",
+    "app_ref": "api:app",
+    "module_file": "api.py"
+   },
+   "V3a": {
+    "status": "PASS",
+    "moved_or_renamed": [
+     {
+      "job": "test",
+      "step": "Run tests",
+      "command": "pytest -rs"
+     }
+    ]
+   },
+   "V3b": {
+    "status": "PASS",
+    "steps": [
+     {
+      "workflow": ".github/workflows/ci.yml",
+      "job": "unit",
+      "step": "Run tests",
+      "command": "pytest -rs"
+     }
+    ],
+    "events": {
+     ".github/workflows/ci.yml": {
+      "push": [
+       "branches"
+      ],
+      "pull_request": []
+     }
+    }
+   },
+   "V2": {
+    "status": "NOT_RUN",
+    "reason": "9장 3단계 (Docker 데몬 필요)"
+   },
+   "expected": {
+    "V1": "PASS",
+    "V3a": "PASS",
+    "V3b": "PASS"
+   },
+   "match": {
+    "V1": true,
+    "V3a": true,
+    "V3b": true
+   },
+   "seconds": {
+    "snapshot": 0.296,
+    "V1": 0.0246,
+    "V3": 0.0295
+   }
+  }
+ },
+ "repo_preserved": true,
+ "finished": "2026-11-17T15:26:24"
+}
