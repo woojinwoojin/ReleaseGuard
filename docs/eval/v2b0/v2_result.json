@@ -1,0 +1,603 @@
+{
+ "runs": [
+  {
+   "started": "2026-11-17T15:40:19",
+   "docker": {
+    "client": "29.8.2",
+    "server": "29.8.2",
+    "platform": "linux/amd64"
+   },
+   "run_options": [
+    "--network",
+    "none",
+    "--memory",
+    "512m",
+    "--cpus",
+    "1",
+    "--pids-limit",
+    "256",
+    "--cap-drop",
+    "ALL",
+    "--security-opt",
+    "no-new-privileges"
+   ],
+   "build_network": "default (pip 설치에 외부 접근)",
+   "repo_before": [
+    "fee00394c47b3135d949f376969988ce5b174a1d",
+    ""
+   ],
+   "leftovers_before": {
+    "containers": [],
+    "images": []
+   },
+   "base_image_digests": [],
+   "leftovers_after": {
+    "containers": [],
+    "images": []
+   },
+   "repo_after": [
+    "fee00394c47b3135d949f376969988ce5b174a1d",
+    ""
+   ],
+   "finished": "2026-11-17T16:02:22",
+   "repo_preserved": true
+  }
+ ],
+ "results": {
+  "W05#1": {
+   "image": "rg2b0-w05-1",
+   "cold": true,
+   "seconds": {
+    "build": 117.2,
+    "start": 0.7,
+    "ready": 30.6,
+    "cleanup": 0.87
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "FAIL",
+   "stage": "ready",
+   "reason": "30초 안에 준비되지 않음",
+   "last_probe": "urllib.error.HTTPError: HTTP Error 500: Internal Server Error",
+   "log_tail": [
+    "Traceback (most recent call last):",
+    "  File \"/usr/local/lib/python3.13/site-packages/uvicorn/protocols/http/httptools_impl.py\", line 422, in run_asgi",
+    "    result = await app(  # type: ignore[func-returns-value]",
+    "             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "        self.scope, self.receive, self.send",
+    "        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "    )",
+    "    ^",
+    "  File \"/usr/local/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py\", line 63, in __call__",
+    "    return await self.app(scope, receive, send)",
+    "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "  File \"/usr/local/lib/python3.13/site-packages/uvicorn/middleware/asgi2.py\", line 14, in __call__",
+    "    instance = self.app(scope)",
+    "TypeError: 'ApiClient' object is not callable",
+    "2026-11-17 06:42:48.411 127.0.0.1:54700 - \"GET /docs HTTP/1.1\" 500"
+   ],
+   "expected": "FAIL",
+   "match": true
+  },
+  "W05#2": {
+   "image": "rg2b0-w05-2",
+   "cold": false,
+   "seconds": {
+    "build": 8.19,
+    "start": 0.73,
+    "ready": 30.46,
+    "cleanup": 0.95
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "FAIL",
+   "stage": "ready",
+   "reason": "30초 안에 준비되지 않음",
+   "last_probe": "urllib.error.HTTPError: HTTP Error 500: Internal Server Error",
+   "log_tail": [
+    "Traceback (most recent call last):",
+    "  File \"/usr/local/lib/python3.13/site-packages/uvicorn/protocols/http/httptools_impl.py\", line 422, in run_asgi",
+    "    result = await app(  # type: ignore[func-returns-value]",
+    "             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "        self.scope, self.receive, self.send",
+    "        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "    )",
+    "    ^",
+    "  File \"/usr/local/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py\", line 63, in __call__",
+    "    return await self.app(scope, receive, send)",
+    "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "  File \"/usr/local/lib/python3.13/site-packages/uvicorn/middleware/asgi2.py\", line 14, in __call__",
+    "    instance = self.app(scope)",
+    "TypeError: 'ApiClient' object is not callable",
+    "2026-11-17 06:43:29.262 127.0.0.1:57520 - \"GET /docs HTTP/1.1\" 500"
+   ],
+   "expected": "FAIL",
+   "match": true
+  },
+  "W05#3": {
+   "image": "rg2b0-w05-3",
+   "cold": false,
+   "seconds": {
+    "build": 5.8,
+    "start": 0.52,
+    "ready": 30.39,
+    "cleanup": 0.87
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "FAIL",
+   "stage": "ready",
+   "reason": "30초 안에 준비되지 않음",
+   "last_probe": "urllib.error.HTTPError: HTTP Error 500: Internal Server Error",
+   "log_tail": [
+    "Traceback (most recent call last):",
+    "  File \"/usr/local/lib/python3.13/site-packages/uvicorn/protocols/http/httptools_impl.py\", line 422, in run_asgi",
+    "    result = await app(  # type: ignore[func-returns-value]",
+    "             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "        self.scope, self.receive, self.send",
+    "        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "    )",
+    "    ^",
+    "  File \"/usr/local/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py\", line 63, in __call__",
+    "    return await self.app(scope, receive, send)",
+    "           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",
+    "  File \"/usr/local/lib/python3.13/site-packages/uvicorn/middleware/asgi2.py\", line 14, in __call__",
+    "    instance = self.app(scope)",
+    "TypeError: 'ApiClient' object is not callable",
+    "2026-11-17 06:44:07.412 127.0.0.1:44268 - \"GET /docs HTTP/1.1\" 500"
+   ],
+   "expected": "FAIL",
+   "match": true
+  },
+  "W06#1": {
+   "image": "rg2b0-w06-1",
+   "cold": true,
+   "seconds": {
+    "build": 96.22,
+    "start": 0.81,
+    "ready": 4.88,
+    "cleanup": 0.79
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "W06#2": {
+   "image": "rg2b0-w06-2",
+   "cold": false,
+   "seconds": {
+    "build": 6.85,
+    "start": 0.54,
+    "ready": 5.07,
+    "cleanup": 0.92
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "W06#3": {
+   "image": "rg2b0-w06-3",
+   "cold": false,
+   "seconds": {
+    "build": 9.66,
+    "start": 1.01,
+    "ready": 4.31,
+    "cleanup": 0.83
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "N0#1": {
+   "image": "rg2b0-n0-1",
+   "cold": true,
+   "seconds": {
+    "build": 94.45,
+    "start": 1.12,
+    "ready": 5.62,
+    "cleanup": 1.06
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "N0#2": {
+   "image": "rg2b0-n0-2",
+   "cold": false,
+   "seconds": {
+    "build": 9.65,
+    "start": 0.87,
+    "ready": 4.57,
+    "cleanup": 0.79
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "N0#3": {
+   "image": "rg2b0-n0-3",
+   "cold": false,
+   "seconds": {
+    "build": 7.09,
+    "start": 0.99,
+    "ready": 5.92,
+    "cleanup": 0.88
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "N1#1": {
+   "status": "NOT_RUN",
+   "reason": "Dockerfile 없음",
+   "expected": "NOT_RUN",
+   "match": true
+  },
+  "N1#2": {
+   "status": "NOT_RUN",
+   "reason": "Dockerfile 없음",
+   "expected": "NOT_RUN",
+   "match": true
+  },
+  "N1#3": {
+   "status": "NOT_RUN",
+   "reason": "Dockerfile 없음",
+   "expected": "NOT_RUN",
+   "match": true
+  },
+  "N2#1": {
+   "image": "rg2b0-n2-1",
+   "cold": true,
+   "seconds": {
+    "build": 85.37,
+    "start": 0.93,
+    "ready": 5.41,
+    "cleanup": 1.1
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "N2#2": {
+   "image": "rg2b0-n2-2",
+   "cold": false,
+   "seconds": {
+    "build": 8.4,
+    "start": 0.74,
+    "ready": 5.8,
+    "cleanup": 0.83
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "N2#3": {
+   "image": "rg2b0-n2-3",
+   "cold": false,
+   "seconds": {
+    "build": 7.19,
+    "start": 0.84,
+    "ready": 5.19,
+    "cleanup": 0.72
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "N3#1": {
+   "image": "rg2b0-n3-1",
+   "cold": true,
+   "seconds": {
+    "build": 88.34,
+    "start": 1.47,
+    "ready": 7.54,
+    "cleanup": 1.65
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "N3#2": {
+   "image": "rg2b0-n3-2",
+   "cold": false,
+   "seconds": {
+    "build": 8.06,
+    "start": 0.77,
+    "ready": 7.72,
+    "cleanup": 0.78
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "N3#3": {
+   "image": "rg2b0-n3-3",
+   "cold": false,
+   "seconds": {
+    "build": 7.58,
+    "start": 0.86,
+    "ready": 4.69,
+    "cleanup": 0.74
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "DN1#1": {
+   "image": "rg2b0-dn1-1",
+   "cold": true,
+   "seconds": {
+    "build": 101.2,
+    "start": 0.76,
+    "ready": 5.55,
+    "cleanup": 0.72
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "DN1#2": {
+   "image": "rg2b0-dn1-2",
+   "cold": false,
+   "seconds": {
+    "build": 8.1,
+    "start": 0.75,
+    "ready": 7.35,
+    "cleanup": 0.8
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "DN1#3": {
+   "image": "rg2b0-dn1-3",
+   "cold": false,
+   "seconds": {
+    "build": 7.22,
+    "start": 0.85,
+    "ready": 7.6,
+    "cleanup": 0.91
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "DN2#1": {
+   "image": "rg2b0-dn2-1",
+   "cold": true,
+   "seconds": {
+    "build": 97.74,
+    "start": 0.55,
+    "ready": 3.25,
+    "cleanup": 0.88
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "DN2#2": {
+   "image": "rg2b0-dn2-2",
+   "cold": false,
+   "seconds": {
+    "build": 9.68,
+    "start": 0.87,
+    "ready": 4.78,
+    "cleanup": 0.79
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "DN2#3": {
+   "image": "rg2b0-dn2-3",
+   "cold": false,
+   "seconds": {
+    "build": 7.78,
+    "start": 0.85,
+    "ready": 4.97,
+    "cleanup": 0.76
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "CN1#1": {
+   "image": "rg2b0-cn1-1",
+   "cold": true,
+   "seconds": {
+    "build": 106.12,
+    "start": 0.88,
+    "ready": 4.88,
+    "cleanup": 0.84
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "CN1#2": {
+   "image": "rg2b0-cn1-2",
+   "cold": false,
+   "seconds": {
+    "build": 8.79,
+    "start": 0.51,
+    "ready": 3.34,
+    "cleanup": 0.94
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "CN1#3": {
+   "image": "rg2b0-cn1-3",
+   "cold": false,
+   "seconds": {
+    "build": 9.07,
+    "start": 0.87,
+    "ready": 6.18,
+    "cleanup": 0.78
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "CN2#1": {
+   "image": "rg2b0-cn2-1",
+   "cold": true,
+   "seconds": {
+    "build": 99.21,
+    "start": 1.03,
+    "ready": 5.57,
+    "cleanup": 0.85
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "CN2#2": {
+   "image": "rg2b0-cn2-2",
+   "cold": false,
+   "seconds": {
+    "build": 8.58,
+    "start": 0.83,
+    "ready": 6.38,
+    "cleanup": 0.43
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  },
+  "CN2#3": {
+   "image": "rg2b0-cn2-3",
+   "cold": false,
+   "seconds": {
+    "build": 11.29,
+    "start": 0.82,
+    "ready": 5.61,
+    "cleanup": 1.73
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  }
+ }
+}
