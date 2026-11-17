@@ -22,6 +22,9 @@ survivors:
     oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
     oracle_evidence: "대상 줄(add_subparsers required=True)은 HEAD까지 그대로(git blame --reverse). 74951a0 등 이후 커밋은 main에 명령·인자를 더했을 뿐 required를 바꾸지 않음"
     revised_after_history: null
+    differential_test: DETECTED   # 7단계, docs/eval/v22c/test_additions.json (시도 1회, 수정 0회)
+    class_after_test: ACTIONABLE_GAP_PROVISIONAL
+    test_note: "원본 SystemExit 2 / mutant AttributeError. 명세 weak(사용 예뿐)라 GO 계산 제외"
   - mutant: 2
     codebase: R
     where: c910160 releaseguard/__main__.py:19 main
@@ -37,6 +40,9 @@ survivors:
     oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
     oracle_evidence: "대상 줄 HEAD까지 그대로. 원래 동작(--repo 필수)을 바꾼 커밋 없음"
     revised_after_history: null
+    differential_test: DETECTED   # 7단계, docs/eval/v22c/test_additions.json (시도 1회, 수정 0회)
+    class_after_test: ACTIONABLE_GAP_PROVISIONAL
+    test_note: "원본 SystemExit 2 / mutant AttributeError. 명세 weak라 GO 계산 제외"
   - mutant: 3
     codebase: R
     where: c910160 releaseguard/__main__.py:20 main
@@ -52,6 +58,9 @@ survivors:
     oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
     oracle_evidence: "대상 줄 HEAD까지 그대로. 원래 동작(--base 필수)을 바꾼 커밋 없음"
     revised_after_history: null
+    differential_test: DETECTED   # 7단계, docs/eval/v22c/test_additions.json (시도 1회, 수정 0회)
+    class_after_test: ACTIONABLE_GAP_PROVISIONAL
+    test_note: "원본 SystemExit 2 / mutant는 'git 오류' 경로로 return 2. 프로세스 종료 코드는 둘 다 2이고 차이는 메시지(사용법 오류 vs git 오류)와 종료 방식뿐 — 감지가 구현 방식에 기대므로 가장 약한 사례. 명세 weak라 GO 계산 제외"
   - mutant: 4
     codebase: R
     where: c910160 releaseguard/__main__.py:32 main
@@ -95,6 +104,9 @@ survivors:
     oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
     oracle_evidence: "git_diff를 바꾼 이후 커밋 없음(대상 줄 HEAD까지 그대로)"
     revised_after_history: null
+    differential_test: DETECTED   # 7단계, docs/eval/v22c/test_additions.json (시도 1회, 수정 0회)
+    class_after_test: ACTIONABLE_GAP_PROVISIONAL
+    test_note: "정확히 12,000자에서 원본 truncated False / mutant True. 명세 weak(필드 이름·내부 일관성)라 GO 계산 제외"
   - mutant: 23
     codebase: W
     where: 5b31f70 tools.py:56 check_category (week2-tool-calling)
@@ -113,6 +125,9 @@ survivors:
     oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
     oracle_evidence: "7f9efeb(week2)가 check_category를 공통 필터 검사로 다시 쓰며 이 줄을 지움. 새 코드도 첫 값을 쓰고(other[0]) 예외 대신 error dict를 돌려줌 — 원래 동작(첫 상위 카테고리, 예외 없음)을 결함으로 고친 것 아님. week3·4는 새 코드를 그대로 복사"
     revised_after_history: null
+    differential_test: DETECTED   # 7단계, docs/eval/v22c/test_additions.json (시도 1회, 수정 0회)
+    class_after_test: ACTIONABLE_GAP
+    test_note: "원본 hint dict / mutant IndexError. 명세 strong(모듈·함수 docstring의 error dict 계약), assertion 감지, KNOWN_BUG_ORACLE 아님 → confirmed. coverage는 covered·분기 공백 없음 → Incremental Value 1"
   - mutant: 42
     codebase: P
     where: 3db2f31 src/metrics/engine.py:57 combine
@@ -161,6 +176,16 @@ summary_second_pass:   # 7단계 오라클 확인 (2026-11-17)
   known_bug_oracle: 0
   revised_after_history: 0
   method: "대상 커밋..HEAD에서 git blame --reverse로 대상 줄 추적, 바뀐 경우 그 커밋 diff 확인 + 대상 함수 git log -L"
+summary_step7:   # 차등 검증 (2026-11-17)
+  attempted: 5          # test_targets 전부, 상한 15 미만이라 미시도 0
+  detected_by_assertion: 5
+  original_fail: 0
+  confirmed: {R: 0, W: 1, P: 0}       # W #23 (5b31f70)
+  provisional: {R: 4, W: 0, P: 0}     # #1·#2·#3 (c910160), #16 (6fb437c) — 명세 weak
+  untested_meaningful: 0
+  incremental_value_confirmed: 1      # #23, covered·분기 공백 없음
+  test_author: "Claude (사용자 개입 없음), 대상마다 시도 1회·수정 0회, 기존 fixture 재사용 없음"
+  go_condition_1: "불충족 — confirmed가 W에만 있음 (R은 provisional 4건뿐)"
 summary_first_pass:
   survived: 10
   by_class: {MEANINGFUL_UNVERIFIED: 5, LOW_VALUE: 4, UNRESOLVED: 1}

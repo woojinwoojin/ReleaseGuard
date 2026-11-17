@@ -1,0 +1,264 @@
+{
+ "runs": [
+  {
+   "started": "2026-11-17T14:16:32",
+   "repos": {
+    "release-guard": {
+     "before": [
+      "f3049835cf0f6cf0db0b42e6c14c4d91ff4ece10",
+      ""
+     ],
+     "after": [
+      "f3049835cf0f6cf0db0b42e6c14c4d91ff4ece10",
+      "?? docs/eval/v22c/test_additions.json\n"
+     ],
+     "preserved": false
+    },
+    "2026-10/week2-tool-calling": {
+     "before": [
+      "dda429cac88b0723c99cf1143ca7ac961d40968d",
+      ""
+     ],
+     "after": [
+      "dda429cac88b0723c99cf1143ca7ac961d40968d",
+      ""
+     ],
+     "preserved": true
+    }
+   },
+   "finished": "2026-11-17T14:18:27"
+  }
+ ],
+ "results": {
+  "1": {
+   "no": 1,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "c910160",
+   "path": "releaseguard/__main__.py",
+   "line": 17,
+   "operator": "core/ReplaceTrueWithFalse",
+   "occurrence": 0,
+   "test_file": "docs/eval/v22c/tests/test_rg22c_m01_no_command.py",
+   "known_bug_oracle": false,
+   "timeout": 120,
+   "outcome": "DETECTED",
+   "original_new_test": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 0.86,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "mutant_new_test": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.84,
+    "failed": [
+     "tests/test_rg22c_m01_no_command.py::test_no_command_is_usage_error"
+    ],
+    "kinds": {
+     "tests/test_rg22c_m01_no_command.py::test_no_command_is_usage_error": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ('exception',...tributeError') == ('exit', 2)\n  \n  At index 0 diff: 'exception' != 'exit'\n  Use -v to get more diff"
+    ],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "original_full": "SURVIVED",
+   "mutant_full": "KILLED",
+   "source_before": "sub = parser.add_subparsers(dest=\"command\", required=True)",
+   "source_after": "sub = parser.add_subparsers(dest=\"command\", required=False)"
+  },
+  "2": {
+   "no": 2,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "c910160",
+   "path": "releaseguard/__main__.py",
+   "line": 19,
+   "operator": "core/ReplaceTrueWithFalse",
+   "occurrence": 1,
+   "test_file": "docs/eval/v22c/tests/test_rg22c_m02_repo_required.py",
+   "known_bug_oracle": false,
+   "timeout": 120,
+   "outcome": "DETECTED",
+   "original_new_test": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 1.14,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "mutant_new_test": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.85,
+    "failed": [
+     "tests/test_rg22c_m02_repo_required.py::test_missing_repo_is_usage_error"
+    ],
+    "kinds": {
+     "tests/test_rg22c_m02_repo_required.py::test_missing_repo_is_usage_error": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ('exception',...tributeError') == ('exit', 2)\n  \n  At index 0 diff: 'exception' != 'exit'\n  Use -v to get more diff"
+    ],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "original_full": "SURVIVED",
+   "mutant_full": "KILLED",
+   "source_before": "p.add_argument(\"--repo\", type=Path, required=True)",
+   "source_after": "p.add_argument(\"--repo\", type=Path, required=False)"
+  },
+  "3": {
+   "no": 3,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "c910160",
+   "path": "releaseguard/__main__.py",
+   "line": 20,
+   "operator": "core/ReplaceTrueWithFalse",
+   "occurrence": 2,
+   "test_file": "docs/eval/v22c/tests/test_rg22c_m03_base_required.py",
+   "known_bug_oracle": false,
+   "timeout": 120,
+   "outcome": "DETECTED",
+   "original_new_test": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 1.08,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "mutant_new_test": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.01,
+    "failed": [
+     "tests/test_rg22c_m03_base_required.py::test_missing_base_is_usage_error"
+    ],
+    "kinds": {
+     "tests/test_rg22c_m03_base_required.py::test_missing_base_is_usage_error": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert ('return', 2) == ('exit', 2)\n  \n  At index 0 diff: 'return' != 'exit'\n  Use -v to get more diff"
+    ],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "original_full": "SURVIVED",
+   "mutant_full": "KILLED",
+   "source_before": "p.add_argument(\"--base\", required=True)",
+   "source_after": "p.add_argument(\"--base\", required=False)"
+  },
+  "16": {
+   "no": 16,
+   "codebase": "R",
+   "repo": "release-guard",
+   "commit": "6fb437c",
+   "path": "releaseguard/agent_tools.py",
+   "line": 54,
+   "operator": "core/ReplaceComparisonOperator_Gt_GtE",
+   "occurrence": 0,
+   "test_file": "docs/eval/v22c/tests/test_rg22c_m16_truncated.py",
+   "known_bug_oracle": false,
+   "timeout": 120,
+   "outcome": "DETECTED",
+   "original_new_test": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 0.95,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "mutant_new_test": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 0.82,
+    "failed": [
+     "tests/test_rg22c_m16_truncated.py::test_diff_exactly_at_cap_is_not_truncated"
+    ],
+    "kinds": {
+     "tests/test_rg22c_m16_truncated.py::test_diff_exactly_at_cap_is_not_truncated": "assertion"
+    },
+    "messages": [
+     "assert True is False"
+    ],
+    "tail": null,
+    "executed": 2,
+    "skipped": 0
+   },
+   "original_full": "SURVIVED",
+   "mutant_full": "KILLED",
+   "source_before": "return {\"path\": path, \"diff\": text[:MAX_DIFF_CHARS], \"truncated\": len(text) > MAX_DIFF_CHARS}",
+   "source_after": "return {\"path\": path, \"diff\": text[:MAX_DIFF_CHARS], \"truncated\": len(text) >= MAX_DIFF_CHARS}"
+  },
+  "23": {
+   "no": 23,
+   "codebase": "W",
+   "repo": "2026-10/week2-tool-calling",
+   "commit": "5b31f70",
+   "path": "tools.py",
+   "line": 56,
+   "operator": "core/NumberReplacer",
+   "occurrence": 22,
+   "test_file": "docs/eval/v22c/tests/test_rg22c_m23_single_parent.py",
+   "known_bug_oracle": false,
+   "timeout": 120,
+   "outcome": "DETECTED",
+   "original_new_test": {
+    "status": "SURVIVED",
+    "kind": null,
+    "seconds": 3.65,
+    "failed": [],
+    "kinds": {},
+    "messages": [],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "mutant_new_test": {
+    "status": "KILLED",
+    "kind": "assertion",
+    "seconds": 1.36,
+    "failed": [
+     "tests/test_rg22c_m23_single_parent.py::test_sub_category_with_single_row_hints_parent"
+    ],
+    "kinds": {
+     "tests/test_rg22c_m23_single_parent.py::test_sub_category_with_single_row_hints_parent": "assertion"
+    },
+    "messages": [
+     "AssertionError: assert None == '없는 카테고리: B1'\n +  where None = <built-in method get of dict object at 0x000002F4E67BE380>('error')\n +    where <built-in method g"
+    ],
+    "tail": null,
+    "executed": 1,
+    "skipped": 0
+   },
+   "original_full": "SURVIVED",
+   "mutant_full": "KILLED",
+   "source_before": "error[\"hint\"] = f\"{category}는 {parent.iloc[0]}의 하위 카테고리입니다.\"",
+   "source_after": "error[\"hint\"] = f\"{category}는 {parent.iloc[ 1]}의 하위 카테고리입니다.\""
+  }
+ }
+}
