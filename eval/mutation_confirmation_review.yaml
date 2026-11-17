@@ -19,6 +19,9 @@ survivors:
     expected_test: "main([])이 SystemExit(code=2)를 낸다 (AttributeError가 아님)"
     review_priority: LOW
     test_target: true
+    oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
+    oracle_evidence: "대상 줄(add_subparsers required=True)은 HEAD까지 그대로(git blame --reverse). 74951a0 등 이후 커밋은 main에 명령·인자를 더했을 뿐 required를 바꾸지 않음"
+    revised_after_history: null
   - mutant: 2
     codebase: R
     where: c910160 releaseguard/__main__.py:19 main
@@ -31,6 +34,9 @@ survivors:
     expected_test: "main(['analyze', '--base', 'x'])가 SystemExit(code=2)를 낸다"
     review_priority: LOW
     test_target: true
+    oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
+    oracle_evidence: "대상 줄 HEAD까지 그대로. 원래 동작(--repo 필수)을 바꾼 커밋 없음"
+    revised_after_history: null
   - mutant: 3
     codebase: R
     where: c910160 releaseguard/__main__.py:20 main
@@ -43,6 +49,9 @@ survivors:
     expected_test: "main(['analyze', '--repo', '.'])가 SystemExit(code=2)를 낸다"
     review_priority: LOW
     test_target: true
+    oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
+    oracle_evidence: "대상 줄 HEAD까지 그대로. 원래 동작(--base 필수)을 바꾼 커밋 없음"
+    revised_after_history: null
   - mutant: 4
     codebase: R
     where: c910160 releaseguard/__main__.py:32 main
@@ -53,6 +62,9 @@ survivors:
     spec: 중첩 출력 경로를 지원한다는 문서·테스트 없음 (2.1 #5 시간 상한과 같은 처리)
     spec_strength: none
     test_target: false
+    oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
+    oracle_evidence: "2404a6c가 출력 코드를 write()로 옮기며 stem.parent.mkdir(parents=True, exist_ok=True)로 유지 — 원래 동작 유지, 결함 수정 아님"
+    revised_after_history: null
   - mutant: 6
     codebase: R
     where: c910160 releaseguard/__main__.py:34 main
@@ -63,6 +75,9 @@ survivors:
     spec: 바이트 형식 계약 없음 (2.1 #7과 같은 처리)
     spec_strength: none
     test_target: false
+    oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
+    oracle_evidence: "2404a6c가 write()로 옮기며 indent=2 유지 — 원래 동작 유지"
+    revised_after_history: null
   - mutant: 16
     codebase: R
     where: 6fb437c releaseguard/agent_tools.py:54 RepoView.git_diff
@@ -77,6 +92,9 @@ survivors:
     expected_test: "길이가 정확히 MAX_DIFF_CHARS인 diff에서 truncated is False"
     review_priority: LOW   # 정확한 경계값에서만 (2.1 T5와 같은 구분: 의미 있는 차이 ≠ 우선순위)
     test_target: true
+    oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
+    oracle_evidence: "git_diff를 바꾼 이후 커밋 없음(대상 줄 HEAD까지 그대로)"
+    revised_after_history: null
   - mutant: 23
     codebase: W
     where: 5b31f70 tools.py:56 check_category (week2-tool-calling)
@@ -92,6 +110,9 @@ survivors:
     expected_test: "sub_category 행이 하나인 df에서 check_category(df, '<하위>')가 예외 없이 hint에 상위 카테고리를 담은 dict를 돌려준다"
     review_priority: LOW   # 행이 하나뿐인 하위 카테고리에서만
     test_target: true
+    oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
+    oracle_evidence: "7f9efeb(week2)가 check_category를 공통 필터 검사로 다시 쓰며 이 줄을 지움. 새 코드도 첫 값을 쓰고(other[0]) 예외 대신 error dict를 돌려줌 — 원래 동작(첫 상위 카테고리, 예외 없음)을 결함으로 고친 것 아님. week3·4는 새 코드를 그대로 복사"
+    revised_after_history: null
   - mutant: 42
     codebase: P
     where: 3db2f31 src/metrics/engine.py:57 combine
@@ -102,6 +123,9 @@ survivors:
     spec: 비고를 60자로 자른다는 계약 없음 (커밋 시점 README·decisions에서 확인 안 됨 — 60은 표시용 상수)
     spec_strength: none
     test_target: false
+    oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
+    oracle_evidence: "대상 줄 HEAD까지 그대로. c7733b3·142912b가 combine에 기간 조건·보류 경로를 더했지만 비고 60자 자르기는 그대로"
+    revised_after_history: null
   - mutant: 44
     codebase: P
     where: 3db2f31 src/metrics/engine.py:59 combine
@@ -112,6 +136,9 @@ survivors:
     spec: "#42와 같음"
     spec_strength: none
     test_target: false
+    oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
+    oracle_evidence: "#42와 같음"
+    revised_after_history: null
   - mutant: 55
     codebase: P
     where: 99c3179 src/scoring/score.py:65 score_metric
@@ -127,6 +154,13 @@ survivors:
       n ≥ 20이면 A 방식도 반영해야 한다고 읽으면 (1)에서는 mutant 쪽이 명세에 가깝다. 원본 동작을 정답으로 고정하는 테스트는 오라클 위험.
     spec_strength: weak
     test_target: false   # 어느 쪽이 맞는지 정해지지 않음
+    oracle_check: NOT_KNOWN_BUG   # 2차 (7단계, 1차 커밋 e8643ef 뒤)
+    oracle_evidence: "대상 줄 HEAD까지 그대로(b515f78에서 함수 이름만 score_metric → score_row). 이후 이력도 A 방식 조건의 의도를 정하지 않아 UNRESOLVED 그대로"
+    revised_after_history: null
+summary_second_pass:   # 7단계 오라클 확인 (2026-11-17)
+  known_bug_oracle: 0
+  revised_after_history: 0
+  method: "대상 커밋..HEAD에서 git blame --reverse로 대상 줄 추적, 바뀐 경우 그 커밋 diff 확인 + 대상 함수 git log -L"
 summary_first_pass:
   survived: 10
   by_class: {MEANINGFUL_UNVERIFIED: 5, LOW_VALUE: 4, UNRESOLVED: 1}
