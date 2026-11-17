@@ -1,6 +1,6 @@
 # ReleaseGuard — 현재 상태와 로드맵
 
-기준일: 2026-11-11 · 버전 0.2.0 · 판정 규칙 v3.2 · 테스트 194개 통과 · **Stage 1 기술 MVP 완료, Stage 1.7 완료** ([보고서 #12](eval/20261111_eval_report_12.md)) · **Stage 2.0 spike 완료 → Go** ([#13](eval/20261111_eval_report_13.md)) · **Stage 2.1 Value Eval → GO (조건부, 리뷰 정정)** ([#14](eval/20261111_eval_report_14.md)) · 다음: 2.2 전 독립 확인 평가
+기준일: 2026-11-17 · 버전 0.2.0 · 판정 규칙 v3.2 · 테스트 194개 통과 · **Stage 1 기술 MVP 완료, Stage 1.7 완료** ([보고서 #12](eval/20261111_eval_report_12.md)) · **Stage 2.0 spike 완료 → Go** ([#13](eval/20261111_eval_report_13.md)) · **Stage 2.1 Value Eval → GO (조건부, 리뷰 정정)** ([#14](eval/20261111_eval_report_14.md)) · **Stage 2.2 독립 확인 평가 → HOLD** ([#15](eval/20261117_eval_report_15.md), 2026-11-17) · 다음: 2b 배포 산출물 검증 (추천)
 
 Stage 1 종료 심사: [Eval 보고서 #11](eval/20261111_eval_report_11.md). **제품 수준의 판정 구분력·실제 사용자 효용은 아직 미검증**.
 
@@ -109,6 +109,7 @@ base...head
 | 11-10 | Test Suggestion Validator, #10 | skip·이름 충돌을 결정적으로 표시 |
 | 11-11 | Stage 1 마무리 | 문서 정리 (README·usage·보고서 정리). 블로그는 건너뜀 |
 | 11-11 | Stage 1 종료 재평가, #11 | 코드 변경 `need: no`의 11/12 경고; test-only·삭제 경계 사례 확인. Stage 1.7 신뢰성 보완 필요 |
+| 11-17 | **2.2 전 독립 확인 평가**, #15 | 새 커밋 11개·mutant 55(R 20·W 20·P 15), KILLED 45·SURVIVED 10, 선택 = 전체 55/55. 차등 테스트 5/5 감지. confirmed ACTIONABLE은 W #23 1건뿐(R은 명세 weak인 provisional 4건, 그중 3건은 같은 CLI 커밋). 커밋당 제품 경로 중앙값 R 29.8초·W 14.1초, 사람 검토 시간 NOT_MEASURED. GO 조건 ①(R·W 각 1건) 불충족 → **HOLD**, 정식 통합 보류 |
 | 11-11 | 2.1 정정 (외부 독립 리뷰) | #23 provisional(독립 명세 없음), T5 → ACTIONABLE(우선순위 LOW), SZZ 유형 구분(직접 2·실행 조건 1, 모두 c7733b3), 지표 분모 정정, 어댑터 NO_EXECUTED_TEST. confirmed ACTIONABLE 4건·3개 커밋으로 GO 유지. 2.2 전 새 커밋·2개 이상 저장소에서 독립 확인 |
 | 11-11 | **2.1 Mutation Value Eval**, #14 | 평가 A(2.0 SURVIVED 13개): ACTIONABLE 4건(4개 커밋, 모두 coverage가 '검증됨'으로 본 줄). 평가 B(SZZ 결함 줄 3 vs 대조군 3): SURVIVED 2/6 vs 2/6 — 결함 위치 가설 불지지, 빠진 조건형 결함은 mutation으로 못 겨냥. 테스트 추가 5/5 감지. 사전 기준상 GO, 판정 반영 없이 mutation_result 보고서만 |
 | 11-11 | **2.0 Mutation spike**, #13 | Cosmic Ray 8.9.0 (mutmut은 Windows 거부). Predict 5커밋·mutant 40: 지정 줄 40/40, 저장소 보존, 관련 테스트만 = 전체 40/40, KILLED 27·SURVIVED 13, mutant당 0.72초(관련)·1.33초(전체). Go, 가치는 2.1 |
@@ -176,7 +177,7 @@ Stage 1.7은 기능 확장이 아니라 이미 발견한 SAFE 경계의 보완�
 |---|---|---|
 | **2.0 Mutation Spike** | 변경된 **실행 줄**에 한정, 비교·상수·불리언 연산자 소수와 기존 도구 어댑터를 8~12개 사례에서 시험. 60~120개 mutant 상한을 탐색 기준으로 고려 | 실행 가능성, Windows·Python 3.13 호환, INVALID·TIMEOUT·비용 확인. Cosmic Ray의 Windows 호환성은 미검증 |
 | **2.1 Mutation Value Eval** | line/branch 대비 추가로 찾은 **행동 가능한 테스트 부족** 측정. 관련 테스트 선택과 전체 테스트 실행 결과 비교 | Actionable survivor, 새 테스트로 mutant kill, 비용·오탐 분석. 미래 수정 커밋과 seed 정보를 모델에 노출하지 않음 |
-| **2.2 Mutation 통합 (조건부)** | Eval에서 추가 가치가 확인된 경우에만. 처음에는 기존 판정에 영향 없는 독립 신호 | 추가 가치 미확인 시 건너뛰고 2b 이동. 기존 판정과 분리 |
+| **2.2 Mutation 통합 (조건부)** — **HOLD** ([#15](eval/20261117_eval_report_15.md)) | Eval에서 추가 가치가 확인된 경우에만. 처음에는 기존 판정에 영향 없는 독립 신호 | 확인 평가에서 confirmed가 W 1건뿐이고 사람 검토 비용은 미측정이라 보류. 어댑터·평가 기록은 보존하고, 사람 비용을 잴 기회가 생기면 새 사례로 재평가 |
 | **2b 배포 산출물 검증** | (W05) Docker **빌드뿐 아니라 컨테이너 실행·상태 확인**; (W06) CI 구문 검사뿐 아니라 **필수 테스트 단계 정책 검사** | 알려진 W05·W06을 실제로 탐지 + 정상 사례에서 과잉 경고 통제. 동적 검증은 격리 필요 |
 | 2c Workflow 엔진 | 재시도/분기/상태 복구 복잡성이 현재 구현 한계를 넘어설 때만 | 측정된 병목 없으면 미도입 |
 | 3 Knowledge RAG | 문서가 없어서 설명/검증에 실패한 평가 사례가 생길 때 | 검색 정확성·추가 효용 |
@@ -189,7 +190,7 @@ Stage 1.7은 기능 확장이 아니라 이미 발견한 SAFE 경계의 보완�
 
 ### 현재 확정 정책과 보류 항목
 
-- **확정:** Stage 1 기술 MVP 종료, 1.7의 테스트 실행 경계 보완 우선, 2.0은 Mutation **실험**, 2.2는 효과 확인 시에만, 2b는 W05/W06 검출 기준을 수정.
+- **확정:** Stage 1 기술 MVP 종료, 1.7의 테스트 실행 경계 보완 우선, 2.0은 Mutation **실험**, 2.2는 효과 확인 시에만(확인 평가 결과 HOLD, #15), 2b는 W05/W06 검출 기준을 수정.
 - **확정:** 릴리즈 판정은 보수적 게이트, **1차 사용자 가치 제안은 검증 공백 보고서**. 현재 경고 구분력 부족을 숨기지 않음.
 - **확정·구현 (1.7):** T03 원인 코드 4개(REVIEW), 미지원 수집 설정은 보류 + N07, scope 그대로, 삭제 소스 N06은 NOTE 유지.
 - **보류:** Mutation 도구 선택과 Windows·Python 3.13 호환성, 실행 격리 범위는 2.0에서 검증.

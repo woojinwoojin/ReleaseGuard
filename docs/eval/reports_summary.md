@@ -1,4 +1,4 @@
-# ReleaseGuard 평가 보고서 정리 (#1~#14)
+# ReleaseGuard 평가 보고서 정리 (#1~#15)
 
 기준: 2026-11-11 · 기간 2026-11-03 ~ 11-11 · 원문은 각 보고서 링크
 
@@ -20,6 +20,7 @@
 | [12](20261111_eval_report_12.md) | 11-11 | 1.7 Reliability Gate (v3.2): T03·N07, coverage 버전·위치, node id | 심은 사례 26/26·6/6, 58커밋 판정 변화 0, T03 추가 7 (모두 data/ 없음 skip, 이미 REVIEW·BLOCK), 과잉 11/12 그대로 | Stage 2.0 Mutation spike |
 | [13](20261111_eval_report_13.md) | 11-11 | 2.0 Mutation spike (Cosmic Ray, Predict 5커밋·40개) | 지정 줄 40/40, 저장소 보존, 관련만 = 전체 40/40, KILLED 27·SURVIVED 13 | Go → 2.1 Value Eval |
 | [14](20261111_eval_report_14.md) | 11-11 | 2.1 Mutation Value Eval (SURVIVED 13개 분류 + SZZ 결함 줄 vs 대조군 + 테스트 추가) | ACTIONABLE 4건(coverage가 못 본 줄), SZZ vs 대조군 차이 없음 | 사전 기준상 GO → 2.2는 보고서만 |
+| [15](20261117_eval_report_15.md) | 11-17 | 2.2 전 독립 확인 평가 (새 커밋 11개·mutant 55, R·W·P) | 선택 = 전체 55/55, 차등 테스트 5/5 감지, confirmed는 W #23 1건(R은 provisional 4), 사람 검토 시간 미측정 | **HOLD** → 2b 추천 |
 
 ## 시험장
 
@@ -167,6 +168,7 @@
 | #12 | `out/eval/v18/`, 비교 `docs/eval/20261111_explore/compare_v17_v18.py` |
 | #13 | `docs/eval/v20_spike/`, 코드 `spikes/stage2_0/` |
 | #14 | `docs/eval/v21/`, 코드 `spikes/stage2_1/`, 사례·분류 `eval/*_2_1.yaml` |
+| #15 | `docs/eval/v22c/`, 코드 `spikes/stage2_2_confirmation/`, 사례·분류 `eval/mutation_confirmation_*.yaml` |
 
 
 ## 7. Stage 1 종료 심사 (#11)
@@ -196,3 +198,13 @@
 - **오라클 위험**: #38은 원래 동작이 결함이었다. 이 mutant를 잡는 테스트는 결함을 정답으로 고정한다.
 - 결론: 사전 기준상 GO. 다만 "테스트 보강 후보를 찾는다"까지만 지지되고, "결함 위치를 알려준다"는 지지되지 않는다. 분류는 Claude 초안이다.
 - **정정 (외부 리뷰)**: #23은 provisional(출력 형식의 독립 명세 없음), T5는 ACTIONABLE(우선순위 LOW)로 바꿨다. confirmed 4건(3개 커밋), 명시적 covered 줄 4건. 결함 3줄은 한 수정 커밋에서 나왔고, 그중 1줄은 실행 조건 변경형이다. 2.2 전에 새 커밋으로 독립 확인한다.
+
+## 11. Stage 2.2 전 독립 확인 평가 (#15)
+
+[보고서 #15](20261117_eval_report_15.md): 2.1의 기준을 바꾸지 않고, 관찰하지 않은 새 커밋에 적용했다. 단계마다 커밋해 사전 고정을 남겼다.
+- R(ReleaseGuard) 20·W(AI Data Analyst) 20·P(Predict, GO 제외) 15 = mutant 55. KILLED 45·SURVIVED 10, 선택 실행 = 전체 실행 55/55.
+- SURVIVED 10개를 모두 분류했다. 이후 이력으로 확인한 결함 오라클은 0개. 테스트 대상 5개는 모두 원본 통과·mutant assertion 실패였다.
+- **confirmed ACTIONABLE은 W #23 1건**(coverage '실행됨' 줄, 명세 strong)이다. R 4건은 명세가 weak라 provisional이고, 그중 3건은 같은 CLI 커밋에서 나왔다.
+- 커밋당 제품 경로 비용 중앙값은 R 29.8초·W 14.1초(과거 스냅샷 기준). 사람 검토 시간은 블라인드가 깨져 측정하지 못했다(`NOT_MEASURED`).
+- 블라인드 A(외부 AI)와 Claude의 일치: 라벨 3/5, 의미 있음·없음 5/5.
+- **결론: HOLD.** R에서 confirmed가 없어 사람 시간을 쟀더라도 GO가 아니었다. W에서 한 건이 재현돼 NO-GO도 아니다. 정식 통합은 보류하고 2b로 간다.

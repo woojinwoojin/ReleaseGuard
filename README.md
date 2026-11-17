@@ -13,11 +13,12 @@
 | 문서 | 내용 |
 |---|---|
 | [docs/usage.md](docs/usage.md) | **사용법** — 설치, `analyze`, 보고서 읽는 법, 평가 명령 |
-| [docs/eval/reports_summary.md](docs/eval/reports_summary.md) | **평가 보고서 #1~#14 정리** |
+| [docs/eval/reports_summary.md](docs/eval/reports_summary.md) | **평가 보고서 #1~#15 정리** |
 | [docs/status_roadmap.md](docs/status_roadmap.md) | 현재 상태, 한계, 로드맵 |
 | [docs/design_stage1_7.md](docs/design_stage1_7.md) | Stage 1.7 설계 (T03·N07, 외부 리뷰 반영 확정) |
 | [docs/design_stage2_0.md](docs/design_stage2_0.md) | Stage 2.0 Mutation spike 설계 (확정, 결과 [#13](docs/eval/20261111_eval_report_13.md): Go) |
 | [docs/design_stage2_1.md](docs/design_stage2_1.md) | Stage 2.1 Mutation Value Eval 설계 (실행 전 고정, 결과 [#14](docs/eval/20261111_eval_report_14.md): 조건부 GO) |
+| [docs/design_stage2_2_confirmation.md](docs/design_stage2_2_confirmation.md) | Stage 2.2 전 독립 확인 평가 설계 (실행 전 고정, 결과 [#15](docs/eval/20261117_eval_report_15.md): HOLD) |
 | [docs/problem.md](docs/problem.md) · [docs/design.md](docs/design.md) · [docs/proposal.md](docs/proposal.md) | 문제 정의 · 설계 · 제안서 |
 | [docs/samples/report_142912b.md](docs/samples/report_142912b.md) | 보고서 샘플 |
 
@@ -75,7 +76,7 @@ python -m venv .venv
 1. ~~1.7 Reliability Gate~~ **완료**: T03·N07, coverage 실제 버전·위치 확인, 원본 node id 보존
 2. ~~2.0 Mutation spike~~ **완료 (Go)**: Cosmic Ray 어댑터, 지정 줄 40/40, 관련 테스트만 = 전체 40/40 ([#13](docs/eval/20261111_eval_report_13.md))
 3. ~~2.1 Value Eval~~ **완료 (조건부 GO)**: coverage가 '검증됨'으로 본 줄에서 테스트 보강 후보 4건 확인, 결함 위치 예측은 지지 안 됨 ([#14](docs/eval/20261111_eval_report_14.md))
-4. **2.2 조건부 통합**: 2.1에서 효과가 확인될 때만
+4. ~~2.2 전 독립 확인 평가~~ **완료 (HOLD)**: 새 코드베이스에서 confirmed 1건(W)만 재현, 사람 검토 비용 미측정 → 정식 통합 보류 ([#15](docs/eval/20261117_eval_report_15.md))
 5. **2b 배포 산출물 검증**: 컨테이너 시작 확인, CI 필수 단계 정책
 
 판정 구분력(Decision Utility)은 별도 측정 과제로 추적한다. 각 단계는 앞 단계의 평가에서 근거가 확인될 때만 시작한다. 자세한 내용: [status_roadmap.md 8장](docs/status_roadmap.md#8-로드맵)
