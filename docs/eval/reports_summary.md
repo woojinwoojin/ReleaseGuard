@@ -1,4 +1,4 @@
-# ReleaseGuard 평가 보고서 정리 (#1~#15)
+# ReleaseGuard 평가 보고서 정리 (#1~#16)
 
 기준: 2026-11-11 · 기간 2026-11-03 ~ 11-11 · 원문은 각 보고서 링크
 
@@ -21,6 +21,7 @@
 | [13](20261111_eval_report_13.md) | 11-11 | 2.0 Mutation spike (Cosmic Ray, Predict 5커밋·40개) | 지정 줄 40/40, 저장소 보존, 관련만 = 전체 40/40, KILLED 27·SURVIVED 13 | Go → 2.1 Value Eval |
 | [14](20261111_eval_report_14.md) | 11-11 | 2.1 Mutation Value Eval (SURVIVED 13개 분류 + SZZ 결함 줄 vs 대조군 + 테스트 추가) | ACTIONABLE 4건(coverage가 못 본 줄), SZZ vs 대조군 차이 없음 | 사전 기준상 GO → 2.2는 보고서만 |
 | [15](20261117_eval_report_15.md) | 11-17 | 2.2 전 독립 확인 평가 (새 커밋 11개·mutant 55, R·W·P) | 선택 = 전체 55/55, 차등 테스트 5/5 감지, confirmed는 W #23 1건(R은 provisional 4), 사람 검토 시간 미측정 | **HOLD** → 2b 추천 |
+| [16](20261117_eval_report_16.md) | 11-17 | 2b.0 Artifact Verification Spike (4주차, 결함 2·정상 8, V1·V2·V3) | V2가 W05를 원인 로그(`'ApiClient' object is not callable`)와 함께 3/3, V3가 W06을 사라진 단계 근거와 함께 잡음, 정상 FAIL 0. V1은 W05 못 잡음(`app.py`에 `def api()` 있음) | V2·V3로 2b.1 (추천) |
 
 ## 시험장
 
@@ -168,6 +169,7 @@
 | #12 | `out/eval/v18/`, 비교 `docs/eval/20261111_explore/compare_v17_v18.py` |
 | #13 | `docs/eval/v20_spike/`, 코드 `spikes/stage2_0/` |
 | #14 | `docs/eval/v21/`, 코드 `spikes/stage2_1/`, 사례·분류 `eval/*_2_1.yaml` |
+| #16 | `docs/eval/v2b0/`, 코드 `spikes/stage2b_0/`, 사례 `eval/artifact_cases_2b0.yaml` |
 | #15 | `docs/eval/v22c/`, 코드 `spikes/stage2_2_confirmation/`, 사례·분류 `eval/mutation_confirmation_*.yaml` |
 
 
@@ -208,3 +210,12 @@
 - 커밋당 제품 경로 비용 중앙값은 R 29.8초·W 14.1초(과거 스냅샷 기준). 사람 검토 시간은 블라인드가 깨져 측정하지 못했다(`NOT_MEASURED`).
 - 블라인드 A(외부 AI)와 Claude의 일치: 라벨 3/5, 의미 있음·없음 5/5.
 - **결론: HOLD.** R에서 confirmed가 없어 사람 시간을 쟀더라도 GO가 아니었다. W에서 한 건이 재현돼 NO-GO도 아니다. 정식 통합은 보류하고 2b로 간다.
+
+## 12. Stage 2b.0 Artifact Verification Spike (#16)
+
+[보고서 #16](20261117_eval_report_16.md): 배포 산출물 결함(W05 Dockerfile 진입점, W06 CI 테스트 단계 삭제)을 잡는 최소 검증을 4주차 저장소에서 확인했다.
+- **V2 격리된 컨테이너 준비 확인**: W05 FAIL 3/3. 컨테이너는 뜨지만 `/docs`가 500이고, 로그에 `TypeError: 'ApiClient' object is not callable`가 남는다. 정상 21회 모두 READY. 콜드 빌드 중앙값 98초, 캐시 빌드 8초, 준비 확인 5.5초.
+- **V3 CI 정책 검사**: W06에서 사라진 단계(`test` / `Run tests` / `pytest -rs`)를 근거로 FAIL. 이름 변경·작업 이동은 PASS.
+- **V1 정적 진입점 검사**: W05 PASS(기대 FAIL). `app.py`에 `def api()`가 있어, 이름은 있지만 ASGI 앱이 아니다. 설계의 사실 오류(P2)였다.
+- 판정은 바꾸지 않는다. W05·W06은 이미 REVIEW이고, 2b가 더하는 것은 고칠 수 있는 원인 근거다.
+

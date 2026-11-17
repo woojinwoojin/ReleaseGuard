@@ -1,6 +1,6 @@
 # ReleaseGuard — 현재 상태와 로드맵
 
-기준일: 2026-11-17 · 버전 0.2.0 · 판정 규칙 v3.2 · 테스트 194개 통과 · **Stage 1 기술 MVP 완료, Stage 1.7 완료** ([보고서 #12](eval/20261111_eval_report_12.md)) · **Stage 2.0 spike 완료 → Go** ([#13](eval/20261111_eval_report_13.md)) · **Stage 2.1 Value Eval → GO (조건부, 리뷰 정정)** ([#14](eval/20261111_eval_report_14.md)) · **Stage 2 종료** (2026-11-17, 외부 리뷰 승인): Mutation 연구 완료 · Mutation 제품 통합(2.2) **HOLD** ([#15](eval/20261117_eval_report_15.md)) · spike 보존 · 다음: **Stage 2b.0 Artifact Verification Spike** 설계
+기준일: 2026-11-17 · 버전 0.2.0 · 판정 규칙 v3.2 · 테스트 194개 통과 · **Stage 1 기술 MVP 완료, Stage 1.7 완료** ([보고서 #12](eval/20261111_eval_report_12.md)) · **Stage 2.0 spike 완료 → Go** ([#13](eval/20261111_eval_report_13.md)) · **Stage 2.1 Value Eval → GO (조건부, 리뷰 정정)** ([#14](eval/20261111_eval_report_14.md)) · **Stage 2 종료** (2026-11-17, 외부 리뷰 승인): Mutation 연구 완료 · Mutation 제품 통합(2.2) **HOLD** ([#15](eval/20261117_eval_report_15.md)) · spike 보존 · **Stage 2b.0 spike 완료** ([#16](eval/20261117_eval_report_16.md)): V2 컨테이너 준비 확인·V3 CI 정책 검사는 기준 충족, V1 정적 진입점은 W05 못 잡음 · 다음: 2b.1 범위 결정
 
 Stage 1 종료 심사: [Eval 보고서 #11](eval/20261111_eval_report_11.md). **제품 수준의 판정 구분력·실제 사용자 효용은 아직 미검증**.
 
