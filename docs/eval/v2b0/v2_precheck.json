@@ -1,0 +1,66 @@
+{
+ "runs": [
+  {
+   "started": "2026-11-17T15:38:07",
+   "docker": {
+    "client": "29.8.2",
+    "server": "29.8.2",
+    "platform": "linux/amd64"
+   },
+   "run_options": [
+    "--network",
+    "none",
+    "--memory",
+    "512m",
+    "--cpus",
+    "1",
+    "--pids-limit",
+    "256",
+    "--cap-drop",
+    "ALL",
+    "--security-opt",
+    "no-new-privileges"
+   ],
+   "build_network": "default (pip 설치에 외부 접근)",
+   "repo_before": [
+    "fee00394c47b3135d949f376969988ce5b174a1d",
+    ""
+   ],
+   "leftovers_before": {
+    "containers": [],
+    "images": []
+   },
+   "base_image_digests": [],
+   "leftovers_after": {
+    "containers": [],
+    "images": []
+   },
+   "repo_after": [
+    "fee00394c47b3135d949f376969988ce5b174a1d",
+    ""
+   ],
+   "finished": "2026-11-17T15:40:09",
+   "repo_preserved": true
+  }
+ ],
+ "results": {
+  "N0#1": {
+   "image": "rg2b0-n0-1",
+   "cold": true,
+   "seconds": {
+    "build": 113.99,
+    "start": 1.08,
+    "ready": 5.32,
+    "cleanup": 0.96
+   },
+   "image_healthcheck": null,
+   "ready_timeout_seconds": 30,
+   "status": "PASS",
+   "stage": "ready",
+   "ready_by": "probe http://localhost:8000/docs",
+   "probe_result": "200",
+   "expected": "PASS",
+   "match": true
+  }
+ }
+}
