@@ -1,0 +1,107 @@
+# Stage 2b.0 Artifact Verification Spike — 사례와 기대값 (설계 docs/design_stage2b_0.md 6장)
+# 검증기(V1·V2·V3) 실행 전에 커밋한다. 결과를 보고 사례를 더하거나 바꾸지 않는다 (바꾸면 docs/eval/v2b0/protocol_changes.yaml).
+# 결과 값: PASS / FAIL / INCONCLUSIVE / NOT_RUN (V2는 STARTED_ONLY 추가). 판정(SAFE·REVIEW·BLOCK)과 분리.
+# seed: base 스냅샷에 find/replace 편집(seeds_week4.yaml과 같은 방식). 상대 검사(V3a)의 base는 seed면 base 커밋, 실제 커밋이면 부모 커밋.
+repo: ../2026-10/week4-docker-aws   # release-guard 루트 기준. 사용자 자신의 저장소(신뢰하는 실험용)
+base: fee0039
+v2_probe:                            # 이미지에 HEALTHCHECK가 없을 때 쓰는 사전 정의 엔드포인트 (출처: compose api healthcheck, compose는 실행 안 함)
+  url: http://localhost:8000/docs
+  ready_timeout_seconds: 30
+  poll_seconds: 0.5
+v2_repeats: 3                         # 콜드 빌드 1 + 캐시 빌드 2
+cases:
+  - id: W05
+    kind: seed
+    description: Dockerfile 실행 명령 오타 (seeds_week4.yaml W05 그대로)
+    edits:
+      - path: Dockerfile
+        find: CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+        replace: CMD ["uvicorn", "app:api", "--host", "0.0.0.0", "--port", "8000"]
+    expected: {V1: FAIL, V2: FAIL, V3a: PASS, V3b: PASS}
+    expected_evidence: "V1: 이름 api가 app.py에 정의되지 않음. V2: 시작 실패 원인이 컨테이너 로그에 있음"
+  - id: W06
+    kind: seed
+    description: CI 테스트 단계 삭제 (seeds_week4.yaml W06 그대로)
+    edits:
+      - path: .github/workflows/ci.yml
+        find: |2
+                - name: Run tests
+                  run: pytest -rs  # -rs: 건너뛴 테스트가 있으면 이유를 출력한다
+        replace: ""
+    expected: {V1: PASS, V2: PASS, V3a: FAIL, V3b: FAIL}
+    expected_evidence: "V3: 작업 test의 단계 'Run tests'(pytest -rs)가 사라짐"
+  - id: N0
+    kind: seed
+    description: base 그대로 (편집 없음)
+    edits: []
+    expected: {V1: PASS, V2: PASS, V3a: PASS, V3b: PASS}
+  - id: N1
+    kind: commit
+    commit: 6a987e0
+    description: 실제 커밋 — CI 추가 (Actions push success)
+    expected: {V1: NOT_RUN, V2: NOT_RUN, V3a: NOT_RUN, V3b: PASS}
+    note: Dockerfile이 아직 없음, 부모 커밋에 워크플로 없음
+  - id: N2
+    kind: commit
+    commit: f54b612
+    description: 실제 커밋 — Dockerfile 추가 + CI build 작업 (Actions push success)
+    expected: {V1: PASS, V2: PASS, V3a: PASS, V3b: PASS}
+  - id: N3
+    kind: commit
+    commit: cc36c47
+    description: 실제 커밋 — compose 추가 (Actions push success)
+    expected: {V1: PASS, V2: PASS, V3a: PASS, V3b: PASS}
+  - id: DN1
+    kind: seed
+    description: Docker 정상 1 — 유효한 진입점 형식 변경 (python -m uvicorn)
+    edits:
+      - path: Dockerfile
+        find: CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+        replace: CMD ["python", "-m", "uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+    expected: {V1: PASS, V2: PASS, V3a: PASS, V3b: PASS}
+  - id: DN2
+    kind: seed
+    description: Docker 정상 2 — 서비스가 그대로 뜨는 설정 변경 (--timeout-keep-alive 추가)
+    edits:
+      - path: Dockerfile
+        find: CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+        replace: CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000", "--timeout-keep-alive", "10"]
+    expected: {V1: PASS, V2: PASS, V3a: PASS, V3b: PASS}
+  - id: CN1
+    kind: seed
+    description: CI 정상 1 — 테스트 단계 이름만 변경, 명령 유지
+    edits:
+      - path: .github/workflows/ci.yml
+        find: "      - name: Run tests\n"
+        replace: "      - name: Unit tests\n"
+    expected: {V1: PASS, V2: PASS, V3a: PASS, V3b: PASS}
+  - id: CN2
+    kind: seed
+    description: CI 정상 2 — 테스트 단계를 새 작업 unit으로 옮기고 build가 test·unit을 기다림, 실행 계약 유지
+    edits:
+      - path: .github/workflows/ci.yml
+        find: |2
+                - name: Run tests
+                  run: pytest -rs  # -rs: 건너뛴 테스트가 있으면 이유를 출력한다
+        replace: ""
+      - path: .github/workflows/ci.yml
+        find: "  # 테스트가 통과해야 이미지를 빌드한다."
+        replace: |2-
+            unit:
+              runs-on: ubuntu-latest
+              steps:
+                - uses: actions/checkout@v5
+                - uses: actions/setup-python@v6
+                  with:
+                    python-version: "3.13"
+                    cache: pip
+                - name: Install dependencies
+                  run: pip install -r requirements.txt
+                - name: Run tests
+                  run: pytest -rs
+
+            # 테스트가 통과해야 이미지를 빌드한다.
+      - path: .github/workflows/ci.yml
+        find: "    needs: test\n"
+        replace: "    needs: [test, unit]\n"
+    expected: {V1: PASS, V2: PASS, V3a: PASS, V3b: PASS}
