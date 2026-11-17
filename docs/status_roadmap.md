@@ -1,6 +1,6 @@
 # ReleaseGuard — 현재 상태와 로드맵
 
-기준일: 2026-11-17 · 버전 0.2.0 · 판정 규칙 v3.2 · 테스트 194개 통과 · **Stage 1 기술 MVP 완료, Stage 1.7 완료** ([보고서 #12](eval/20261111_eval_report_12.md)) · **Stage 2.0 spike 완료 → Go** ([#13](eval/20261111_eval_report_13.md)) · **Stage 2.1 Value Eval → GO (조건부, 리뷰 정정)** ([#14](eval/20261111_eval_report_14.md)) · **Stage 2.2 독립 확인 평가 → HOLD** ([#15](eval/20261117_eval_report_15.md), 2026-11-17) · 다음: 2b 배포 산출물 검증 (추천)
+기준일: 2026-11-17 · 버전 0.2.0 · 판정 규칙 v3.2 · 테스트 194개 통과 · **Stage 1 기술 MVP 완료, Stage 1.7 완료** ([보고서 #12](eval/20261111_eval_report_12.md)) · **Stage 2.0 spike 완료 → Go** ([#13](eval/20261111_eval_report_13.md)) · **Stage 2.1 Value Eval → GO (조건부, 리뷰 정정)** ([#14](eval/20261111_eval_report_14.md)) · **Stage 2 종료** (2026-11-17, 외부 리뷰 승인): Mutation 연구 완료 · Mutation 제품 통합(2.2) **HOLD** ([#15](eval/20261117_eval_report_15.md)) · spike 보존 · 다음: **Stage 2b.0 Artifact Verification Spike** 설계
 
 Stage 1 종료 심사: [Eval 보고서 #11](eval/20261111_eval_report_11.md). **제품 수준의 판정 구분력·실제 사용자 효용은 아직 미검증**.
 
@@ -191,6 +191,11 @@ Stage 1.7은 기능 확장이 아니라 이미 발견한 SAFE 경계의 보완�
 ### 현재 확정 정책과 보류 항목
 
 - **확정:** Stage 1 기술 MVP 종료, 1.7의 테스트 실행 경계 보완 우선, 2.0은 Mutation **실험**, 2.2는 효과 확인 시에만(확인 평가 결과 HOLD, #15), 2b는 W05/W06 검출 기준을 수정.
+- **확정 (2026-11-17, Stage 2 종료):**
+  - Mutation 연구는 완료다. 기술적 실행 가능성(2.0)과, 기존 coverage에 없는 독립적 추가 가치 1건(#15 W #23)을 확인했다.
+  - Mutation 제품 통합(2.2)은 HOLD다. 다른 코드베이스에서 반복되는 confirmed 사례와 사람 검토 비용 근거가 부족하다.
+  - Mutation spike는 후속 연구의 기준선으로 보존한다: `spikes/stage2_1/mutlib.py`, `spikes/stage2_2_confirmation/`, 선정 규칙, 평가 데이터, 차등 테스트.
+- **확정 (2b 원칙):** 2b는 mutation과 다른 질문(배포 산출물이 동작 계약을 만족하는가)을 다룬다. 순서는 2b.0 spike(W05·W06을 재현하고, 잡으려면 어떤 검증이 필요한지 확인) → 2b.1 Value Eval(정상 Docker·CI 변경에서의 과잉 경고 포함) → 2b.2 조건부 선택 기능이다. 결함 정의 → 최소 검증기 실험 → 근거가 있을 때만 통합한다. **새 검증 결과는 곧바로 판정(SAFE·REVIEW·BLOCK)에 연결하지 않는다** (Decision Utility 11/12 과잉 경고 문제를 키우지 않기 위해). 컨테이너 시작은 코드 실행이므로 신뢰할 수 없는 저장소는 격리 없이 실행하지 않는다.
 - **확정:** 릴리즈 판정은 보수적 게이트, **1차 사용자 가치 제안은 검증 공백 보고서**. 현재 경고 구분력 부족을 숨기지 않음.
 - **확정·구현 (1.7):** T03 원인 코드 4개(REVIEW), 미지원 수집 설정은 보류 + N07, scope 그대로, 삭제 소스 N06은 NOTE 유지.
 - **보류:** Mutation 도구 선택과 Windows·Python 3.13 호환성, 실행 격리 범위는 2.0에서 검증.
