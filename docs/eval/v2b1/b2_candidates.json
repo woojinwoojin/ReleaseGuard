@@ -186,8 +186,10 @@
    "selected_reason": "규칙 include 충족",
    "label": "UNCLEAR",
    "label_reason": "Windows·macOS 전체 매트릭스에서 아직 지원하는 3.14·3.14t를 제외 (3.15·3.15t만 남김). 테스트 실행은 남지만 범위 축소가 계약 위반인지는 정책에 달림",
-   "label_status": "CLAUDE_DRAFT",
-   "user_review": true
+   "label_status": "REVIEWED",
+   "user_review": true,
+   "label_review_note": "외부 리뷰(사용자 전달, 2026-11-18): UNCLEAR 유지. 변경 후에도 Ubuntu의 3.14·3.14t 테스트가 남아 K2 최소 조건(실행·실패 전파)은 유지. 사유: 매트릭스 범위 축소(MATRIX_COVERAGE_REDUCED)",
+   "unclear_kind": "MATRIX_COVERAGE_REDUCED"
   },
   {
    "repo": "fastapi/fastapi",
@@ -693,8 +695,10 @@
    "selected_reason": "규칙 include 충족",
    "label": "UNCLEAR",
    "label_reason": "매트릭스에서 3.13t(free-threaded) 제거, 3.13은 남음. 지원 중단 근거가 diff·메시지에 없어 범위 축소가 계약 위반인지 정책에 달림",
-   "label_status": "CLAUDE_DRAFT",
-   "user_review": true
+   "label_status": "REVIEWED",
+   "user_review": true,
+   "label_review_note": "외부 리뷰(사용자 전달, 2026-11-18): UNCLEAR 유지. 3.13t가 CI 매트릭스와 pyproject tox 환경 목록에서 함께 제거(의도적 범위 축소), 3.13·3.14t는 남음. 사유: 매트릭스 범위 축소(MATRIX_COVERAGE_REDUCED)",
+   "unclear_kind": "MATRIX_COVERAGE_REDUCED"
   }
  ],
  "skipped": [

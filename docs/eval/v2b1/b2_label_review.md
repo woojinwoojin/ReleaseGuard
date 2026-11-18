@@ -61,7 +61,7 @@
 -        python-version: [ "3.14", "3.14t", "3.15", "3.15t" ]
 +        python-version: [ "3.15", "3.15t" ]
 ```
-- 사용자 확인: 
+- 사용자 확인: 외부 리뷰(사용자 전달, 2026-11-18): UNCLEAR 유지. 변경 후에도 Ubuntu의 3.14·3.14t 테스트가 남아 K2 최소 조건(실행·실패 전파)은 유지. 사유: 매트릭스 범위 축소(MATRIX_COVERAGE_REDUCED)
 
 ## 4. fastapi/fastapi `28eaf6a22c` — 초안 **CONTRACT_PRESERVED**
 
@@ -184,4 +184,4 @@
 ```diff
 -          - {python: '3.13t'}
 ```
-- 사용자 확인: 
+- 사용자 확인: 외부 리뷰(사용자 전달, 2026-11-18): UNCLEAR 유지. 3.13t가 CI 매트릭스와 pyproject tox 환경 목록에서 함께 제거(의도적 범위 축소), 3.13·3.14t는 남음. 사유: 매트릭스 범위 축소(MATRIX_COVERAGE_REDUCED)

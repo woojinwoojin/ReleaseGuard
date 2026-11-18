@@ -20,3 +20,14 @@ changes:
     interpretation_rule: >-
       25개와 34개는 독립 평가 집합이 아니다. 각각의 성능을 별도 재현으로 취급하지 않고, '병합 포함으로 정확도가 달라졌다'는 사후 해석을 하지 않는다.
       라벨 결과 UNCLEAR가 많아도 숫자를 채우려고 사례를 바꾸지 않는다
+  - id: P2
+    date: 2026-11-18
+    kind: evaluation_rule_clarification
+    status: 확정 (외부 리뷰, V3 실행 전)
+    what: B2 라벨 UNCLEAR와 V3 기대값의 관계
+    rule: >-
+      V3가 검사하는 계약은 K2(push·PR에서 필수 테스트가 실행되고 실패가 전파되는가)뿐이다. 매트릭스 범위(지원 버전·OS 조합을 얼마나 검사하는가)는
+      다른 계약이고 V3 범위 밖이다. UNCLEAR를 기대 INCONCLUSIVE와 같게 보지 않는다. UNCLEAR 사례는 기대값 없이 V3 결과만 따로 보고하고,
+      정상 과잉(PRESERVED에서 FAIL)과 탐지(REMOVED에서 FAIL)의 분모에서 뺀다.
+      UNCLEAR 사례에서 V3가 FAIL을 내면 'K2 위반을 주장한 것'이므로 근거를 따로 검토해 보고한다(오탐 후보)
+    cases: [fastapi/fastapi 980cee9678, pallets/flask eb58d862cc]  # 둘 다 UNCLEAR 유지, unclear_kind MATRIX_COVERAGE_REDUCED
