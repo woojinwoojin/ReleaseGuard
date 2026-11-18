@@ -41,3 +41,28 @@ changes:
     kind: note
     what: 빌드 캐시는 지우지 않았다 (설계 5장대로 기록만). 실행 뒤 docker system df 기준 Build Cache 11.65GB(재사용 가능 8.99GB) — 이번 실험분만의 크기는 따로 재지 않음. 접두어 rg2b0- 컨테이너·이미지 잔여 0
 
+  - id: P6
+    date: 2026-11-18
+    kind: fact_correction
+    scope: 기존 관찰의 원인 해석 정정. 새 실험 규칙 아님. 사례·기대값·V2 결과·정상 사례 결과는 바꾸지 않는다
+    what: P3과 보고서 #16 1장·3장의 "uvicorn이 app:api(일반 함수)를 ASGI2 앱으로 감쌌다"는 틀린 메커니즘
+    evidence: >-
+      uvicorn 0.54.0 config.py 512~533줄 (4주차 requirements 고정 버전): load()가 가져온 객체를 인자 없이 한 번 호출한다(factory 자동 감지).
+      api()는 인자가 없어 성공하고 ApiClient 인스턴스를 돌려주며, --factory가 없으므로 "ASGI app factory detected" 경고를 남긴다.
+      interface auto 판별에서 인스턴스의 __call__이 코루틴이 아니므로 asgi2로 분류해 ASGI2Middleware로 감싼다.
+      첫 요청에서 asgi2.py `self.app(scope)`가 인스턴스를 호출 → "TypeError: 'ApiClient' object is not callable".
+      함수 api를 감쌌다면 api(scope)에서 인자 개수 오류가 났어야 하고, 로그의 마지막 프레임이 asgi2.py인 것과 맞지 않는다
+    consequence: >-
+      앱으로 쓰인 것은 함수 api가 아니라 api()의 반환값 ApiClient다. "떠 있지만 준비되지 않음(첫 요청 실패)"이라는 결론과
+      W05 V2 FAIL 3/3은 그대로. V1 결론(못 잡음)도 그대로 — 인자 없는 함수·반환 표시 ApiClient로 의심 신호는 가능하지만 확정 불가
+    record_gap: >-
+      시작 시 factory 경고는 결과 파일에 없다. log_tail이 마지막 줄만 저장해 시작 로그가 잘렸다(경고 존재는 소스 기준 추론, 로그로 미확인)
+    next: >-
+      2b.1 가설로만 기록 — 시작 로그를 따로 보존하고 factory 경고가 실제 준비 실패를 얼마나 일찍 예측하는지 측정.
+      정상 factory 앱(--factory 없이 자동 감지되는 정상 사례)을 반례로 포함. 경고는 보조 정보, V2 판정 근거는 준비 확인 그대로
+  - id: P7
+    date: 2026-11-18
+    kind: record_clarification
+    what: 보고서 #16 3장 "1회 전체 17.0초"의 분모
+    evidence: v2_result.json에서 NOT_RUN을 뺀 27회(콜드 9 + 캐시 18)의 build+start+ready+cleanup 합 중앙값. 캐시 빌드 PASS 16회만은 15.8초
+    consequence: 17.0초는 이번 실험의 콜드·캐시 구성비에 좌우되므로 일반적인 1회 실행 시간 추정치로 쓰지 않는다
