@@ -69,8 +69,8 @@ def main(include_merges: bool = False, out_path: Path = OUT) -> int:
             if when < since or len(picked) >= RULE["cap"]["per_repo"]:
                 break
             ps = parents.split()
-            if len(ps) != 1 and not include_merges:
-                out["skipped"].append({"repo": name, "sha": sha, "why": "병합 커밋"})
+            if len(ps) > 2 or (len(ps) == 2 and not include_merges):
+                out["skipped"].append({"repo": name, "sha": sha, "why": "부모 3개 이상인 병합" if len(ps) > 2 else "병합 커밋"})
                 continue
             files = [f for f in git(repo, "diff", "--name-only", ps[0], sha).splitlines() if WF.match(f)]
             if not files:
@@ -98,7 +98,7 @@ def main(include_merges: bool = False, out_path: Path = OUT) -> int:
             bots += is_bot
             picked.append({"repo": name, "head_sha": sha, "base_sha": ps[0], "committed_at": cdate, "author_is_bot_or_dep": is_bot,
                            "changed_workflows": files, "message_first_line": subject[:200],
-                           "selected_reason": "규칙 include 충족" + (" (봇·의존성)" if is_bot else ""),
+                           "is_merge": len(ps) == 2, "selected_reason": "규칙 include 충족" + (" (봇·의존성)" if is_bot else ""),
                            "label": None, "label_reason": None, "label_status": None})
         out["commits"] += picked
         print(f"{name:20} {len(picked):2}개 (봇·의존성 {bots}) {out['repo_heads'][name]['head'][:10]}")
@@ -112,7 +112,7 @@ def main(include_merges: bool = False, out_path: Path = OUT) -> int:
 if __name__ == "__main__":
     import argparse
     ap = argparse.ArgumentParser()
-    ap.add_argument("--include-merges", action="store_true", help="병합 커밋을 1차 부모 대비 변경으로 포함 (규칙 변경 후보, 미리보기용)")
+    ap.add_argument("--original-rule", action="store_true", help="P1 이전 규칙(병합 제외)으로 추출 — 비교용")
     ap.add_argument("--out", type=Path, default=OUT)
     a = ap.parse_args()
-    raise SystemExit(main(a.include_merges, a.out))
+    raise SystemExit(main(not a.original_rule and RULE["merge_policy"]["include_merges"], a.out))

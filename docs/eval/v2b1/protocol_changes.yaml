@@ -3,10 +3,20 @@ changes:
   - id: P1
     date: 2026-11-18
     kind: selection_rule_issue
-    status: 사용자 결정 대기
+    status: 승인 (2026-11-18, 외부 리뷰·사용자) — 결과 확인 전 수정된 프로토콜. 처음부터 사전 등록된 규칙이 아니다
     what: B2 선정 규칙의 '병합 커밋 제외' 때문에 병합으로 PR을 합치는 저장소(pytest, flask)에서 표본이 거의 봇 커밋만 남음
     evidence: >-
       규칙 그대로 추출(b2_candidates.json): pytest 4개(봇·의존성 3), fastapi 10, requests 10, flask 1개(봇·의존성 1), 총 25.
       pytest 건너뜀 중 병합 커밋 11, flask 5. 두 저장소의 기본 브랜치 1차 부모 이력은 실제 변경이 대부분 병합 커밋으로 들어온다.
     candidate_fix: 병합 커밋을 1차 부모 대비 diff로 변경 단위에 포함 (미리보기 총 34 — pytest 8, fastapi 10, requests 10, flask 6). 다른 규칙은 그대로
     leakage: 라벨·V3 실행 전. 본 것은 커밋 목록(메시지·작성자)뿐이고 V3 결과는 없다. 판단 근거는 표본 수와 구성이지 V3 결과가 아니다
+    decision: >-
+      병합 커밋 포함, 첫 번째 부모 대비 diff. 부모 3개 이상인 병합은 사유와 함께 제외. 다른 규칙(기간·정렬·봇 상한·patch-id·개수) 그대로.
+      목적은 표본 대표성(병합 관행에 따른 체계적 편향 제거)이지 정확도 개선이 아니다
+    result: >-
+      P1 규칙 34개(pytest 8, fastapi 10, requests 10, flask 6, 그중 병합 10) → b2_candidates.json.
+      원래 규칙 25개는 b2_candidates_original_rule.json에 보존. 공통 24, P1에만 10(pytest 병합 5·flask 병합 5),
+      원래에만 1(pytest 24e7f30b02 봇 커밋 — 더 최신인 dependabot 병합 1211245aa7이 봇 상한 3을 먼저 채움)
+    interpretation_rule: >-
+      25개와 34개는 독립 평가 집합이 아니다. 각각의 성능을 별도 재현으로 취급하지 않고, '병합 포함으로 정확도가 달라졌다'는 사후 해석을 하지 않는다.
+      라벨 결과 UNCLEAR가 많아도 숫자를 채우려고 사례를 바꾸지 않는다

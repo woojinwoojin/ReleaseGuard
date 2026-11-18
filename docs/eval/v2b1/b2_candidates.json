@@ -1,6 +1,6 @@
 {
  "rule_file": "eval/b2_selection_2b1.yaml",
- "extracted": "2026-11-18T14:40:24",
+ "extracted": "2026-11-18T14:49:16",
  "clones": {
   "pytest-dev/pytest": ".rg/external/pytest-dev_pytest",
   "fastapi/fastapi": ".rg/external/fastapi_fastapi",
@@ -28,6 +28,23 @@
  "commits": [
   {
    "repo": "pytest-dev/pytest",
+   "head_sha": "1211245aa72f1efe07bcfce63a7c543156cee976",
+   "base_sha": "afac7979e3d0d30914aa986192dcbbc48379cb86",
+   "committed_at": "2026-11-02T17:41:27+01:00",
+   "author_is_bot_or_dep": true,
+   "changed_workflows": [
+    ".github/workflows/deploy.yml",
+    ".github/workflows/test.yml"
+   ],
+   "message_first_line": "Merge pull request #15309 from pytest-dev/dependabot/github_actions/github-actions-35a4fca628",
+   "is_merge": true,
+   "selected_reason": "규칙 include 충족 (봇·의존성)",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "pytest-dev/pytest",
    "head_sha": "c9bf1edf9e0d388f3e7bebc88576e608ffbc40a4",
    "base_sha": "9225e4fe0e184ebe63d8f7a1a48405d195a553f2",
    "committed_at": "2026-10-21T10:48:49+02:00",
@@ -40,6 +57,7 @@
     ".github/workflows/update-plugin-list.yml"
    ],
    "message_first_line": "build(deps): Bump the github-actions group with 2 updates (#15233)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
    "label": null,
    "label_reason": null,
@@ -56,6 +74,7 @@
     ".github/workflows/test.yml"
    ],
    "message_first_line": "build(deps): Bump actions/download-artifact from 8.0.1 to 8.0.2 (#15212)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
    "label": null,
    "label_reason": null,
@@ -63,15 +82,52 @@
   },
   {
    "repo": "pytest-dev/pytest",
-   "head_sha": "24e7f30b020f5d2981106cd1927669af3e2daa8e",
-   "base_sha": "c333125d977b323fafbeb0e09cd86e203ab4af39",
-   "committed_at": "2026-09-28T06:58:57+02:00",
-   "author_is_bot_or_dep": true,
+   "head_sha": "849fbda3ce87e3829b30d005979bee59928c01ff",
+   "base_sha": "d07c5d4e3956cb6b8ff7f9f49c0bc4d819a15349",
+   "committed_at": "2026-07-22T13:51:20+02:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/deploy.yml",
+    ".github/workflows/doc-check-links.yml",
+    ".github/workflows/prepare-release-pr.yml",
+    ".github/workflows/test.yml",
+    ".github/workflows/update-plugin-list.yml"
+   ],
+   "message_first_line": "Merge pull request #14122 from RonnyPfannschmidt/enable-uv",
+   "is_merge": true,
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "head_sha": "6153372429f86e6ff224548d62e54945def76d8f",
+   "base_sha": "efc013416e45d9162dc00dca9e4a83e1ef1c4089",
+   "committed_at": "2026-07-13T17:32:14+03:00",
+   "author_is_bot_or_dep": false,
    "changed_workflows": [
     ".github/workflows/test.yml"
    ],
-   "message_first_line": "build(deps): Bump codecov/codecov-action from 7.1.0 to 7.1.1 (#15111)",
-   "selected_reason": "규칙 include 충족 (봇·의존성)",
+   "message_first_line": "Merge pull request #14701 from Pierre-Sassoulas/fix-pypy311-hypothesis",
+   "is_merge": true,
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "head_sha": "ea98f72badc085bdff17c784cfe9a611af5196a4",
+   "base_sha": "c9d940f12ed381320f7b21ca8f0987190cfff934",
+   "committed_at": "2026-05-27T22:53:14+03:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/test.yml"
+   ],
+   "message_first_line": "Merge pull request #14527 from bluetech/py315",
+   "is_merge": true,
+   "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
    "label_status": null
@@ -86,6 +142,23 @@
     ".github/workflows/test.yml"
    ],
    "message_first_line": "Upload junit reports codecov (#13778)",
+   "is_merge": false,
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "head_sha": "dd389d7f9290d8581a1c3d14c5adc07a4dda9bec",
+   "base_sha": "6b6502e94b78b41951b70265a84187a419e8ce8c",
+   "committed_at": "2025-11-20T21:52:10+01:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/test.yml"
+   ],
+   "message_first_line": "Merge pull request #13984 from bluetech/ci-windows-coverage",
+   "is_merge": true,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -101,6 +174,7 @@
     ".github/workflows/test.yml"
    ],
    "message_first_line": "👷 Limit the full test matrix to Python 3.15 (#16776)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -133,6 +207,7 @@
     ".github/workflows/zizmor.yml"
    ],
    "message_first_line": "🔒️ Generate GH actions worklow lockfile and bump Zizmor (#16736)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
    "label": null,
    "label_reason": null,
@@ -148,6 +223,7 @@
     ".github/workflows/test.yml"
    ],
    "message_first_line": "💥 Drop support for Python 3.10 (#16737)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -163,6 +239,7 @@
     ".github/workflows/test.yml"
    ],
    "message_first_line": "⬆️ Add support for Python 3.15 (#16727)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -191,6 +268,7 @@
     ".github/workflows/zizmor.yml"
    ],
    "message_first_line": "⬆ Bump the github-actions group with 7 updates (#16658)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
    "label": null,
    "label_reason": null,
@@ -206,6 +284,7 @@
     ".github/workflows/test.yml"
    ],
    "message_first_line": "🐛 Cache OpenTelemetry tracers to preserve warning deduplication (#16468)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -235,6 +314,7 @@
     ".github/workflows/zizmor.yml"
    ],
    "message_first_line": "⬆ Bump the github-actions group with 3 updates (#16438)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
    "label": null,
    "label_reason": null,
@@ -263,6 +343,7 @@
     ".github/workflows/translate.yml"
    ],
    "message_first_line": "⬆️ Bump `setup-uv` action to `10.0.1` (#16249)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -278,6 +359,7 @@
     ".github/workflows/zizmor.yml"
    ],
    "message_first_line": "👷 Fix branch name in `zizmor.yml` workflow (`main` -> `master`) (#16178)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -293,6 +375,7 @@
     ".github/workflows/pre-commit.yml"
    ],
    "message_first_line": "👷 Use GitHub CLI for Git authentication (#16166)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -309,6 +392,7 @@
     ".github/workflows/zizmor.yml"
    ],
    "message_first_line": "Bump the actions group with 4 updates (#7636)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
    "label": null,
    "label_reason": null,
@@ -324,6 +408,7 @@
     ".github/workflows/codeql-analysis.yml"
    ],
    "message_first_line": "Bump the actions group with 3 updates (#7628)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
    "label": null,
    "label_reason": null,
@@ -343,6 +428,7 @@
     ".github/workflows/zizmor.yml"
    ],
    "message_first_line": "Bump the actions group with 2 updates (#7596)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
    "label": null,
    "label_reason": null,
@@ -358,6 +444,7 @@
     ".github/workflows/lint.yml"
    ],
    "message_first_line": "Inline pre-commit linting (#7539)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -373,6 +460,7 @@
     ".github/workflows/run-tests.yml"
    ],
    "message_first_line": "Formalize 3.15 support (#7422)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -388,6 +476,7 @@
     ".github/workflows/run-tests.yml"
    ],
    "message_first_line": "Add 3.14t support to CI (#7419)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -403,6 +492,7 @@
     ".github/workflows/typecheck.yml"
    ],
    "message_first_line": "Add inline types to Requests (#7272)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -422,6 +512,7 @@
     ".github/workflows/zizmor.yml"
    ],
    "message_first_line": "Add Zizmor workflow and make initial updates",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -437,6 +528,7 @@
     ".github/workflows/publish.yml"
    ],
    "message_first_line": "Remove harden runner from publish workflow (#7207)",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -452,6 +544,82 @@
     ".github/workflows/publish.yml"
    ],
    "message_first_line": "Update publish workflow and add test pypi option",
+   "is_merge": false,
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "pallets/flask",
+   "head_sha": "728c5e440af704a786384159184f695cf04ecbe7",
+   "base_sha": "d73fa1cdcbd8b1465c151db8924ba58b1dd14e35",
+   "committed_at": "2026-10-07T06:56:05-07:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/tests.yaml"
+   ],
+   "message_first_line": "drop support for Python 3.10 (#6168)",
+   "is_merge": true,
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "pallets/flask",
+   "head_sha": "6a2f545bfd8ed31e19066a299296917e034aca58",
+   "base_sha": "36e4a824f340fdee7ed50937ba8e7f6bc7d17f81",
+   "committed_at": "2026-07-30T10:29:33-07:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/lock.yaml",
+    ".github/workflows/pre-commit.yaml",
+    ".github/workflows/publish.yaml",
+    ".github/workflows/tests.yaml",
+    ".github/workflows/zizmor.yaml"
+   ],
+   "message_first_line": "Merge branch 'stable'",
+   "is_merge": true,
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "pallets/flask",
+   "head_sha": "e4e4bf6543ac1f132afddb1ffd0bf02bea4c93f7",
+   "base_sha": "7ef2946fb5151b745df30201b8c27790cac53875",
+   "committed_at": "2026-04-05T11:24:48-07:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/pre-commit.yaml",
+    ".github/workflows/publish.yaml",
+    ".github/workflows/tests.yaml",
+    ".github/workflows/zizmor.yaml"
+   ],
+   "message_first_line": "Merge branch 'stable'",
+   "is_merge": true,
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "pallets/flask",
+   "head_sha": "4cae5d8e411b1e69949d8fae669afeacbd3e5908",
+   "base_sha": "3a9d54f3da1de540adfdf6f1e2dea6fc0006e15d",
+   "committed_at": "2026-03-08T16:21:50-07:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/lock.yaml",
+    ".github/workflows/pre-commit.yaml",
+    ".github/workflows/publish.yaml",
+    ".github/workflows/tests.yaml",
+    ".github/workflows/zizmor.yaml"
+   ],
+   "message_first_line": "Merge branch 'stable'",
+   "is_merge": true,
    "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
@@ -469,7 +637,27 @@
     ".github/workflows/tests.yaml"
    ],
    "message_first_line": "update dev dependencies",
+   "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "pallets/flask",
+   "head_sha": "eb58d862cc4a8f31a369b6e9ad1724e9e642f13f",
+   "base_sha": "2579ce9f18e67ec3213c6eceb5240310ccd46af8",
+   "committed_at": "2026-01-24T17:15:54-08:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/lock.yaml",
+    ".github/workflows/pre-commit.yaml",
+    ".github/workflows/publish.yaml",
+    ".github/workflows/tests.yaml"
+   ],
+   "message_first_line": "Merge branch 'stable'",
+   "is_merge": true,
+   "selected_reason": "규칙 include 충족",
    "label": null,
    "label_reason": null,
    "label_status": null
@@ -478,8 +666,8 @@
  "skipped": [
   {
    "repo": "pytest-dev/pytest",
-   "sha": "1211245aa72f1efe07bcfce63a7c543156cee976",
-   "why": "병합 커밋"
+   "sha": "24e7f30b020f5d2981106cd1927669af3e2daa8e",
+   "why": "봇·의존성 상한"
   },
   {
    "repo": "pytest-dev/pytest",
@@ -489,7 +677,7 @@
   {
    "repo": "pytest-dev/pytest",
    "sha": "fe9eef7ebc62042f26edfca2b922e08c33180ed5",
-   "why": "병합 커밋"
+   "why": "봇·의존성 상한"
   },
   {
    "repo": "pytest-dev/pytest",
@@ -513,21 +701,6 @@
   },
   {
    "repo": "pytest-dev/pytest",
-   "sha": "70f8650a624c92f91c94dd26b391326df2ea4143",
-   "why": "병합 커밋"
-  },
-  {
-   "repo": "pytest-dev/pytest",
-   "sha": "849fbda3ce87e3829b30d005979bee59928c01ff",
-   "why": "병합 커밋"
-  },
-  {
-   "repo": "pytest-dev/pytest",
-   "sha": "6153372429f86e6ff224548d62e54945def76d8f",
-   "why": "병합 커밋"
-  },
-  {
-   "repo": "pytest-dev/pytest",
    "sha": "9720f722114524cc610fa0eba363bbd63a2eb18e",
    "why": "봇·의존성 상한"
   },
@@ -544,22 +717,12 @@
   {
    "repo": "pytest-dev/pytest",
    "sha": "4e80019353af4748669cec522352e0651e36f1d2",
-   "why": "병합 커밋"
-  },
-  {
-   "repo": "pytest-dev/pytest",
-   "sha": "ea98f72badc085bdff17c784cfe9a611af5196a4",
-   "why": "병합 커밋"
+   "why": "봇·의존성 상한"
   },
   {
    "repo": "pytest-dev/pytest",
    "sha": "27ed4b95be0a0a64d99702a753a02fbeb46c8c0d",
    "why": "봇·의존성 상한"
-  },
-  {
-   "repo": "pytest-dev/pytest",
-   "sha": "146041f51d3d937196f556ae2dfcdb8771e12860",
-   "why": "병합 커밋"
   },
   {
    "repo": "pytest-dev/pytest",
@@ -578,11 +741,6 @@
   },
   {
    "repo": "pytest-dev/pytest",
-   "sha": "295d9da900a0dbe8b4093d6a6bc977cd567aa4b0",
-   "why": "병합 커밋"
-  },
-  {
-   "repo": "pytest-dev/pytest",
    "sha": "f7338e05685c952f21f838f0beab95cd29e05452",
    "why": "봇·의존성 상한"
   },
@@ -594,7 +752,7 @@
   {
    "repo": "pytest-dev/pytest",
    "sha": "d49c94b5c13111790a4b6bc7f320bbc23b2c61e0",
-   "why": "병합 커밋"
+   "why": "봇·의존성 상한"
   },
   {
    "repo": "pytest-dev/pytest",
@@ -625,11 +783,6 @@
    "repo": "pytest-dev/pytest",
    "sha": "8fb7815f1440c7cf8718c248639109a779db575d",
    "why": "봇·의존성 상한"
-  },
-  {
-   "repo": "pytest-dev/pytest",
-   "sha": "dd389d7f9290d8581a1c3d14c5adc07a4dda9bec",
-   "why": "병합 커밋"
   },
   {
    "repo": "fastapi/fastapi",
@@ -685,31 +838,7 @@
    "repo": "psf/requests",
    "sha": "27f8b40d5cc6198148a58a8e65c8cff8f7c46a54",
    "why": "봇·의존성 상한"
-  },
-  {
-   "repo": "pallets/flask",
-   "sha": "728c5e440af704a786384159184f695cf04ecbe7",
-   "why": "병합 커밋"
-  },
-  {
-   "repo": "pallets/flask",
-   "sha": "6a2f545bfd8ed31e19066a299296917e034aca58",
-   "why": "병합 커밋"
-  },
-  {
-   "repo": "pallets/flask",
-   "sha": "e4e4bf6543ac1f132afddb1ffd0bf02bea4c93f7",
-   "why": "병합 커밋"
-  },
-  {
-   "repo": "pallets/flask",
-   "sha": "4cae5d8e411b1e69949d8fae669afeacbd3e5908",
-   "why": "병합 커밋"
-  },
-  {
-   "repo": "pallets/flask",
-   "sha": "eb58d862cc4a8f31a369b6e9ad1724e9e642f13f",
-   "why": "병합 커밋"
   }
- ]
+ ],
+ "include_merges": true
 }
