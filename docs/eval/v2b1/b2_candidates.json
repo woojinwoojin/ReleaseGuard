@@ -39,9 +39,10 @@
    "message_first_line": "Merge pull request #15309 from pytest-dev/dependabot/github_actions/github-actions-35a4fca628",
    "is_merge": true,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "액션 버전 고정값만 변경 (build-and-inspect, setup-python)",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "pytest-dev/pytest",
@@ -59,9 +60,10 @@
    "message_first_line": "build(deps): Bump the github-actions group with 2 updates (#15233)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "액션 버전 고정값만 변경 (checkout 등)",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "pytest-dev/pytest",
@@ -76,9 +78,10 @@
    "message_first_line": "build(deps): Bump actions/download-artifact from 8.0.1 to 8.0.2 (#15212)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "액션 버전 고정값만 변경 (download-artifact)",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "pytest-dev/pytest",
@@ -96,9 +99,10 @@
    "message_first_line": "Merge pull request #14122 from RonnyPfannschmidt/enable-uv",
    "is_merge": true,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "tox 설치 단계를 로컬 복합 액션(.github/actions/setup-tox)으로 교체. 테스트 실행 단계(tox run)는 그대로",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": true
   },
   {
    "repo": "pytest-dev/pytest",
@@ -112,9 +116,10 @@
    "message_first_line": "Merge pull request #14701 from Pierre-Sassoulas/fix-pypy311-hypothesis",
    "is_merge": true,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "매트릭스 항목의 PyPy 버전 3.10→3.11",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": true
   },
   {
    "repo": "pytest-dev/pytest",
@@ -128,9 +133,10 @@
    "message_first_line": "Merge pull request #14527 from bluetech/py315",
    "is_merge": true,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "매트릭스에 Python 3.15 항목 추가",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "pytest-dev/pytest",
@@ -144,9 +150,10 @@
    "message_first_line": "Upload junit reports codecov (#13778)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "테스트 단계에 JUnit 출력 환경 변수 추가, JUnit 업로드 단계 추가(fail_ci_if_error: false는 업로드 단계에만). 테스트 실행·실패 전파 그대로",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "pytest-dev/pytest",
@@ -160,9 +167,10 @@
    "message_first_line": "Merge pull request #13984 from bluetech/ci-windows-coverage",
    "is_merge": true,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "Windows 3.14 항목에 use_coverage 추가 (if로 갈리는 두 테스트 단계 중 다른 쪽 실행, 둘 다 테스트 실행)",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "fastapi/fastapi",
@@ -176,9 +184,10 @@
    "message_first_line": "👷 Limit the full test matrix to Python 3.15 (#16776)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "UNCLEAR",
+   "label_reason": "Windows·macOS 전체 매트릭스에서 아직 지원하는 3.14·3.14t를 제외 (3.15·3.15t만 남김). 테스트 실행은 남지만 범위 축소가 계약 위반인지는 정책에 달림",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": true
   },
   {
    "repo": "fastapi/fastapi",
@@ -209,9 +218,10 @@
    "message_first_line": "🔒️ Generate GH actions worklow lockfile and bump Zizmor (#16736)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "액션 참조를 커밋 해시에서 태그로 변경 (잠금 파일 도입). 테스트 실행 계약과 무관",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "fastapi/fastapi",
@@ -225,9 +235,10 @@
    "message_first_line": "💥 Drop support for Python 3.10 (#16737)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "Python 3.10 지원 중단에 맞춰 macOS include 항목 3.10→3.11",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": true
   },
   {
    "repo": "fastapi/fastapi",
@@ -241,9 +252,10 @@
    "message_first_line": "⬆️ Add support for Python 3.15 (#16727)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "매트릭스에 3.15·3.15t 추가",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "fastapi/fastapi",
@@ -270,9 +282,10 @@
    "message_first_line": "⬆ Bump the github-actions group with 7 updates (#16658)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "액션 버전 고정값만 변경",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": true
   },
   {
    "repo": "fastapi/fastapi",
@@ -286,9 +299,10 @@
    "message_first_line": "🐛 Cache OpenTelemetry tracers to preserve warning deduplication (#16468)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "작업 timeout-minutes 5→10",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "fastapi/fastapi",
@@ -316,9 +330,10 @@
    "message_first_line": "⬆ Bump the github-actions group with 3 updates (#16438)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "액션 버전 고정값만 변경 (setup-uv)",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "fastapi/fastapi",
@@ -345,9 +360,10 @@
    "message_first_line": "⬆️ Bump `setup-uv` action to `10.0.1` (#16249)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "setup-uv v9→v10, uv 버전 고정(0.11.18)을 latest-known으로. 테스트 실행 단계 그대로",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "fastapi/fastapi",
@@ -361,9 +377,10 @@
    "message_first_line": "👷 Fix branch name in `zizmor.yml` workflow (`main` -> `master`) (#16178)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "zizmor 워크플로의 브랜치 이름 main→master. 테스트 워크플로 아님",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "fastapi/fastapi",
@@ -377,9 +394,10 @@
    "message_first_line": "👷 Use GitHub CLI for Git authentication (#16166)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "pre-commit 워크플로의 Git 인증 방식 변경. 테스트 워크플로 아님",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "psf/requests",
@@ -394,9 +412,10 @@
    "message_first_line": "Bump the actions group with 4 updates (#7636)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "codeql·zizmor 액션 버전만 변경. 테스트 워크플로 아님",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "psf/requests",
@@ -410,9 +429,10 @@
    "message_first_line": "Bump the actions group with 3 updates (#7628)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "codeql 액션 버전만 변경. 테스트 워크플로 아님",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "psf/requests",
@@ -430,9 +450,10 @@
    "message_first_line": "Bump the actions group with 2 updates (#7596)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "액션 버전 고정값만 변경 (setup-python 등)",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "psf/requests",
@@ -446,9 +467,10 @@
    "message_first_line": "Inline pre-commit linting (#7539)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "lint 워크플로에서 pre-commit 액션을 직접 실행 명령으로 교체. 테스트 워크플로 아님",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "psf/requests",
@@ -462,9 +484,10 @@
    "message_first_line": "Formalize 3.15 support (#7422)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "3.15-dev에 걸려 있던 작업 continue-on-error 표현식 제거 → 실패 전파가 강해짐",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "psf/requests",
@@ -478,9 +501,10 @@
    "message_first_line": "Add 3.14t support to CI (#7419)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "매트릭스에 3.14t 추가",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "psf/requests",
@@ -494,9 +518,10 @@
    "message_first_line": "Add inline types to Requests (#7272)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "타입 검사(pyright) 워크플로 새로 추가. 테스트 워크플로 그대로",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": true
   },
   {
    "repo": "psf/requests",
@@ -514,9 +539,10 @@
    "message_first_line": "Add Zizmor workflow and make initial updates",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "checkout에 persist-credentials: false 추가, 권한 최소화, zizmor 워크플로 추가. 테스트 실행 그대로",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "psf/requests",
@@ -530,9 +556,10 @@
    "message_first_line": "Remove harden runner from publish workflow (#7207)",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "배포 워크플로에서 harden-runner 단계 제거. 테스트 워크플로 아님",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "psf/requests",
@@ -546,9 +573,10 @@
    "message_first_line": "Update publish workflow and add test pypi option",
    "is_merge": false,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "배포 워크플로 개편(workflow_dispatch 입력, provenance 작업 제거). 테스트 워크플로 아님",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": true
   },
   {
    "repo": "pallets/flask",
@@ -562,9 +590,10 @@
    "message_first_line": "drop support for Python 3.10 (#6168)",
    "is_merge": true,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "Python 3.10 지원 중단에 맞춰 매트릭스에서 3.10 제거, Development Versions 3.10→3.11",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": true
   },
   {
    "repo": "pallets/flask",
@@ -582,9 +611,10 @@
    "message_first_line": "Merge branch 'stable'",
    "is_merge": true,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "매트릭스에 3.15 추가, allow-prereleases, 액션 버전 변경",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": true
   },
   {
    "repo": "pallets/flask",
@@ -601,9 +631,10 @@
    "message_first_line": "Merge branch 'stable'",
    "is_merge": true,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "tox 실행 명령에 --no-default-groups --group dev 추가 (uv 의존성 그룹 선택). 실행 단계는 그대로",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "pallets/flask",
@@ -621,9 +652,10 @@
    "message_first_line": "Merge branch 'stable'",
    "is_merge": true,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "concurrency(cancel-in-progress) 추가, persist-credentials: false, tox -e 인자를 TOX_ENV 환경 변수로 이동(tox 4는 TOX_ENV를 -e로 읽음 — Claude의 tox 지식, 실행 확인 아님). push의 paths-ignore는 base에도 있던 것",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "pallets/flask",
@@ -639,9 +671,10 @@
    "message_first_line": "update dev dependencies",
    "is_merge": false,
    "selected_reason": "규칙 include 충족 (봇·의존성)",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "CONTRACT_PRESERVED",
+   "label_reason": "액션 버전 고정값만 변경",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": false
   },
   {
    "repo": "pallets/flask",
@@ -658,9 +691,10 @@
    "message_first_line": "Merge branch 'stable'",
    "is_merge": true,
    "selected_reason": "규칙 include 충족",
-   "label": null,
-   "label_reason": null,
-   "label_status": null
+   "label": "UNCLEAR",
+   "label_reason": "매트릭스에서 3.13t(free-threaded) 제거, 3.13은 남음. 지원 중단 근거가 diff·메시지에 없어 범위 축소가 계약 위반인지 정책에 달림",
+   "label_status": "CLAUDE_DRAFT",
+   "user_review": true
   }
  ],
  "skipped": [
@@ -840,5 +874,10 @@
    "why": "봇·의존성 상한"
   }
  ],
- "include_merges": true
+ "include_merges": true,
+ "labeling": {
+  "draft_by": "Claude, diff만 보고 V3 실행 전 (2026-11-18)",
+  "matrix_rule": "매트릭스에서 버전을 뺀 변경: 커밋 메시지상 그 버전 지원 중단과 함께면 PRESERVED, 아직 지원하는 버전·변형을 빼면 UNCLEAR (라벨 작성 중 정함, V3 결과 전)",
+  "review_sample": "eval/b2_selection_2b1.yaml labels.user_review — 저장소 순서 pytest, fastapi, requests, flask로 같은 Random(20261118) 객체에서 차례로 sample"
+ }
 }
