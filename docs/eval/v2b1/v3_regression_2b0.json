@@ -1,0 +1,146 @@
+{
+ "W05": {
+  "new": [
+   "PASS",
+   "PASS"
+  ],
+  "old": [
+   "PASS",
+   "PASS"
+  ],
+  "mechanism": [
+   null,
+   null
+  ]
+ },
+ "W06": {
+  "new": [
+   "FAIL",
+   "FAIL"
+  ],
+  "old": [
+   "FAIL",
+   "FAIL"
+  ],
+  "mechanism": [
+   [
+    "REMOVED"
+   ],
+   [
+    "REMOVED"
+   ]
+  ]
+ },
+ "N0": {
+  "new": [
+   "PASS",
+   "PASS"
+  ],
+  "old": [
+   "PASS",
+   "PASS"
+  ],
+  "mechanism": [
+   null,
+   null
+  ]
+ },
+ "N1": {
+  "new": [
+   "NOT_RUN",
+   "PASS"
+  ],
+  "old": [
+   "NOT_RUN",
+   "PASS"
+  ],
+  "mechanism": [
+   null,
+   null
+  ]
+ },
+ "N2": {
+  "new": [
+   "PASS",
+   "PASS"
+  ],
+  "old": [
+   "PASS",
+   "PASS"
+  ],
+  "mechanism": [
+   null,
+   null
+  ]
+ },
+ "N3": {
+  "new": [
+   "PASS",
+   "PASS"
+  ],
+  "old": [
+   "PASS",
+   "PASS"
+  ],
+  "mechanism": [
+   null,
+   null
+  ]
+ },
+ "DN1": {
+  "new": [
+   "PASS",
+   "PASS"
+  ],
+  "old": [
+   "PASS",
+   "PASS"
+  ],
+  "mechanism": [
+   null,
+   null
+  ]
+ },
+ "DN2": {
+  "new": [
+   "PASS",
+   "PASS"
+  ],
+  "old": [
+   "PASS",
+   "PASS"
+  ],
+  "mechanism": [
+   null,
+   null
+  ]
+ },
+ "CN1": {
+  "new": [
+   "PASS",
+   "PASS"
+  ],
+  "old": [
+   "PASS",
+   "PASS"
+  ],
+  "mechanism": [
+   null,
+   null
+  ]
+ },
+ "CN2": {
+  "new": [
+   "PASS",
+   "PASS"
+  ],
+  "old": [
+   "PASS",
+   "PASS"
+  ],
+  "mechanism": [
+   null,
+   null
+  ]
+ }
+}
