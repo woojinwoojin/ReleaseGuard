@@ -1,0 +1,36 @@
+# Stage 2b.1 B2 — 실제 CI 변경 이력 선정 규칙 (설계 docs/design_stage2b_1.md 3장 B2)
+# 목록 추출 전에 커밋한다. 선정에 V3 결과를 쓰지 않는다. 순서: 추출 → 라벨 초안 → 사용자 확인 → 고정 → V3 실행.
+repos:
+  - pytest-dev/pytest
+  - fastapi/fastapi
+  - psf/requests
+  - pallets/flask
+period: {since: "2025-11-18T00:00:00Z", until: "2026-11-18T00:00:00Z"}   # 커밋 시각(committer date) 기준
+history: 기본 브랜치의 1차 부모 이력 (git log --first-parent), 최신순
+include:
+  - .github/workflows/ 아래 *.yml 또는 *.yaml 파일을 추가·수정·삭제한 커밋
+  - 바뀐 워크플로 중 하나 이상이 base 또는 head에서 push 또는 pull_request 이벤트를 가짐 (on 키만 YAML로 파싱. V3 판단 코드는 쓰지 않음)
+exclude:
+  - 병합 커밋 (부모 2개 이상)
+  - 같은 patch-id(git patch-id --stable, 워크플로 파일 diff만)의 두 번째 이후 커밋 (최신순으로 볼 때 먼저 나온 것만 남김)
+  - 워크플로 파일 YAML이 base·head 모두 파싱되지 않는 커밋 (사유 기록)
+cap:
+  per_repo: 10
+  bot_or_dependency_per_repo: 3   # 아래 중 하나라도 해당
+  bot_or_dependency:
+    - 작성자 이름이 [bot]으로 끝남
+    - 커밋 메시지 첫 줄이 Bump·bump·chore(deps)·build(deps)로 시작
+    - 워크플로 diff의 바뀐 줄이 전부 uses: 줄(액션 버전·해시만 변경)
+  rule: 최신순으로 훑으며 조건에 맞는 커밋을 담는다. bot_or_dependency 상한에 걸린 커밋은 건너뛰고 계속 본다. 저장소당 10개가 차거나 기간이 끝나면 멈춘다
+record: [repo, head_sha, base_sha, committed_at, author_is_bot_or_dep, changed_workflows, message_first_line, selected_reason]
+labels:
+  values: [CONTRACT_REMOVED, CONTRACT_PRESERVED, UNCLEAR]
+  definition:
+    CONTRACT_REMOVED: push·pull_request에서 돌던 필수 테스트 실행이 사라졌거나, 실행되지 않거나(if 상수 거짓 등), 실패가 전파되지 않게 됨(continue-on-error·|| true 등)
+    CONTRACT_PRESERVED: 위에 해당하지 않음 (테스트와 무관한 변경 포함)
+    UNCLEAR: diff만으로 판단할 수 없음 (이유를 적음)
+  draft_by: Claude (전수, V3 결과를 보기 전, diff만 보고)
+  user_review:
+    - CONTRACT_REMOVED·UNCLEAR 전수
+    - CONTRACT_PRESERVED는 저장소마다 2개를 random.Random(20261118).sample(그 저장소의 PRESERVED 목록을 head_sha 순으로 정렬한 것, 2)로 뽑음 (2개 미만이면 전부)
+  unreviewed_mark: CLAUDE_ONLY   # 사람이 확인한 라벨과 따로 집계, 객관적 정답으로 쓰지 않음

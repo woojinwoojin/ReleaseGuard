@@ -1,0 +1,355 @@
+# Stage 2b.1 — 사례와 기대값 (설계 docs/design_stage2b_1.md 3장)
+# 검증기 실행 전에 커밋한다. 결과를 보고 사례를 더하거나 바꾸지 않는다 (바꾸면 docs/eval/v2b1/protocol_changes.yaml).
+# 예외: A0 표본 적합성 사전 검사(원본만)에서 출처를 제외하거나 엔드포인트가 맞지 않음을 발견하는 것 — seed 실행 전에만, 사유와 함께 기록.
+# 결과 값: PASS / FAIL / INCONCLUSIVE / NOT_RUN (V2는 STARTED_ONLY 추가). INCONCLUSIVE 사유: ENV_INSUFFICIENT / UNKNOWN_CAUSE / (V3) 정적 판단 불가.
+# V3 FAIL 메커니즘: REMOVED / NOT_EXECUTED / FAILURE_ALLOWED / FAILURE_MASKED.
+# 편집: find/replace (정확히 한 번 나와야 함. django Dockerfile은 dev-envs 단계에 같은 CMD가 또 있어 builder의 ENTRYPOINT 줄(끝 공백 포함)까지 찾는다), create (새 파일). 경로는 출처의 context 기준.
+# env_required: 필요한 변수·역할·읽는 위치(파일:줄, 편집 적용 후 기준). E1 규칙(설계 3장 A)은 이 목록만 본다. 사례 종류(seed인지)는 보지 않는다.
+
+v2_repeats: 3                 # 콜드 1 + 캐시 2. 안정성 측정이지 표본 증가가 아님
+v2_ready_timeout_seconds: 30
+v2_poll_seconds: 0.5
+startup_log: {head_lines: 50, tail_lines: 40}
+
+sources:
+  S0:
+    repo: ../2026-10/week4-docker-aws      # release-guard 루트 기준. 사용자 자신의 저장소
+    commit: fee0039
+    context: .
+    build_target: null                     # 단일 단계
+    probe: http://localhost:8000/docs
+    env_required: []
+    note: 2b.0 기준선. N0·W05는 회귀 확인용(새 증거로 세지 않음). NF는 새 사례
+  S1:
+    repo: .rg/external/awesome-compose     # https://github.com/docker/awesome-compose, CC0
+    commit: 30f4b7f6a6c3b0c0ecf4d4efb0de203c48d11562
+    context: fastapi
+    build_target: builder
+    probe: http://localhost:80/            # 기본 이미지 tiangolo/uvicorn-gunicorn-fastapi의 기본 포트. compose의 PORT=8000은 compose 설정이라 쓰지 않음 (2b.0 Q3)
+    env_required: []
+    note: builder에 CMD 없음 → 기본 이미지 명령(gunicorn + uvicorn worker, MODULE_NAME·VARIABLE_NAME·PORT 환경 변수로 설정). 기본 이미지에 fastapi·uvicorn이 이미 있음
+  S2:
+    repo: .rg/external/awesome-compose
+    commit: 30f4b7f6a6c3b0c0ecf4d4efb0de203c48d11562
+    context: flask/app
+    build_target: builder
+    probe: http://localhost:8000/
+    env_required: []
+    note: ENTRYPOINT python3 + CMD app.py, Flask 개발 서버, root 실행. app.py는 탭 들여쓰기
+  S3:
+    repo: .rg/external/awesome-compose
+    commit: 30f4b7f6a6c3b0c0ecf4d4efb0de203c48d11562
+    context: django/app
+    build_target: builder
+    probe: http://localhost:8000/admin/login/   # urls.py에 admin만 있음. / 는 404
+    env_required:                          # 원본 settings.py가 실제로 읽는 변수 (모두 기본값 있음) — 모든 S3 사례에서 E1 규칙이 켜져 있음
+      - {name: SECRET_KEY, role: Django 서명 키, read_at: "example/settings.py:31"}
+      - {name: DEBUG, role: 디버그 모드, read_at: "example/settings.py:35"}
+      - {name: ALLOWED_HOSTS, role: 허용 호스트, read_at: "example/settings.py:37"}
+    note: python:3.7-alpine, Django==3.2.13, environs==7.3.1 (python-dotenv는 environs 의존성으로 들어온다고 가정 — A0에서 확인)
+
+v2_cases:
+  # ---------------- S0 4주차
+  - {id: S0-N0, source: S0, kind: baseline, edits: [], expected: PASS}
+  - id: S0-W05
+    source: S0
+    kind: seed
+    type: F1
+    edits:
+      - path: Dockerfile
+        find: CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+        replace: CMD ["uvicorn", "app:api", "--host", "0.0.0.0", "--port", "8000"]
+    expected: FAIL
+    note: 2b.0 W05 재확인
+  - id: S0-NF
+    source: S0
+    kind: seed
+    type: NF
+    description: 정상 factory — create_app이 모듈의 app을 돌려주고, --factory 없이 자동 감지로 동작
+    edits:
+      - path: api.py
+        find: "app = FastAPI(title=\"AI Data Analyst\")\n"
+        replace: "app = FastAPI(title=\"AI Data Analyst\")\n\n\ndef create_app() -> FastAPI:\n    return app\n"
+      - path: Dockerfile
+        find: CMD ["uvicorn", "api:app", "--host", "0.0.0.0", "--port", "8000"]
+        replace: CMD ["uvicorn", "api:create_app", "--host", "0.0.0.0", "--port", "8000"]
+    expected: PASS
+    expected_observation: factory 경고 있음 (H-F 반례, 결과 값에 쓰지 않음)
+
+  # ---------------- S1 fastapi (기본 이미지 명령)
+  - {id: S1-N0, source: S1, kind: baseline, edits: [], expected: PASS, note: A0 대상}
+  - id: S1-F1
+    source: S1
+    kind: seed
+    type: F1
+    description: 진입점 모듈 이름 오타 (기본 이미지의 MODULE_NAME)
+    edits:
+      - {path: Dockerfile, find: "COPY ./app ./app\n", replace: "COPY ./app ./app\nENV MODULE_NAME=app.mian\n"}
+    expected: FAIL
+  - id: S1-F2
+    source: S1
+    kind: seed
+    type: F2
+    description: 이미지에 없는 패키지 import (기본 이미지에 fastapi가 이미 있어 requirements 제거로는 재현 안 됨 → 앱 쪽 import로 구현)
+    edits:
+      - {path: app/main.py, find: "from fastapi import FastAPI\n", replace: "import pandas\nfrom fastapi import FastAPI\n"}
+    expected: FAIL
+  - id: S1-F3
+    source: S1
+    kind: seed
+    type: F3
+    description: 다른 포트로 뜸
+    edits:
+      - {path: Dockerfile, find: "COPY ./app ./app\n", replace: "COPY ./app ./app\nENV PORT=8080\n"}
+    expected: FAIL
+  - id: S1-F4
+    source: S1
+    kind: seed
+    type: F4
+    description: import 시점 예외
+    edits:
+      - {path: app/main.py, find: "app = FastAPI()\n", replace: "raise RuntimeError(\"startup check failed\")\napp = FastAPI()\n"}
+    expected: FAIL
+  - id: S1-E1
+    source: S1
+    kind: seed
+    type: E1
+    edits:
+      - {path: app/main.py, find: "from fastapi import FastAPI\n", replace: "import os\nfrom fastapi import FastAPI\n\nDATABASE_URL = os.environ[\"DATABASE_URL\"]\n"}
+    env_required:
+      - {name: DATABASE_URL, role: DB 연결 문자열, read_at: "app/main.py:4"}
+    expected: INCONCLUSIVE
+    expected_reason: ENV_INSUFFICIENT
+  - id: S1-N1
+    source: S1
+    kind: seed
+    type: N
+    description: 실행 설정 변경 (기본 이미지 로그 수준)
+    edits:
+      - {path: Dockerfile, find: "COPY ./app ./app\n", replace: "COPY ./app ./app\nENV LOG_LEVEL=debug\n"}
+    expected: PASS
+  - id: S1-NF
+    source: S1
+    kind: seed
+    type: NF
+    description: 정상 factory — 명시적 uvicorn 명령, --factory 없음
+    edits:
+      - path: app/main.py
+        find: "app = FastAPI()\n\n\n@app.get(\"/\")\ndef hello_world():\n    return {\"message\": \"OK\"}\n"
+        replace: "def create_app() -> FastAPI:\n    app = FastAPI()\n\n    @app.get(\"/\")\n    def hello_world():\n        return {\"message\": \"OK\"}\n\n    return app\n"
+      - path: Dockerfile
+        find: "COPY ./app ./app\n"
+        replace: "COPY ./app ./app\nCMD [\"uvicorn\", \"app.main:create_app\", \"--host\", \"0.0.0.0\", \"--port\", \"80\"]\n"
+    expected: PASS
+    expected_observation: factory 경고 있음
+  - id: S1-NH
+    source: S1
+    kind: seed
+    type: NH
+    edits:
+      - path: Dockerfile
+        find: "COPY ./app ./app\n"
+        replace: "COPY ./app ./app\nHEALTHCHECK --interval=5s --timeout=3s --start-period=5s --retries=3 CMD [\"python\", \"-c\", \"import urllib.request; urllib.request.urlopen('http://localhost:80/', timeout=2)\"]\n"
+    expected: PASS
+    expected_observation: 준비 확인이 healthy 경로로 이뤄짐
+
+  # ---------------- S2 flask (ENTRYPOINT + CMD, 개발 서버)
+  - {id: S2-N0, source: S2, kind: baseline, edits: [], expected: PASS, note: A0 대상}
+  - id: S2-F1
+    source: S2
+    kind: seed
+    type: F1
+    edits:
+      - {path: Dockerfile, find: "CMD [\"app.py\"]", replace: "CMD [\"ap.py\"]"}
+    expected: FAIL
+  - id: S2-F2
+    source: S2
+    kind: seed
+    type: F2
+    description: requirements에서 flask 제거
+    edits:
+      - {path: requirements.txt, find: "flask", replace: ""}
+    expected: FAIL
+  - id: S2-F3
+    source: S2
+    kind: seed
+    type: F3
+    edits:
+      - {path: app.py, find: "port=8000)", replace: "port=8001)"}
+    expected: FAIL
+  - id: S2-F4
+    source: S2
+    kind: seed
+    type: F4
+    edits:
+      - {path: app.py, find: "if __name__ == '__main__':\n", replace: "raise RuntimeError(\"startup check failed\")\n\nif __name__ == '__main__':\n"}
+    expected: FAIL
+  - id: S2-E1
+    source: S2
+    kind: seed
+    type: E1
+    edits:
+      - {path: app.py, find: "from flask import Flask\n", replace: "import os\nfrom flask import Flask\nSECRET_KEY = os.environ[\"FLASK_SECRET_KEY\"]\n"}
+    env_required:
+      - {name: FLASK_SECRET_KEY, role: 세션 서명 키, read_at: "app.py:3"}
+    expected: INCONCLUSIVE
+    expected_reason: ENV_INSUFFICIENT
+  - id: S2-N1
+    source: S2
+    kind: seed
+    type: N
+    description: 실행 옵션 추가
+    edits:
+      - {path: app.py, find: "port=8000)", replace: "port=8000, threaded=True)"}
+    expected: PASS
+  - id: S2-N2
+    source: S2
+    kind: seed
+    type: N
+    description: 진입점 형식 변경 (python3 -u)
+    edits:
+      - {path: Dockerfile, find: "CMD [\"app.py\"]", replace: "CMD [\"-u\", \"app.py\"]"}
+    expected: PASS
+  - id: S2-NH
+    source: S2
+    kind: seed
+    type: NH
+    edits:
+      - path: Dockerfile
+        find: "CMD [\"app.py\"]"
+        replace: "HEALTHCHECK --interval=5s --timeout=3s --start-period=5s --retries=3 CMD [\"python3\", \"-c\", \"import urllib.request; urllib.request.urlopen('http://localhost:8000/', timeout=2)\"]\nCMD [\"app.py\"]"
+    expected: PASS
+    note: S2-NF는 없음 — uvicorn을 쓰지 않는 출처라 factory 자동 감지가 해당되지 않음 (실행 전 제외)
+
+  # ---------------- S3 django (runserver, 환경 변수 있음)
+  - {id: S3-N0, source: S3, kind: baseline, edits: [], expected: PASS, note: A0 대상}
+  - id: S3-F1
+    source: S3
+    kind: seed
+    type: F1
+    edits:
+      - {path: Dockerfile, find: "ENTRYPOINT [\"python3\"] \nCMD [\"manage.py\", \"runserver\", \"0.0.0.0:8000\"]", replace: "ENTRYPOINT [\"python3\"] \nCMD [\"manag.py\", \"runserver\", \"0.0.0.0:8000\"]"}
+    expected: FAIL
+  - id: S3-F2
+    source: S3
+    kind: seed
+    type: F2
+    description: requirements에서 environs 제거 (settings.py가 import)
+    edits:
+      - {path: requirements.txt, find: "environs==7.3.1", replace: ""}
+    expected: FAIL
+    note: S3는 env_required가 켜져 있으므로 ENV_INSUFFICIENT가 나오면 규칙 오류
+  - id: S3-F3
+    source: S3
+    kind: seed
+    type: F3
+    edits:
+      - {path: Dockerfile, find: "ENTRYPOINT [\"python3\"] \nCMD [\"manage.py\", \"runserver\", \"0.0.0.0:8000\"]", replace: "ENTRYPOINT [\"python3\"] \nCMD [\"manage.py\", \"runserver\", \"0.0.0.0:8001\"]"}
+    expected: FAIL
+  - id: S3-F4
+    source: S3
+    kind: seed
+    type: F4
+    description: settings 로딩 시 예외
+    edits:
+      - {path: example/settings.py, find: "# Application definition\n", replace: "raise RuntimeError(\"startup check failed\")\n\n# Application definition\n"}
+    expected: FAIL
+    note: S3 env_required 켜져 있음 — ENV_INSUFFICIENT면 규칙 오류
+  - id: S3-E1
+    source: S3
+    kind: seed
+    type: E1
+    description: SECRET_KEY 기본값 제거
+    edits:
+      - path: example/settings.py
+        find: "SECRET_KEY = env('SECRET_KEY',\n                'h8+mu_iy6%5j%7+hp**+gsq$nmy!!mjd8z_qkd94@z!%9%!+qn')\n"
+        replace: "SECRET_KEY = env('SECRET_KEY',\n                )\n"   # 줄 수 유지 (S3 env_required 줄 번호가 그대로)
+    expected: INCONCLUSIVE
+    expected_reason: ENV_INSUFFICIENT
+  - id: S3-N1
+    source: S3
+    kind: seed
+    type: N
+    description: 실행 옵션 추가 (--noreload)
+    edits:
+      - {path: Dockerfile, find: "ENTRYPOINT [\"python3\"] \nCMD [\"manage.py\", \"runserver\", \"0.0.0.0:8000\"]", replace: "ENTRYPOINT [\"python3\"] \nCMD [\"manage.py\", \"runserver\", \"0.0.0.0:8000\", \"--noreload\"]"}
+    expected: PASS
+  - id: S3-N2
+    source: S3
+    kind: seed
+    type: N
+    description: 진입점 형식 변경 (python3 -u)
+    edits:
+      - {path: Dockerfile, find: "ENTRYPOINT [\"python3\"] \nCMD [\"manage.py\", \"runserver\", \"0.0.0.0:8000\"]", replace: "ENTRYPOINT [\"python3\"] \nCMD [\"-u\", \"manage.py\", \"runserver\", \"0.0.0.0:8000\"]"}
+    expected: PASS
+  - id: S3-NH
+    source: S3
+    kind: seed
+    type: NH
+    edits:
+      - path: Dockerfile
+        find: "ENTRYPOINT [\"python3\"] \nCMD [\"manage.py\", \"runserver\", \"0.0.0.0:8000\"]"
+        replace: "ENTRYPOINT [\"python3\"] \nHEALTHCHECK --interval=5s --timeout=3s --start-period=5s --retries=3 CMD [\"python3\", \"-c\", \"import urllib.request; urllib.request.urlopen('http://localhost:8000/admin/login/', timeout=2)\"]\nCMD [\"manage.py\", \"runserver\", \"0.0.0.0:8000\"]"
+    expected: PASS
+    note: S3-NF는 없음 — uvicorn 미사용 (실행 전 제외)
+
+# ---------------- V3 B1 seed (S0 ci.yml 기준). 기대: [V3a, V3b], FAIL이면 메커니즘
+v3_cases:
+  - {id: B1-N0, source: S0, edits: [], expected: [PASS, PASS]}
+  - id: B1-D1
+    source: S0
+    edits:
+      - {path: .github/workflows/ci.yml, find: "      - name: Run tests\n", replace: "      - name: Run tests\n        if: false\n"}
+    expected: [FAIL, FAIL]
+    mechanism: NOT_EXECUTED
+  - id: B1-D2
+    source: S0
+    edits:
+      - {path: .github/workflows/ci.yml, find: "      - name: Run tests\n", replace: "      - name: Run tests\n        continue-on-error: true\n"}
+    expected: [FAIL, FAIL]
+    mechanism: FAILURE_ALLOWED
+  - id: B1-D3
+    source: S0
+    edits:
+      - {path: .github/workflows/ci.yml, find: "run: pytest -rs  #", replace: "run: pytest -rs || true  #"}
+    expected: [FAIL, FAIL]
+    mechanism: FAILURE_MASKED
+  - id: B1-I1
+    source: S0
+    edits:
+      - {path: .github/workflows/ci.yml, find: "      - name: Run tests\n", replace: "      - name: Run tests\n        if: ${{ github.event_name == 'push' }}\n"}
+    expected: [INCONCLUSIVE, INCONCLUSIVE]
+  - id: B1-I2
+    source: S0
+    edits:
+      - path: .github/workflows/ci.yml
+        find: "  push:\n    branches: [main]\n  pull_request:\n"
+        replace: "  push:\n    branches: [main]\n    paths: ['**.py', 'requirements.txt']\n  pull_request:\n    paths: ['**.py', 'requirements.txt']\n"
+    expected: [INCONCLUSIVE, INCONCLUSIVE]
+  - id: B1-I3
+    source: S0
+    description: 테스트 작업을 로컬 재사용 워크플로로 이동
+    edits:
+      - path: .github/workflows/ci.yml
+        find: "  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v5\n\n      - uses: actions/setup-python@v6\n        with:\n          python-version: \"3.13\"  # 로컬과 같은 버전 (Dockerfile도 맞춘다)\n          cache: pip  # requirements.txt가 바뀌지 않으면 다운로드를 재사용한다\n\n      - name: Install dependencies\n        run: pip install -r requirements.txt\n\n      - name: Run tests\n        run: pytest -rs  # -rs: 건너뛴 테스트가 있으면 이유를 출력한다\n"
+        replace: "  test:\n    uses: ./.github/workflows/test.yml\n"
+      - path: .github/workflows/test.yml
+        create: "name: Test\n\non:\n  workflow_call:\n\njobs:\n  pytest:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v5\n      - uses: actions/setup-python@v6\n        with:\n          python-version: \"3.13\"\n          cache: pip\n      - name: Install dependencies\n        run: pip install -r requirements.txt\n      - name: Run tests\n        run: pytest -rs\n"
+    expected: [INCONCLUSIVE, INCONCLUSIVE]
+  - id: B1-I4
+    source: S0
+    edits:
+      - {path: .github/workflows/ci.yml, find: "run: pytest -rs  #", replace: "run: make test  #"}
+    expected: [INCONCLUSIVE, INCONCLUSIVE]
+  - id: B1-I5
+    source: S0
+    edits:
+      - {path: .github/workflows/ci.yml, find: "run: pytest -rs  #", replace: "run: tox  #"}
+    expected: [INCONCLUSIVE, INCONCLUSIVE]
+  - id: B1-C3
+    source: S0
+    description: matrix 추가, 명령 유지
+    edits:
+      - {path: .github/workflows/ci.yml, find: "  test:\n    runs-on: ubuntu-latest\n", replace: "  test:\n    runs-on: ubuntu-latest\n    strategy:\n      matrix:\n        python-version: [\"3.12\", \"3.13\"]\n"}
+      - {path: .github/workflows/ci.yml, find: "          python-version: \"3.13\"  # 로컬과 같은 버전 (Dockerfile도 맞춘다)\n", replace: "          python-version: ${{ matrix.python-version }}\n"}
+    expected: [PASS, PASS]
