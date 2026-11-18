@@ -1,0 +1,715 @@
+{
+ "rule_file": "eval/b2_selection_2b1.yaml",
+ "extracted": "2026-11-18T14:40:24",
+ "clones": {
+  "pytest-dev/pytest": ".rg/external/pytest-dev_pytest",
+  "fastapi/fastapi": ".rg/external/fastapi_fastapi",
+  "psf/requests": ".rg/external/psf_requests",
+  "pallets/flask": ".rg/external/pallets_flask"
+ },
+ "repo_heads": {
+  "pytest-dev/pytest": {
+   "branch": "main",
+   "head": "36eed6b7b0eb59760fc4b33e90bdaac5057388f0"
+  },
+  "fastapi/fastapi": {
+   "branch": "master",
+   "head": "b2831196bfee3eb9ce303a3c6440f2a104832954"
+  },
+  "psf/requests": {
+   "branch": "main",
+   "head": "3c7baaa05ab4aa49cc819ce3a819d260de19c157"
+  },
+  "pallets/flask": {
+   "branch": "main",
+   "head": "49943b5a94413a530761350f04e896f76e8d620e"
+  }
+ },
+ "commits": [
+  {
+   "repo": "pytest-dev/pytest",
+   "head_sha": "c9bf1edf9e0d388f3e7bebc88576e608ffbc40a4",
+   "base_sha": "9225e4fe0e184ebe63d8f7a1a48405d195a553f2",
+   "committed_at": "2026-10-21T10:48:49+02:00",
+   "author_is_bot_or_dep": true,
+   "changed_workflows": [
+    ".github/workflows/deploy.yml",
+    ".github/workflows/doc-check-links.yml",
+    ".github/workflows/prepare-release-pr.yml",
+    ".github/workflows/test.yml",
+    ".github/workflows/update-plugin-list.yml"
+   ],
+   "message_first_line": "build(deps): Bump the github-actions group with 2 updates (#15233)",
+   "selected_reason": "규칙 include 충족 (봇·의존성)",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "head_sha": "3751648646686eb46f8bdcfebee70c049f1b8acf",
+   "base_sha": "420cf37a3fc8c03c9a4769c2635a03773d27be10",
+   "committed_at": "2026-10-19T07:42:44+02:00",
+   "author_is_bot_or_dep": true,
+   "changed_workflows": [
+    ".github/workflows/deploy.yml",
+    ".github/workflows/test.yml"
+   ],
+   "message_first_line": "build(deps): Bump actions/download-artifact from 8.0.1 to 8.0.2 (#15212)",
+   "selected_reason": "규칙 include 충족 (봇·의존성)",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "head_sha": "24e7f30b020f5d2981106cd1927669af3e2daa8e",
+   "base_sha": "c333125d977b323fafbeb0e09cd86e203ab4af39",
+   "committed_at": "2026-09-28T06:58:57+02:00",
+   "author_is_bot_or_dep": true,
+   "changed_workflows": [
+    ".github/workflows/test.yml"
+   ],
+   "message_first_line": "build(deps): Bump codecov/codecov-action from 7.1.0 to 7.1.1 (#15111)",
+   "selected_reason": "규칙 include 충족 (봇·의존성)",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "head_sha": "bda18de6ab84023bd08baf620bc2430f41eb4b5c",
+   "base_sha": "e77b9a403f94b4a70d588b62ca4dfb66060b84b4",
+   "committed_at": "2026-02-11T13:28:01-03:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/test.yml"
+   ],
+   "message_first_line": "Upload junit reports codecov (#13778)",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "fastapi/fastapi",
+   "head_sha": "980cee9678de95644be6a9d942349ce3aab2f45b",
+   "base_sha": "a3260d49e97b0072c4c0c161d9f63cc3826584b5",
+   "committed_at": "2026-11-15T18:10:34+01:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/test.yml"
+   ],
+   "message_first_line": "👷 Limit the full test matrix to Python 3.15 (#16776)",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "fastapi/fastapi",
+   "head_sha": "e51ee3bf1cbeefc1e53d24630ff3bb35ca8b4685",
+   "base_sha": "12e66580a897db716fc8c902e51e1582f34a5745",
+   "committed_at": "2026-11-13T15:28:33+01:00",
+   "author_is_bot_or_dep": true,
+   "changed_workflows": [
+    ".github/workflows/add-to-project.yml",
+    ".github/workflows/build-docs.yml",
+    ".github/workflows/bump-pre-commit-hooks.yml",
+    ".github/workflows/create-draft-release.yml",
+    ".github/workflows/deploy-docs.yml",
+    ".github/workflows/detect-conflicts.yml",
+    ".github/workflows/guard-dependencies.yml",
+    ".github/workflows/issue-manager.yml",
+    ".github/workflows/pre-commit.yml",
+    ".github/workflows/prepare-release.yml",
+    ".github/workflows/publish.yml",
+    ".github/workflows/smokeshow.yml",
+    ".github/workflows/sponsors.yml",
+    ".github/workflows/test-redistribute.yml",
+    ".github/workflows/test.yml",
+    ".github/workflows/topic-repos.yml",
+    ".github/workflows/translate.yml",
+    ".github/workflows/zizmor.yml"
+   ],
+   "message_first_line": "🔒️ Generate GH actions worklow lockfile and bump Zizmor (#16736)",
+   "selected_reason": "규칙 include 충족 (봇·의존성)",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "fastapi/fastapi",
+   "head_sha": "28eaf6a22c4e70f415868132d5ca948d21821360",
+   "base_sha": "5add7a458d629b07311d48261f696b5ac2bb9a5f",
+   "committed_at": "2026-11-13T14:17:31+01:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/test.yml"
+   ],
+   "message_first_line": "💥 Drop support for Python 3.10 (#16737)",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "fastapi/fastapi",
+   "head_sha": "ed6f566fd9f6243b9ece9270b0183440e8c1965c",
+   "base_sha": "5e24b3219a11cdf5c41179406eb358f6d1a19c1a",
+   "committed_at": "2026-11-10T15:01:34+01:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/test.yml"
+   ],
+   "message_first_line": "⬆️ Add support for Python 3.15 (#16727)",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "fastapi/fastapi",
+   "head_sha": "2d3e1e9dea7f6eaed9ba7d1975ac1c7cc3c33023",
+   "base_sha": "5bfb66ef36f71eb55d1ed9787f35305997c93316",
+   "committed_at": "2026-11-02T09:40:34+01:00",
+   "author_is_bot_or_dep": true,
+   "changed_workflows": [
+    ".github/workflows/build-docs.yml",
+    ".github/workflows/bump-pre-commit-hooks.yml",
+    ".github/workflows/create-draft-release.yml",
+    ".github/workflows/deploy-docs.yml",
+    ".github/workflows/pre-commit.yml",
+    ".github/workflows/prepare-release.yml",
+    ".github/workflows/publish.yml",
+    ".github/workflows/smokeshow.yml",
+    ".github/workflows/sponsors.yml",
+    ".github/workflows/test-redistribute.yml",
+    ".github/workflows/test.yml",
+    ".github/workflows/topic-repos.yml",
+    ".github/workflows/translate.yml",
+    ".github/workflows/zizmor.yml"
+   ],
+   "message_first_line": "⬆ Bump the github-actions group with 7 updates (#16658)",
+   "selected_reason": "규칙 include 충족 (봇·의존성)",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "fastapi/fastapi",
+   "head_sha": "6eae2f3456c889ad791de38dd45c14e17de775d3",
+   "base_sha": "94918c1d40afb27065c64d523219ed2ad9822f76",
+   "committed_at": "2026-10-07T21:04:19+02:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/test.yml"
+   ],
+   "message_first_line": "🐛 Cache OpenTelemetry tracers to preserve warning deduplication (#16468)",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "fastapi/fastapi",
+   "head_sha": "b3b47c6cf1b8d420cbca518dbca02946797f695b",
+   "base_sha": "33d411dbc3236275dd64d200bfe18d5d60a49b2e",
+   "committed_at": "2026-10-01T20:23:29+02:00",
+   "author_is_bot_or_dep": true,
+   "changed_workflows": [
+    ".github/workflows/build-docs.yml",
+    ".github/workflows/bump-pre-commit-hooks.yml",
+    ".github/workflows/create-draft-release.yml",
+    ".github/workflows/deploy-docs.yml",
+    ".github/workflows/label-approved.yml",
+    ".github/workflows/notify-translations.yml",
+    ".github/workflows/pre-commit.yml",
+    ".github/workflows/prepare-release.yml",
+    ".github/workflows/publish.yml",
+    ".github/workflows/smokeshow.yml",
+    ".github/workflows/sponsors.yml",
+    ".github/workflows/test.yml",
+    ".github/workflows/topic-repos.yml",
+    ".github/workflows/translate.yml",
+    ".github/workflows/zizmor.yml"
+   ],
+   "message_first_line": "⬆ Bump the github-actions group with 3 updates (#16438)",
+   "selected_reason": "규칙 include 충족 (봇·의존성)",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "fastapi/fastapi",
+   "head_sha": "60bd125bfb3aacd5e0447f8503a3e1d8a2720c1d",
+   "base_sha": "c3f316b7e814667e8ee81e03a7330d00ee61e45c",
+   "committed_at": "2026-08-25T15:19:25+02:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/build-docs.yml",
+    ".github/workflows/bump-pre-commit-hooks.yml",
+    ".github/workflows/create-draft-release.yml",
+    ".github/workflows/deploy-docs.yml",
+    ".github/workflows/label-approved.yml",
+    ".github/workflows/notify-translations.yml",
+    ".github/workflows/pre-commit.yml",
+    ".github/workflows/prepare-release.yml",
+    ".github/workflows/publish.yml",
+    ".github/workflows/smokeshow.yml",
+    ".github/workflows/sponsors.yml",
+    ".github/workflows/test.yml",
+    ".github/workflows/topic-repos.yml",
+    ".github/workflows/translate.yml"
+   ],
+   "message_first_line": "⬆️ Bump `setup-uv` action to `10.0.1` (#16249)",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "fastapi/fastapi",
+   "head_sha": "613089ea60d04188153e2bb68a7f4587399ad012",
+   "base_sha": "3e8d1526d83a90aaf7d6eb6dc682bf150f180b25",
+   "committed_at": "2026-08-11T23:03:32+02:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/zizmor.yml"
+   ],
+   "message_first_line": "👷 Fix branch name in `zizmor.yml` workflow (`main` -> `master`) (#16178)",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "fastapi/fastapi",
+   "head_sha": "da2f09432739cd46791920edd7a1cf89e915f8f4",
+   "base_sha": "22c2d0e53b66c74fbc654dba0df02dedb66ba8c6",
+   "committed_at": "2026-08-09T00:28:06+02:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/pre-commit.yml"
+   ],
+   "message_first_line": "👷 Use GitHub CLI for Git authentication (#16166)",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "psf/requests",
+   "head_sha": "3c7baaa05ab4aa49cc819ce3a819d260de19c157",
+   "base_sha": "611c6162cbc4ac2020a2f91c7cfa4f3abf9bbb60",
+   "committed_at": "2026-10-26T11:14:41-06:00",
+   "author_is_bot_or_dep": true,
+   "changed_workflows": [
+    ".github/workflows/codeql-analysis.yml",
+    ".github/workflows/zizmor.yml"
+   ],
+   "message_first_line": "Bump the actions group with 4 updates (#7636)",
+   "selected_reason": "규칙 include 충족 (봇·의존성)",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "psf/requests",
+   "head_sha": "611c6162cbc4ac2020a2f91c7cfa4f3abf9bbb60",
+   "base_sha": "dae7ef63b4df6eded86637f251fc4e3a06c3b479",
+   "committed_at": "2026-09-21T13:22:33-07:00",
+   "author_is_bot_or_dep": true,
+   "changed_workflows": [
+    ".github/workflows/codeql-analysis.yml"
+   ],
+   "message_first_line": "Bump the actions group with 3 updates (#7628)",
+   "selected_reason": "규칙 include 충족 (봇·의존성)",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "psf/requests",
+   "head_sha": "414f0513c33883adf6f2b46901d4f0b38a455851",
+   "base_sha": "ded32878c0090f6b7b32a008176df6cecf36481f",
+   "committed_at": "2026-07-27T11:25:09-06:00",
+   "author_is_bot_or_dep": true,
+   "changed_workflows": [
+    ".github/workflows/lint.yml",
+    ".github/workflows/publish.yml",
+    ".github/workflows/run-tests.yml",
+    ".github/workflows/typecheck.yml",
+    ".github/workflows/zizmor.yml"
+   ],
+   "message_first_line": "Bump the actions group with 2 updates (#7596)",
+   "selected_reason": "규칙 include 충족 (봇·의존성)",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "psf/requests",
+   "head_sha": "74c56d5ffb0ad718dbd011b983d056c994355d7d",
+   "base_sha": "d64b9ad4bf1c14e21e0df3f0f4320fec81180e91",
+   "committed_at": "2026-06-24T15:40:12-07:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/lint.yml"
+   ],
+   "message_first_line": "Inline pre-commit linting (#7539)",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "psf/requests",
+   "head_sha": "dc9dbdfb3434c6e58d48fd102f93e5342308817e",
+   "base_sha": "25340ebad09a38e0748aeb26232102022a03ec94",
+   "committed_at": "2026-05-10T19:05:34-07:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/run-tests.yml"
+   ],
+   "message_first_line": "Formalize 3.15 support (#7422)",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "psf/requests",
+   "head_sha": "eb173bc819c72580deed2d54190d340cc769e529",
+   "base_sha": "d60f4773b1f5932e2715b2c64b333649edbb405b",
+   "committed_at": "2026-05-08T13:18:00-07:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/run-tests.yml"
+   ],
+   "message_first_line": "Add 3.14t support to CI (#7419)",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "psf/requests",
+   "head_sha": "561e4b6889f53584c39a67f8794c53a414f68481",
+   "base_sha": "8f6cda9969f4a98c45ea2922f6bcbefc02256202",
+   "committed_at": "2026-05-03T12:38:48-07:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/typecheck.yml"
+   ],
+   "message_first_line": "Add inline types to Requests (#7272)",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "psf/requests",
+   "head_sha": "cbce031327be4f1b4b5fd041ff4dcaa8efa2ce53",
+   "base_sha": "6360477c52303c9445b45fa8744b02d05a2f0905",
+   "committed_at": "2026-03-31T21:28:16-05:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/close-issues.yml",
+    ".github/workflows/codeql-analysis.yml",
+    ".github/workflows/lint.yml",
+    ".github/workflows/run-tests.yml",
+    ".github/workflows/zizmor.yml"
+   ],
+   "message_first_line": "Add Zizmor workflow and make initial updates",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "psf/requests",
+   "head_sha": "a2ce3d8ace060b0c8446bc956e3853806dd4e3bb",
+   "base_sha": "5e7cb71cd719394f8fc56ea55da3f58bb22ae2b6",
+   "committed_at": "2026-02-13T16:48:20-06:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/publish.yml"
+   ],
+   "message_first_line": "Remove harden runner from publish workflow (#7207)",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "psf/requests",
+   "head_sha": "00600b38f45dc234f825f609cea63d24e7e690af",
+   "base_sha": "5f338446f9eabd956e7e132668f330d9de4fc368",
+   "committed_at": "2026-02-13T13:23:44-07:00",
+   "author_is_bot_or_dep": false,
+   "changed_workflows": [
+    ".github/workflows/publish.yml"
+   ],
+   "message_first_line": "Update publish workflow and add test pypi option",
+   "selected_reason": "규칙 include 충족",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  },
+  {
+   "repo": "pallets/flask",
+   "head_sha": "663198d7b453ffdbe86d0e0238b1feafde6ce569",
+   "base_sha": "976459f7cb35c8c3abc3a6e6a2728d76d1a0a5f2",
+   "committed_at": "2026-02-03T10:22:19-08:00",
+   "author_is_bot_or_dep": true,
+   "changed_workflows": [
+    ".github/workflows/pre-commit.yaml",
+    ".github/workflows/publish.yaml",
+    ".github/workflows/tests.yaml"
+   ],
+   "message_first_line": "update dev dependencies",
+   "selected_reason": "규칙 include 충족 (봇·의존성)",
+   "label": null,
+   "label_reason": null,
+   "label_status": null
+  }
+ ],
+ "skipped": [
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "1211245aa72f1efe07bcfce63a7c543156cee976",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "79833c82b92409dd74c9236c59b8b18970d026e0",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "fe9eef7ebc62042f26edfca2b922e08c33180ed5",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "e984a9b94740697411f5a05fcdfc3299dd20f13a",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "ecade5a6c120732f94126c806c40bee12c98398a",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "56b196e921acec0259d84622a570fde6032e15b5",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "ab2ba2dcb35958dfaae65e6485055f157daafbb8",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "70f8650a624c92f91c94dd26b391326df2ea4143",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "849fbda3ce87e3829b30d005979bee59928c01ff",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "6153372429f86e6ff224548d62e54945def76d8f",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "9720f722114524cc610fa0eba363bbd63a2eb18e",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "d377458dd4f2547e527a8e765d3b359a54adc06a",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "7089db526150a6ffd50392672aa45098f27d14e2",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "4e80019353af4748669cec522352e0651e36f1d2",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "ea98f72badc085bdff17c784cfe9a611af5196a4",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "27ed4b95be0a0a64d99702a753a02fbeb46c8c0d",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "146041f51d3d937196f556ae2dfcdb8771e12860",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "f0554edaddd091fd93716aaf8c8d94dc101d8b0a",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "3e39c0ae5397a971544e5496dd64a2839f1da6c2",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "75609e71415e67c0f74492d192ca99ca94a3f582",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "295d9da900a0dbe8b4093d6a6bc977cd567aa4b0",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "f7338e05685c952f21f838f0beab95cd29e05452",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "7bc02cca0dd92ec505b4556c054b4e06e9cb8d4d",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "d49c94b5c13111790a4b6bc7f320bbc23b2c61e0",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "0ac68056b791384eeec832598fcfccf5cb07f904",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "14ac82d7b6678459d2bc4e5a35a3f744f0a4c483",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "d794da357b43b2a455df4628f1534fcd8c75ea8d",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "502f76346eb730975ec746747f10de8db6344e21",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "3b4e7ca59f42127a9aa27b790827ab819a75b9e9",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "8fb7815f1440c7cf8718c248639109a779db575d",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pytest-dev/pytest",
+   "sha": "dd389d7f9290d8581a1c3d14c5adc07a4dda9bec",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "fastapi/fastapi",
+   "sha": "042c33c0876e30933ef3f29a96eb4b0a597bff92",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "psf/requests",
+   "sha": "69f84847045bef7a849cc994a26fe7ba8a169e95",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "psf/requests",
+   "sha": "4c800e9aea2059660b8306b0fc8f9e9a4232cb3e",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "psf/requests",
+   "sha": "4ed3d1b3204caa6806a36125a39589044a02e807",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "psf/requests",
+   "sha": "a634611dd1bbf1455723cff0af2ecc30866d880c",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "psf/requests",
+   "sha": "79f4df84cf77a2fee873809821dfbd786de05b97",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "psf/requests",
+   "sha": "6360477c52303c9445b45fa8744b02d05a2f0905",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "psf/requests",
+   "sha": "9c72a41bec8597f948c9d8caa5dc3f12273b3303",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "psf/requests",
+   "sha": "ebf71906798ec82f34e07d3168f8b8aecaf8a3be",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "psf/requests",
+   "sha": "392b01f26e1cca4a2ada1539a6ae1a1b607ec33a",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "psf/requests",
+   "sha": "27f8b40d5cc6198148a58a8e65c8cff8f7c46a54",
+   "why": "봇·의존성 상한"
+  },
+  {
+   "repo": "pallets/flask",
+   "sha": "728c5e440af704a786384159184f695cf04ecbe7",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "pallets/flask",
+   "sha": "6a2f545bfd8ed31e19066a299296917e034aca58",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "pallets/flask",
+   "sha": "e4e4bf6543ac1f132afddb1ffd0bf02bea4c93f7",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "pallets/flask",
+   "sha": "4cae5d8e411b1e69949d8fae669afeacbd3e5908",
+   "why": "병합 커밋"
+  },
+  {
+   "repo": "pallets/flask",
+   "sha": "eb58d862cc4a8f31a369b6e9ad1724e9e642f13f",
+   "why": "병합 커밋"
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+# Stage 2b.1 — 설계·사례 고정(a8a3b3c)·구현(c152147) 뒤에 생긴 변경. 사례와 기대값은 바꾸지 않는다.
+changes:
+  - id: P1
+    date: 2026-11-18
+    kind: selection_rule_issue
+    status: 사용자 결정 대기
+    what: B2 선정 규칙의 '병합 커밋 제외' 때문에 병합으로 PR을 합치는 저장소(pytest, flask)에서 표본이 거의 봇 커밋만 남음
+    evidence: >-
+      규칙 그대로 추출(b2_candidates.json): pytest 4개(봇·의존성 3), fastapi 10, requests 10, flask 1개(봇·의존성 1), 총 25.
+      pytest 건너뜀 중 병합 커밋 11, flask 5. 두 저장소의 기본 브랜치 1차 부모 이력은 실제 변경이 대부분 병합 커밋으로 들어온다.
+    candidate_fix: 병합 커밋을 1차 부모 대비 diff로 변경 단위에 포함 (미리보기 총 34 — pytest 8, fastapi 10, requests 10, flask 6). 다른 규칙은 그대로
+    leakage: 라벨·V3 실행 전. 본 것은 커밋 목록(메시지·작성자)뿐이고 V3 결과는 없다. 판단 근거는 표본 수와 구성이지 V3 결과가 아니다
